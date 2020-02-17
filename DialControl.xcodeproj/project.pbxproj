@@ -16,6 +16,7 @@
 		AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AE4D58D023F8087D00C66136 /* LaunchScreen.storyboard */; };
 		AE4D58DD23F8087E00C66136 /* DialControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58DC23F8087E00C66136 /* DialControlTests.swift */; };
 		AE4D58E823F8087E00C66136 /* DialControlUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58E723F8087E00C66136 /* DialControlUITests.swift */; };
+		AE4D58F623F961D200C66136 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58F523F961D200C66136 /* Test.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		AE4D58E323F8087E00C66136 /* DialControlUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DialControlUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58E723F8087E00C66136 /* DialControlUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialControlUITests.swift; sourceTree = "<group>"; };
 		AE4D58E923F8087E00C66136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AE4D58F523F961D200C66136 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 		AE4D58B623F8087B00C66136 = {
 			isa = PBXGroup;
 			children = (
+				AE4D58F523F961D200C66136 /* Test.swift */,
 				AE4D58C123F8087C00C66136 /* DialControl */,
 				AE4D58DB23F8087E00C66136 /* DialControlTests */,
 				AE4D58E623F8087E00C66136 /* DialControlUITests */,
@@ -272,6 +275,7 @@
 			files = (
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */,
+				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 			);
