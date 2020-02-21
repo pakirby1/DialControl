@@ -9,12 +9,19 @@
 import SwiftUI
 import Combine
 
+class Test : ObservableObject {
+    @Published var temperature: CGFloat = 0.0
+}
+
 struct ContentView: View {
+    let test = Test()
+    
     var body: some View {
-//        Text("Hello, World!")
-//        DialControl(width: 500, height: 500)
-        TemperatureDial(temperature: 125)
-//        TestView()
+        let binding = Binding<CGFloat>(
+            get: { self.test.temperature },
+            set: { self.test.temperature = $0} )
+
+        return TemperatureDial(temperature: 125)
     }
 }
 
