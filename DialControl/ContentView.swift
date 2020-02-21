@@ -149,6 +149,14 @@ struct Rotation: View {
     }
 }
 
+struct PathNodeStruct<T: View> : Identifiable {
+    var id: UUID = UUID()
+    
+    let view: T
+    let rotationAngle: Angle
+    let offset: (CGFloat, CGFloat)
+}
+
 struct TemperatureDial: View {
 
     @State private var value: CGFloat = 0
@@ -175,6 +183,35 @@ struct TemperatureDial: View {
         self.initialTemperature = temperature
     }
 
+    private func buildManeuverViews(radius: CGFloat) -> [PathNodeStruct<Text>] {
+        var currentAngle = Angle(degrees: -90)
+        let segmentAngle = Double(360 / maneuvers.count)
+        
+        let pathNodes: [PathNodeStruct<Text>] = maneuvers.map{
+            let view = Text($0)
+            let rotationAngle = Angle(degrees: currentAngle.degrees)
+            let offset = pointOnCircle(withRadius: radius, withAngle: CGFloat(rotationAngle.degrees))
+            currentAngle.degrees += segmentAngle
+            
+            return buildPathNode(view: view,
+                                 rotationAngle: rotationAngle,
+                                 offset: offset)
+        }
+        
+        return pathNodes
+    }
+    
+    private func buildPathNode<T: View>(view: T,
+                                        rotationAngle: Angle,
+                                        offset: (CGFloat, CGFloat)) -> PathNodeStruct<T>
+    {
+        let pathNode = PathNodeStruct(view: view,
+                                      rotationAngle: rotationAngle,
+                                      offset: offset)
+        
+        return pathNode
+    }
+    
     private func angle(between starting: CGPoint, ending: CGPoint) -> CGFloat {
         let center = CGPoint(x: ending.x - starting.x, y: ending.y - starting.y)
         let radians = atan2(center.y, center.x)
@@ -206,14 +243,9 @@ struct TemperatureDial: View {
     }
     
     func pointOnCircle(withRadius: CGFloat, withAngle: CGFloat) -> (CGFloat, CGFloat) {
-        let x = withRadius * cos(withAngle)
-        let y = withRadius * sin(withAngle)
-        
-        let points = getCirclePoints(centerPoint: CGPoint(x: 0, y: 0),
-                                     radius: withRadius,
-                                     n: 8)
-        
-        points.forEach{ print($0) }
+        let angle = CGFloat(withAngle) * .pi / 180
+        let x = withRadius * cos(angle)
+        let y = withRadius * sin(angle)
         
         return (x, y)
     }
@@ -263,18 +295,27 @@ struct TemperatureDial: View {
 //                    .offset(x: 0, y: -self.textCircleRadius)
 //                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
 //
-                Text("2")
-                    .font(.title)
-                    .rotated(Angle.degrees(90.0))
-                    .offset(x: xPoint(self.textCircleRadius, 90.0),
-                            y: yPoint(self.textCircleRadius, 90.0))
-                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
-                
-                ForEach(self.maneuvers, id:\.self) { maneuver in
-                    let point = getOffsetForIndex(withRadius: CGFloatself.textCircleRadius, numPoints: maneuvers.count, index: 0)
-                    Text("2")
-                    
+                ForEach(self.buildManeuverViews(radius: self.textCircleRadius), id:\.id) { node in
+                    node.view
+                        .font(.title)
+                        .rotated(Angle.degrees(node.rotationAngle.degrees))
+                        .offset(x: node.offset.0,
+                                y: node.offset.1)
+                        .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
                 }
+                
+//                Text("2")
+//                    .font(.title)
+//                    .rotated(Angle.degrees(90.0))
+//                    .offset(x: xPoint(self.textCircleRadius, 90.0),
+//                            y: yPoint(self.textCircleRadius, 90.0))
+//                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
+                
+//                ForEach(self.maneuvers, id:\.self) { maneuver in
+//                    let point = getOffsetForIndex(withRadius: CGFloatself.textCircleRadius, numPoints: maneuvers.count, index: 0)
+//                    Text("2")
+//
+//                }
                                 
 //                Text("3")
 //                    .font(.title)
