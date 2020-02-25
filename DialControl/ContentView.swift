@@ -205,9 +205,13 @@ enum ManeuverBearing : String {
     }
 }
 
-struct Maneuver {
+struct Maneuver: CustomStringConvertible {
     let speed: UInt
     let bearing: ManeuverBearing
+    
+    var description: String {
+        return "\(speed)\(bearing.rawValue)"
+    }
 }
 
 struct ManeuverDialSelection: View, CustomStringConvertible {
@@ -240,6 +244,8 @@ struct TemperatureDial: View {
     private let stepSize: CGFloat = 0.5
 
     @State var currentSegment: UInt = 0
+    @State var topSegment: UInt = 0
+    
     var maneuvers: [String] = ["1LT", "1LB", "1S", "1RB", "2LT", "2LB", "2S", "2RB"]
     
     let Newmaneuvers: [Maneuver] = [Maneuver(speed: 1, bearing: .LT),
@@ -449,13 +455,15 @@ struct TemperatureDial: View {
                         
                         self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
                         
-                        print("self.value= \(self.value) self.currentSegment= \(self.currentSegment)")
+                        self.topSegment = UInt(self.totalSegments - 1) - self.currentSegment
+                        
+                        print("self.value= \(self.value) self.currentSegment= \(self.currentSegment) oppositeSegment=\(self.topSegment)")
                         
                         self.currentTemperature = self.value * self.maxTemperature
                     }
                 )
         
-            Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment) \n \(maneuvers[Int(currentSegment)])")
+            Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment) \n \(Newmaneuvers[Int(currentSegment)].description) \n topSegment: \(topSegment) \n \(Newmaneuvers[Int(topSegment)].description)")
                 .font(.largeTitle)
                 .foregroundColor(Color.white)
                 .fontWeight(.semibold)
