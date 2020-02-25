@@ -21,7 +21,7 @@ struct ContentView: View {
             get: { self.test.temperature },
             set: { self.test.temperature = $0} )
 
-        return TemperatureDial(temperature: 125)
+        return TemperatureDial(temperature: 0)
     }
 }
 
@@ -169,17 +169,38 @@ enum ManeuverBearing : String {
     case LB
     case S
     case RB
+    case RT
+    case LTA
+    case RTA
+    case K
+    case LS
+    case RS
+    case X
     
     func getSymbolCharacter() -> String {
         switch(self) {
         case .LT:
-            return "T"
+            return "4"
         case .LB:
-            return "B"
+            return "7"
         case .S:
-            return "S"
+            return "8"
         case .RB:
-            return "R"
+            return "9"
+        case .RT:
+            return "6"
+        case .RTA:
+            return ";"
+        case .LTA:
+            return ":"
+        case .K:
+            return "2"
+        case .LS:
+            return "1"
+        case .RS:
+            return "3"
+        case .X:
+            return "5"
         }
     }
 }
@@ -189,17 +210,22 @@ struct Maneuver {
     let bearing: ManeuverBearing
 }
 
-struct ManeuverDialSelection: View {
+struct ManeuverDialSelection: View, CustomStringConvertible {
     let maneuver: Maneuver
     
     var body: some View {
         VStack {
             Text(maneuver.bearing.getSymbolCharacter())
-                .font(.custom("KimberleyBl-Regular", size: 36))
+                .font(.custom("xwing-miniatures", size: 30))
             
             Text("\(maneuver.speed)")
-                .font(.custom("KimberleyBl-Regular", size: 36))
+                .font(.custom("KimberleyBl-Regular", size: 30))
         }
+        .border(Color.white)
+    }
+    
+    var description: String {
+        return "\(maneuver.speed)\(maneuver.bearing.rawValue)"
     }
 }
 
@@ -208,7 +234,7 @@ struct TemperatureDial: View {
     @State private var value: CGFloat = 0
 
     private let initialTemperature: CGFloat
-    private let outerDiameter: CGFloat = 275
+    private let outerDiameter: CGFloat = 375
     private let indicatorLength: CGFloat = 25
     private let maxTemperature: CGFloat = 360
     private let stepSize: CGFloat = 0.5
@@ -220,10 +246,10 @@ struct TemperatureDial: View {
                                     Maneuver(speed: 1, bearing: .LB),
                                     Maneuver(speed: 1, bearing: .S),
                                     Maneuver(speed: 1, bearing: .RB),
-                                    Maneuver(speed: 2, bearing: .LT),
-                                    Maneuver(speed: 2, bearing: .LB),
+                                    Maneuver(speed: 2, bearing: .LTA),
+                                    Maneuver(speed: 2, bearing: .RB),
                                     Maneuver(speed: 2, bearing: .S),
-                                    Maneuver(speed: 2, bearing: .RB)
+                                    Maneuver(speed: 2, bearing: .K)
                                     ]
     
     var totalSegments: CGFloat {
@@ -258,14 +284,19 @@ struct TemperatureDial: View {
     }
     
     private func buildManeuverViews_New(radius: CGFloat) -> [PathNodeStruct<ManeuverDialSelection>] {
-        var currentAngle = Angle(degrees: -90)
+        var currentAngle = Angle(degrees: 0)
         let segmentAngle = Double(360 / maneuvers.count)
         
         let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = Newmaneuvers.map{
             let view = ManeuverDialSelection(maneuver: $0)
+            
+            // 0 degrees in SwiftUI is at the pi / 2 (90 clockwise) location, so add
+            // -90 to get the correct location
             let rotationAngle = Angle(degrees: currentAngle.degrees)
             let offset = pointOnCircle(withRadius: radius, withAngle: CGFloat(rotationAngle.degrees))
             currentAngle.degrees += segmentAngle
+            
+            print("\(#function) \(view): \(rotationAngle.degrees) (x: \(offset.0), y: \(offset.1)) \(currentAngle.degrees)")
             
             return buildPathNode(view: view,
                                  rotationAngle: rotationAngle,
@@ -317,7 +348,7 @@ struct TemperatureDial: View {
     }
     
     func pointOnCircle(withRadius: CGFloat, withAngle: CGFloat) -> (CGFloat, CGFloat) {
-        let angle = CGFloat(withAngle) * .pi / 180
+        let angle = CGFloat(withAngle - 90) * .pi / 180
         let x = withRadius * cos(angle)
         let y = withRadius * sin(angle)
         
@@ -369,9 +400,9 @@ struct TemperatureDial: View {
 //                    .offset(x: 0, y: -self.textCircleRadius)
 //                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
 //
-                ForEach(self.buildManeuverViews_Old(radius: self.textCircleRadius), id:\.id) { node in
+                ForEach(self.buildManeuverViews_New(radius: self.textCircleRadius), id:\.id) { node in
                     node.view
-                        .font(.custom("KimberleyBl-Regular", size: 36))
+//                        .font(.custom("KimberleyBl-Regular", size: 36))
 //                        .font(.title)
                         .rotated(Angle.degrees(node.rotationAngle.degrees))
                         .offset(x: node.offset.0,
@@ -417,6 +448,8 @@ struct TemperatureDial: View {
                         self.value = CGFloat(Int(((angle / 360) * (self.maxTemperature / self.stepSize)))) / (self.maxTemperature / self.stepSize)
                         
                         self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
+                        
+                        print("self.value= \(self.value) self.currentSegment= \(self.currentSegment)")
                         
                         self.currentTemperature = self.value * self.maxTemperature
                     }
