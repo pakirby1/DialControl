@@ -26,6 +26,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Add `@Environment(\.managedObjectContext)` in the views that will need the context.
         let contentView = ContentView().environment(\.managedObjectContext, context)
 
+        // Get a list of all font names
+        print("===== FONTS =====")
+        for fontFamily in UIFont.familyNames.sorted() {
+            print("\(fontFamily)")
+            
+            for fontName in UIFont.fontNames(forFamilyName: fontFamily) {
+                print("\t\(fontName)")
+            }
+        }
+        
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)

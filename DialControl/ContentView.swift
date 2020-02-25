@@ -164,6 +164,45 @@ struct PathNodeStruct<T: View> : Identifiable {
     let offset: (CGFloat, CGFloat)
 }
 
+enum ManeuverBearing : String {
+    case LT
+    case LB
+    case S
+    case RB
+    
+    func getSymbolCharacter() -> String {
+        switch(self) {
+        case .LT:
+            return "T"
+        case .LB:
+            return "B"
+        case .S:
+            return "S"
+        case .RB:
+            return "R"
+        }
+    }
+}
+
+struct Maneuver {
+    let speed: UInt
+    let bearing: ManeuverBearing
+}
+
+struct ManeuverDialSelection: View {
+    let maneuver: Maneuver
+    
+    var body: some View {
+        VStack {
+            Text(maneuver.bearing.getSymbolCharacter())
+                .font(.custom("KimberleyBl-Regular", size: 36))
+            
+            Text("\(maneuver.speed)")
+                .font(.custom("KimberleyBl-Regular", size: 36))
+        }
+    }
+}
+
 struct TemperatureDial: View {
 
     @State private var value: CGFloat = 0
@@ -176,6 +215,16 @@ struct TemperatureDial: View {
 
     @State var currentSegment: UInt = 0
     var maneuvers: [String] = ["1LT", "1LB", "1S", "1RB", "2LT", "2LB", "2S", "2RB"]
+    
+    let Newmaneuvers: [Maneuver] = [Maneuver(speed: 1, bearing: .LT),
+                                    Maneuver(speed: 1, bearing: .LB),
+                                    Maneuver(speed: 1, bearing: .S),
+                                    Maneuver(speed: 1, bearing: .RB),
+                                    Maneuver(speed: 2, bearing: .LT),
+                                    Maneuver(speed: 2, bearing: .LB),
+                                    Maneuver(speed: 2, bearing: .S),
+                                    Maneuver(speed: 2, bearing: .RB)
+                                    ]
     
     var totalSegments: CGFloat {
         CGFloat(maneuvers.count)
@@ -190,12 +239,30 @@ struct TemperatureDial: View {
         self.initialTemperature = temperature
     }
 
-    private func buildManeuverViews(radius: CGFloat) -> [PathNodeStruct<Text>] {
+    private func buildManeuverViews_Old(radius: CGFloat) -> [PathNodeStruct<Text>] {
         var currentAngle = Angle(degrees: -90)
         let segmentAngle = Double(360 / maneuvers.count)
         
         let pathNodes: [PathNodeStruct<Text>] = maneuvers.map{
             let view = Text($0)
+            let rotationAngle = Angle(degrees: currentAngle.degrees)
+            let offset = pointOnCircle(withRadius: radius, withAngle: CGFloat(rotationAngle.degrees))
+            currentAngle.degrees += segmentAngle
+            
+            return buildPathNode(view: view,
+                                 rotationAngle: rotationAngle,
+                                 offset: offset)
+        }
+        
+        return pathNodes
+    }
+    
+    private func buildManeuverViews_New(radius: CGFloat) -> [PathNodeStruct<ManeuverDialSelection>] {
+        var currentAngle = Angle(degrees: -90)
+        let segmentAngle = Double(360 / maneuvers.count)
+        
+        let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = Newmaneuvers.map{
+            let view = ManeuverDialSelection(maneuver: $0)
             let rotationAngle = Angle(degrees: currentAngle.degrees)
             let offset = pointOnCircle(withRadius: radius, withAngle: CGFloat(rotationAngle.degrees))
             currentAngle.degrees += segmentAngle
@@ -302,9 +369,10 @@ struct TemperatureDial: View {
 //                    .offset(x: 0, y: -self.textCircleRadius)
 //                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
 //
-                ForEach(self.buildManeuverViews(radius: self.textCircleRadius), id:\.id) { node in
+                ForEach(self.buildManeuverViews_Old(radius: self.textCircleRadius), id:\.id) { node in
                     node.view
-                        .font(.title)
+                        .font(.custom("KimberleyBl-Regular", size: 36))
+//                        .font(.title)
                         .rotated(Angle.degrees(node.rotationAngle.degrees))
                         .offset(x: node.offset.0,
                                 y: node.offset.1)

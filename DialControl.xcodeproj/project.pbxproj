@@ -17,6 +17,8 @@
 		AE4D58DD23F8087E00C66136 /* DialControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58DC23F8087E00C66136 /* DialControlTests.swift */; };
 		AE4D58E823F8087E00C66136 /* DialControlUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58E723F8087E00C66136 /* DialControlUITests.swift */; };
 		AE4D58F623F961D200C66136 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58F523F961D200C66136 /* Test.swift */; };
+		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
+		AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		AE4D58E723F8087E00C66136 /* DialControlUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialControlUITests.swift; sourceTree = "<group>"; };
 		AE4D58E923F8087E00C66136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE4D58F523F961D200C66136 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
+		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
+		AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures_SK9.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +108,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AEAD19F32404F32C0020FABC /* Fonts */,
 				AE4D58C223F8087C00C66136 /* AppDelegate.swift */,
 				AE4D58C423F8087C00C66136 /* SceneDelegate.swift */,
 				AE4D58C923F8087C00C66136 /* ContentView.swift */,
@@ -140,6 +145,15 @@
 				AE4D58E923F8087E00C66136 /* Info.plist */,
 			);
 			path = DialControlUITests;
+			sourceTree = "<group>";
+		};
+		AEAD19F32404F32C0020FABC /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				AEAD19F42404F48B0020FABC /* kimberley bl.ttf */,
+				AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -246,8 +260,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */,
 				AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */,
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
+				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
 				AE4D58CC23F8087D00C66136 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
