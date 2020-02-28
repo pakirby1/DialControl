@@ -21,7 +21,8 @@ struct ContentView: View {
             get: { self.test.temperature },
             set: { self.test.temperature = $0} )
 
-        return TemperatureDial(temperature: 0)
+        return TemperatureDial(temperature: 0,
+                               diameter: 500)
     }
 }
 
@@ -233,16 +234,66 @@ struct ManeuverDialSelection: View, CustomStringConvertible {
     }
 }
 
+struct AngleRange : Identifiable, CustomStringConvertible {
+    let id: UUID = UUID()
+    let start: CGFloat
+    let end: CGFloat
+    let mid: CGFloat
+    let sector: UInt
+    
+    var description: String {
+        return "\(start) \(mid) \(end) \(sector)"
+    }
+}
+
+extension Array where Element == AngleRange {
+    func getSegment(withAngle: CGFloat) -> Int {
+        print("withAngle: \(withAngle)")
+        var ret: Int = -1
+        
+        for (index, item) in self.enumerated() {
+            print("Found \(item) at position \(index)")
+            
+            if (withAngle >= 337.5) && (withAngle < 360) {
+                ret = 0
+            }
+            
+            if (withAngle >= item.start) && (withAngle < item.end) {
+                print("Found \(withAngle) at index \(index)")
+                
+                ret = index
+                return ret
+            }
+        }
+        
+        return ret
+    }
+}
+
 struct TemperatureDial: View {
 
     @State private var value: CGFloat = 0
-
+    @State private var oldCoordinate: (CGFloat, CGFloat) = (0.0, 0.0)
+    @State private var oldAngle: CGFloat = 0.0
+    @State private var rotatingClockwise = true
+    
     private let initialTemperature: CGFloat
-    private let outerDiameter: CGFloat = 375
+    private let outerDiameter: CGFloat
     private let indicatorLength: CGFloat = 25
     private let maxTemperature: CGFloat = 360
     private let stepSize: CGFloat = 0.5
-
+    private var ranges: [CGFloat] = []
+    private var angleRanges: [AngleRange] = []
+    private var temps: [Range<CGFloat>] = [-22.5..<22.5,
+                                           22.5..<67.5,
+                                           67.5..<112.5,
+                                           112.5..<157.5,
+                                           157.5..<202.5,
+                                           202.5..<247.5,
+                                           247.5..<292.5,
+                                           292.5..<337.5
+                                            ]
+    
     @State var currentSegment: UInt = 0
     @State var topSegment: UInt = 0
     
@@ -266,9 +317,93 @@ struct TemperatureDial: View {
         return outerDiameter - indicatorLength
     }
 
+    mutating func buildSectorsOdd() {
+        let numberOfSections = 8
+        
+        // 1 - Define sector length
+        let fanWidth: CGFloat = CGFloat.pi * 2 / 8
+        print("fanWidth= \(fanWidth)")
+        
+        // 2 - Set initial midpoint
+        var mid: CGFloat = 0
+        
+        // 3 - Iterate through all sectors
+        for index in 1...numberOfSections {
+            print("mid= \(mid)")
+            var angleRange = AngleRange(start: mid - (fanWidth/2),
+                                        end: mid + (fanWidth/2),
+                                        mid: mid,
+                                        sector: UInt(index))
+            print(angleRange)
+            
+            mid -= fanWidth
+            
+            print("mid= \(mid)")
+            
+            if (angleRange.start < -CGFloat.pi) {
+                mid = -mid
+                print("mid= \(mid)")
+                
+                mid -= fanWidth
+                print("mid= \(mid)")
+            }
+            
+            angleRanges.append(angleRange)
+        }
+        
+        angleRanges.forEach{print($0)}
+    }
 
-    init(temperature: CGFloat) {
+//    mutating func buildSectorsEven() {
+//        let numberOfSections = 8
+//
+//        // 1 - Define sector length
+//        let fanWidth: CGFloat = CGFloat.pi * 2 / 8
+//        print("fanWidth= \(fanWidth)")
+//
+//        // 2 - Set initial midpoint
+//        var mid: CGFloat = 0
+//
+//        // 3 - Iterate through all sectors
+//        for index in 1...numberOfSections {
+//            print("mid= \(mid)")
+//            var angleRange = AngleRange(start: mid - (fanWidth/2),
+//                                        end: mid + (fanWidth/2),
+//                                        mid: mid,
+//                                        sector: UInt(index))
+//            print(angleRange)
+//
+//            if (angleRange.end - fanWidth < - CGFloat.pi) {
+//                mid = CGFloat.pi
+//                angleRange.mid = mid;
+//                angleRange.start = fabsf(sector.maxValue);
+//
+//            }
+//            mid -= fanWidth;
+//
+//
+//            angleRanges.append(angleRange)
+//        }
+//
+//        angleRanges.forEach{print($0)}
+//    }
+    init(temperature: CGFloat, diameter: CGFloat) {
         self.initialTemperature = temperature
+        self.outerDiameter = diameter
+        
+//        buildSectorsOdd()
+        
+        self.ranges = stride(from: 0.0, to: 360.0, by: 45.0)
+            .map{ CGFloat($0) }
+
+        for (index, item) in self.temps.enumerated() {
+            let lower = item.lowerBound
+            _ = item.upperBound
+            let mid = (item.lowerBound + item.upperBound) / 2
+
+            self.angleRanges.append(AngleRange(start: lower, end: item.upperBound, mid: mid, sector: UInt(index)))
+        }
+        
     }
 
     private func buildManeuverViews_Old(radius: CGFloat) -> [PathNodeStruct<Text>] {
@@ -443,23 +578,35 @@ struct TemperatureDial: View {
             }
             .gesture(
                     DragGesture().onChanged() { value in
-
+                        print("self.oldCoordinate: x=\(self.oldCoordinate.0) y=\(self.oldCoordinate.1)")
+                        print("self.oldAngle = \(self.oldAngle)")
+                        
+                        print("value.location.x=\(value.location.x)")
+                        print("value.location.y=\(value.location.y)")
+                        
                         let x: CGFloat = min(max(value.location.x, 0), self.innerDiameter)
                         let y: CGFloat = min(max(value.location.y, 0), self.innerDiameter)
 
                         let ending = CGPoint(x: x, y: y)
                         let start = CGPoint(x: (self.innerDiameter) / 2, y: (self.innerDiameter) / 2)
 
+                        print("start=\(start)")
+                        print("ending=\(ending)")
+                        
                         let angle = self.angle(between: start, ending: ending)
                         self.value = CGFloat(Int(((angle / 360) * (self.maxTemperature / self.stepSize)))) / (self.maxTemperature / self.stepSize)
                         
                         self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
                         
-                        self.topSegment = UInt(self.totalSegments - 1) - self.currentSegment
-                        
-                        print("self.value= \(self.value) self.currentSegment= \(self.currentSegment) oppositeSegment=\(self.topSegment)")
-                        
+//                        self.topSegment = UInt(self.totalSegments - 1) - self.currentSegment
                         self.currentTemperature = self.value * self.maxTemperature
+                        
+                        self.topSegment = UInt(self.angleRanges.getSegment(withAngle: self.currentTemperature))
+                        
+                        print("angle: \(angle) oldAngle: \(self.oldAngle) self.value= \(self.value) self.currentSegment= \(self.currentSegment) topSegment=\(self.topSegment) rotatingClockwise: \(self.rotatingClockwise)")
+                        
+                        self.rotatingClockwise = (angle - self.oldAngle) > 0
+                        self.oldAngle = angle
                     }
                 )
         
@@ -487,6 +634,12 @@ struct TemperatureDial: View {
                 .stroke(Color.red, style: dashedStyle)
                 .rotationEffect(.degrees(-90))
                 .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
+            
+            VStack {
+                ForEach(self.angleRanges, id:\.id) { angle in
+                    Text("\(angle.start)..\(angle.mid)<\(angle.end) \(angle.sector)")
+                }
+            }.offset(x: 0, y: -350)
         }
         .onAppear(perform: {
             let percentage = self.initialTemperature / self.maxTemperature
