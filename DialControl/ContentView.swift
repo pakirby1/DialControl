@@ -247,9 +247,9 @@ struct AngleRange : Identifiable, CustomStringConvertible {
 }
 
 extension Array where Element == AngleRange {
-    func getSegment(withAngle: CGFloat) -> Int {
+    func getSegment(withAngle: CGFloat) -> UInt {
         print("withAngle: \(withAngle)")
-        var ret: Int = -1
+        var ret: UInt = 0
         
         for (index, item) in self.enumerated() {
             print("Found \(item) at position \(index)")
@@ -261,7 +261,7 @@ extension Array where Element == AngleRange {
             if (withAngle >= item.start) && (withAngle < item.end) {
                 print("Found \(withAngle) at index \(index)")
                 
-                ret = index
+                ret = UInt(index)
                 return ret
             }
         }
@@ -284,14 +284,14 @@ struct TemperatureDial: View {
     private let stepSize: CGFloat = 0.5
     private var ranges: [CGFloat] = []
     private var angleRanges: [AngleRange] = []
-    private var temps: [Range<CGFloat>] = [-22.5..<22.5,
-                                           22.5..<67.5,
-                                           67.5..<112.5,
-                                           112.5..<157.5,
-                                           157.5..<202.5,
-                                           202.5..<247.5,
-                                           247.5..<292.5,
-                                           292.5..<337.5
+    private var temps: [Range<CGFloat>] = [0..<45,
+                                           45..<90,
+                                           90..<135,
+                                           135..<180,
+                                           180..<225,
+                                           225..<270,
+                                           270..<315,
+                                           315..<360
                                             ]
     
     @State var currentSegment: UInt = 0
@@ -519,6 +519,18 @@ struct TemperatureDial: View {
         return point.1
     }
     
+    func getSector(baseline: CGFloat, x: CGFloat, angleFromBaseline: CGFloat) -> UInt {
+        var newAngle: CGFloat = angleFromBaseline
+
+        // if we are going CW the angleFromBaseline will be closer to 360 (high sectors)
+        // if we are going CCW the angleFromBaseline will be closer to 0 (low sectors)
+        newAngle = 360.0 - angleFromBaseline
+    
+        let segment = angleRanges.getSegment(withAngle: newAngle)
+        
+        return UInt(segment)
+    }
+    
     var innerCircle: some View {
         ZStack {
             ZStack {
@@ -597,6 +609,10 @@ struct TemperatureDial: View {
                         self.value = CGFloat(Int(((angle / 360) * (self.maxTemperature / self.stepSize)))) / (self.maxTemperature / self.stepSize)
                         
                         self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
+                        
+                        self.currentSegment = self.getSector(baseline: start.x,
+                                                    x: ending.x,
+                                                    angleFromBaseline: angle)
                         
 //                        self.topSegment = UInt(self.totalSegments - 1) - self.currentSegment
                         self.currentTemperature = self.value * self.maxTemperature
