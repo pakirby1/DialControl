@@ -254,7 +254,7 @@ extension Array where Element == AngleRange {
         for (index, item) in self.enumerated() {
             print("Found \(item) at position \(index)")
             
-            if (withAngle >= 337.5) && (withAngle < 360) {
+            if (withAngle >= -22.5) && (withAngle < 360) {
                 ret = 0
             }
             
@@ -293,6 +293,17 @@ struct TemperatureDial: View {
                                            270..<315,
                                            315..<360
                                             ]
+    
+    private var newTemps: [Range<CGFloat>] = [-22.5..<22.5,
+                                              22.5..<67.5,
+                                              67.5..<112.5,
+                                              112.5..<157.5,
+                                              157.5..<202.5,
+                                              202.5..<247.5,
+                                              247.5..<292.5,
+                                              292.5..<337.5
+                                            ]
+
     
     @State var currentSegment: UInt = 0
     @State var topSegment: UInt = 0
@@ -396,7 +407,7 @@ struct TemperatureDial: View {
         self.ranges = stride(from: 0.0, to: 360.0, by: 45.0)
             .map{ CGFloat($0) }
 
-        for (index, item) in self.temps.enumerated() {
+        for (index, item) in self.newTemps.enumerated() {
             let lower = item.lowerBound
             _ = item.upperBound
             let mid = (item.lowerBound + item.upperBound) / 2
