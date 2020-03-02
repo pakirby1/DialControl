@@ -254,6 +254,7 @@ extension Array where Element == AngleRange {
         for (index, item) in self.enumerated() {
             print("Found \(item) at position \(index)")
             
+            // Should pass in the negative threshold angle as an input param
             if (withAngle >= -22.5) && (withAngle < 360) {
                 ret = 0
             }
@@ -267,6 +268,46 @@ extension Array where Element == AngleRange {
         }
         
         return ret
+    }
+}
+
+struct MyShape : Shape {
+    let parentWidth: CGFloat
+    let parentHeight: CGFloat
+    let radius: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
+        
+        p.addArc(center: center,
+                 radius: radius,
+                 startAngle: .degrees(247.5),
+                 endAngle: .degrees(292.5),
+                 clockwise: false)
+        
+        p.addLine(to: center)
+        p.closeSubpath()
+        
+        
+//        return p.strokedPath(.init(lineWidth: 4)).fill(Color.red) as! Path
+        return p
+    }
+}
+
+struct MyCircle : View {
+    let innerDiameter: CGFloat
+    let rotationAngle: CGFloat
+    
+    var body: some View {
+        return ZStack {
+            Circle()
+                .fill(Color.blue)
+                .frame(width: self.innerDiameter,
+                       height: self.innerDiameter,
+                       alignment: .center)
+                .rotationEffect(Angle.degrees(Double(self.rotationAngle)))
+        }
     }
 }
 
@@ -294,6 +335,7 @@ struct TemperatureDial: View {
                                            315..<360
                                             ]
     
+    // sector can stradle the baseline (x = 0)
     private var newTemps: [Range<CGFloat>] = [-22.5..<22.5,
                                               22.5..<67.5,
                                               67.5..<112.5,
@@ -401,8 +443,8 @@ struct TemperatureDial: View {
     init(temperature: CGFloat, diameter: CGFloat) {
         self.initialTemperature = temperature
         self.outerDiameter = diameter
-        
-//        buildSectorsOdd()
+        let x = self.innerDiameter
+        print("x: \(x)")
         
         self.ranges = stride(from: 0.0, to: 360.0, by: 45.0)
             .map{ CGFloat($0) }
@@ -533,31 +575,26 @@ struct TemperatureDial: View {
     func getSector(baseline: CGFloat, x: CGFloat, angleFromBaseline: CGFloat) -> UInt {
         var newAngle: CGFloat = angleFromBaseline
 
-        // if we are going CW the angleFromBaseline will be closer to 360 (high sectors)
-        // if we are going CCW the angleFromBaseline will be closer to 0 (low sectors)
+        // if we are going CW the angleFromBaseline will be closer to 360 (viewing high sectors)
+        // if we are going CCW the angleFromBaseline will be closer to 0 (viewing low sectors)
         newAngle = 360.0 - angleFromBaseline
     
         let segment = angleRanges.getSegment(withAngle: newAngle)
         
         return UInt(segment)
     }
-    
+
     var innerCircle: some View {
         ZStack {
             ZStack {
-                Circle()
-                    .fill(Color.blue)
-                    .frame(width: self.innerDiameter,
-                           height: self.innerDiameter,
-                           alignment: .center)
-                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
+                MyCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
                 
-                Rectangle()
-                    .fill(Color.red)
-                    .frame(width: self.innerDiameter / 3,
-                           height: self.innerDiameter / 3,
-                           alignment: .center)
-                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
+//                Rectangle()
+//                    .fill(Color.red)
+//                    .frame(width: self.innerDiameter / 3,
+//                           height: self.innerDiameter / 3,
+//                           alignment: .center)
+//                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
                 
 //                Text("1")
 //                    .font(.title)
@@ -630,20 +667,26 @@ struct TemperatureDial: View {
                         
                         self.topSegment = UInt(self.angleRanges.getSegment(withAngle: self.currentTemperature))
                         
-                        print("angle: \(angle) oldAngle: \(self.oldAngle) self.value= \(self.value) self.currentSegment= \(self.currentSegment) topSegment=\(self.topSegment) rotatingClockwise: \(self.rotatingClockwise)")
+                        print("angle: \(angle) oldAngle: \(self.oldAngle) self.value= \(self.value) self.currentSegment= \(self.currentSegment) rotatingClockwise: \(self.rotatingClockwise)")
                         
                         self.rotatingClockwise = (angle - self.oldAngle) > 0
                         self.oldAngle = angle
                     }
                 )
         
-            Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment) \n \(Newmaneuvers[Int(currentSegment)].description) \n topSegment: \(topSegment) \n \(Newmaneuvers[Int(topSegment)].description)")
+            Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment) \n \(Newmaneuvers[Int(currentSegment)].description) \n ")
                 .font(.largeTitle)
                 .foregroundColor(Color.white)
                 .fontWeight(.semibold)
             
-            
+            GeometryReader { g in
+                MyShape(parentWidth: g.size.width,
+                        parentHeight: g.size.height,
+                        radius: self.innerDiameter / 2)
+                    .fill(Color.red.opacity(0.4))
+            }
         }
+        .border(Color.blue)
     }
     
     var body: some View {
