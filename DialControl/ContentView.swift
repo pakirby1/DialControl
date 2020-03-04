@@ -243,12 +243,13 @@ struct ManeuverDialSelection: View, CustomStringConvertible {
             Text(maneuver.bearing.getSymbolCharacter())
                 .font(.custom("xwing-miniatures", size: size))
                 .foregroundColor(maneuver.difficulty.color())
+                .padding(10)
             
             Text("\(maneuver.speed)")
                 .font(.custom("KimberleyBl-Regular", size: size))
                 .foregroundColor(maneuver.difficulty.color())
         }
-//        .border(Color.white)
+        .border(Color.white)
     }
     
     var description: String {
@@ -358,15 +359,15 @@ struct TemperatureDial: View {
                                             ]
     
     // sector can stradle the baseline (x = 0)
-    private var newTemps: [Range<CGFloat>] = [-22.5..<22.5,
-                                              22.5..<67.5,
-                                              67.5..<112.5,
-                                              112.5..<157.5,
-                                              157.5..<202.5,
-                                              202.5..<247.5,
-                                              247.5..<292.5,
-                                              292.5..<337.5
-                                            ]
+//    private var newTemps: [Range<CGFloat>] = [-22.5..<22.5,
+//                                              22.5..<67.5,
+//                                              67.5..<112.5,
+//                                              112.5..<157.5,
+//                                              157.5..<202.5,
+//                                              202.5..<247.5,
+//                                              247.5..<292.5,
+//                                              292.5..<337.5
+//                                            ]
 
     
     @State var currentSegment: UInt = 0
@@ -374,15 +375,42 @@ struct TemperatureDial: View {
     
     var maneuvers: [String] = ["1LT", "1LB", "1LS", "1RB", "2LT", "2LB", "2RS", "2RB"]
     
-    let Newmaneuvers: [Maneuver] = [Maneuver(speed: 1, bearing: .LT, difficulty: .White),
-                                    Maneuver(speed: 1, bearing: .LB, difficulty: .Blue),
-                                    Maneuver(speed: 1, bearing: .LS, difficulty: .Red),
-                                    Maneuver(speed: 1, bearing: .RB, difficulty: .Blue),
-                                    Maneuver(speed: 2, bearing: .LTA, difficulty: .Red),
-                                    Maneuver(speed: 2, bearing: .RT, difficulty: .White),
-                                    Maneuver(speed: 2, bearing: .RS, difficulty: .Red),
-                                    Maneuver(speed: 2, bearing: .K, difficulty: .Red)
-                                    ]
+//    let Newmaneuvers: [Maneuver] = [Maneuver(speed: 1, bearing: .LT, difficulty: .White),
+//                                    Maneuver(speed: 1, bearing: .LB, difficulty: .Blue),
+//                                    Maneuver(speed: 1, bearing: .LS, difficulty: .Red),
+//                                    Maneuver(speed: 1, bearing: .RB, difficulty: .Blue),
+//                                    Maneuver(speed: 2, bearing: .LTA, difficulty: .Red),
+//                                    Maneuver(speed: 2, bearing: .RT, difficulty: .White),
+//                                    Maneuver(speed: 2, bearing: .RS, difficulty: .Red),
+//                                    Maneuver(speed: 2, bearing: .K, difficulty: .Red)
+//                                    ]
+    
+    let lambda_Shuttle_Maneuvers: [Maneuver] = [Maneuver(speed: 0, bearing: .X, difficulty: .Red),
+                                                Maneuver(speed: 1, bearing: .LB, difficulty: .Blue),
+                                                Maneuver(speed: 1, bearing: .S, difficulty: .Blue),
+                                                Maneuver(speed: 1, bearing: .RB, difficulty: .Blue),
+                                                Maneuver(speed: 2, bearing: .LT, difficulty: .Red),
+                                                Maneuver(speed: 2, bearing: .LB, difficulty: .White),
+                                                Maneuver(speed: 2, bearing: .S, difficulty: .Blue),
+                                                Maneuver(speed: 2, bearing: .RB, difficulty: .White),
+                                                Maneuver(speed: 2, bearing: .RT, difficulty: .Red),
+                                                Maneuver(speed: 3, bearing: .LT, difficulty: .Red),
+                                                Maneuver(speed: 3, bearing: .S, difficulty: .White),
+                                                Maneuver(speed: 3, bearing: .RT, difficulty: .Red)]
+    
+    private var lambda_Shuttle_Angles: [Range<CGFloat>] = [-15..<15,
+      15..<45,
+      45..<75,
+      75..<105,
+      105..<135,
+      135..<165,
+      165..<195,
+      195..<225,
+      225..<255,
+      255..<285,
+      285..<315,
+      315..<345
+    ]
     
     var totalSegments: CGFloat {
         CGFloat(maneuvers.count)
@@ -471,7 +499,7 @@ struct TemperatureDial: View {
         self.ranges = stride(from: 0.0, to: 360.0, by: 45.0)
             .map{ CGFloat($0) }
 
-        for (index, item) in self.newTemps.enumerated() {
+        for (index, item) in self.lambda_Shuttle_Angles.enumerated() {
             let lower = item.lowerBound
             _ = item.upperBound
             let mid = (item.lowerBound + item.upperBound) / 2
@@ -499,17 +527,18 @@ struct TemperatureDial: View {
         return pathNodes
     }
     
-    private func buildManeuverViews_New(radius: CGFloat) -> [PathNodeStruct<ManeuverDialSelection>] {
+    private func buildManeuverViews_New(radius: CGFloat,
+                                        maneuvers: [Maneuver]) -> [PathNodeStruct<ManeuverDialSelection>] {
         var currentAngle = Angle(degrees: 0)
         let segmentAngle = Double(360 / maneuvers.count)
         
-        let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = Newmaneuvers.map{
+        let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = maneuvers.map{
             let view = ManeuverDialSelection(maneuver: $0, size: 40)
             
             // 0 degrees in SwiftUI is at the pi / 2 (90 clockwise) location, so add
             // -90 to get the correct location
             let rotationAngle = Angle(degrees: currentAngle.degrees)
-            let textRadius = radius - 30
+            let textRadius = radius - 40
             
             let offset = pointOnCircle(withRadius: textRadius, withAngle: CGFloat(rotationAngle.degrees))
             currentAngle.degrees += segmentAngle
@@ -632,7 +661,7 @@ struct TemperatureDial: View {
 //                    .offset(x: 0, y: -self.textCircleRadius)
 //                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
 //
-                ForEach(self.buildManeuverViews_New(radius: self.textCircleRadius), id:\.id) { node in
+                ForEach(self.buildManeuverViews_New(radius: self.textCircleRadius, maneuvers: lambda_Shuttle_Maneuvers), id:\.id) { node in
                     node.view
 //                        .font(.custom("KimberleyBl-Regular", size: 36))
 //                        .font(.title)
@@ -706,7 +735,12 @@ struct TemperatureDial: View {
                 )
         
             VStack {
-                Text("\(Newmaneuvers[Int(currentSegment)].description)")
+                Text(lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing.getSymbolCharacter())
+                    .font(.custom("xwing-miniatures", size: 40))
+                    .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
+                    .padding(10)
+                
+                Text("\(lambda_Shuttle_Maneuvers[Int(currentSegment)].description)")
                     .font(.largeTitle)
                     .foregroundColor(Color.white)
                     .fontWeight(.semibold)
@@ -727,7 +761,7 @@ struct TemperatureDial: View {
 //            Circle()
 //                .stroke(Color.blue, style: dashedStyle)
 //                .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
-//            
+//
 //            // current temp
 //            Circle()
 //                .trim(from: 0.0, to: self.value)
@@ -737,9 +771,9 @@ struct TemperatureDial: View {
             
             VStack {
                 ForEach(self.angleRanges, id:\.id) { angle in
-                    Text("\(angle.start)..\(angle.mid)<\(angle.end) \(angle.sector)")
+                    Text("\(angle.start)..\(angle.mid)<\(angle.end) \(angle.sector) \(self.getManeuver(sector: angle.sector))")
                 }
-            }.offset(x: 0, y: -350)
+            }.offset(x: 0, y: -375)
         }
         .onAppear(perform: {
             let percentage = self.initialTemperature / self.maxTemperature
@@ -747,7 +781,12 @@ struct TemperatureDial: View {
             self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
         })
     }
+    
+    func getManeuver(sector: UInt) -> String {
+        return lambda_Shuttle_Maneuvers[Int(sector)].description
+    }
 }
+
 
 struct TestView: View {
     @State private var rotation = 0.0
