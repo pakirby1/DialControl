@@ -206,9 +206,28 @@ enum ManeuverBearing : String {
     }
 }
 
+enum ManeuverDifficulty {
+    
+    case Red
+    case White
+    case Blue
+    
+    func color() -> Color {
+        switch(self) {
+        case .Red:
+            return Color.red
+        case .White:
+            return Color.white
+        case .Blue:
+            return Color.blue
+        }
+    }
+}
+
 struct Maneuver: CustomStringConvertible {
     let speed: UInt
     let bearing: ManeuverBearing
+    let difficulty: ManeuverDifficulty
     
     var description: String {
         return "\(speed)\(bearing.rawValue)"
@@ -217,16 +236,19 @@ struct Maneuver: CustomStringConvertible {
 
 struct ManeuverDialSelection: View, CustomStringConvertible {
     let maneuver: Maneuver
+    let size: CGFloat
     
     var body: some View {
         VStack {
             Text(maneuver.bearing.getSymbolCharacter())
-                .font(.custom("xwing-miniatures", size: 30))
+                .font(.custom("xwing-miniatures", size: size))
+                .foregroundColor(maneuver.difficulty.color())
             
             Text("\(maneuver.speed)")
-                .font(.custom("KimberleyBl-Regular", size: 30))
+                .font(.custom("KimberleyBl-Regular", size: size))
+                .foregroundColor(maneuver.difficulty.color())
         }
-        .border(Color.white)
+//        .border(Color.white)
     }
     
     var description: String {
@@ -302,7 +324,7 @@ struct MyCircle : View {
     var body: some View {
         return ZStack {
             Circle()
-                .fill(Color.blue)
+                .fill(Color.black)
                 .frame(width: self.innerDiameter,
                        height: self.innerDiameter,
                        alignment: .center)
@@ -350,16 +372,16 @@ struct TemperatureDial: View {
     @State var currentSegment: UInt = 0
     @State var topSegment: UInt = 0
     
-    var maneuvers: [String] = ["1LT", "1LB", "1S", "1RB", "2LT", "2LB", "2S", "2RB"]
+    var maneuvers: [String] = ["1LT", "1LB", "1LS", "1RB", "2LT", "2LB", "2RS", "2RB"]
     
-    let Newmaneuvers: [Maneuver] = [Maneuver(speed: 1, bearing: .LT),
-                                    Maneuver(speed: 1, bearing: .LB),
-                                    Maneuver(speed: 1, bearing: .S),
-                                    Maneuver(speed: 1, bearing: .RB),
-                                    Maneuver(speed: 2, bearing: .LTA),
-                                    Maneuver(speed: 2, bearing: .RB),
-                                    Maneuver(speed: 2, bearing: .S),
-                                    Maneuver(speed: 2, bearing: .K)
+    let Newmaneuvers: [Maneuver] = [Maneuver(speed: 1, bearing: .LT, difficulty: .White),
+                                    Maneuver(speed: 1, bearing: .LB, difficulty: .Blue),
+                                    Maneuver(speed: 1, bearing: .LS, difficulty: .Red),
+                                    Maneuver(speed: 1, bearing: .RB, difficulty: .Blue),
+                                    Maneuver(speed: 2, bearing: .LTA, difficulty: .Red),
+                                    Maneuver(speed: 2, bearing: .RT, difficulty: .White),
+                                    Maneuver(speed: 2, bearing: .RS, difficulty: .Red),
+                                    Maneuver(speed: 2, bearing: .K, difficulty: .Red)
                                     ]
     
     var totalSegments: CGFloat {
@@ -482,12 +504,14 @@ struct TemperatureDial: View {
         let segmentAngle = Double(360 / maneuvers.count)
         
         let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = Newmaneuvers.map{
-            let view = ManeuverDialSelection(maneuver: $0)
+            let view = ManeuverDialSelection(maneuver: $0, size: 40)
             
             // 0 degrees in SwiftUI is at the pi / 2 (90 clockwise) location, so add
             // -90 to get the correct location
             let rotationAngle = Angle(degrees: currentAngle.degrees)
-            let offset = pointOnCircle(withRadius: radius, withAngle: CGFloat(rotationAngle.degrees))
+            let textRadius = radius - 30
+            
+            let offset = pointOnCircle(withRadius: textRadius, withAngle: CGFloat(rotationAngle.degrees))
             currentAngle.degrees += segmentAngle
             
             print("\(#function) \(view): \(rotationAngle.degrees) (x: \(offset.0), y: \(offset.1)) \(currentAngle.degrees)")
@@ -586,6 +610,13 @@ struct TemperatureDial: View {
 
     var innerCircle: some View {
         ZStack {
+            GeometryReader { g in
+                MyShape(parentWidth: g.size.width,
+                        parentHeight: g.size.height,
+                        radius: (self.innerDiameter / 2) + 20)
+                    .fill(Color.red)
+            }
+            
             ZStack {
                 MyCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
                 
@@ -674,16 +705,15 @@ struct TemperatureDial: View {
                     }
                 )
         
-            Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment) \n \(Newmaneuvers[Int(currentSegment)].description) \n ")
-                .font(.largeTitle)
-                .foregroundColor(Color.white)
-                .fontWeight(.semibold)
-            
-            GeometryReader { g in
-                MyShape(parentWidth: g.size.width,
-                        parentHeight: g.size.height,
-                        radius: self.innerDiameter / 2)
-                    .fill(Color.red.opacity(0.4))
+            VStack {
+                Text("\(Newmaneuvers[Int(currentSegment)].description)")
+                    .font(.largeTitle)
+                    .foregroundColor(Color.white)
+                    .fontWeight(.semibold)
+                
+                Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment)")
+                    .font(.body)
+                    .foregroundColor(Color.white)
             }
         }
         .border(Color.blue)
@@ -693,17 +723,17 @@ struct TemperatureDial: View {
         ZStack(alignment: .center) {
             innerCircle
             
-            // remaining temp
-            Circle()
-                .stroke(Color.blue, style: dashedStyle)
-                .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
-            
-            // current temp
-            Circle()
-                .trim(from: 0.0, to: self.value)
-                .stroke(Color.red, style: dashedStyle)
-                .rotationEffect(.degrees(-90))
-                .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
+//            // remaining temp
+//            Circle()
+//                .stroke(Color.blue, style: dashedStyle)
+//                .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
+//            
+//            // current temp
+//            Circle()
+//                .trim(from: 0.0, to: self.value)
+//                .stroke(Color.red, style: dashedStyle)
+//                .rotationEffect(.degrees(-90))
+//                .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
             
             VStack {
                 ForEach(self.angleRanges, id:\.id) { angle in
