@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE1FBE562416608D005C54F5 /* TimelaneCombine in Frameworks */ = {isa = PBXBuildFile; productRef = AE1FBE552416608D005C54F5 /* TimelaneCombine */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
 		AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */; };
@@ -66,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE1FBE562416608D005C54F5 /* TimelaneCombine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +177,9 @@
 			dependencies = (
 			);
 			name = DialControl;
+			packageProductDependencies = (
+				AE1FBE552416608D005C54F5 /* TimelaneCombine */,
+			);
 			productName = DialControl;
 			productReference = AE4D58BF23F8087C00C66136 /* DialControl.app */;
 			productType = "com.apple.product-type.application";
@@ -247,6 +252,9 @@
 				Base,
 			);
 			mainGroup = AE4D58B623F8087B00C66136;
+			packageReferences = (
+				AE1FBE542416608D005C54F5 /* XCRemoteSwiftPackageReference "TimelaneCombine" */,
+			);
 			productRefGroup = AE4D58C023F8087C00C66136 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -622,6 +630,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AE1FBE542416608D005C54F5 /* XCRemoteSwiftPackageReference "TimelaneCombine" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/icanzilb/TimelaneCombine";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AE1FBE552416608D005C54F5 /* TimelaneCombine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE1FBE542416608D005C54F5 /* XCRemoteSwiftPackageReference "TimelaneCombine" */;
+			productName = TimelaneCombine;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */ = {

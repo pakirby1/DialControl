@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Combine
+import TimelaneCombine
 
 class Test : ObservableObject {
     @Published var temperature: CGFloat = 0.0
@@ -102,10 +103,12 @@ struct Rotation: View {
     @State var currentSegment: UInt = 0
     
     init() {
-        anglePublisher.sink{ value in
-            print("rotated: \(value.degrees) from top")
-        }
-        .store(in: &cancellables)
+        anglePublisher
+            .lane("anglePublisher")
+            .sink{ value in
+                print("rotated: \(value.degrees) from top")
+            }
+            .store(in: &cancellables)
     }
     
     var rotationAngle: Angle {
@@ -490,6 +493,10 @@ struct TemperatureDial: View {
 //
 //        angleRanges.forEach{print($0)}
 //    }
+    
+    var anglePublisher = PassthroughSubject<Angle, Never>()
+    private var cancellables: Set<AnyCancellable> = []
+    
     init(temperature: CGFloat, diameter: CGFloat) {
         self.initialTemperature = temperature
         self.outerDiameter = diameter
@@ -507,6 +514,12 @@ struct TemperatureDial: View {
             self.angleRanges.append(AngleRange(start: lower, end: item.upperBound, mid: mid, sector: UInt(index)))
         }
         
+        anglePublisher
+            .lane("anglePublisher")
+            .sink{ value in
+                print("rotated: \(value.degrees)")
+            }
+            .store(in: &cancellables)
     }
 
     private func buildManeuverViews_Old(radius: CGFloat) -> [PathNodeStruct<Text>] {
@@ -731,6 +744,8 @@ struct TemperatureDial: View {
                         
                         self.rotatingClockwise = (angle - self.oldAngle) > 0
                         self.oldAngle = angle
+                        
+                        self.anglePublisher.send(Angle(degrees: Double(angle)))
                     }
                 )
         
