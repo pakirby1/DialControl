@@ -327,14 +327,14 @@ struct DialView: View {
     var innerCircle: some View {
         ZStack {
             GeometryReader { g in
-                MyShape(parentWidth: g.size.width,
+                SelectionIndicator(parentWidth: g.size.width,
                         parentHeight: g.size.height,
                         radius: (self.innerDiameter / 2) + 20)
                     .fill(Color.red)
             }
             
             ZStack {
-                MyCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
+                DialCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
                 
 //                Rectangle()
 //                    .fill(Color.red)
@@ -424,10 +424,7 @@ struct DialView: View {
                 )
         
             VStack {
-                Text(lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing.getSymbolCharacter())
-                    .font(.custom("xwing-miniatures", size: 40))
-                    .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
-                    .padding(10)
+                buildSymbolView()
                 
                 Text("\(lambda_Shuttle_Maneuvers[Int(currentSegment)].description)")
                     .font(.largeTitle)
@@ -474,5 +471,73 @@ struct DialView: View {
     func getManeuver(sector: UInt) -> String {
         return lambda_Shuttle_Maneuvers[Int(sector)].description
     }
+    
+    func getCirclePoints(centerPoint point: CGPoint, radius: CGFloat, n: Int) -> [CGPoint] {
+        let result: [CGPoint] = stride(from: 0.0, to: 360.0, by: Double(360 / n)).map {
+            let bearing = CGFloat($0) * .pi / 180
+            let x = point.x + radius * cos(bearing)
+            let y = point.y + radius * sin(bearing)
+            return CGPoint(x: x, y: y)
+        }
+        
+        return result
+    }
+    
+    func buildSymbolView() -> AnyView {
+        // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font.
+        if lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing == .S {
+            return AnyView(Image(systemName: "arrow.up")
+                .font(.system(size: 36.0, weight: .bold))
+                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
+                .border(Color.white))
+        } else {
+            return AnyView(Text(lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing.getSymbolCharacter())
+                                .font(.custom("xwing-miniatures", size: 40))
+                                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
+                                .border(Color.white))
+        }
+    }
 }
+
+struct SelectionIndicator : Shape {
+    let parentWidth: CGFloat
+    let parentHeight: CGFloat
+    let radius: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        var p = Path()
+        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
+        
+        p.addArc(center: center,
+                 radius: radius,
+                 startAngle: .degrees(247.5),
+                 endAngle: .degrees(292.5),
+                 clockwise: false)
+        
+        p.addLine(to: center)
+        p.closeSubpath()
+        
+        
+//        return p.strokedPath(.init(lineWidth: 4)).fill(Color.red) as! Path
+        return p
+    }
+}
+
+struct DialCircle : View {
+    let innerDiameter: CGFloat
+    let rotationAngle: CGFloat
+    
+    var body: some View {
+        return ZStack {
+            Circle()
+                .fill(Color.black)
+                .frame(width: self.innerDiameter,
+                       height: self.innerDiameter,
+                       alignment: .center)
+                .rotationEffect(Angle.degrees(Double(self.rotationAngle)))
+        }
+    }
+}
+
+
 

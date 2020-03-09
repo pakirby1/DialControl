@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		AE1FBE562416608D005C54F5 /* TimelaneCombine in Frameworks */ = {isa = PBXBuildFile; productRef = AE1FBE552416608D005C54F5 /* TimelaneCombine */; };
 		AE1FBE5924166443005C54F5 /* DialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE5824166443005C54F5 /* DialView.swift */; };
+		AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE5B24166623005C54F5 /* Maneuver.swift */; };
+		AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE5D24166675005C54F5 /* Extensions.swift */; };
+		AE1FBE6024166798005C54F5 /* Rotated.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE5F24166798005C54F5 /* Rotated.swift */; };
+		AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE6124166830005C54F5 /* PathNode.swift */; };
+		AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */; };
+		AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE65241668CF005C54F5 /* AngleRange.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
 		AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */; };
@@ -43,6 +49,12 @@
 
 /* Begin PBXFileReference section */
 		AE1FBE5824166443005C54F5 /* DialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialView.swift; sourceTree = "<group>"; };
+		AE1FBE5B24166623005C54F5 /* Maneuver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maneuver.swift; sourceTree = "<group>"; };
+		AE1FBE5D24166675005C54F5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		AE1FBE5F24166798005C54F5 /* Rotated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rotated.swift; sourceTree = "<group>"; };
+		AE1FBE6124166830005C54F5 /* PathNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathNode.swift; sourceTree = "<group>"; };
+		AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManeuverDialSelection.swift; sourceTree = "<group>"; };
+		AE1FBE65241668CF005C54F5 /* AngleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleRange.swift; sourceTree = "<group>"; };
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58C223F8087C00C66136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AE4D58C423F8087C00C66136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -94,8 +106,20 @@
 			isa = PBXGroup;
 			children = (
 				AE1FBE5824166443005C54F5 /* DialView.swift */,
+				AE1FBE5F24166798005C54F5 /* Rotated.swift */,
+				AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		AE1FBE5A2416657D005C54F5 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AE1FBE5B24166623005C54F5 /* Maneuver.swift */,
+				AE1FBE6124166830005C54F5 /* PathNode.swift */,
+				AE1FBE65241668CF005C54F5 /* AngleRange.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		AE4D58B623F8087B00C66136 = {
@@ -122,6 +146,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AE1FBE5A2416657D005C54F5 /* Models */,
 				AE1FBE5724166422005C54F5 /* Views */,
 				AEAD19F32404F32C0020FABC /* Fonts */,
 				AE4D58C223F8087C00C66136 /* AppDelegate.swift */,
@@ -133,6 +158,7 @@
 				AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */,
 				AE4D58CD23F8087D00C66136 /* Preview Content */,
 				AEAD19F824085E0A0020FABC /* TestView.swift */,
+				AE1FBE5D24166675005C54F5 /* Extensions.swift */,
 			);
 			path = DialControl;
 			sourceTree = "<group>";
@@ -312,12 +338,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				AEAD19F924085E0A0020FABC /* TestView.swift in Sources */,
+				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
+				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
+				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */,
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
+				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
+				AE1FBE6024166798005C54F5 /* Rotated.swift in Sources */,
+				AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
