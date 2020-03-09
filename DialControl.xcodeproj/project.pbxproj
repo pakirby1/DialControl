@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AE1FBE562416608D005C54F5 /* TimelaneCombine in Frameworks */ = {isa = PBXBuildFile; productRef = AE1FBE552416608D005C54F5 /* TimelaneCombine */; };
+		AE1FBE5924166443005C54F5 /* DialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE5824166443005C54F5 /* DialView.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
 		AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AE1FBE5824166443005C54F5 /* DialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialView.swift; sourceTree = "<group>"; };
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58C223F8087C00C66136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AE4D58C423F8087C00C66136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AE1FBE5724166422005C54F5 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AE1FBE5824166443005C54F5 /* DialView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		AE4D58B623F8087B00C66136 = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +122,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AE1FBE5724166422005C54F5 /* Views */,
 				AEAD19F32404F32C0020FABC /* Fonts */,
 				AE4D58C223F8087C00C66136 /* AppDelegate.swift */,
 				AE4D58C423F8087C00C66136 /* SceneDelegate.swift */,
@@ -306,6 +317,7 @@
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
+				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
