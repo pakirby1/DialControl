@@ -16,12 +16,12 @@ struct UpArrow : Shape {
         let height = rect.height
         
         let top = CGPoint(x: width / 2, y: 0)
-        let left = CGPoint(x: 0, y: height / 3)
-        let headLeft = CGPoint(x: width / 3, y: height / 3)
-        let bottomLeft = CGPoint(x: width / 3, y: height)
-        let bottomRight = CGPoint(x: width * 2 / 3, y: height)
-        let headRight = CGPoint(x: width * 2 / 3, y: height / 3)
-        let right = CGPoint(x: width, y: height / 3)
+        let left = CGPoint(x: width / 8, y: height / 3)
+        let headLeft = CGPoint(x: width * 3 / 8, y: height / 3)
+        let bottomLeft = CGPoint(x: width * 3 / 8, y: height)
+        let bottomRight = CGPoint(x: width * 5 / 8, y: height)
+        let headRight = CGPoint(x: width * 5 / 8, y: height / 3)
+        let right = CGPoint(x: width * 7 / 8, y: height / 3)
         
         path.move(to: top)
         path.addLine(to: left)
@@ -40,6 +40,9 @@ struct UpArrowView: View {
     let color: Color
     
     var body: some View {
-        UpArrow().fill(color).border(Color.white)
+        UpArrow()
+            .fill(color)
+            .padding(2)
+//            .border(Color.white)
     }
 }

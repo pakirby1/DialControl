@@ -508,8 +508,8 @@ struct DialView: View {
                                 .font(.custom("xwing-miniatures", size: 30))
                                 .frame(width: 32, height: 40, alignment: .center)
                                 .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
-                                .padding(2)
-                                .border(Color.white))
+                                .padding(2))
+//                                .border(Color.white))
         }
     }
 }

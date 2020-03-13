@@ -13,18 +13,35 @@ struct ManeuverDialSelection: View, CustomStringConvertible {
     let maneuver: Maneuver
     let size: CGFloat
     
-    var body: some View {
-        VStack {
-            Text(maneuver.bearing.getSymbolCharacter())
+    func buildSymbol() -> AnyView {
+        func buildUpArrowView() -> AnyView {
+            return AnyView(UpArrowView(color: maneuver.difficulty.color())
+                .frame(width: 50, height: 50, alignment: .center))
+        }
+        
+        func buildTextFontView() -> AnyView {
+            return AnyView(Text(maneuver.bearing.getSymbolCharacter())
                 .font(.custom("xwing-miniatures", size: size))
                 .foregroundColor(maneuver.difficulty.color())
-                .padding(10)
+                .padding(10))
+        }
+        
+        if maneuver.bearing == .S {
+            return buildUpArrowView()
+        } else {
+            return buildTextFontView()
+        }
+    }
+    
+    var body: some View {
+        VStack {
+            buildSymbol()
             
             Text("\(maneuver.speed)")
                 .font(.custom("KimberleyBl-Regular", size: size))
                 .foregroundColor(maneuver.difficulty.color())
         }
-        .border(Color.white)
+//        .border(Color.white)
     }
     
     var description: String {
