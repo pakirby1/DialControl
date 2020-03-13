@@ -28,6 +28,7 @@
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
 		AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */; };
 		AEAD19F924085E0A0020FABC /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAD19F824085E0A0020FABC /* TestView.swift */; };
+		AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
 		AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures_SK9.ttf"; sourceTree = "<group>"; };
 		AEAD19F824085E0A0020FABC /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		AEBA6360241B58D9008B00DB /* UpArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				AE1FBE5824166443005C54F5 /* DialView.swift */,
 				AE1FBE5F24166798005C54F5 /* Rotated.swift */,
 				AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */,
+				AEBA6360241B58D9008B00DB /* UpArrow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			files = (
 				AEAD19F924085E0A0020FABC /* TestView.swift in Sources */,
 				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
+				AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,

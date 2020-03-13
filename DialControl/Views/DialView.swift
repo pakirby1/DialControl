@@ -425,6 +425,8 @@ struct DialView: View {
         
             VStack {
                 buildSymbolView()
+                    .frame(width: 32, height: 40, alignment: .center)
+//                    .border(Color.white)
                 
                 Text("\(lambda_Shuttle_Maneuvers[Int(currentSegment)].description)")
                     .font(.largeTitle)
@@ -484,16 +486,29 @@ struct DialView: View {
     }
     
     func buildSymbolView() -> AnyView {
-        // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font.
-        if lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing == .S {
+        func buildSFSymbolView() -> AnyView {
             return AnyView(Image(systemName: "arrow.up")
                 .font(.system(size: 36.0, weight: .bold))
-                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
-                .border(Color.white))
+                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color()))
+//                .border(Color.white))
+        }
+        
+        func buildArrowView() -> AnyView {
+            return AnyView(UpArrowView(color: lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color()))
+//                .fill()
+        }
+        
+        // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font.
+        if lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing == .S {
+//            return buildSFSymbolView()
+            return buildArrowView()
+            
         } else {
             return AnyView(Text(lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing.getSymbolCharacter())
-                                .font(.custom("xwing-miniatures", size: 40))
+                                .font(.custom("xwing-miniatures", size: 30))
+                                .frame(width: 32, height: 40, alignment: .center)
                                 .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
+                                .padding(2)
                                 .border(Color.white))
         }
     }
@@ -535,6 +550,8 @@ struct DialCircle : View {
                        height: self.innerDiameter,
                        alignment: .center)
                 .rotationEffect(Angle.degrees(Double(self.rotationAngle)))
+            
+//            UpArrowView()
         }
     }
 }
