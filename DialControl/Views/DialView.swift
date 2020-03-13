@@ -12,7 +12,6 @@ import Combine
 import TimelaneCombine
 
 struct DialView: View {
-
     @State private var value: CGFloat = 0
     @State private var oldCoordinate: (CGFloat, CGFloat) = (0.0, 0.0)
     @State private var oldAngle: CGFloat = 0.0
@@ -35,32 +34,11 @@ struct DialView: View {
                                            315..<360
                                             ]
     
-    // sector can stradle the baseline (x = 0)
-//    private var newTemps: [Range<CGFloat>] = [-22.5..<22.5,
-//                                              22.5..<67.5,
-//                                              67.5..<112.5,
-//                                              112.5..<157.5,
-//                                              157.5..<202.5,
-//                                              202.5..<247.5,
-//                                              247.5..<292.5,
-//                                              292.5..<337.5
-//                                            ]
-
-    
     @State var currentSegment: UInt = 0
     @State var topSegment: UInt = 0
+    @Binding var currentManeuver: String
     
     var maneuvers: [String] = ["1LT", "1LB", "1LS", "1RB", "2LT", "2LB", "2RS", "2RB"]
-    
-//    let Newmaneuvers: [Maneuver] = [Maneuver(speed: 1, bearing: .LT, difficulty: .White),
-//                                    Maneuver(speed: 1, bearing: .LB, difficulty: .Blue),
-//                                    Maneuver(speed: 1, bearing: .LS, difficulty: .Red),
-//                                    Maneuver(speed: 1, bearing: .RB, difficulty: .Blue),
-//                                    Maneuver(speed: 2, bearing: .LTA, difficulty: .Red),
-//                                    Maneuver(speed: 2, bearing: .RT, difficulty: .White),
-//                                    Maneuver(speed: 2, bearing: .RS, difficulty: .Red),
-//                                    Maneuver(speed: 2, bearing: .K, difficulty: .Red)
-//                                    ]
     
     let lambda_Shuttle_Maneuvers: [Maneuver] = [Maneuver(speed: 0, bearing: .X, difficulty: .Red),
                                                 Maneuver(speed: 1, bearing: .LB, difficulty: .Blue),
@@ -134,46 +112,17 @@ struct DialView: View {
         angleRanges.forEach{print($0)}
     }
 
-//    mutating func buildSectorsEven() {
-//        let numberOfSections = 8
-//
-//        // 1 - Define sector length
-//        let fanWidth: CGFloat = CGFloat.pi * 2 / 8
-//        print("fanWidth= \(fanWidth)")
-//
-//        // 2 - Set initial midpoint
-//        var mid: CGFloat = 0
-//
-//        // 3 - Iterate through all sectors
-//        for index in 1...numberOfSections {
-//            print("mid= \(mid)")
-//            var angleRange = AngleRange(start: mid - (fanWidth/2),
-//                                        end: mid + (fanWidth/2),
-//                                        mid: mid,
-//                                        sector: UInt(index))
-//            print(angleRange)
-//
-//            if (angleRange.end - fanWidth < - CGFloat.pi) {
-//                mid = CGFloat.pi
-//                angleRange.mid = mid;
-//                angleRange.start = fabsf(sector.maxValue);
-//
-//            }
-//            mid -= fanWidth;
-//
-//
-//            angleRanges.append(angleRange)
-//        }
-//
-//        angleRanges.forEach{print($0)}
-//    }
-    
     var anglePublisher = PassthroughSubject<Angle, Never>()
     private var cancellables: Set<AnyCancellable> = []
     
-    init(temperature: CGFloat, diameter: CGFloat) {
+    init(temperature: CGFloat,
+         diameter: CGFloat,
+         currentManeuver: Binding<String>)
+    {
         self.initialTemperature = temperature
         self.outerDiameter = diameter
+        self._currentManeuver = currentManeuver // Have to use `_` character to set the binding
+        
         let x = self.innerDiameter
         print("x: \(x)")
         
@@ -335,53 +284,14 @@ struct DialView: View {
             
             ZStack {
                 DialCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
-                
-//                Rectangle()
-//                    .fill(Color.red)
-//                    .frame(width: self.innerDiameter / 3,
-//                           height: self.innerDiameter / 3,
-//                           alignment: .center)
-//                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
-                
-//                Text("1")
-//                    .font(.title)
-//                    .offset(x: 0, y: -self.textCircleRadius)
-//                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
-//
+
                 ForEach(self.buildManeuverViews_New(radius: self.textCircleRadius, maneuvers: lambda_Shuttle_Maneuvers), id:\.id) { node in
                     node.view
-//                        .font(.custom("KimberleyBl-Regular", size: 36))
-//                        .font(.title)
                         .rotated(Angle.degrees(node.rotationAngle.degrees))
                         .offset(x: node.offset.0,
                                 y: node.offset.1)
                         .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
                 }
-                
-//                Text("2")
-//                    .font(.title)
-//                    .rotated(Angle.degrees(90.0))
-//                    .offset(x: xPoint(self.textCircleRadius, 90.0),
-//                            y: yPoint(self.textCircleRadius, 90.0))
-//                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
-                
-//                ForEach(self.maneuvers, id:\.self) { maneuver in
-//                    let point = getOffsetForIndex(withRadius: CGFloatself.textCircleRadius, numPoints: maneuvers.count, index: 0)
-//                    Text("2")
-//
-//                }
-                                
-//                Text("3")
-//                    .font(.title)
-//                    .rotated(Angle.degrees(60))
-////                    .offset(x: xPoint(self.textCircleRadius, 60.0),
-////                            y: yPoint(self.textCircleRadius, 60.0))
-//                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
-                
-//                Text("6")
-//                    .font(.title)
-//                    .offset(x: 0, y: self.textCircleRadius)
-//                    .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
             }
             .gesture(
                     DragGesture().onChanged() { value in
@@ -409,7 +319,6 @@ struct DialView: View {
                                                     x: ending.x,
                                                     angleFromBaseline: angle)
                         
-//                        self.topSegment = UInt(self.totalSegments - 1) - self.currentSegment
                         self.currentTemperature = self.value * self.maxTemperature
                         
                         self.topSegment = UInt(self.angleRanges.getSegment(withAngle: self.currentTemperature))
@@ -420,6 +329,7 @@ struct DialView: View {
                         self.oldAngle = angle
                         
                         self.anglePublisher.send(Angle(degrees: Double(angle)))
+                        self.currentManeuver = self.lambda_Shuttle_Maneuvers[Int(self.currentSegment)].description
                     }
                 )
         
@@ -444,19 +354,7 @@ struct DialView: View {
     var body: some View {
         ZStack(alignment: .center) {
             innerCircle
-            
-//            // remaining temp
-//            Circle()
-//                .stroke(Color.blue, style: dashedStyle)
-//                .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
-//
-//            // current temp
-//            Circle()
-//                .trim(from: 0.0, to: self.value)
-//                .stroke(Color.red, style: dashedStyle)
-//                .rotationEffect(.degrees(-90))
-//                .frame(width: self.outerDiameter, height: self.outerDiameter, alignment: .center)
-            
+
             VStack {
                 ForEach(self.angleRanges, id:\.id) { angle in
                     Text("\(angle.start)..\(angle.mid)<\(angle.end) \(angle.sector) \(self.getManeuver(sector: angle.sector))")
@@ -509,7 +407,6 @@ struct DialView: View {
                                 .frame(width: 32, height: 40, alignment: .center)
                                 .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
                                 .padding(2))
-//                                .border(Color.white))
         }
     }
 }
@@ -532,8 +429,6 @@ struct SelectionIndicator : Shape {
         p.addLine(to: center)
         p.closeSubpath()
         
-        
-//        return p.strokedPath(.init(lineWidth: 4)).fill(Color.red) as! Path
         return p
     }
 }
@@ -550,8 +445,6 @@ struct DialCircle : View {
                        height: self.innerDiameter,
                        alignment: .center)
                 .rotationEffect(Angle.degrees(Double(self.rotationAngle)))
-            
-//            UpArrowView()
         }
     }
 }

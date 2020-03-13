@@ -11,9 +11,15 @@ import Combine
 import TimelaneCombine
 
 struct ContentView: View {
+    @State var maneuver: String = ""
+    
     var body: some View {
-        return DialView(temperature: 0,
-                               diameter: 500)
+        VStack {
+            DialView(temperature: 0,
+                        diameter: 500,
+                        currentManeuver: $maneuver)
+            Text("Maneuver: \(maneuver)")
+        }
     }
 }
 
