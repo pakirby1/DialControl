@@ -12,12 +12,14 @@ import TimelaneCombine
 
 struct ContentView: View {
     @State var maneuver: String = ""
+    let ship: Ship = Ship.serializeJSON(jsonString: jsonString)
     
     var body: some View {
         VStack {
             DialView(temperature: 0,
                         diameter: 500,
                         currentManeuver: $maneuver)
+            Text("Ship: \(ship.name)")
             Text("Maneuver: \(maneuver)")
         }
     }

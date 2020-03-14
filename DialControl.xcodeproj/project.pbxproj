@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
+		AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */ = {isa = PBXBuildFile; fileRef = AE15E78D241D02120002F696 /* tie-in-interceptor.json */; };
 		AE1FBE562416608D005C54F5 /* TimelaneCombine in Frameworks */ = {isa = PBXBuildFile; productRef = AE1FBE552416608D005C54F5 /* TimelaneCombine */; };
 		AE1FBE5924166443005C54F5 /* DialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE5824166443005C54F5 /* DialView.swift */; };
 		AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE5B24166623005C54F5 /* Maneuver.swift */; };
@@ -49,6 +51,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
+		AE15E78D241D02120002F696 /* tie-in-interceptor.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tie-in-interceptor.json"; sourceTree = "<group>"; };
 		AE1FBE5824166443005C54F5 /* DialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialView.swift; sourceTree = "<group>"; };
 		AE1FBE5B24166623005C54F5 /* Maneuver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Maneuver.swift; sourceTree = "<group>"; };
 		AE1FBE5D24166675005C54F5 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -104,6 +108,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AE15E78C241D01A20002F696 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				AE15E78D241D02120002F696 /* tie-in-interceptor.json */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
 		AE1FBE5724166422005C54F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +133,7 @@
 				AE1FBE5B24166623005C54F5 /* Maneuver.swift */,
 				AE1FBE6124166830005C54F5 /* PathNode.swift */,
 				AE1FBE65241668CF005C54F5 /* AngleRange.swift */,
+				AE15E78A241D00120002F696 /* Ship.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -149,6 +162,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AE15E78C241D01A20002F696 /* Data */,
 				AE1FBE5A2416657D005C54F5 /* Models */,
 				AE1FBE5724166422005C54F5 /* Views */,
 				AEAD19F32404F32C0020FABC /* Fonts */,
@@ -312,6 +326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */,
+				AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */,
 				AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */,
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
 				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
@@ -344,6 +359,7 @@
 				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
 				AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
+				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */,
