@@ -40,18 +40,33 @@ struct DialView: View {
     
     var maneuvers: [String] = ["1LT", "1LB", "1LS", "1RB", "2LT", "2LB", "2RS", "2RB"]
     
-    let lambda_Shuttle_Maneuvers: [Maneuver] = [Maneuver(speed: 0, bearing: .X, difficulty: .Red),
-                                                Maneuver(speed: 1, bearing: .LB, difficulty: .Blue),
-                                                Maneuver(speed: 1, bearing: .S, difficulty: .Blue),
-                                                Maneuver(speed: 1, bearing: .RB, difficulty: .Blue),
-                                                Maneuver(speed: 2, bearing: .LT, difficulty: .Red),
-                                                Maneuver(speed: 2, bearing: .LB, difficulty: .White),
-                                                Maneuver(speed: 2, bearing: .S, difficulty: .Blue),
-                                                Maneuver(speed: 2, bearing: .RB, difficulty: .White),
-                                                Maneuver(speed: 2, bearing: .RT, difficulty: .Red),
-                                                Maneuver(speed: 3, bearing: .LT, difficulty: .Red),
-                                                Maneuver(speed: 3, bearing: .S, difficulty: .White),
-                                                Maneuver(speed: 3, bearing: .RT, difficulty: .Red)]
+//    case E      // Left Talon
+//    case L      // Left Sloop
+//    case T      // Left Turn
+//    case B      // Left Bank
+//    case A      // Left Reverse
+//    case O      // Stop
+//    case S      // Reverse
+//    case F      // Forward
+//    case R      // Right Talon
+//    case P      // Right Sloop
+//    case Y      // Right Turn
+//    case N      // Right Bank
+//    case D      // Right Reverse
+//    case K      // K Turn
+    
+    let lambda_Shuttle_Maneuvers: [Maneuver] = [Maneuver(speed: 0, bearing: .O, difficulty: .R),
+                                                Maneuver(speed: 1, bearing: .B, difficulty: .B),
+                                                Maneuver(speed: 1, bearing: .F, difficulty: .B),
+                                                Maneuver(speed: 1, bearing: .N, difficulty: .B),
+                                                Maneuver(speed: 2, bearing: .T, difficulty: .R),
+                                                Maneuver(speed: 2, bearing: .B, difficulty: .W),
+                                                Maneuver(speed: 2, bearing: .F, difficulty: .B),
+                                                Maneuver(speed: 2, bearing: .N, difficulty: .W),
+                                                Maneuver(speed: 2, bearing: .Y, difficulty: .R),
+                                                Maneuver(speed: 3, bearing: .T, difficulty: .R),
+                                                Maneuver(speed: 3, bearing: .F, difficulty: .W),
+                                                Maneuver(speed: 3, bearing: .Y, difficulty: .R)]
     
     private var lambda_Shuttle_Angles: [Range<CGFloat>] = [-15..<15,
       15..<45,
@@ -67,6 +82,9 @@ struct DialView: View {
       315..<345
     ]
     
+    private var angles: [Range<CGFloat>] = []
+    private var maneuverList: [Maneuver] = []
+    
     var totalSegments: CGFloat {
         CGFloat(maneuvers.count)
     }
@@ -75,24 +93,26 @@ struct DialView: View {
         return outerDiameter - indicatorLength
     }
 
-    mutating func buildAngles() {
-        var sectorAngles: [Range<CGFloat>] = []
-        let count = lambda_Shuttle_Maneuvers.count
+    
+    mutating func buildDial(dial: [String]) {
+        let count = dial.count
         let sectorAngle: CGFloat = CGFloat(360 / count) // 30
         
         let lower = sectorAngle / 2 // 15
         let upper = lower // 15
         let range: Range<CGFloat> = -lower..<upper // -15..<15
         
-        sectorAngles.append(range)
+        angles.append(range)
         
-        lambda_Shuttle_Maneuvers.enumerated().forEach { index, value in
+        dial.enumerated().forEach { index, value in
             if (index > 0) {
                 let lower = upper
                 let upper = lower + sectorAngle
                 let range: Range<CGFloat> = lower..<upper
-                sectorAngles.append(range)
+                angles.append(range)
             }
+            
+            maneuverList.append(Maneuver.buildManeuver(maneuver: value))
         }
     }
     
@@ -138,8 +158,10 @@ struct DialView: View {
     
     init(temperature: CGFloat,
          diameter: CGFloat,
-         currentManeuver: Binding<String>)
+         currentManeuver: Binding<String>,
+         dial: [String])
     {
+        print("DialView.init()")
         self.initialTemperature = temperature
         self.outerDiameter = diameter
         self._currentManeuver = currentManeuver // Have to use `_` character to set the binding
@@ -164,6 +186,8 @@ struct DialView: View {
                 print("rotated: \(value.degrees)")
             }
             .store(in: &cancellables)
+        
+        buildDial(dial: dial)
     }
 
     private func buildManeuverViews_Old(radius: CGFloat) -> [PathNodeStruct<Text>] {
@@ -408,12 +432,12 @@ struct DialView: View {
         func buildSFSymbolView() -> AnyView {
             return AnyView(Image(systemName: "arrow.up")
                 .font(.system(size: 36.0, weight: .bold))
-                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color()))
+                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color))
 //                .border(Color.white))
         }
         
         func buildArrowView() -> AnyView {
-            return AnyView(UpArrowView(color: lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color()))
+            return AnyView(UpArrowView(color: lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color))
 //                .fill()
         }
         
@@ -426,7 +450,7 @@ struct DialView: View {
             return AnyView(Text(lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing.getSymbolCharacter())
                                 .font(.custom("xwing-miniatures", size: 30))
                                 .frame(width: 32, height: 40, alignment: .center)
-                                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color())
+                                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color)
                                 .padding(2))
         }
     }

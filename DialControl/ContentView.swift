@@ -18,9 +18,12 @@ struct ContentView: View {
         VStack {
             DialView(temperature: 0,
                         diameter: 500,
-                        currentManeuver: $maneuver)
+                        currentManeuver: $maneuver,
+                        dial: ship.dial)
             Text("Ship: \(ship.name)")
             Text("Maneuver: \(maneuver)")
+        }.onAppear() {
+            print("ContentView.onAppear")
         }
     }
 }

@@ -15,14 +15,14 @@ struct ManeuverDialSelection: View, CustomStringConvertible {
     
     func buildSymbol() -> AnyView {
         func buildUpArrowView() -> AnyView {
-            return AnyView(UpArrowView(color: maneuver.difficulty.color())
+            return AnyView(UpArrowView(color: maneuver.difficulty.color)
                 .frame(width: 50, height: 50, alignment: .center))
         }
         
         func buildTextFontView() -> AnyView {
             return AnyView(Text(maneuver.bearing.getSymbolCharacter())
                 .font(.custom("xwing-miniatures", size: size))
-                .foregroundColor(maneuver.difficulty.color())
+                .foregroundColor(maneuver.difficulty.color)
                 .padding(10))
         }
         
@@ -39,7 +39,7 @@ struct ManeuverDialSelection: View, CustomStringConvertible {
             
             Text("\(maneuver.speed)")
                 .font(.custom("KimberleyBl-Regular", size: size))
-                .foregroundColor(maneuver.difficulty.color())
+                .foregroundColor(maneuver.difficulty.color)
         }
 //        .border(Color.white)
     }

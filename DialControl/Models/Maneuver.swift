@@ -9,64 +9,108 @@
 import Foundation
 import SwiftUI
 
+//    "1TW",
+//    "1YW",
+//    "2TB",
+//    "2BB",
+//    "2FB",
+//    "2NB",
+//    "2YB",
+//    "3LR",
+//    "3TW",
+//    "3BW",
+//    "3FB",
+//    "3NW",
+//    "3YW",
+//    "3PR",
+//    "4FB",
+//    "4KR",
+//    "5FW"
+
 enum ManeuverBearing : String {
-    case LT
-    case LB
-    case S
-    case RB
-    case RT
-    case LTA
-    case RTA
-    case K
-    case LS
-    case RS
-    case X
+    case E      // Left Talon
+    case L      // Left Sloop
+    case T      // Left Turn
+    case B      // Left Bank
+    case A      // Left Reverse
+    case O      // Stop
+    case S      // Reverse
+    case F      // Forward
+    case R      // Right Talon
+    case P      // Right Sloop
+    case Y      // Right Turn
+    case N      // Right Bank
+    case D      // Right Reverse
+    case K      // K Turn
     
     func getSymbolCharacter() -> String {
         switch(self) {
-        case .LT:
-            return "4"
-        case .LB:
-            return "7"
-        case .S:
-            return "8"
-        case .RB:
-            return "9"
-        case .RT:
-            return "6"
-        case .RTA:
-            return ";"
-        case .LTA:
+        case .E: // Left Talon
             return ":"
-        case .K:
-            return "2"
-        case .LS:
+        case .L: // Left Sloop
             return "1"
-        case .RS:
-            return "3"
-        case .X:
+        case .T: // Left Turn
+            return "4"
+        case .B: // Left Bank
+            return "7"
+        case .A: // Left Reverse
+            return "J"
+        case .O: // Stop
             return "5"
+        case .S: // Reverse
+            return "K"
+        case .F: // Forward
+            return "8"
+        case .R: // Right Talon
+            return ";"
+        case .P: // Right Sloop
+            return "3"
+        case .Y: // Right Turn
+            return "6"
+        case .N: // Right Bank
+            return "9"
+        case .D: // Right Reverse
+            return "L"
+        case .K: // K Turn
+            return "2"
         }
     }
 }
 
-enum ManeuverDifficulty {
+enum ManeuverDifficulty: String {
+    case R
+    case W
+    case B
     
-    case Red
-    case White
-    case Blue
-    
-    func color() -> Color {
+    var color : Color {
         switch(self) {
-        case .Red:
+        case .R:
             return Color.red
-        case .White:
+        case .W:
             return Color.white
-        case .Blue:
+        case .B:
             return Color.blue
         }
     }
 }
+
+//    "1TW",
+//    "1YW",
+//    "2TB",
+//    "2BB",
+//    "2FB",
+//    "2NB",
+//    "2YB",
+//    "3LR",
+//    "3TW",
+//    "3BW",
+//    "3FB",
+//    "3NW",
+//    "3YW",
+//    "3PR",
+//    "4FB",
+//    "4KR",
+//    "5FW"
 
 struct Maneuver: CustomStringConvertible {
     let speed: UInt
@@ -75,5 +119,19 @@ struct Maneuver: CustomStringConvertible {
     
     var description: String {
         return "\(speed)\(bearing.rawValue)"
+    }
+    
+    static func buildManeuver(maneuver: String) -> Maneuver {
+        let speed: Character = maneuver[0]
+        let b: String = String(maneuver[1])
+        let bearing: ManeuverBearing? = ManeuverBearing(rawValue: b)
+        let difficulty: ManeuverDifficulty? = ManeuverDifficulty(rawValue: String(maneuver[2]))
+        
+        // Remove !
+        let ret = Maneuver(speed: UInt(String(speed))!,
+                           bearing: bearing!,
+                           difficulty: difficulty!)
+
+        return ret
     }
 }
