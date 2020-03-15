@@ -75,6 +75,27 @@ struct DialView: View {
         return outerDiameter - indicatorLength
     }
 
+    mutating func buildAngles() {
+        var sectorAngles: [Range<CGFloat>] = []
+        let count = lambda_Shuttle_Maneuvers.count
+        let sectorAngle: CGFloat = CGFloat(360 / count) // 30
+        
+        let lower = sectorAngle / 2 // 15
+        let upper = lower // 15
+        let range: Range<CGFloat> = -lower..<upper // -15..<15
+        
+        sectorAngles.append(range)
+        
+        lambda_Shuttle_Maneuvers.enumerated().forEach { index, value in
+            if (index > 0) {
+                let lower = upper
+                let upper = lower + sectorAngle
+                let range: Range<CGFloat> = lower..<upper
+                sectorAngles.append(range)
+            }
+        }
+    }
+    
     mutating func buildSectorsOdd() {
         let numberOfSections = 8
         
