@@ -55,7 +55,7 @@ struct DialView: View {
 //    case D      // Right Reverse
 //    case K      // K Turn
     
-    let lambda_Shuttle_Maneuvers: [Maneuver] = [Maneuver(speed: 0, bearing: .O, difficulty: .R),
+    let lambda_Shuttle_Maneuvers2: [Maneuver] = [Maneuver(speed: 0, bearing: .O, difficulty: .R),
                                                 Maneuver(speed: 1, bearing: .B, difficulty: .B),
                                                 Maneuver(speed: 1, bearing: .F, difficulty: .B),
                                                 Maneuver(speed: 1, bearing: .N, difficulty: .B),
@@ -98,16 +98,32 @@ struct DialView: View {
         let count = dial.count
         let sectorAngle: CGFloat = CGFloat(360 / count) // 30
         
-        let lower = sectorAngle / 2 // 15
-        let upper = lower // 15
+        var lower = sectorAngle / 2 // 15
+        var upper = lower // 15
         let range: Range<CGFloat> = -lower..<upper // -15..<15
         
         angles.append(range)
         
+//        0 : Range(-10.5..<10.5)
+//          - lowerBound : -10.5
+//          - upperBound : 10.5
+//        ▿ 1 : Range(10.5..<31.5)
+//          - lowerBound : 10.5
+//          - upperBound : 31.5
+//        ▿ 2 : Range(10.5..<31.5)
+//          - lowerBound : 10.5
+//          - upperBound : 31.5
+//        ▿ 3 : Range(10.5..<31.5)
+//          - lowerBound : 10.5
+//          - upperBound : 31.5
+//        ▿ 4 : Range(10.5..<31.5)
+//          - lowerBound : 10.5
+//          - upperBound : 31.5
+//
         dial.enumerated().forEach { index, value in
             if (index > 0) {
-                let lower = upper
-                let upper = lower + sectorAngle
+                lower = upper
+                upper = lower + sectorAngle
                 let range: Range<CGFloat> = lower..<upper
                 angles.append(range)
             }
@@ -330,7 +346,7 @@ struct DialView: View {
             ZStack {
                 DialCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
 
-                ForEach(self.buildManeuverViews_New(radius: self.textCircleRadius, maneuvers: lambda_Shuttle_Maneuvers), id:\.id) { node in
+                ForEach(self.buildManeuverViews_New(radius: self.textCircleRadius, maneuvers: maneuverList), id:\.id) { node in
                     node.view
                         .rotated(Angle.degrees(node.rotationAngle.degrees))
                         .offset(x: node.offset.0,
@@ -374,7 +390,7 @@ struct DialView: View {
                         self.oldAngle = angle
                         
                         self.anglePublisher.send(Angle(degrees: Double(angle)))
-                        self.currentManeuver = self.lambda_Shuttle_Maneuvers[Int(self.currentSegment)].description
+                        self.currentManeuver = self.maneuverList[Int(self.currentSegment)].description
                     }
                 )
         
@@ -383,7 +399,7 @@ struct DialView: View {
                     .frame(width: 32, height: 40, alignment: .center)
 //                    .border(Color.white)
                 
-                Text("\(lambda_Shuttle_Maneuvers[Int(currentSegment)].description)")
+                Text("\(maneuverList[Int(currentSegment)].description)")
                     .font(.largeTitle)
                     .foregroundColor(Color.white)
                     .fontWeight(.semibold)
@@ -414,7 +430,7 @@ struct DialView: View {
     }
     
     func getManeuver(sector: UInt) -> String {
-        return lambda_Shuttle_Maneuvers[Int(sector)].description
+        return maneuverList[Int(sector)].description
     }
     
     func getCirclePoints(centerPoint point: CGPoint, radius: CGFloat, n: Int) -> [CGPoint] {
@@ -432,25 +448,25 @@ struct DialView: View {
         func buildSFSymbolView() -> AnyView {
             return AnyView(Image(systemName: "arrow.up")
                 .font(.system(size: 36.0, weight: .bold))
-                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color))
+                .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color))
 //                .border(Color.white))
         }
         
         func buildArrowView() -> AnyView {
-            return AnyView(UpArrowView(color: lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color))
+            return AnyView(UpArrowView(color: maneuverList[Int(currentSegment)].difficulty.color))
 //                .fill()
         }
         
         // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font.
-        if lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing == .S {
+        if maneuverList[Int(currentSegment)].bearing == .S {
 //            return buildSFSymbolView()
             return buildArrowView()
             
         } else {
-            return AnyView(Text(lambda_Shuttle_Maneuvers[Int(currentSegment)].bearing.getSymbolCharacter())
+            return AnyView(Text(maneuverList[Int(currentSegment)].bearing.getSymbolCharacter())
                                 .font(.custom("xwing-miniatures", size: 30))
                                 .frame(width: 32, height: 40, alignment: .center)
-                                .foregroundColor(lambda_Shuttle_Maneuvers[Int(currentSegment)].difficulty.color)
+                                .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color)
                                 .padding(2))
         }
     }

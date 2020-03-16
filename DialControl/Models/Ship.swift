@@ -44,10 +44,7 @@ let jsonString = """
     "3FB",
     "3NW",
     "3YW",
-    "3PR",
-    "4FB",
-    "4KR",
-    "5FW"
+    "3PR"
   ],
   "dialCodes": [
     "TI"
