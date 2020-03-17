@@ -82,7 +82,7 @@ struct DialView: View {
       315..<345
     ]
     
-    private var angles: [Range<CGFloat>] = []
+    private var angles: [Range<Int>] = []
     private var maneuverList: [Maneuver] = []
     
     var totalSegments: CGFloat {
@@ -96,11 +96,14 @@ struct DialView: View {
     
     mutating func buildDial(dial: [String]) {
         let count = dial.count
-        let sectorAngle: CGFloat = CGFloat(360 / count) // 30
+//        let sectorAngle: CGFloat = CGFloat(360 / count) // 30
+        let x:CGFloat = 360 / CGFloat(count)
+        
+        let sectorAngle: Int = Int(x.rounded(.up)) // 30
         
         var lower = sectorAngle / 2 // 15
         var upper = lower // 15
-        let range: Range<CGFloat> = -lower..<upper // -15..<15
+        let range: Range<Int> = -lower..<upper // -15..<15
         
         angles.append(range)
         
@@ -124,7 +127,7 @@ struct DialView: View {
             if (index > 0) {
                 lower = upper
                 upper = lower + sectorAngle
-                let range: Range<CGFloat> = lower..<upper
+                let range: Range<Int> = lower..<upper
                 angles.append(range)
             }
             
@@ -188,12 +191,14 @@ struct DialView: View {
         self.ranges = stride(from: 0.0, to: 360.0, by: 45.0)
             .map{ CGFloat($0) }
 
-        for (index, item) in self.lambda_Shuttle_Angles.enumerated() {
+        buildDial(dial: dial)
+        
+        for (index, item) in self.angles.enumerated() {
             let lower = item.lowerBound
             _ = item.upperBound
             let mid = (item.lowerBound + item.upperBound) / 2
 
-            self.angleRanges.append(AngleRange(start: lower, end: item.upperBound, mid: mid, sector: UInt(index)))
+            self.angleRanges.append(AngleRange(start: CGFloat(lower), end: CGFloat(item.upperBound), mid: CGFloat(mid), sector: UInt(index)))
         }
         
         anglePublisher
@@ -202,8 +207,6 @@ struct DialView: View {
                 print("rotated: \(value.degrees)")
             }
             .store(in: &cancellables)
-        
-        buildDial(dial: dial)
     }
 
     private func buildManeuverViews_Old(radius: CGFloat) -> [PathNodeStruct<Text>] {
@@ -414,13 +417,13 @@ struct DialView: View {
     
     var body: some View {
         ZStack(alignment: .center) {
-            innerCircle
+            innerCircle.offset(x: 0, y: 100)
 
             VStack {
                 ForEach(self.angleRanges, id:\.id) { angle in
                     Text("\(angle.start)..\(angle.mid)<\(angle.end) \(angle.sector) \(self.getManeuver(sector: angle.sector))")
                 }
-            }.offset(x: 0, y: -375)
+            }.offset(x: 0, y: -325)
         }
         .onAppear(perform: {
             let percentage = self.initialTemperature / self.maxTemperature

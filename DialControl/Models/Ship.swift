@@ -23,6 +23,22 @@ import Foundation
 // N = Right Bank, column 11
 // D = Right Reverse, column 12
 // K = Koigran Turn, column 13
+// "dial": [
+//   "1TW",
+//   "1YW",
+//   "2TB",
+//   "2BB",
+//   "2FB",
+//   "2NB",
+//   "2YB",
+//   "3LR",
+//   "3TW",
+//   "3BW",
+//   "3FB",
+//   "3NW",
+//   "3YW",
+//   "3PR"
+// ]
 
 let jsonString = """
 {
