@@ -82,7 +82,7 @@ struct DialView: View {
       315..<345
     ]
     
-    private var angles: [Range<Int>] = []
+    private var angles: [Range<CGFloat>] = []
     private var maneuverList: [Maneuver] = []
     
     var totalSegments: CGFloat {
@@ -96,14 +96,11 @@ struct DialView: View {
     
     mutating func buildDial(dial: [String]) {
         let count = dial.count
-//        let sectorAngle: CGFloat = CGFloat(360 / count) // 30
-        let x:CGFloat = 360 / CGFloat(count)
-        
-        let sectorAngle: Int = Int(x.rounded(.up)) // 30
+        let sectorAngle: CGFloat = CGFloat(360) / CGFloat(count) // 30
         
         var lower = sectorAngle / 2 // 15
         var upper = lower // 15
-        let range: Range<Int> = -lower..<upper // -15..<15
+        let range: Range<CGFloat> = -lower..<upper // -15..<15
         
         angles.append(range)
         
@@ -127,7 +124,7 @@ struct DialView: View {
             if (index > 0) {
                 lower = upper
                 upper = lower + sectorAngle
-                let range: Range<Int> = lower..<upper
+                let range: Range<CGFloat> = lower..<upper
                 angles.append(range)
             }
             

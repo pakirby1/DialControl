@@ -31,6 +31,7 @@ extension Array where Element == AngleRange {
             print("Found \(item) at position \(index)")
             
             // Should pass in the negative threshold angle as an input param
+            // FIXME: Figure out the correct angles for segment 0 based on index 0
             if (withAngle >= -22.5) && (withAngle < 360) {
                 ret = 0
             }
