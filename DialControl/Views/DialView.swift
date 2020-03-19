@@ -227,7 +227,9 @@ struct DialView: View {
     private func buildManeuverViews_New(radius: CGFloat,
                                         maneuvers: [Maneuver]) -> [PathNodeStruct<ManeuverDialSelection>] {
         var currentAngle = Angle(degrees: 0)
-        let segmentAngle = Double(360 / maneuvers.count)
+        
+        // Read angle from AngleRanges instead
+        let segmentAngle = CGFloat(360) / CGFloat(maneuvers.count)
         
         let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = maneuvers.map{
             let view = ManeuverDialSelection(maneuver: $0, size: 40)
@@ -238,7 +240,7 @@ struct DialView: View {
             let textRadius = radius - 40
             
             let offset = pointOnCircle(withRadius: textRadius, withAngle: CGFloat(rotationAngle.degrees))
-            currentAngle.degrees += segmentAngle
+            currentAngle.degrees += Double(segmentAngle)
             
             print("\(#function) \(view): \(rotationAngle.degrees) (x: \(offset.0), y: \(offset.1)) \(currentAngle.degrees)")
             
