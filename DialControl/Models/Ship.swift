@@ -40,7 +40,7 @@ import Foundation
 //   "3PR"
 // ]
 
-let jsonString = """
+let shipJSON = """
 {
   "name": "TIE/in Interceptor",
   "xws": "tieininterceptor",

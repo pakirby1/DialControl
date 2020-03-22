@@ -17,6 +17,10 @@
 		AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE6124166830005C54F5 /* PathNode.swift */; };
 		AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */; };
 		AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE65241668CF005C54F5 /* AngleRange.swift */; };
+		AE2D80EC24277F0100248CA4 /* squad.json in Resources */ = {isa = PBXBuildFile; fileRef = AE2D80EB24277F0100248CA4 /* squad.json */; };
+		AE2D80EE242780FC00248CA4 /* squad.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80ED242780FC00248CA4 /* squad.swift */; };
+		AE2D80F0242784D400248CA4 /* SquadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80EF242784D400248CA4 /* SquadView.swift */; };
+		AE2D80F224278B8400248CA4 /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = AE2D80F124278B8400248CA4 /* test.txt */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
 		AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */; };
@@ -60,6 +64,10 @@
 		AE1FBE6124166830005C54F5 /* PathNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathNode.swift; sourceTree = "<group>"; };
 		AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManeuverDialSelection.swift; sourceTree = "<group>"; };
 		AE1FBE65241668CF005C54F5 /* AngleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleRange.swift; sourceTree = "<group>"; };
+		AE2D80EB24277F0100248CA4 /* squad.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = squad.json; sourceTree = "<group>"; };
+		AE2D80ED242780FC00248CA4 /* squad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = squad.swift; sourceTree = "<group>"; };
+		AE2D80EF242784D400248CA4 /* SquadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadView.swift; sourceTree = "<group>"; };
+		AE2D80F124278B8400248CA4 /* test.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = test.txt; sourceTree = "<group>"; };
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58C223F8087C00C66136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AE4D58C423F8087C00C66136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -112,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				AE15E78D241D02120002F696 /* tie-in-interceptor.json */,
+				AE2D80EB24277F0100248CA4 /* squad.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -123,6 +132,7 @@
 				AE1FBE5F24166798005C54F5 /* Rotated.swift */,
 				AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */,
 				AEBA6360241B58D9008B00DB /* UpArrow.swift */,
+				AE2D80EF242784D400248CA4 /* SquadView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -134,6 +144,7 @@
 				AE1FBE6124166830005C54F5 /* PathNode.swift */,
 				AE1FBE65241668CF005C54F5 /* AngleRange.swift */,
 				AE15E78A241D00120002F696 /* Ship.swift */,
+				AE2D80ED242780FC00248CA4 /* squad.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -141,6 +152,7 @@
 		AE4D58B623F8087B00C66136 = {
 			isa = PBXGroup;
 			children = (
+				AE2D80F124278B8400248CA4 /* test.txt */,
 				AE4D58F523F961D200C66136 /* Test.swift */,
 				AE4D58C123F8087C00C66136 /* DialControl */,
 				AE4D58DB23F8087E00C66136 /* DialControlTests */,
@@ -331,6 +343,8 @@
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
 				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
 				AE4D58CC23F8087D00C66136 /* Assets.xcassets in Resources */,
+				AE2D80F224278B8400248CA4 /* test.txt in Resources */,
+				AE2D80EC24277F0100248CA4 /* squad.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -356,9 +370,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AEAD19F924085E0A0020FABC /* TestView.swift in Sources */,
+				AE2D80F0242784D400248CA4 /* SquadView.swift in Sources */,
 				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
 				AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
+				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
