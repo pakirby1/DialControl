@@ -84,7 +84,9 @@ struct SquadCardView: View {
 struct PilotDetailsView: View {
     let pilot: SquadPilot
     let displayUpgrades: Bool
-    @State var currentManeuver: String = "1LT"
+    let displayHeaders: Bool
+    
+    @State var currentManeuver: String = ""
     
     var body: some View {
         HStack {
@@ -102,7 +104,6 @@ struct PilotDetailsView: View {
                 
                 Text(pilot.ship)
                     .font(.body)
-                
             }
             .border(Color.blue, width: 2)
             
@@ -110,11 +111,20 @@ struct PilotDetailsView: View {
             
             VStack {
                 if (displayUpgrades) {
-                    UpgradeSummaryView(category: "Talent Upgrades", upgrades: pilot.upgrades.talents)
-                    UpgradeSummaryView(category: "Sensor Upgrades", upgrades: pilot.upgrades.sensors)
-                    UpgradeSummaryView(category: "Modification Upgrades", upgrades: pilot.upgrades.modifications)
+                    UpgradeSummaryView(category: "Talent Upgrades",
+                                       upgrades: pilot.upgrades.talents,
+                                       displayHeader: displayHeaders)
+                    
+                    UpgradeSummaryView(category: "Sensor Upgrades",
+                                       upgrades: pilot.upgrades.sensors,
+                                       displayHeader: displayHeaders)
+                    
+                    UpgradeSummaryView(category: "Modification Upgrades",
+                                       upgrades: pilot.upgrades.modifications,
+                                       displayHeader: displayHeaders)
                 }
             }
+            
             Spacer()
             
 //            DialView(temperature: 0, diameter: 500, currentManeuver: $currentManeuver, dial: [
@@ -143,11 +153,14 @@ struct PilotDetailsView: View {
 struct UpgradeSummaryView : View {
     let category: String
     let upgrades: [String]
+    let displayHeader: Bool
     
     var body: some View {
         VStack {
             if (upgrades.count > 0) {
-                Text(category).font(.title)
+                if (displayHeader) {
+                    Text(category).font(.title)
+                }
                 
                 ForEach(upgrades, id:\.self) { upgrade in
                     Text("\(upgrade)")
@@ -166,7 +179,7 @@ struct PilotCardView: View {
                 .fill(theme.BUTTONBACKGROUND)
 
             VStack {
-                PilotDetailsView(pilot: pilot, displayUpgrades: false)
+                PilotDetailsView(pilot: pilot, displayUpgrades: true, displayHeaders: false)
             }
             .padding(20)
             .multilineTextAlignment(.center)
@@ -217,7 +230,7 @@ struct ShipView: View {
             .frame(width: 600, height: 50, alignment: .leading)
             .border(Color.blue, width: 2)
             
-            PilotDetailsView(pilot: squadPilot, displayUpgrades: true)
+            PilotDetailsView(pilot: squadPilot, displayUpgrades: true, displayHeaders: false)
                 .padding(5)
                 .border(Color.green, width: 2)
             
