@@ -63,9 +63,9 @@ let squadJSON = """
 """
 
 struct SquadPilotUpgrade: Codable {
-    var talent: [String] { return _talent ?? [] }
-    var modification: [String] { return _modification ?? [] }
-    var sensor: [String] { return _sensor ?? [] }
+    var talents: [String] { return _talent ?? [] }
+    var modifications: [String] { return _modification ?? [] }
+    var sensors: [String] { return _sensor ?? [] }
     
     private var _sensor: [String]?
     private var _talent: [String]?

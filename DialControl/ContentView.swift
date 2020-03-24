@@ -10,22 +10,35 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
+class ViewFactory: ObservableObject {
+    @Published var viewType: ViewType = .squadView
+    
+    func buildView(type: ViewType) -> AnyView {
+        switch(type) {
+        case .squadView:
+            return AnyView(SquadView().environmentObject(self))
+        case .shipView(let squadPilot):
+            return AnyView(ShipView(squadPilot: squadPilot).environmentObject(self))
+        }
+    }
+}
+
+enum ViewType {
+    case squadView
+    case shipView(SquadPilot)
+}
+
 struct ContentView: View {
     @State var maneuver: String = ""
     let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+    @EnvironmentObject var viewFactory: ViewFactory
     
     var body: some View {
         VStack {
-            SquadView()
-//            DialView(temperature: 0,
-//                        diameter: 500,
-//                        currentManeuver: $maneuver,
-//                        dial: ship.dial)
-//            Text("Ship: \(ship.name)")
-//            Text("Maneuver: \(maneuver)")
+            viewFactory.buildView(type: viewFactory.viewType)
         }.onAppear() {
             print("ContentView.onAppear")
-        }
+        }.border(Color.green, width: 2)
     }
 }
 
