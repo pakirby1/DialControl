@@ -37,6 +37,7 @@ struct DialView: View {
     @State var currentSegment: UInt = 0
     @State var topSegment: UInt = 0
     @Binding var currentManeuver: String
+    var displayAngleRanges: Bool = true
     
     var maneuvers: [String] = ["1LT", "1LB", "1LS", "1RB", "2LT", "2LB", "2RS", "2RB"]
     
@@ -175,11 +176,14 @@ struct DialView: View {
     init(temperature: CGFloat,
          diameter: CGFloat,
          currentManeuver: Binding<String>,
-         dial: [String])
+         dial: [String],
+         displayAngleRanges: Bool)
     {
         print("DialView.init()")
         self.initialTemperature = temperature
         self.outerDiameter = diameter
+        self.displayAngleRanges = displayAngleRanges
+        
         self._currentManeuver = currentManeuver // Have to use `_` character to set the binding
         
         let x = self.innerDiameter
@@ -232,7 +236,7 @@ struct DialView: View {
         let segmentAngle = CGFloat(360) / CGFloat(maneuvers.count)
         
         let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = maneuvers.map{
-            let view = ManeuverDialSelection(maneuver: $0, size: 40)
+            let view = ManeuverDialSelection(maneuver: $0, size: 30)
             
             // 0 degrees in SwiftUI is at the pi / 2 (90 clockwise) location, so add
             // -90 to get the correct location
@@ -418,11 +422,13 @@ struct DialView: View {
         ZStack(alignment: .center) {
             innerCircle.offset(x: 0, y: 100)
 
-            VStack {
-                ForEach(self.angleRanges, id:\.id) { angle in
-                    Text("\(angle.start)..\(angle.mid)<\(angle.end) \(angle.sector) \(self.getManeuver(sector: angle.sector))")
-                }
-            }.offset(x: 0, y: -325)
+            if (displayAngleRanges) {
+                VStack {
+                    ForEach(self.angleRanges, id:\.id) { angle in
+                        Text("\(angle.start)..\(angle.mid)<\(angle.end) \(angle.sector) \(self.getManeuver(sector: angle.sector))")
+                    }
+                }.offset(x: 0, y: -325)
+            }
         }
         .onAppear(perform: {
             let percentage = self.initialTemperature / self.maxTemperature
@@ -459,17 +465,22 @@ struct DialView: View {
 //                .fill()
         }
         
+        func buildTextFontView(baselineOffset: CGFloat = 0) -> AnyView {
+            return AnyView(Text(maneuverList[Int(currentSegment)].bearing.getSymbolCharacter()).baselineOffset(baselineOffset)
+                .font(.custom("xwing-miniatures", size: 30))
+                .frame(width: 32, height: 40, alignment: .center)
+                .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color)
+                .padding(2))
+        }
+        
         // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font.
-        if maneuverList[Int(currentSegment)].bearing == .S {
+        if maneuverList[Int(currentSegment)].bearing == .F {
 //            return buildSFSymbolView()
-            return buildArrowView()
-            
+            return AnyView(buildTextFontView(baselineOffset: -10))
+        } else if maneuverList[Int(currentSegment)].bearing == .K {
+            return AnyView(buildTextFontView(baselineOffset: -10))
         } else {
-            return AnyView(Text(maneuverList[Int(currentSegment)].bearing.getSymbolCharacter())
-                                .font(.custom("xwing-miniatures", size: 30))
-                                .frame(width: 32, height: 40, alignment: .center)
-                                .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color)
-                                .padding(2))
+            return AnyView(buildTextFontView())
         }
     }
 }

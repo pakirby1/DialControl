@@ -16,18 +16,23 @@ struct ManeuverDialSelection: View, CustomStringConvertible {
     func buildSymbol() -> AnyView {
         func buildUpArrowView() -> AnyView {
             return AnyView(UpArrowView(color: maneuver.difficulty.color)
-                .frame(width: 50, height: 50, alignment: .center))
+                .frame(width: 30, height: 30, alignment: .center)
+                .border(Color.white, width: 1))
         }
         
-        func buildTextFontView() -> AnyView {
-            return AnyView(Text(maneuver.bearing.getSymbolCharacter())
+        func buildTextFontView(baselineOffset: CGFloat = 0) -> AnyView {
+            return AnyView(Text(maneuver.bearing.getSymbolCharacter()).baselineOffset(baselineOffset)
                 .font(.custom("xwing-miniatures", size: size))
                 .foregroundColor(maneuver.difficulty.color)
-                .padding(10))
+                .padding(5))
         }
         
         if maneuver.bearing == .S {
             return buildUpArrowView()
+        } else if maneuver.bearing == .F {
+            return buildTextFontView(baselineOffset: -10.0)
+        } else if maneuver.bearing == .K {
+            return buildTextFontView(baselineOffset: -10.0)
         } else {
             return buildTextFontView()
         }
