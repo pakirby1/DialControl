@@ -227,6 +227,12 @@ struct ShipView: View {
                 .padding(5)
                 .border(Color.green, width: 2)
             
+            Image("Card_Pilot_103")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 600.0,height:600)
+                .border(Color.green, width: 2)
+
             clearView
         }.border(Color.red, width: 2)
     }
