@@ -11,7 +11,6 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
-
 struct SquadView: View {
     @State var maneuver: String = ""
     let squad: Squad = Squad.serializeJSON(jsonString: squadJSON)
@@ -44,26 +43,7 @@ struct SquadCardView: View {
                 Text("Points: \(squad.points)")
                     .font(.title)
                     .foregroundColor(.black)
-                
-////                NavigationView {
-////                    ForEach(squad.pilots) { pilot in
-////                        NavigationLink(destination:
-////                            ShipView(squadPilot: pilot)
-////                        ) {
-////                            PilotCardView(pilot: pilot)
-////                        }
-////                    }
-////                }
-//
-//                NavigationView {
-//                    List(squad.pilots) { pilot in
-//                      NavigationLink(
-//                        destination: ShipView(squadPilot: pilot)) {
-//                            PilotCardView(pilot: pilot)
-//                      }
-//                    }
-//                }.navigationViewStyle(StackNavigationViewStyle())
-                
+
                 ForEach(squad.pilots) { pilot in
                     Button(action: {
                         self.viewFactory.viewType = .shipView(pilot)
@@ -96,7 +76,6 @@ struct PilotDetailsView: View {
                 .padding()
                 .background(Color.blue)
                 .clipShape(Circle())
-            //                        .border(Color.blue, width: 2)
             
             VStack {
                 Text(pilot.name)
@@ -146,7 +125,7 @@ struct PilotDetailsView: View {
 //              "4KR",
 //              "5FW"
 //            ])
-        }
+        }.padding(5)
     }
 }
 
@@ -169,22 +148,36 @@ struct UpgradeSummaryView : View {
         }
     }
 }
+
 struct PilotCardView: View {
     let pilot: SquadPilot
     let theme: Theme = LightTheme()
     
-    var body: some View {
-        ZStack {
+    var newView: some View {
+        ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(theme.BUTTONBACKGROUND)
 
             VStack {
+                HStack {
+                    Spacer()
+                
+                    Text("\(pilot.name)")
+                        .font(.title)
+                        .foregroundColor(Color.white)
+                    
+                    Spacer()
+                }.background(Color.black)
+                
                 PilotDetailsView(pilot: pilot, displayUpgrades: true, displayHeaders: false)
             }
-            .padding(20)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .multilineTextAlignment(.center)
         }
-        .frame(width: 500, height: 100)
+    }
+    
+    var body: some View {
+        newView
     }
 }
 
