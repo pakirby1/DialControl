@@ -49,11 +49,7 @@ struct SquadCardView: View {
                         self.viewFactory.viewType = .shipView(pilot)
                     }) {
                         PilotCardView(pilot: pilot)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.black, lineWidth: 2)
-                            )
-                    }
+                                                }
                 }
                 
                 Spacer()
@@ -152,6 +148,57 @@ struct UpgradeSummaryView : View {
     }
 }
 
+struct CardViewModel<Content: View> {
+    let strokeColor: Color
+    let strokeWidth: CGFloat
+    let backgroundColor: Color
+    let headerText: String
+    let headerBackgroundColor: Color
+    let headerTextColor: Color
+    let cornerRadius: CGFloat
+    let content: () -> Content
+}
+
+// CardView<PilotDetailsView>
+// CardView<UpgradeCardView>
+struct CardView<Content: View>: View {
+    let cardViewModel: CardViewModel<Content>
+    let pilot: SquadPilot
+    let theme: Theme = LightTheme()
+    
+    var newView: some View {
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: cardViewModel.cornerRadius, style: .continuous)
+                .fill(cardViewModel.backgroundColor)
+
+            VStack {
+                HStack {
+                    Spacer()
+                
+                    Text("\(cardViewModel.headerText)")
+                        .font(.title)
+                        .foregroundColor(cardViewModel.headerTextColor)
+                    
+                    Spacer()
+                }.background(cardViewModel.headerBackgroundColor)
+                
+//                PilotDetailsView(pilot: pilot, displayUpgrades: true, displayHeaders: false)
+                cardViewModel.content()
+            }
+            .clipShape(RoundedRectangle(cornerRadius: cardViewModel.cornerRadius, style: .continuous))
+            .multilineTextAlignment(.center)
+        }
+    }
+    
+    var body: some View {
+        newView.overlay(
+            RoundedRectangle(cornerRadius: cardViewModel.cornerRadius)
+                .stroke(cardViewModel.strokeColor, lineWidth: cardViewModel.strokeWidth)
+        )
+    }
+}
+
+
 struct PilotCardView: View {
     let pilot: SquadPilot
     let theme: Theme = LightTheme()
@@ -180,11 +227,14 @@ struct PilotCardView: View {
     }
     
     var body: some View {
-        newView
+        newView.overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.black, lineWidth: 2)
+        )
     }
 }
 
-struct CardView: View {
+struct OldCardView: View {
     let content: () -> AnyView
     
     var body: some View {
