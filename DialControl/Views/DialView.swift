@@ -11,6 +11,18 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
+class TimeCounter: ObservableObject {
+    @Published var time = 0
+
+    lazy var timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in self.time += 1
+        print("TimeCounter.time: \(self.time)")
+    }
+    
+    init() {
+        timer.fire()
+    }
+}
+
 struct DialView: View {
     @State private var value: CGFloat = 0
     @State private var oldCoordinate: (CGFloat, CGFloat) = (0.0, 0.0)
@@ -131,6 +143,9 @@ struct DialView: View {
             
             maneuverList.append(Maneuver.buildManeuver(maneuver: value))
         }
+        
+        self.pathNodes = self.buildPathNodes(radius: self.textCircleRadius,
+                                    maneuvers: maneuverList)
     }
     
     mutating func buildSectorsOdd() {
@@ -172,6 +187,8 @@ struct DialView: View {
 
     var anglePublisher = PassthroughSubject<Angle, Never>()
     private var cancellables: Set<AnyCancellable> = []
+    @ObservedObject var timeCounter = TimeCounter()
+    private var pathNodes: [PathNodeStruct<ManeuverDialSelection>] = []
     
     init(temperature: CGFloat,
          diameter: CGFloat,
@@ -194,6 +211,7 @@ struct DialView: View {
 
         buildDial(dial: dial)
         
+        
         for (index, item) in self.angles.enumerated() {
             let lower = item.lowerBound
             _ = item.upperBound
@@ -208,27 +226,11 @@ struct DialView: View {
                 print("rotated: \(value.degrees)")
             }
             .store(in: &cancellables)
-    }
-
-    private func buildManeuverViews_Old(radius: CGFloat) -> [PathNodeStruct<Text>] {
-        var currentAngle = Angle(degrees: -90)
-        let segmentAngle = Double(360 / maneuvers.count)
         
-        let pathNodes: [PathNodeStruct<Text>] = maneuvers.map{
-            let view = Text($0)
-            let rotationAngle = Angle(degrees: currentAngle.degrees)
-            let offset = pointOnCircle(withRadius: radius, withAngle: CGFloat(rotationAngle.degrees))
-            currentAngle.degrees += segmentAngle
-            
-            return buildPathNode(view: view,
-                                 rotationAngle: rotationAngle,
-                                 offset: offset)
-        }
         
-        return pathNodes
     }
     
-    private func buildManeuverViews_New(radius: CGFloat,
+    private func buildPathNodes(radius: CGFloat,
                                         maneuvers: [Maneuver]) -> [PathNodeStruct<ManeuverDialSelection>] {
         var currentAngle = Angle(degrees: 0)
         
@@ -342,6 +344,8 @@ struct DialView: View {
 
     var innerCircle: some View {
         ZStack {
+            Text("\(timeCounter.time)").offset(x: 0, y: -50)
+            
             GeometryReader { g in
                 SelectionIndicator(parentWidth: g.size.width,
                         parentHeight: g.size.height,
@@ -352,7 +356,7 @@ struct DialView: View {
             ZStack {
                 DialCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
 
-                ForEach(self.buildManeuverViews_New(radius: self.textCircleRadius, maneuvers: maneuverList), id:\.id) { node in
+                ForEach(pathNodes, id:\.id) { node in
                     node.view
                         .rotated(Angle.degrees(node.rotationAngle.degrees))
                         .offset(x: node.offset.0,

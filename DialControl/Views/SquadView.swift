@@ -148,7 +148,7 @@ struct UpgradeSummaryView : View {
     }
 }
 
-struct CardViewModel<Content: View> {
+struct CardViewModel {
     let strokeColor: Color
     let strokeWidth: CGFloat
     let backgroundColor: Color
@@ -156,16 +156,34 @@ struct CardViewModel<Content: View> {
     let headerBackgroundColor: Color
     let headerTextColor: Color
     let cornerRadius: CGFloat
-    let content: () -> Content
 }
 
+// content wrapper pattern
+//struct TrackinAreaView<Content>: View where Content : View {
+//    let onMove: (NSPoint) -> Void
+//    let content: () -> Content
+//
+//    init(onMove: @escaping (NSPoint) -> Void, @ViewBuilder content: @escaping () -> Content) {
+//        self.onMove = onMove
+//        self.content = content
+//    }
+//
+//    var body: some View {
+//        TrackingAreaRepresentable(onMove: onMove, content: self.content())
+//    }
+//}
+//
 // CardView<PilotDetailsView>
 // CardView<UpgradeCardView>
 struct CardView<Content: View>: View {
-    let cardViewModel: CardViewModel<Content>
-    let pilot: SquadPilot
-    let theme: Theme = LightTheme()
+    let cardViewModel: CardViewModel
+    let content: () -> Content
     
+    init(cardViewModel: CardViewModel, @ViewBuilder content: @escaping () -> Content) {
+        self.cardViewModel = cardViewModel
+        self.content = content
+    }
+        
     var newView: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: cardViewModel.cornerRadius, style: .continuous)
@@ -183,7 +201,7 @@ struct CardView<Content: View>: View {
                 }.background(cardViewModel.headerBackgroundColor)
                 
 //                PilotDetailsView(pilot: pilot, displayUpgrades: true, displayHeaders: false)
-                cardViewModel.content()
+                content()
             }
             .clipShape(RoundedRectangle(cornerRadius: cardViewModel.cornerRadius, style: .continuous))
             .multilineTextAlignment(.center)
