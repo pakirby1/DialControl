@@ -68,11 +68,17 @@ struct ShipView: View {
                 .padding(5)
 //                .border(Color.green, width: 2)
             
+            
+            
             HStack {
-                Image("Card_Pilot_103")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 600.0,height:600)
+//                Image("Card_Pilot_103")
+//                    .resizable()
+//                    .scaledToFit()
+//                    .frame(width: 600.0,height:600)
+//                    .border(Color.green, width: 2)
+                
+                WedgeView()
+                    .frame(width: 400.0,height:400)
                     .border(Color.green, width: 2)
                 
                 DialView(temperature: 0, diameter: 400, currentManeuver: $currentManeuver, dial: dial, displayAngleRanges: false)

@@ -252,7 +252,8 @@ struct DialView: View {
             
             return buildPathNode(view: view,
                                  rotationAngle: rotationAngle,
-                                 offset: offset)
+                                 offset: offset,
+                                 sectorAngle: currentAngle)
         }
         
         return pathNodes
@@ -260,11 +261,13 @@ struct DialView: View {
     
     private func buildPathNode<T: View>(view: T,
                                         rotationAngle: Angle,
-                                        offset: (CGFloat, CGFloat)) -> PathNodeStruct<T>
+                                        offset: (CGFloat, CGFloat),
+                                        sectorAngle: Angle) -> PathNodeStruct<T>
     {
         let pathNode = PathNodeStruct(view: view,
                                       rotationAngle: rotationAngle,
-                                      offset: offset)
+                                      offset: offset,
+                                      sectorAngle: sectorAngle)
         
         return pathNode
     }
@@ -346,13 +349,6 @@ struct DialView: View {
         ZStack {
             Text("\(timeCounter.time)").offset(x: 0, y: -50)
             
-            GeometryReader { g in
-                SelectionIndicator(parentWidth: g.size.width,
-                        parentHeight: g.size.height,
-                        radius: (self.innerDiameter / 2) + 20)
-                    .fill(Color.red)
-            }
-            
             ZStack {
                 DialCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
 
@@ -417,6 +413,14 @@ struct DialView: View {
                 Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment)")
                     .font(.body)
                     .foregroundColor(Color.white)
+            }
+            
+            GeometryReader { g in
+                SelectionIndicator(parentWidth: g.size.width,
+                        parentHeight: g.size.height,
+                        radius: (self.innerDiameter / 2) + 20,
+                        sectorAngle: self.pathNodes[0].sectorAngle.degrees)
+                    .fill(Color.yellow).opacity(0.5)
             }
         }
         .border(Color.blue)
@@ -493,6 +497,7 @@ struct SelectionIndicator : Shape {
     let parentWidth: CGFloat
     let parentHeight: CGFloat
     let radius: CGFloat
+    let sectorAngle: Double
     
     func path(in rect: CGRect) -> Path {
         var p = Path()
@@ -500,8 +505,8 @@ struct SelectionIndicator : Shape {
         
         p.addArc(center: center,
                  radius: radius,
-                 startAngle: .degrees(247.5),
-                 endAngle: .degrees(292.5),
+                 startAngle: .degrees(270 - (sectorAngle / 2)),
+                 endAngle: .degrees(270 + (sectorAngle / 2)),
                  clockwise: false)
         
         p.addLine(to: center)

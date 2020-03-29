@@ -15,4 +15,5 @@ struct PathNodeStruct<T: View> : Identifiable {
     let view: T
     let rotationAngle: Angle
     let offset: (CGFloat, CGFloat)
+    let sectorAngle: Angle // angle of entire sector
 }

@@ -24,6 +24,7 @@
 		AE2D80F42428C74700248CA4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F32428C74700248CA4 /* Theme.swift */; };
 		AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F52428D3E800248CA4 /* NavigationStack.swift */; };
 		AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F7242B76AF00248CA4 /* ShipView.swift */; };
+		AE3539542430C64700AC023A /* WedgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3539532430C64700AC023A /* WedgeView.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
 		AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */; };
@@ -74,6 +75,7 @@
 		AE2D80F32428C74700248CA4 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		AE2D80F52428D3E800248CA4 /* NavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStack.swift; sourceTree = "<group>"; };
 		AE2D80F7242B76AF00248CA4 /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
+		AE3539532430C64700AC023A /* WedgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WedgeView.swift; sourceTree = "<group>"; };
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58C223F8087C00C66136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AE4D58C423F8087C00C66136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		AE4D58B623F8087B00C66136 = {
 			isa = PBXGroup;
 			children = (
+				AE3539532430C64700AC023A /* WedgeView.swift */,
 				AE2D80F124278B8400248CA4 /* test.txt */,
 				AE4D58F523F961D200C66136 /* Test.swift */,
 				AE4D58C123F8087C00C66136 /* DialControl */,
@@ -388,6 +391,7 @@
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
+				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
 				AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
