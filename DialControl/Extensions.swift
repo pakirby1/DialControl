@@ -120,3 +120,19 @@ extension View {
 //        return (x, y)
     }
 }
+
+func deg2rad(_ number: Double) -> Double {
+    return number * .pi / 180
+}
+
+extension Shape {
+    /// fills and strokes a shape
+    public func fill<S:ShapeStyle>(_ fillContent: S,
+                                   stroke: StrokeStyle) -> some View
+    {
+        ZStack {
+            self.fill(fillContent)
+            self.stroke(style:stroke)
+        }
+    }
+}

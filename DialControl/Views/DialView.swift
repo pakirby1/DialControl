@@ -392,20 +392,24 @@ struct DialView: View {
                 
                 Text("\(maneuverList[Int(currentSegment)].description)")
                     .font(.largeTitle)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color)
                     .fontWeight(.semibold)
-                
-                Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment)")
-                    .font(.body)
-                    .foregroundColor(Color.white)
+
+//                Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment)")
+//                    .font(.body)
+//                    .foregroundColor(Color.white)
             }
             
             GeometryReader { g in
-                SelectionIndicator(parentWidth: g.size.width,
+                SelectionIndicator_Old(parentWidth: g.size.width,
                         parentHeight: g.size.height,
-                        radius: self.radius,
+                        radius: self.radius + 10,
                         sectorAngle: self.pathNodes[0].sectorAngle.degrees)
-                    .fill(Color.yellow).opacity(0.5)
+                    .stroke(Color.gray, lineWidth: 5)
+                    
+//                    .fill(Color.clear, stroke: StrokeStyle(lineWidth: 5))
+                    
+//                    .fill(Color.yellow).opacity(0.5)
             }
         }
         .border(Color.blue)
@@ -478,6 +482,75 @@ struct DialView: View {
     }
 }
 
+struct TestView: View {
+    var body: some View {
+        Path { path in
+            path.move(to: CGPoint(x: 200, y: 100))
+            path.addLine(to: CGPoint(x: 100, y: 300))
+            path.addLine(to: CGPoint(x: 300, y: 300))
+            path.addLine(to: CGPoint(x: 200, y: 100))
+            path.addLine(to: CGPoint(x: 100, y: 300))
+        }
+        .stroke(Color.blue, lineWidth: 10)
+    }
+}
+
+struct SelectionIndicator_Old : Shape {
+    let parentWidth: CGFloat
+    let parentHeight: CGFloat
+    let radius: CGFloat
+    let sectorAngle: Double
+    
+    
+    func path(in rect: CGRect) -> Path {
+        
+        var p = Path()
+        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
+        let halfSectorAngle: Double = (sectorAngle / 2)
+        let leftAngle: Angle = .degrees(270 - halfSectorAngle)
+        let rightAngle: Angle = .degrees(270 + halfSectorAngle)
+        let pos: CGPoint = pointOnCircle(withRadius: radius / 3, withAngle: 10)
+        
+        let newPos:CGPoint = CGPoint(x: pos.x + radius, y: pos.y + radius)
+        
+        print("radius: \(radius)")
+        print(sectorAngle)
+        print(leftAngle)
+        print(rightAngle)
+        print(CGFloat(pos.x) + radius)
+        print(CGFloat(pos.y) + radius)
+        print(newPos.x)
+        print(newPos.y)
+        
+        for radians in stride(from: 0.0, to: .pi * 2, by: .pi / 4) {
+            let degrees = Int(radians * 180 / .pi)
+            let pos: CGPoint = pointOnCircle(withRadius: radius, withAngle: CGFloat(degrees))
+            
+            print("Degrees: \(degrees), radians: \(radians), point: \(pos)")
+        }
+        
+        p.addArc(center: center,
+                 radius: radius - 20,
+                 startAngle: leftAngle,
+                 endAngle: rightAngle,
+                 clockwise: false)
+        
+        p.addLine(to: newPos)
+        
+        p.addArc(center: center,
+                 radius: radius / 3,
+                 startAngle: rightAngle,
+                 endAngle: leftAngle,
+                 clockwise: false)
+        
+        p.closeSubpath()
+        
+//        p.closeSubpath()
+        
+        return p
+    }
+}
+
 //        public struct Angle {
 //
 //            public var radians: Double
@@ -496,7 +569,7 @@ struct DialView: View {
 //        }
 //
 
-struct SelectionIndicator : Shape {
+struct SelectionIndicator_New : Shape {
     let parentWidth: CGFloat
     let parentHeight: CGFloat
     let radius: CGFloat
@@ -504,7 +577,7 @@ struct SelectionIndicator : Shape {
     
     func path(in rect: CGRect) -> Path {
         var p = Path()
-        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
+        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2 - 175)
         
         p.addArc(center: center,
                  radius: radius,
@@ -513,11 +586,14 @@ struct SelectionIndicator : Shape {
                  clockwise: false)
         
         p.addLine(to: center)
-        p.closeSubpath()
+        
+        
+//        p.closeSubpath()
         
         return p
     }
 }
+
 //
 //struct SelectionIndicator : Shape {
 //    let parentWidth: CGFloat
