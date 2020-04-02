@@ -135,4 +135,16 @@ extension Shape {
             self.stroke(style:stroke)
         }
     }
+    
+    /// fills and strokes a shape
+    public func fill<S:ShapeStyle>(_ fillContent: S,
+                                   opacity: Double,
+                                   strokeWidth: CGFloat,
+                                   strokeColor: S) -> some View
+    {
+        ZStack {
+            self.fill(fillContent).opacity(opacity)
+            self.stroke(strokeColor, lineWidth: strokeWidth)
+        }
+    }
 }

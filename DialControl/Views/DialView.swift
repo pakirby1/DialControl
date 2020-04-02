@@ -401,15 +401,11 @@ struct DialView: View {
             }
             
             GeometryReader { g in
-                SelectionIndicator_Old(parentWidth: g.size.width,
+                SelectionIndicator(parentWidth: g.size.width,
                         parentHeight: g.size.height,
                         radius: self.radius + 10,
                         sectorAngle: self.pathNodes[0].sectorAngle.degrees)
-                    .stroke(Color.gray, lineWidth: 5)
-                    
-//                    .fill(Color.clear, stroke: StrokeStyle(lineWidth: 5))
-                    
-//                    .fill(Color.yellow).opacity(0.5)
+                    .fill(Color.yellow, opacity: 0.2, strokeWidth: 3, strokeColor: Color.white)
             }
         }
         .border(Color.blue)
@@ -495,7 +491,7 @@ struct TestView: View {
     }
 }
 
-struct SelectionIndicator_Old : Shape {
+struct SelectionIndicator : Shape {
     let parentWidth: CGFloat
     let parentHeight: CGFloat
     let radius: CGFloat
@@ -503,49 +499,51 @@ struct SelectionIndicator_Old : Shape {
     
     
     func path(in rect: CGRect) -> Path {
-        
         var p = Path()
         let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
         let halfSectorAngle: Double = (sectorAngle / 2)
         let leftAngle: Angle = .degrees(270 - halfSectorAngle)
         let rightAngle: Angle = .degrees(270 + halfSectorAngle)
-        let pos: CGPoint = pointOnCircle(withRadius: radius / 3, withAngle: 10)
+        let innerRadius = radius / 4
+        let outerRadius = radius - 25
+        
+        let pos: CGPoint = pointOnCircle(withRadius: innerRadius, withAngle: CGFloat(halfSectorAngle))
         
         let newPos:CGPoint = CGPoint(x: pos.x + radius, y: pos.y + radius)
         
-        print("radius: \(radius)")
-        print(sectorAngle)
-        print(leftAngle)
-        print(rightAngle)
-        print(CGFloat(pos.x) + radius)
-        print(CGFloat(pos.y) + radius)
-        print(newPos.x)
-        print(newPos.y)
-        
-        for radians in stride(from: 0.0, to: .pi * 2, by: .pi / 4) {
-            let degrees = Int(radians * 180 / .pi)
-            let pos: CGPoint = pointOnCircle(withRadius: radius, withAngle: CGFloat(degrees))
-            
-            print("Degrees: \(degrees), radians: \(radians), point: \(pos)")
-        }
+//        print("radius: \(radius)")
+//        print("halfSectorAngle: \(halfSectorAngle)")
+//        print(sectorAngle)
+//        print(leftAngle)
+//        print(rightAngle)
+//        print(CGFloat(pos.x) + radius)
+//        print(CGFloat(pos.y) + radius)
+//        print(newPos.x)
+//        print(newPos.y)
+//
+//        for radians in stride(from: 0.0, to: .pi * 2, by: .pi / 4) {
+//            let degrees = Int(radians * 180 / .pi)
+//            let pos: CGPoint = pointOnCircle(withRadius: radius, withAngle: CGFloat(degrees))
+//
+//            print("Degrees: \(degrees), radians: \(radians), point: \(pos)")
+//        }
         
         p.addArc(center: center,
-                 radius: radius - 20,
+                 radius: outerRadius,
                  startAngle: leftAngle,
                  endAngle: rightAngle,
                  clockwise: false)
         
         p.addLine(to: newPos)
         
+        // have to adjust the angles or else the arc overshoots to the right.
         p.addArc(center: center,
-                 radius: radius / 3,
-                 startAngle: rightAngle,
-                 endAngle: leftAngle,
-                 clockwise: false)
+                 radius: innerRadius,
+                 startAngle: Angle(degrees: rightAngle.degrees - 4),
+                 endAngle: Angle(degrees: leftAngle.degrees + 4),
+                 clockwise: true)
         
         p.closeSubpath()
-        
-//        p.closeSubpath()
         
         return p
     }
@@ -568,73 +566,6 @@ struct SelectionIndicator_Old : Shape {
 //            @inlinable public static func degrees(_ degrees: Double) -> Angle
 //        }
 //
-
-struct SelectionIndicator_New : Shape {
-    let parentWidth: CGFloat
-    let parentHeight: CGFloat
-    let radius: CGFloat
-    let sectorAngle: Double
-    
-    func path(in rect: CGRect) -> Path {
-        var p = Path()
-        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2 - 175)
-        
-        p.addArc(center: center,
-                 radius: radius,
-                 startAngle: .degrees(270 - (sectorAngle / 2)),
-                 endAngle: .degrees(270 + (sectorAngle / 2)),
-                 clockwise: false)
-        
-        p.addLine(to: center)
-        
-        
-//        p.closeSubpath()
-        
-        return p
-    }
-}
-
-//
-//struct SelectionIndicator : Shape {
-//    let parentWidth: CGFloat
-//    let parentHeight: CGFloat
-//    let radius: CGFloat
-//    let sectorAngle: Double
-//    let innerRadius: CGFloat
-//    let outerRadius: CGFloat
-//
-//    func path(in rect: CGRect) -> Path {
-//        var p = Path()
-//        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
-//        let halfSectorAngle: Double = sectorAngle / 2
-//
-//
-//
-//        let leftAngle: Double = 270 + halfSectorAngle
-//        let rightAngle: Double = 270 - halfSectorAngle
-//        let outerPoint: CGPoint = pointOnCircle(withRadius: outerRadius, withAngle: CGFloat(rightAngle))
-//        let innerPoint: CGPoint = pointOnCircle(withRadius: innerRadius, withAngle: CGFloat(leftAngle))
-//
-////        p.addArc(center: center,
-////                 radius: radius - 125,
-////                 startAngle: Angle.degrees(leftAngle),
-////                 endAngle: Angle.degrees(rightAngle),
-////                 clockwise: false)
-////
-////        p.addLine(to: outerPoint)
-//
-//        p.addArc(center: center,
-//                 radius: radius,
-//                 startAngle: Angle.degrees(leftAngle),
-//                 endAngle: Angle.degrees(rightAngle),
-//                 clockwise: false)
-//
-//        p.addLine(to: innerPoint)
-//        p.closeSubpath()
-//
-//        return p
-//    }
-//}
 
 struct DialCircle : View {
     let innerDiameter: CGFloat
