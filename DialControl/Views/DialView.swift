@@ -105,6 +105,10 @@ struct DialView: View {
     private var innerDiameter: CGFloat {
         return outerDiameter - indicatorLength
     }
+    
+    private var radius: CGFloat {
+        return innerDiameter / 2
+    }
 
     
     mutating func buildDial(dial: [String]) {
@@ -226,8 +230,6 @@ struct DialView: View {
                 print("rotated: \(value.degrees)")
             }
             .store(in: &cancellables)
-        
-        
     }
     
     private func buildPathNodes(radius: CGFloat,
@@ -245,7 +247,7 @@ struct DialView: View {
             let rotationAngle = Angle(degrees: currentAngle.degrees)
             let textRadius = radius - 40
             
-            let offset = pointOnCircle(withRadius: textRadius, withAngle: CGFloat(rotationAngle.degrees))
+            let offset: (CGFloat, CGFloat) = pointOnCircle(withRadius: textRadius, withAngle: CGFloat(rotationAngle.degrees))
             currentAngle.degrees += Double(segmentAngle)
             
             print("\(#function) \(view): \(rotationAngle.degrees) (x: \(offset.0), y: \(offset.1)) \(currentAngle.degrees)")
@@ -292,7 +294,7 @@ struct DialView: View {
     @State private var rotationAngle: CGFloat = 0.0
     
     var textCircleRadius: CGFloat {
-        return (self.innerDiameter / 2) - 25
+        return self.radius - 25
     }
     
     var dashedStyle : StrokeStyle {
@@ -302,13 +304,7 @@ struct DialView: View {
                     dash: [4])
     }
     
-    func pointOnCircle(withRadius: CGFloat, withAngle: CGFloat) -> (CGFloat, CGFloat) {
-        let angle = CGFloat(withAngle - 90) * .pi / 180
-        let x = withRadius * cos(angle)
-        let y = withRadius * sin(angle)
-        
-        return (x, y)
-    }
+
     
     func getOffsetForIndex(withRadius: CGFloat,
                            numPoints: Int,
@@ -319,18 +315,6 @@ struct DialView: View {
                                      n: numPoints)
         
         return points[index]
-    }
-    
-    func xPoint(_ withRadius: CGFloat, _ withAngle: CGFloat) -> CGFloat {
-        let point = pointOnCircle(withRadius: withRadius, withAngle: withAngle)
-        print("x: \(point.0)")
-        return point.0
-    }
-    
-    func yPoint(_ withRadius: CGFloat, _ withAngle: CGFloat) -> CGFloat {
-        let point = pointOnCircle(withRadius: withRadius, withAngle: withAngle)
-        print("y: \(point.1)")
-        return point.1
     }
     
     func getSector(baseline: CGFloat, x: CGFloat, angleFromBaseline: CGFloat) -> UInt {
@@ -350,7 +334,8 @@ struct DialView: View {
             Text("\(timeCounter.time)").offset(x: 0, y: -50)
             
             ZStack {
-                DialCircle(innerDiameter: self.innerDiameter, rotationAngle: self.currentTemperature)
+                DialCircle(innerDiameter: self.innerDiameter,
+                           rotationAngle: self.currentTemperature)
 
                 ForEach(pathNodes, id:\.id) { node in
                     node.view
@@ -372,7 +357,7 @@ struct DialView: View {
                         let y: CGFloat = min(max(value.location.y, 0), self.innerDiameter)
 
                         let ending = CGPoint(x: x, y: y)
-                        let start = CGPoint(x: (self.innerDiameter) / 2, y: (self.innerDiameter) / 2)
+                        let start = CGPoint(x: self.radius, y: self.radius)
 
                         print("start=\(start)")
                         print("ending=\(ending)")
@@ -418,7 +403,7 @@ struct DialView: View {
             GeometryReader { g in
                 SelectionIndicator(parentWidth: g.size.width,
                         parentHeight: g.size.height,
-                        radius: (self.innerDiameter / 2) + 20,
+                        radius: self.radius,
                         sectorAngle: self.pathNodes[0].sectorAngle.degrees)
                     .fill(Color.yellow).opacity(0.5)
             }
@@ -493,6 +478,24 @@ struct DialView: View {
     }
 }
 
+//        public struct Angle {
+//
+//            public var radians: Double
+//
+//            @inlinable public var degrees: Double
+//
+//            @inlinable public init()
+//
+//            @inlinable public init(radians: Double)
+//
+//            @inlinable public init(degrees: Double)
+//
+//            @inlinable public static func radians(_ radians: Double) -> Angle
+//
+//            @inlinable public static func degrees(_ degrees: Double) -> Angle
+//        }
+//
+
 struct SelectionIndicator : Shape {
     let parentWidth: CGFloat
     let parentHeight: CGFloat
@@ -515,6 +518,47 @@ struct SelectionIndicator : Shape {
         return p
     }
 }
+//
+//struct SelectionIndicator : Shape {
+//    let parentWidth: CGFloat
+//    let parentHeight: CGFloat
+//    let radius: CGFloat
+//    let sectorAngle: Double
+//    let innerRadius: CGFloat
+//    let outerRadius: CGFloat
+//
+//    func path(in rect: CGRect) -> Path {
+//        var p = Path()
+//        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
+//        let halfSectorAngle: Double = sectorAngle / 2
+//
+//
+//
+//        let leftAngle: Double = 270 + halfSectorAngle
+//        let rightAngle: Double = 270 - halfSectorAngle
+//        let outerPoint: CGPoint = pointOnCircle(withRadius: outerRadius, withAngle: CGFloat(rightAngle))
+//        let innerPoint: CGPoint = pointOnCircle(withRadius: innerRadius, withAngle: CGFloat(leftAngle))
+//
+////        p.addArc(center: center,
+////                 radius: radius - 125,
+////                 startAngle: Angle.degrees(leftAngle),
+////                 endAngle: Angle.degrees(rightAngle),
+////                 clockwise: false)
+////
+////        p.addLine(to: outerPoint)
+//
+//        p.addArc(center: center,
+//                 radius: radius,
+//                 startAngle: Angle.degrees(leftAngle),
+//                 endAngle: Angle.degrees(rightAngle),
+//                 clockwise: false)
+//
+//        p.addLine(to: innerPoint)
+//        p.closeSubpath()
+//
+//        return p
+//    }
+//}
 
 struct DialCircle : View {
     let innerDiameter: CGFloat

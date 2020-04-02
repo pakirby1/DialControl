@@ -88,3 +88,35 @@ extension StringProtocol {
         suffix(Swift.max(0, count-range.lowerBound))
     }
 }
+
+extension View {
+    func xPoint(_ withRadius: CGFloat, _ withAngle: CGFloat) -> CGFloat {
+        let point: (CGFloat, CGFloat) = pointOnCircle(withRadius: withRadius, withAngle: withAngle)
+        print("x: \(point.0)")
+        return point.0
+    }
+
+    func yPoint(_ withRadius: CGFloat, _ withAngle: CGFloat) -> CGFloat {
+        let point: (CGFloat, CGFloat) = pointOnCircle(withRadius: withRadius, withAngle: withAngle)
+        print("y: \(point.1)")
+        return point.1
+    }
+    
+    func pointOnCircle(withRadius: CGFloat, withAngle: CGFloat) -> (CGFloat, CGFloat) {
+        let angle = CGFloat(withAngle - 90) * .pi / 180
+        let x = withRadius * cos(angle)
+        let y = withRadius * sin(angle)
+
+//        return CGPoint(x: x, y: y)
+        return (x, y)
+    }
+    
+    func pointOnCircle(withRadius: CGFloat, withAngle: CGFloat) -> CGPoint {
+        let angle = CGFloat(withAngle - 90) * .pi / 180
+        let x = withRadius * cos(angle)
+        let y = withRadius * sin(angle)
+
+        return CGPoint(x: x, y: y)
+//        return (x, y)
+    }
+}

@@ -216,7 +216,6 @@ struct CardView<Content: View>: View {
     }
 }
 
-
 struct PilotCardView: View {
     let pilot: SquadPilot
     let theme: Theme = LightTheme()
