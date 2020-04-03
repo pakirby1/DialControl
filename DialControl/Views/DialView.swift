@@ -401,11 +401,14 @@ struct DialView: View {
             }
             
             GeometryReader { g in
-                SelectionIndicator(parentWidth: g.size.width,
-                        parentHeight: g.size.height,
-                        radius: self.radius + 10,
-                        sectorAngle: self.pathNodes[0].sectorAngle.degrees)
-                    .fill(Color.yellow, opacity: 0.2, strokeWidth: 3, strokeColor: Color.white)
+//                SelectionIndicator(parentWidth: g.size.width,
+//                        parentHeight: g.size.height,
+//                        radius: self.radius + 10,
+//                        sectorAngle: self.pathNodes[0].sectorAngle.degrees)
+//                    .fill(Color.yellow, opacity: 0.2, strokeWidth: 3, strokeColor: Color.white)
+                SelectionIndicator(sectorAngle: self.pathNodes[0].sectorAngle.degrees,
+                                       radius: self.radius)
+                .fill(Color.yellow, opacity: 0.2, strokeWidth: 3, strokeColor: Color.white)
             }
         }
         .border(Color.blue)
@@ -413,7 +416,8 @@ struct DialView: View {
     
     var body: some View {
         ZStack(alignment: .center) {
-            innerCircle.offset(x: 0, y: 100)
+            innerCircle
+//                .offset(x: 0, y: 100)
 
             if (displayAngleRanges) {
                 VStack {
@@ -478,69 +482,29 @@ struct DialView: View {
     }
 }
 
-struct TestView: View {
-    var body: some View {
-        Path { path in
-            path.move(to: CGPoint(x: 200, y: 100))
-            path.addLine(to: CGPoint(x: 100, y: 300))
-            path.addLine(to: CGPoint(x: 300, y: 300))
-            path.addLine(to: CGPoint(x: 200, y: 100))
-            path.addLine(to: CGPoint(x: 100, y: 300))
-        }
-        .stroke(Color.blue, lineWidth: 10)
-    }
-}
-
 struct SelectionIndicator : Shape {
-    let parentWidth: CGFloat
-    let parentHeight: CGFloat
-    let radius: CGFloat
     let sectorAngle: Double
-    
+    let radius: CGFloat
     
     func path(in rect: CGRect) -> Path {
         var p = Path()
-        let center = CGPoint(x: parentWidth / 2, y:parentHeight / 2)
+        let center =  CGPoint(x: rect.size.width / 2, y: rect.size.width / 2)
         let halfSectorAngle: Double = (sectorAngle / 2)
         let leftAngle: Angle = .degrees(270 - halfSectorAngle)
         let rightAngle: Angle = .degrees(270 + halfSectorAngle)
-        let innerRadius = radius / 4
-        let outerRadius = radius - 25
-        
-        let pos: CGPoint = pointOnCircle(withRadius: innerRadius, withAngle: CGFloat(halfSectorAngle))
-        
-        let newPos:CGPoint = CGPoint(x: pos.x + radius, y: pos.y + radius)
-        
-//        print("radius: \(radius)")
-//        print("halfSectorAngle: \(halfSectorAngle)")
-//        print(sectorAngle)
-//        print(leftAngle)
-//        print(rightAngle)
-//        print(CGFloat(pos.x) + radius)
-//        print(CGFloat(pos.y) + radius)
-//        print(newPos.x)
-//        print(newPos.y)
-//
-//        for radians in stride(from: 0.0, to: .pi * 2, by: .pi / 4) {
-//            let degrees = Int(radians * 180 / .pi)
-//            let pos: CGPoint = pointOnCircle(withRadius: radius, withAngle: CGFloat(degrees))
-//
-//            print("Degrees: \(degrees), radians: \(radians), point: \(pos)")
-//        }
+        let innerRadius = radius / 2.75
+        let outerRadius = radius - 20
         
         p.addArc(center: center,
-                 radius: outerRadius,
+                 radius: innerRadius,
                  startAngle: leftAngle,
                  endAngle: rightAngle,
                  clockwise: false)
         
-        p.addLine(to: newPos)
-        
-        // have to adjust the angles or else the arc overshoots to the right.
         p.addArc(center: center,
-                 radius: innerRadius,
-                 startAngle: Angle(degrees: rightAngle.degrees - 4),
-                 endAngle: Angle(degrees: leftAngle.degrees + 4),
+                 radius: outerRadius,
+                 startAngle: rightAngle,
+                 endAngle: leftAngle,
                  clockwise: true)
         
         p.closeSubpath()
