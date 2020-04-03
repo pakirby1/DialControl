@@ -401,11 +401,6 @@ struct DialView: View {
             }
             
             GeometryReader { g in
-//                SelectionIndicator(parentWidth: g.size.width,
-//                        parentHeight: g.size.height,
-//                        radius: self.radius + 10,
-//                        sectorAngle: self.pathNodes[0].sectorAngle.degrees)
-//                    .fill(Color.yellow, opacity: 0.2, strokeWidth: 3, strokeColor: Color.white)
                 SelectionIndicator(sectorAngle: self.pathNodes[0].sectorAngle.degrees,
                                        radius: self.radius)
                 .fill(Color.yellow, opacity: 0.2, strokeWidth: 3, strokeColor: Color.white)
