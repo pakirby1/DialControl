@@ -494,7 +494,7 @@ struct SelectionIndicator : Shape {
                  radius: innerRadius,
                  startAngle: leftAngle,
                  endAngle: rightAngle,
-                 clockwise: false)
+                 clockwise: true)
         
         p.addArc(center: center,
                  radius: outerRadius,
