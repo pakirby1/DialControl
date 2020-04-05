@@ -15,6 +15,7 @@ struct ShipView: View {
     let squadPilot: SquadPilot
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
+    @State var showCardOverlay: Bool = false
     
     let dial: [String] = [
                   "1TW",
@@ -76,8 +77,28 @@ struct ShipView: View {
                     .scaledToFit()
 //                    .frame(width: 600.0,height:600)
                     .border(Color.green, width: 2)
+                    .onTapGesture { self.showCardOverlay.toggle() }
+                    .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 
-                Color.clear.border(Color.green, width: 2)
+//                Color.clear.border(Color.green, width: 2)
+                VStack(spacing: 5) {
+                    HStack {
+                        OverlayContentView(curColor: Color.purple, text: "Force Active").border(Color.green, width: 2)
+                        OverlayContentView(curColor: Color.purple, text: "Force Inactive").border(Color.green, width: 2)
+                    }
+                    
+                    HStack {
+                        OverlayContentView(text: "Shield Active").border(Color.green, width: 2)
+                        OverlayContentView(text: "Shield Inactive").border(Color.green, width: 2)
+                    }
+                    
+                    HStack {
+                        OverlayContentView(curColor: Color.yellow, text: "Charge Active").border(Color.green, width: 2)
+                        OverlayContentView(curColor: Color.yellow, text: "Charge Inactive").border(Color.green, width: 2)
+                    }
+                }
+                
+                
                 
 //                WedgeView()
 //                    .frame(width: 400.0,height:400)
@@ -92,3 +113,14 @@ struct ShipView: View {
     }
 }
 
+struct TextOverlay: View {
+    @Binding var isShowing : Bool
+    
+    var body: some View {
+        Text("Charge")
+            .frame(width: 100, height: 100)
+            .background(Color.yellow)
+            .cornerRadius(20)
+            .opacity(self.isShowing ? 1 : 0)
+    }
+}

@@ -39,6 +39,8 @@
 		AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */; };
 		AEAD19F924085E0A0020FABC /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAD19F824085E0A0020FABC /* TestView.swift */; };
 		AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrow.swift */; };
+		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
+		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +98,8 @@
 		AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures_SK9.ttf"; sourceTree = "<group>"; };
 		AEAD19F824085E0A0020FABC /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrow.swift; sourceTree = "<group>"; };
+		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
+		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +147,8 @@
 				AE2D80EF242784D400248CA4 /* SquadView.swift */,
 				AE2D80F52428D3E800248CA4 /* NavigationStack.swift */,
 				AE2D80F7242B76AF00248CA4 /* ShipView.swift */,
+				AEF3B4612439B83100A49717 /* SelectionIndicator.swift */,
+				AEF3B4632439B9B200A49717 /* InnerCircle.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -389,6 +395,7 @@
 				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
+				AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
@@ -397,6 +404,7 @@
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
+				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
