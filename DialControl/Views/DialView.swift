@@ -191,7 +191,7 @@ struct DialView: View {
 
     var anglePublisher = PassthroughSubject<Angle, Never>()
     private var cancellables: Set<AnyCancellable> = []
-    @ObservedObject var timeCounter = TimeCounter()
+    // @ObservedObject var timeCounter = TimeCounter()
     private var pathNodes: [PathNodeStruct<ManeuverDialSelection>] = []
     
     init(temperature: CGFloat,
@@ -331,7 +331,7 @@ struct DialView: View {
 
     var innerCircle: some View {
         ZStack {
-            Text("\(timeCounter.time)").offset(x: 0, y: -50)
+//            Text("\(timeCounter.time)").offset(x: 0, y: -50)
             
             ZStack {
                 DialCircle(innerDiameter: self.innerDiameter,
@@ -403,7 +403,7 @@ struct DialView: View {
             GeometryReader { g in
                 SelectionIndicator(sectorAngle: self.pathNodes[0].sectorAngle.degrees,
                                        radius: self.radius)
-                .fill(Color.yellow, opacity: 0.2, strokeWidth: 3, strokeColor: Color.white)
+                .fill(Color.yellow, opacity: 0.3, strokeWidth: 3, strokeColor: Color.white)
             }
         }
         .border(Color.blue)
@@ -500,7 +500,7 @@ struct SelectionIndicator : Shape {
                  radius: outerRadius,
                  startAngle: rightAngle,
                  endAngle: leftAngle,
-                 clockwise: true)
+                 clockwise: false)
         
         p.closeSubpath()
         
