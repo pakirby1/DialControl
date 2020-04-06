@@ -308,8 +308,9 @@ struct OverlayContentView: View {
         Text(text)
             .frame(width: 100, height: 100)
             .background(curColor)
+            .foregroundColor(Color.white)
             .cornerRadius(20)
-            .onTapGesture { self.showOverlay.toggle() }
+//            .onTapGesture { self.showOverlay.toggle() }
             .overlay( ArcSelectionView(isShowing: self.$showOverlay, curColor: self.$curColor) )
     }
 }

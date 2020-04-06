@@ -82,20 +82,23 @@ struct ShipView: View {
                 
 //                Color.clear.border(Color.green, width: 2)
                 VStack(spacing: 5) {
-                    HStack {
-                        OverlayContentView(curColor: Color.purple, text: "Force Active").border(Color.green, width: 2)
-                        OverlayContentView(curColor: Color.purple, text: "Force Inactive").border(Color.green, width: 2)
-                    }
-                    
-                    HStack {
-                        OverlayContentView(text: "Shield Active").border(Color.green, width: 2)
-                        OverlayContentView(text: "Shield Inactive").border(Color.green, width: 2)
-                    }
-                    
-                    HStack {
-                        OverlayContentView(curColor: Color.yellow, text: "Charge Active").border(Color.green, width: 2)
-                        OverlayContentView(curColor: Color.yellow, text: "Charge Inactive").border(Color.green, width: 2)
-                    }
+                    LinkedView(maxCount: 3)
+                    LinkedView(maxCount: 2)
+                    LinkedView(maxCount: 3)
+//                    HStack {
+//                        OverlayContentView(curColor: Color.purple, text: "Force Active").border(Color.green, width: 2)
+//                        OverlayContentView(curColor: Color.purple, text: "Force Inactive").border(Color.green, width: 2)
+//                    }
+//
+//                    HStack {
+//                        OverlayContentView(text: "Shield Active").border(Color.green, width: 2)
+//                        OverlayContentView(text: "Shield Inactive").border(Color.green, width: 2)
+//                    }
+//
+//                    HStack {
+//                        OverlayContentView(curColor: Color.yellow, text: "Charge Active").border(Color.green, width: 2)
+//                        OverlayContentView(curColor: Color.yellow, text: "Charge Inactive").border(Color.green, width: 2)
+//                    }
                 }
                 
                 
