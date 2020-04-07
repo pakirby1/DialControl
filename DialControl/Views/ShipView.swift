@@ -62,53 +62,31 @@ struct ShipView: View {
                 backButtonView
                     .border(Color.blue, width: 2)
             }
-            .frame(width: 600, height: 50, alignment: .leading)
+            .frame(width: 150, height: 50, alignment: .leading)
             .border(Color.blue, width: 2)
             
             PilotDetailsView(pilot: squadPilot, displayUpgrades: true, displayHeaders: false)
-                .padding(5)
-//                .border(Color.green, width: 2)
+                .padding(2)
+                .border(Color.green, width: 2)
             
-            
-            
-            HStack(alignment: .top) {
+            HStack(alignment: .center) {
+//                clearView
                 Image("Card_Pilot_103")
                     .resizable()
-                    .scaledToFit()
-//                    .frame(width: 600.0,height:600)
+                    .aspectRatio(UIImage(named: "Card_Pilot_103")!.size, contentMode: .fit)
+                    .frame(width: 350.0,height:500)
                     .border(Color.green, width: 2)
                     .onTapGesture { self.showCardOverlay.toggle() }
                     .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 
-//                Color.clear.border(Color.green, width: 2)
                 VStack(spacing: 20) {
                     LinkedView(maxCount: 8, type: StatButtonType.force)
                     LinkedView(maxCount: 10, type: StatButtonType.charge)
                     LinkedView(maxCount: 32, type: StatButtonType.shield)
-//                    HStack {
-//                        OverlayContentView(curColor: Color.purple, text: "Force Active").border(Color.green, width: 2)
-//                        OverlayContentView(curColor: Color.purple, text: "Force Inactive").border(Color.green, width: 2)
-//                    }
-//
-//                    HStack {
-//                        OverlayContentView(text: "Shield Active").border(Color.green, width: 2)
-//                        OverlayContentView(text: "Shield Inactive").border(Color.green, width: 2)
-//                    }
-//
-//                    HStack {
-//                        OverlayContentView(curColor: Color.yellow, text: "Charge Active").border(Color.green, width: 2)
-//                        OverlayContentView(curColor: Color.yellow, text: "Charge Inactive").border(Color.green, width: 2)
-//                    }
-                }
-                
-                
-                
-//                WedgeView()
-//                    .frame(width: 400.0,height:400)
-//                    .border(Color.green, width: 2)
-                
+                }.border(Color.green, width: 2)
+
                 DialView(temperature: 0, diameter: 400, currentManeuver: $currentManeuver, dial: dial, displayAngleRanges: false)
-                    .frame(width: 400.0,height:400)
+                    .frame(width: 400.0,height:400).border(Color.green, width: 2)
             }
             
             clearView
