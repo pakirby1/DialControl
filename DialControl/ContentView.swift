@@ -30,7 +30,6 @@ enum ViewType {
 
 struct ContentView: View {
     @State var maneuver: String = ""
-    let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
     @EnvironmentObject var viewFactory: ViewFactory
     
     var body: some View {

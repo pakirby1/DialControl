@@ -17,6 +17,7 @@
 		AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE6124166830005C54F5 /* PathNode.swift */; };
 		AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */; };
 		AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE65241668CF005C54F5 /* AngleRange.swift */; };
+		AE2C0EC9243CA52A00042318 /* pilots in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0EC8243CA52A00042318 /* pilots */; };
 		AE2D80EC24277F0100248CA4 /* squad.json in Resources */ = {isa = PBXBuildFile; fileRef = AE2D80EB24277F0100248CA4 /* squad.json */; };
 		AE2D80EE242780FC00248CA4 /* squad.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80ED242780FC00248CA4 /* squad.swift */; };
 		AE2D80F0242784D400248CA4 /* SquadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80EF242784D400248CA4 /* SquadView.swift */; };
@@ -71,6 +72,7 @@
 		AE1FBE6124166830005C54F5 /* PathNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathNode.swift; sourceTree = "<group>"; };
 		AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManeuverDialSelection.swift; sourceTree = "<group>"; };
 		AE1FBE65241668CF005C54F5 /* AngleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleRange.swift; sourceTree = "<group>"; };
+		AE2C0EC8243CA52A00042318 /* pilots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pilots; sourceTree = "<group>"; };
 		AE2D80EB24277F0100248CA4 /* squad.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = squad.json; sourceTree = "<group>"; };
 		AE2D80ED242780FC00248CA4 /* squad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = squad.swift; sourceTree = "<group>"; };
 		AE2D80EF242784D400248CA4 /* SquadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadView.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 		AE15E78C241D01A20002F696 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				AE2C0EC8243CA52A00042318 /* pilots */,
 				AE15E78D241D02120002F696 /* tie-in-interceptor.json */,
 				AE2D80EB24277F0100248CA4 /* squad.json */,
 			);
@@ -360,6 +363,7 @@
 			files = (
 				AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */,
 				AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */,
+				AE2C0EC9243CA52A00042318 /* pilots in Resources */,
 				AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */,
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
 				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
