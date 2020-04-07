@@ -81,10 +81,10 @@ struct ShipView: View {
                     .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 
 //                Color.clear.border(Color.green, width: 2)
-                VStack(spacing: 5) {
-                    LinkedView(maxCount: 3)
-                    LinkedView(maxCount: 2)
-                    LinkedView(maxCount: 3)
+                VStack(spacing: 20) {
+                    LinkedView(maxCount: 8, type: StatButtonType.force)
+                    LinkedView(maxCount: 10, type: StatButtonType.charge)
+                    LinkedView(maxCount: 32, type: StatButtonType.shield)
 //                    HStack {
 //                        OverlayContentView(curColor: Color.purple, text: "Force Active").border(Color.green, width: 2)
 //                        OverlayContentView(curColor: Color.purple, text: "Force Inactive").border(Color.green, width: 2)
