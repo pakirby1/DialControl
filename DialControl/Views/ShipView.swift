@@ -71,7 +71,8 @@ struct ShipView: View {
             
             HStack(alignment: .center) {
 //                clearView
-                Image(uiImage: getShipImage(shipName: squadPilot.ship))
+//                Image(uiImage: getShipImage(shipName: squadPilot.ship))
+                Image("Card_Pilot_103")
                     .resizable()
                     .aspectRatio(UIImage(named: "Card_Pilot_103")!.size, contentMode: .fit)
                     .frame(width: 350.0,height:500)

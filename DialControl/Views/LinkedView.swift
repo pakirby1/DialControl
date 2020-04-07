@@ -71,12 +71,28 @@ struct LinkedView: View {
                 self.setState(active: active, inactive: inactive)
             })
             {
-                Text("\(type.symbol)")
+                if type == .charge {
+                    ZStack {
+                        Color.black
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(20)
+
+                        Text("g")
+                            .font(.custom("xwing-miniatures", size: symbolSize))
+                            .frame(width: 75, height: 75)
+                            .foregroundColor(type.color)
+//                            .border(Color.green, width: 2)
+                            .offset(x: 5, y: 0)
+                    }
+                } else {
+                    Text("\(type.symbol)")
                     .font(.custom("xwing-miniatures", size: symbolSize))
                     .frame(width: 100, height: 100)
                     .background(Color.black)
                     .foregroundColor(type.color)
                     .cornerRadius(20)
+                    .border(Color.green, width: 2)
+                }
             }.overlay(CountBannerView(count: self.activeCount, type: .active).offset(x: 50, y: -50))
             
             Button(action:{
