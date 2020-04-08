@@ -71,8 +71,8 @@ struct ShipView: View {
             
             HStack(alignment: .center) {
 //                clearView
-//                Image(uiImage: getShipImage(shipName: squadPilot.ship))
-                Image("Card_Pilot_103")
+                Image(uiImage: getShipImage(shipName: squadPilot.ship))
+//                Image("Card_Pilot_103")
                     .resizable()
                     .aspectRatio(UIImage(named: "Card_Pilot_103")!.size, contentMode: .fit)
                     .frame(width: 350.0,height:500)
@@ -104,7 +104,9 @@ struct ShipView: View {
                                           inDirectory: "pilots/galactic-empire")
         
         if let shipJSONUrl = shipLookupTable[shipName] {
-            if let path = Bundle.main.path(forResource: shipJSONUrl, ofType: "json")
+            if let path = Bundle.main.path(forResource: shipJSONUrl,
+                                           ofType: "json",
+                                           inDirectory: "pilots/galactic-empire")
             {
                 print("shipJSONUrl: \(path)")
             }
@@ -114,13 +116,14 @@ struct ShipView: View {
 //        let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
 //        let imageUrl: URL = URL(fileURLWithPath: imagePath)
         
-        return UIImage(contentsOfFile: "Card_Pilot_103")!
+        return UIImage(named: "Card_Pilot_103")!
     }
     
     var shipLookupTable: [String:String] = [
         "alphaclassstarwing" : "pilots/galactic-empire/alpha-class-star-wing",
         "tieskstriker" : "pilots/galactic-empire/tie-sk-striker",
-        "tieadvancedx1" : "pilots/galactic-empire/tie-advanced-x1"
+        "tieadvancedx1" : "pilots/galactic-empire/tie-advanced-x1",
+        "tieininterceptor" : "pilots/galactic-empire/tie-in-interceptor"
     ]
 }
 
