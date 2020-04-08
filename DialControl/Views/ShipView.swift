@@ -71,8 +71,8 @@ struct ShipView: View {
             
             HStack(alignment: .center) {
 //                clearView
-                Image(uiImage: getShipImage(shipName: squadPilot.ship))
-//                Image("Card_Pilot_103")
+//                Image(uiImage: getShipImage(shipName: squadPilot.ship, pilotName: squadPilot.name))
+                Image(uiImage: getShipImage(shipName: squadPilot.ship, pilotName: "turrphennir"))
                     .resizable()
                     .aspectRatio(UIImage(named: "Card_Pilot_103")!.size, contentMode: .fit)
                     .frame(width: 350.0,height:500)
@@ -96,35 +96,91 @@ struct ShipView: View {
     }
     
     //    "tieskstriker"
-    func getShipImage(shipName: String) -> UIImage {
-        let shipJSON: String = ""
+    func getShipImage(shipName: String, pilotName: String) -> UIImage {
+        func fetchImage(from urlString: String,
+                        completionHandler: @escaping (_ data: Data?) -> ())
+        {
+            let session = URLSession.shared
+            let url = URL(string: urlString)
+                
+            print("url: \(String(describing: url))")
+            
+            let dataTask = session.dataTask(with: url!) { (data, response, error) in
+                if error != nil {
+                    print("Error fetching the image! 😢")
+                    completionHandler(nil)
+                } else {
+                    completionHandler(data)
+                }
+            }
+                
+            dataTask.resume()
+        }
         
-        let stringPath = Bundle.main.path(forResource: "tie-sk-striker",
-                                          ofType: "json",
-                                          inDirectory: "pilots/galactic-empire")
+        var shipJSON: String = ""
         
-        if let shipJSONUrl = shipLookupTable[shipName] {
-            if let path = Bundle.main.path(forResource: shipJSONUrl,
+        print("shipName: \(shipName)")
+        print("pilotName: \(pilotName)")
+        
+        if let pilotFileUrl = shipLookupTable[shipName] {
+            print("pilotFileUrl: \(pilotFileUrl)")
+            
+            if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
                                            ofType: "json",
-                                           inDirectory: "pilots/galactic-empire")
+                                           inDirectory: pilotFileUrl.directoryPath)
             {
-                print("shipJSONUrl: \(path)")
+                print("path: \(path)")
+                
+                do {
+                    shipJSON = try String(contentsOfFile: path)
+                    print("jsonData: \(shipJSON)")
+                } catch {
+                    print("error reading from \(path)")
+                }
             }
         }
+        
+        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+        let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
+        var image: UIImage?
+        
+        fetchImage(from: foundPilots.image) { (imageData) in
+            if let data = imageData {
+                // referenced imageView from main thread
+                // as iOS SDK warns not to use images from
+                // a background thread
+                DispatchQueue.main.async {
+                    image = UIImage(data: data)
+                }
+            } else {
+                    // show as an alert if you want to
+                print("Error loading image");
+            }
+        }
+        
+//        print("image Url: \(pilot.image)")
         
 //        let imageName = "" // your image name here
 //        let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
 //        let imageUrl: URL = URL(fileURLWithPath: imagePath)
-        
-        return UIImage(named: "Card_Pilot_103")!
+        return image ?? UIImage(named: "Card_Pilot_103")!
     }
     
-    var shipLookupTable: [String:String] = [
-        "alphaclassstarwing" : "pilots/galactic-empire/alpha-class-star-wing",
-        "tieskstriker" : "pilots/galactic-empire/tie-sk-striker",
-        "tieadvancedx1" : "pilots/galactic-empire/tie-advanced-x1",
-        "tieininterceptor" : "pilots/galactic-empire/tie-in-interceptor"
+    var shipLookupTable: [String:PilotFileUrl] = [
+        "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
+        "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
+        "tieadvancedx1" : PilotFileUrl(fileName:"tie-advanced-x1", directoryPath: "pilots/galactic-empire"),
+        "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire")
     ]
+}
+
+struct PilotFileUrl: CustomStringConvertible {
+    let fileName: String
+    let directoryPath: String
+    
+    var description: String {
+        return "fileName: '\(fileName)' directoryPath: '\(directoryPath)'"
+    }
 }
 
 struct UpgradesView: View {

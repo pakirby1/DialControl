@@ -148,3 +148,7 @@ extension Shape {
         }
     }
 }
+
+extension Image {
+    
+}

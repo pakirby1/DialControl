@@ -221,16 +221,21 @@ struct Pilot: Codable {
 
 struct Ship: Codable {
     let name: String
-    let xws: String
-    let ffg: Int
-    let size: String
-    let dial: [String]
+    var xws: String { return _xws ?? "" }
+    var ffg: Int { return _ffg ?? 0 }
+    var size: String { return _size ?? "" }
+    var dial: [String] { return _dial ?? [] }
     let dialCodes: [String]
     let faction: String
     let stats: [Stat]
     let actions: [Action]
     let icon: String
     let pilots: [Pilot]
+    
+    private var _xws: String?
+    private var _ffg: Int?
+    private var _size: String?
+    private var _dial: [String]?
     
     static func serializeJSON(jsonString: String) -> Ship {
         let jsonData = jsonString.data(using: .utf8)!
