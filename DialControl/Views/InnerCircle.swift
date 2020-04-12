@@ -177,10 +177,11 @@ struct InnerCircle: View {
             GeometryReader { g in
                 SelectionIndicator(sectorAngle: self.pathNodes[0].sectorAngle.degrees,
                                        radius: self.radius)
-                .fill(Color.gray,
-                      opacity: 0.5,
-                      strokeWidth: 3,
-                      strokeColor: Color.white)
+                    .trim(from: 0, to: 1)
+                    .fill(Color.gray,
+                          opacity: 0.5,
+                          strokeWidth: 3,
+                          strokeColor: Color.white)
             }
         }
 //        .border(Color.blue)
@@ -341,4 +342,16 @@ struct ArcSelectionView: View {
         .animation(.linear(duration: 0.5))
     }
 }
+
+//struct SelectionIndicatorView : View {
+//    var body: some View {
+//        SelectionIndicator(sectorAngle: self.pathNodes[0].sectorAngle.degrees,
+//                           radius: self.radius)
+//        .trim(from: 0, to: 1)
+//        .fill(Color.gray,
+//              opacity: 0.5,
+//              strokeWidth: 3,
+//              strokeColor: Color.white)
+//    }
+//}
 
