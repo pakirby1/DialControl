@@ -359,8 +359,8 @@ struct DialView: View {
             GeometryReader { g in
                 SelectionIndicator(sectorAngle: self.pathNodes[0].sectorAngle.degrees,
                                        radius: self.radius)
-                .fill(Color.yellow,
-                      opacity: 0.3,
+                .fill(Color.clear,
+                      opacity: 0.5,
                       strokeWidth: 3,
                       strokeColor: Color.white)
             }

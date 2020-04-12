@@ -49,7 +49,7 @@ struct SquadCardView: View {
                         self.viewFactory.viewType = .shipView(pilot)
                     }) {
                         PilotCardView(pilot: pilot)
-                                                }
+                    }
                 }
                 
                 Spacer()
@@ -236,7 +236,9 @@ struct PilotCardView: View {
                     Spacer()
                 }.background(Color.black)
                 
+                Spacer()
                 PilotDetailsView(pilot: pilot, displayUpgrades: true, displayHeaders: false)
+                Spacer()
             }
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .multilineTextAlignment(.center)

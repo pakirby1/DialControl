@@ -185,6 +185,13 @@ struct ShipAbility: Codable {
 enum Slot: String, Codable {
     case Modification
     case Talent
+    case Sensor
+    case Missile
+    case Force = "Force Power"
+    case Illicit
+    case Astromech
+    case Device
+    case Gunner
 }
 
 struct Pilot: Codable {

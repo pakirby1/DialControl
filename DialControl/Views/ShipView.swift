@@ -56,8 +56,8 @@ struct ShipView: View {
             .border(Color.red, width: 5)
     }
     
-    var body: some View {
-        VStack(alignment: .leading) {
+    var headerView: some View {
+        HStack {
             HStack(alignment: .top) {
                 backButtonView
                     .border(Color.blue, width: 2)
@@ -68,34 +68,18 @@ struct ShipView: View {
             PilotDetailsView(pilot: squadPilot, displayUpgrades: true, displayHeaders: false)
                 .padding(2)
                 .border(Color.green, width: 2)
-            
-            HStack(alignment: .center) {
-//                clearView
-//                Image("Card_Pilot_103")
-                
-                // url: URL("https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_103.jpg")
-                
-                // Naming collision with URLImageView
-//                URLImageView(url: URL(fileURLWithPath: getShipImageUrl(shipName: "tieininterceptor", pilotName: "turrphennir")),
-//                             view: Text("Loading..."))
-                
-//                URLImageView(url: URL(fileURLWithPath: "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_103.png"), view: Text("Loading..."))
-                
-//                URLImageView(url: URL(fileURLWithPath: "https://image.tmdb.org/t/p/original/pThyQovXQrw2m0s9x82twj48Jq4.jpg"), view: Text("Loading..."))
-                
-                Image(uiImage: fetchImageFromURL(urlString: getShipImageUrl(shipName: squadPilot.ship, pilotName: "sabersquadronace")))
-                .resizable()
-//                .aspectRatio(UIImage(named: "Card_Pilot_103")!.size, contentMode: .fit)
-                .frame(width: 350.0,height:500)
-                .border(Color.green, width: 2)
-                .onTapGesture { self.showCardOverlay.toggle() }
-                .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
-                
-//                PAKTestView(url: URL("https://"))
-//                Image(uiImage: getShipImage(shipName: squadPilot.ship, pilotName: squadPilot.name))
-//          Image(uiImage: getShipImage(shipName: squadPilot.ship, pilotName: "turrphennir"))
-//                URLImageView(url: getShipImage(shipName: squadPilot.ship, pilotName: "turrphennir"))
-//
+        }
+    }
+    
+    var bodyContent: some View {
+        HStack(alignment: .center) {
+                Image(uiImage: fetchImageFromURL(urlString: getShipImageUrl(shipName: squadPilot.ship,
+                                                                            pilotName: squadPilot.name)))
+                    .resizable()
+                    .frame(width: 350.0,height:500)
+                    .border(Color.green, width: 2)
+                    .onTapGesture { self.showCardOverlay.toggle() }
+                    .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 
                 VStack(spacing: 20) {
                     LinkedView(maxCount: 8, type: StatButtonType.force)
@@ -106,42 +90,56 @@ struct ShipView: View {
                 DialView(temperature: 0, diameter: 400, currentManeuver: $currentManeuver, dial: dial, displayAngleRanges: false)
                     .frame(width: 400.0,height:400).border(Color.green, width: 2)
             }
-            
-            UpgradesView(upgrades: squadPilot.upgrades.modifications + squadPilot.upgrades.sensors + squadPilot.upgrades.talents)
-            
+    }
+    
+    var footer: some View {
+        UpgradesView(upgrades: squadPilot.upgrades.modifications + squadPilot.upgrades.sensors + squadPilot.upgrades.talents)
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            headerView
+            bodyContent
+            footer
         }.border(Color.red, width: 2)
     }
     
-    //    "tieskstriker"
-    func getShipImageUrl(shipName: String, pilotName: String) -> String {
-        func buildUrl(shipName: String, pilotName: String) -> String {
-            var shipJSON: String = ""
-            
-            print("shipName: \(shipName)")
-            print("pilotName: \(pilotName)")
-            
-            if let pilotFileUrl = shipLookupTable[shipName] {
-                print("pilotFileUrl: \(pilotFileUrl)")
+    func getShip(shipName: String, pilotName: String) -> (Ship, Pilot) {
+        var shipJSON: String = ""
                 
-                if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
-                                               ofType: "json",
-                                               inDirectory: pilotFileUrl.directoryPath)
-                {
-                    print("path: \(path)")
+                print("shipName: \(shipName)")
+                print("pilotName: \(pilotName)")
+                
+                if let pilotFileUrl = shipLookupTable[shipName] {
+                    print("pilotFileUrl: \(pilotFileUrl)")
                     
-                    do {
-                        shipJSON = try String(contentsOfFile: path)
-                        print("jsonData: \(shipJSON)")
-                    } catch {
-                        print("error reading from \(path)")
+                    if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
+                                                   ofType: "json",
+                                                   inDirectory: pilotFileUrl.directoryPath)
+                    {
+                        print("path: \(path)")
+                        
+                        do {
+                            shipJSON = try String(contentsOfFile: path)
+                            print("jsonData: \(shipJSON)")
+                        } catch {
+                            print("error reading from \(path)")
+                        }
                     }
                 }
-            }
-            
-            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
-            
-            return foundPilots.image
+                
+                let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+                let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
+        
+        return (ship, foundPilots)
+    }
+    
+    
+    //    "tieskstriker"
+    func getShipImageUrl(shipName: String, pilotName: String) -> String {
+        
+        func buildUrl(shipName: String, pilotName: String) -> String {
+            return getShip(shipName: shipName, pilotName: pilotName).1.image
         }
         
         func fetchImage(from urlString: String,
