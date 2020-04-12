@@ -439,3 +439,26 @@ func fetchImageFromURL(urlString: String) -> UIImage {
     return image!
 }
 
+enum UpgradeCardEnum {
+    case astromech(String)
+    case cannon(String)
+    case cargo(String)
+    case command(String)
+    case configuration(String)
+    case crew(String)
+    case device(String)
+    case forcepower(String)
+    case gunner(String)
+    case hardpoint(String)
+    case illicit(String)
+    case missile(String)
+    case modification(String)
+    case sensor(String)
+    case tacticalrelay(String)
+    case talent(String)
+    case team(String)
+    case tech(String)
+    case title(String)
+    case torpedo(String)
+    case turret(String)
+}
