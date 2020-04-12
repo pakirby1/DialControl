@@ -231,7 +231,7 @@ struct Ship: Codable {
     var xws: String { return _xws ?? "" }
     var ffg: Int { return _ffg ?? 0 }
     var size: String { return _size ?? "" }
-    var dial: [String] { return _dial ?? [] }
+    var dial: [String]
     let dialCodes: [String]
     let faction: String
     let stats: [Stat]
@@ -239,10 +239,10 @@ struct Ship: Codable {
     let icon: String
     let pilots: [Pilot]
     
-    private var _xws: String?
+    var _xws: String?
     private var _ffg: Int?
     private var _size: String?
-    private var _dial: [String]?
+//    private var _dial: [String]?
     
     static func serializeJSON(jsonString: String) -> Ship {
         let jsonData = jsonString.data(using: .utf8)!

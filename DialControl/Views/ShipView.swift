@@ -16,6 +16,7 @@ struct ShipView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
     @State var showCardOverlay: Bool = false
+    var ship: Ship? = nil
     
     let dial: [String] = [
                   "1TW",
@@ -36,6 +37,13 @@ struct ShipView: View {
                   "4KR",
                   "5FW"
                 ]
+    
+    init(squadPilot: SquadPilot) {
+        self.squadPilot = squadPilot
+        
+        self.ship = self.getShip(shipName: squadPilot.ship,
+            pilotName: squadPilot.name).0
+    }
     
     var backButtonView: some View {
         Button(action: {
@@ -87,8 +95,21 @@ struct ShipView: View {
                     LinkedView(maxCount: 32, type: StatButtonType.shield)
                 }.border(Color.green, width: 2)
 
-                DialView(temperature: 0, diameter: 400, currentManeuver: $currentManeuver, dial: dial, displayAngleRanges: false)
+            if FeaturesManager.shared.isFeatureEnabled("DialTest") {
+                    DialView(temperature: 0,
+                         diameter: 400,
+                         currentManeuver: $currentManeuver,
+                         dial: self.ship?.dial ?? [],
+                         displayAngleRanges: false)
                     .frame(width: 400.0,height:400).border(Color.green, width: 2)
+                } else {
+                    DialView(temperature: 0,
+                             diameter: 400,
+                             currentManeuver: $currentManeuver,
+                             dial: dial,
+                             displayAngleRanges: false)
+                        .frame(width: 400.0,height:400).border(Color.green, width: 2)
+                }
             }
     }
     
@@ -96,12 +117,16 @@ struct ShipView: View {
         UpgradesView(upgrades: squadPilot.upgrades.modifications + squadPilot.upgrades.sensors + squadPilot.upgrades.talents)
     }
     
-    var body: some View {
-        VStack(alignment: .leading) {
+    func buildView() -> AnyView {
+        return AnyView(VStack(alignment: .leading) {
             headerView
             bodyContent
             footer
-        }.border(Color.red, width: 2)
+        }.border(Color.red, width: 2))
+    }
+    
+    var body: some View {
+        buildView()
     }
     
     func getShip(shipName: String, pilotName: String) -> (Ship, Pilot) {
