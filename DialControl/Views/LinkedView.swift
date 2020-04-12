@@ -77,18 +77,18 @@ struct LinkedView: View {
                         .cornerRadius(20)
                     
                     if type == .charge {
-                            Text("g")
-                                .font(.custom("xwing-miniatures", size: symbolSize))
-                                .frame(width: 75, height: 75)
-                                .foregroundColor(type.color)
-                                .offset(x: 6, y: 0)
+                        Text("g")
+                            .font(.custom("xwing-miniatures", size: symbolSize))
+                            .frame(width: 75, height: 75)
+                            .foregroundColor(type.color)
+                            .offset(x: 6, y: 0)
                     } else {
                         Text("\(type.symbol)")
-                        .font(.custom("xwing-miniatures", size: symbolSize))
-                        .frame(width: 100, height: 100)
-                        .foregroundColor(type.color)
-                        .cornerRadius(20)
-                        .border(Color.green, width: 2)
+                            .font(.custom("xwing-miniatures", size: symbolSize))
+                            .frame(width: 100, height: 100)
+                            .foregroundColor(type.color)
+                            .cornerRadius(20)
+//                            .border(Color.green, width: 2)
                     }
                 }
             }.overlay(CountBannerView(count: self.activeCount, type: .active).offset(x: 50, y: -50))
@@ -105,18 +105,18 @@ struct LinkedView: View {
                         .cornerRadius(20)
                     
                     if type == .charge {
-                            Text("g")
-                                .font(.custom("xwing-miniatures", size: symbolSize))
-                                .frame(width: 75, height: 75)
-                                .foregroundColor(StatButtonState.inactive.color)
-                                .offset(x: 6, y: 0)
+                        Text("g")
+                            .font(.custom("xwing-miniatures", size: symbolSize))
+                            .frame(width: 75, height: 75)
+                            .foregroundColor(StatButtonState.inactive.color)
+                            .offset(x: 6, y: 0)
                     } else {
                         Text("\(type.symbol)")
-                        .font(.custom("xwing-miniatures", size: symbolSize))
-                        .frame(width: 100, height: 100)
-                        .foregroundColor(StatButtonState.inactive.color)
-                        .cornerRadius(20)
-                        .border(Color.green, width: 2)
+                            .font(.custom("xwing-miniatures", size: symbolSize))
+                            .frame(width: 100, height: 100)
+                            .foregroundColor(StatButtonState.inactive.color)
+                            .cornerRadius(20)
+//                            .border(Color.green, width: 2)
                     }
                 }
             }.overlay(CountBannerView(count: self.inactiveCount, type: .inactive).offset(x: 50, y: -50))

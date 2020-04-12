@@ -16,7 +16,7 @@ struct ShipView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
     @State var showCardOverlay: Bool = false
-    var ship: Ship? = nil
+    private var ship: Ship? = nil
     
     let dial: [String] = [
                   "1TW",
@@ -79,8 +79,31 @@ struct ShipView: View {
         }
     }
     
+    var force: Int {
+        return ship?
+            .pilots
+            .filter{ $0.xws == squadPilot.name}[0]
+            .force?.value ?? 0
+    }
+    
+    var charges: Int {
+        return ship?
+            .pilots
+            .filter{ $0.xws == squadPilot.name }[0]
+            .charges?.value ?? 0
+    }
+    
+    var shields: Int {
+        if ((ship?.stats.filter{ $0.type == "shields"}.count ?? 0) > 0) {
+            return ship?
+                .stats.filter{ $0.type == "shields" }[0].value ?? 0
+        } else {
+            return 0
+        }
+    }
+
     var bodyContent: some View {
-        HStack(alignment: .center) {
+        HStack(alignment: .top) {
                 Image(uiImage: fetchImageFromURL(urlString: getShipImageUrl(shipName: squadPilot.ship,
                                                                             pilotName: squadPilot.name)))
                     .resizable()
@@ -90,9 +113,17 @@ struct ShipView: View {
                     .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 
                 VStack(spacing: 20) {
-                    LinkedView(maxCount: 8, type: StatButtonType.force)
-                    LinkedView(maxCount: 10, type: StatButtonType.charge)
-                    LinkedView(maxCount: 32, type: StatButtonType.shield)
+                    if (force > 0) {
+                        LinkedView(maxCount: force, type: StatButtonType.force)
+                    }
+                    
+                    if (charges > 0) {
+                        LinkedView(maxCount: charges, type: StatButtonType.charge)
+                    }
+                    
+                    if (shields > 0) {
+                        LinkedView(maxCount: shields, type: StatButtonType.shield)
+                    }
                 }.border(Color.green, width: 2)
 
             if FeaturesManager.shared.isFeatureEnabled("DialTest") {

@@ -39,6 +39,7 @@ struct ContentView: View {
         }.onAppear() {
             print("ContentView.onAppear")
         }.border(Color.green, width: 2)
+            .background(Color.gray)
     }
 }
 

@@ -194,6 +194,18 @@ enum Slot: String, Codable {
     case Gunner
 }
 
+struct Force: Codable {
+    //    "force": { "value": 3, "recovers": 1, "side": ["dark"] },
+    let value: Int
+    let recovers: Int
+//    let side: [String]
+}
+
+struct Charges: Codable {
+    let value: Int
+    let recovers: Int
+}
+
 struct Pilot: Codable {
     let name: String
     let initiative: Int
@@ -207,9 +219,13 @@ struct Pilot: Codable {
     let artwork: String
     let ffg: Int
     let hyperspace: Bool
+    var force: Force? { return _force ?? nil }
+    var charges: Charges? { return _charges ?? nil }
     
     private var _text: String?
-
+    private var _force: Force?
+    private var _charges: Charges?
+    
     enum CodingKeys: String, CodingKey {
         case _text = "text"
         case name
@@ -223,6 +239,8 @@ struct Pilot: Codable {
         case artwork
         case ffg
         case hyperspace
+        case _force = "force"
+        case _charges = "charges"
     }
 }
 
