@@ -18,6 +18,8 @@ struct ShipView: View {
     @State var showCardOverlay: Bool = false
     private var ship: Ship? = nil
     
+    @State var showImageOverlay: Bool = false
+    
     let dial: [String] = [
                   "1TW",
                   "1YW",
@@ -144,17 +146,33 @@ struct ShipView: View {
             }
     }
     
-    var footer: some View {
-        UpgradesView(upgrades: squadPilot.upgrades.modifications + squadPilot.upgrades.sensors + squadPilot.upgrades.talents)
+    func footer(showImageOverlay: Binding<Bool>) -> some View {
+        UpgradesView(upgrades: squadPilot.upgrades.modifications + squadPilot.upgrades.sensors + squadPilot.upgrades.talents,
+                     showImageOverlay: $showImageOverlay)
     }
     
     func buildView() -> AnyView {
         return AnyView(VStack(alignment: .leading) {
             headerView
             bodyContent
-            footer
-        }.border(Color.red, width: 2))
+            footer(showImageOverlay: $showImageOverlay)
+        }.border(Color.red, width: 2)
+        .overlay(self.showImageOverlay == true ? AnyView(upgradeImageOverlay) : AnyView(clearView))
+            .onTapGesture{
+                self.showImageOverlay = false
+            }
+        )
     }
+    
+    var upgradeImageOverlay: some View {
+        ZStack {
+            Color.gray.opacity(0.5)
+            
+            Image(uiImage: fetchImageFromURL(urlString: "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_70.png"))
+        }
+    }
+    
+    @State var displayOverlay: Bool = false
     
     var body: some View {
         buildView()
@@ -260,22 +278,49 @@ struct PilotFileUrl: CustomStringConvertible {
 }
 
 struct UpgradesView: View {
+    @State var imageName: String = ""
     let upgrades: [String]
+    @Binding var showImageOverlay: Bool
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(upgrades, id:\.self) {
-                    Text("\($0)")
-                        .foregroundColor(.white)
-                        .font(.largeTitle)
-//                        .frame(width: 200, height: 200)
-                        .padding(15)
-                        .background(Color.red)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    UpgradeView(name: $0,
+                                showImageOverlay: self.$showImageOverlay)
                 }
             }
         }
+    }
+}
+
+struct UpgradeView: View {
+    var name: String
+    @Binding var showImageOverlay: Bool
+    
+    var body: some View {
+        Text("\(name)")
+            .foregroundColor(.white)
+            .font(.largeTitle)
+        //                        .frame(width: 200, height: 200)
+            .padding(15)
+            .background(Color.red)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .onTapGesture {
+                self.showImageOverlay = true
+            }
+    }
+}
+
+struct ImageOverlay: View {
+    @Binding var isShowing : Bool
+    
+    var body: some View {
+        Text("Charge")
+            .frame(width: 100, height: 100)
+            .background(Color.yellow)
+            .cornerRadius(20)
+            .opacity(self.isShowing ? 1 : 0)
     }
 }
 
