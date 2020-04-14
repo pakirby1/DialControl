@@ -102,6 +102,11 @@ class ShipViewModel: ObservableObject {
         return url
     }
     
+    func getUpgradeImageUrl(upgrade: Upgrade) -> String
+    {
+        return "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_70.png"
+    }
+    
     var shipLookupTable: [String:PilotFileUrl] = [
         "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
         "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
@@ -139,11 +144,11 @@ class ShipViewModel: ObservableObject {
 
 struct ShipView: View {
     let viewModel: ShipViewModel
-    let squadPilot: SquadPilot
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
     @State var showCardOverlay: Bool = false
     @State var showImageOverlay: Bool = false
+    @State var imageOverlayUrl: String = ""
     
     let dial: [String] = [
                   "1TW",
@@ -167,7 +172,6 @@ struct ShipView: View {
     
     init(viewModel: ShipViewModel) {
         self.viewModel = viewModel
-        self.squadPilot = viewModel.squadPilot
     }
 
     var backButtonView: some View {
@@ -198,18 +202,16 @@ struct ShipView: View {
             .frame(width: 150, height: 50, alignment: .leading)
             .border(Color.blue, width: 2)
             
-            PilotDetailsView(pilot: squadPilot, displayUpgrades: true, displayHeaders: false)
+            PilotDetailsView(pilot: viewModel.squadPilot, displayUpgrades: true, displayHeaders: false)
                 .padding(2)
                 .border(Color.green, width: 2)
         }
     }
     
-    
-
     var bodyContent: some View {
         HStack(alignment: .top) {
-            Image(uiImage: fetchImageFromURL(urlString: viewModel.getShipImageUrl(shipName: squadPilot.ship,
-                                                                            pilotName: squadPilot.name)))
+            Image(uiImage: fetchImageFromURL(urlString: viewModel.getShipImageUrl(shipName: viewModel.squadPilot.ship,
+                                                                            pilotName: viewModel.squadPilot.name)))
                     .resizable()
                     .frame(width: 350.0,height:500)
                     .border(Color.green, width: 2)
@@ -249,29 +251,55 @@ struct ShipView: View {
     }
     
     func footer(showImageOverlay: Binding<Bool>) -> some View {
-        UpgradesView(upgrades: squadPilot.upgrades.modifications + squadPilot.upgrades.sensors + squadPilot.upgrades.talents,
-                     showImageOverlay: $showImageOverlay)
+        UpgradesView(upgrades: viewModel.squadPilot.upgrades.modifications + viewModel.squadPilot.upgrades.sensors + viewModel.squadPilot.upgrades.talents,
+            showImageOverlay: $showImageOverlay).environmentObject(viewModel)
+    }
+    
+    func footer_New(showImageOverlay: Binding<Bool>) -> some View {
+//        UpgradesView(upgrades: viewModel.squadPilot.upgrades.modifications + viewModel.squadPilot.upgrades.sensors + viewModel.squadPilot.upgrades.talents,
+//            showImageOverlay: $showImageOverlay).environmentObject(viewModel)
+        
+        let modifications: [Upgrade] = viewModel.squadPilot.upgrades.modifications.map {
+            Upgrade(type: "modifications", name: $0)
+        }
+        
+        let sensors: [Upgrade] = viewModel.squadPilot.upgrades.sensors.map {
+            Upgrade(type: "sensors", name: $0)
+        }
+        
+        let talents: [Upgrade] = viewModel.squadPilot.upgrades.talents.map {
+            Upgrade(type: "talents", name: $0)
+        }
+        
+        let upgrades = modifications + sensors + talents
+        
+        return UpgradesView_New(upgrades: upgrades,
+                                showImageOverlay: $showImageOverlay,
+                                imageOverlayUrl: $imageOverlayUrl)
+            .environmentObject(self.viewModel)
     }
     
     func buildView() -> AnyView {
         return AnyView(VStack(alignment: .leading) {
             headerView
             bodyContent
-            footer(showImageOverlay: $showImageOverlay)
+//            footer(showImageOverlay: $showImageOverlay)
+            footer_New(showImageOverlay: $showImageOverlay)
         }.border(Color.red, width: 2)
-        .overlay(self.showImageOverlay == true ? AnyView(upgradeImageOverlay) : AnyView(clearView))
+            .overlay(self.showImageOverlay == true ? upgradeImageOverlay(urlString: self.imageOverlayUrl) : AnyView(clearView))
             .onTapGesture{
                 self.showImageOverlay = false
             }
         )
     }
     
-    var upgradeImageOverlay: some View {
-        ZStack {
-            Color.gray.opacity(0.5)
-            
-            Image(uiImage: fetchImageFromURL(urlString: "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_70.png"))
-        }
+    func upgradeImageOverlay(urlString: String) -> AnyView {
+        return AnyView(
+            ZStack {
+                Color.gray.opacity(0.5)
+                
+                Image(uiImage: fetchImageFromURL(urlString: urlString))
+            })
     }
     
     @State var displayOverlay: Bool = false
@@ -290,6 +318,12 @@ struct PilotFileUrl: CustomStringConvertible {
     }
 }
 
+struct Upgrade : Identifiable {
+    let id = UUID()
+    let type: String
+    let name: String
+}
+
 struct UpgradesView: View {
     @State var imageName: String = ""
     let upgrades: [String]
@@ -301,6 +335,27 @@ struct UpgradesView: View {
                 ForEach(upgrades, id:\.self) {
                     UpgradeView(name: $0,
                                 showImageOverlay: self.$showImageOverlay)
+                }
+            }
+        }
+    }
+}
+
+struct UpgradesView_New: View {
+    @EnvironmentObject var viewModel: ShipViewModel
+    @State var imageName: String = ""
+    let upgrades: [Upgrade]
+    @Binding var showImageOverlay: Bool
+    @Binding var imageOverlayUrl: String
+    
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 20) {
+                ForEach(upgrades) {
+                    UpgradeViewNew(upgrade: $0,
+                                showImageOverlay: self.$showImageOverlay,
+                                imageOverlayUrl: self.$imageOverlayUrl)
+                        .environmentObject(self.viewModel)
                 }
             }
         }
@@ -324,6 +379,28 @@ struct UpgradeView: View {
             }
     }
 }
+
+struct UpgradeViewNew: View {
+    @EnvironmentObject var viewModel: ShipViewModel
+    var upgrade: Upgrade
+    @Binding var showImageOverlay: Bool
+    @Binding var imageOverlayUrl: String
+    
+    var body: some View {
+        Text("\(upgrade.name)")
+            .foregroundColor(.white)
+            .font(.largeTitle)
+        //                        .frame(width: 200, height: 200)
+            .padding(15)
+            .background(Color.red)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .onTapGesture {
+                self.showImageOverlay = true
+                self.imageOverlayUrl = self.viewModel.getUpgradeImageUrl(upgrade: self.upgrade)
+            }
+    }
+}
+
 
 struct ImageOverlay: View {
     @Binding var isShowing : Bool
