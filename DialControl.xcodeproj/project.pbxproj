@@ -45,6 +45,7 @@
 		AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrow.swift */; };
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
+		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +109,7 @@
 		AEBA6360241B58D9008B00DB /* UpArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrow.swift; sourceTree = "<group>"; };
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
+		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 				AE1FBE65241668CF005C54F5 /* AngleRange.swift */,
 				AE15E78A241D00120002F696 /* Ship.swift */,
 				AE2D80ED242780FC00248CA4 /* squad.swift */,
+				AEF65F182445D3B4009D6BDC /* Upgrade.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -421,6 +424,7 @@
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
+				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
