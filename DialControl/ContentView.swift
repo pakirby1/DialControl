@@ -18,7 +18,7 @@ class ViewFactory: ObservableObject {
         case .squadView:
             return AnyView(SquadView().environmentObject(self))
         case .shipView(let squadPilot):
-            return AnyView(ShipView(squadPilot: squadPilot)
+            return AnyView(ShipView(viewModel: ShipViewModel(squadPilot: squadPilot))
                 .environmentObject(self))
         }
     }
