@@ -128,12 +128,21 @@ class ShipViewModel: ObservableObject {
         }
         
         func new(upgrade: UpgradeSummary) -> String {
+            var imageUrl = ""
+            
             let jsonString = getJSON(forType: upgrade.type)
             
             let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-            let matches = upgrades.filter{ $0.xws == "firecontrolsystem" }
             
-            let imageUrl: String = matches[0].sides[0].image
+            let matches = upgrades.filter({ $0.xws == upgrade.name })
+            
+            if (matches.count > 0) {
+                let sides = matches[0].sides
+                
+                if (sides.count > 0) {
+                    imageUrl = sides[0].image
+                }
+            }
             
             return imageUrl
         }
