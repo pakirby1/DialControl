@@ -32,6 +32,7 @@ enum ViewType {
 struct ContentView: View {
     @State var maneuver: String = ""
     @EnvironmentObject var viewFactory: ViewFactory
+    let theme: Theme = WestworldUITheme()
     
     var body: some View {
         VStack {
@@ -39,7 +40,7 @@ struct ContentView: View {
         }.onAppear() {
             print("ContentView.onAppear")
         }.border(Color.green, width: 2)
-            .background(Color.gray)
+            .background(theme.BORDER_INACTIVE)
     }
 }
 

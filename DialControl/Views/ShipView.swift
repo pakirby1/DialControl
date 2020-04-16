@@ -196,6 +196,7 @@ struct ShipView: View {
     @State var showCardOverlay: Bool = false
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
+    let theme: Theme = WestworldUITheme()
     
     let dial: [String] = [
                   "1TW",
@@ -230,6 +231,7 @@ struct ShipView: View {
                     .font(.system(size: 24, weight: .bold))
                 
                 Text("Back to Squad")
+                    .foregroundColor(theme.TEXT_FOREGROUND)
             }
         }.padding(5)
     }
@@ -279,21 +281,13 @@ struct ShipView: View {
                     }
                 }.border(Color.green, width: 2)
 
-            if FeaturesManager.shared.isFeatureEnabled("DialTest") {
-                    DialView(temperature: 0,
-                         diameter: 400,
-                         currentManeuver: $currentManeuver,
-                         dial: self.viewModel.dial,
-                         displayAngleRanges: false)
-                    .frame(width: 400.0,height:400).border(Color.green, width: 2)
-                } else {
-                    DialView(temperature: 0,
-                             diameter: 400,
-                             currentManeuver: $currentManeuver,
-                             dial: dial,
-                             displayAngleRanges: false)
-                        .frame(width: 400.0,height:400).border(Color.green, width: 2)
-                }
+                DialView(temperature: 0,
+                     diameter: 400,
+                     currentManeuver: $currentManeuver,
+                     dial: self.viewModel.dial,
+                     displayAngleRanges: false)
+                .frame(width: 400.0,height:400)
+                    .border(theme.BORDER_ACTIVE, width: 2)
             }
     }
     
@@ -432,14 +426,16 @@ struct UpgradeViewNew: View {
     var upgrade: UpgradeSummary
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
+    let theme: Theme = WestworldUITheme()
     
     var body: some View {
         Text("\(upgrade.name)")
-            .foregroundColor(.white)
+            .foregroundColor(theme.TEXT_FOREGROUND)
             .font(.largeTitle)
         //                        .frame(width: 200, height: 200)
             .padding(15)
-            .background(Color.red)
+//            .background(Color.red)
+            .background(theme.BUTTONBACKGROUND)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .onTapGesture {
                 self.showImageOverlay = true

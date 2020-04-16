@@ -28,21 +28,21 @@ struct SquadView: View {
 struct SquadCardView: View {
     let squad: Squad
     @EnvironmentObject var viewFactory: ViewFactory
+    let theme: Theme = WestworldUITheme()
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(Color.red)
+                .fill(theme.BORDER_INACTIVE)
 
             VStack(alignment: .leading) {
                 Text(squad.name)
                     .font(.title)
-                    .foregroundColor(.black)
-                    .border(Color.blue, width: 2)
+                    .foregroundColor(theme.TEXT_FOREGROUND)
 
                 Text("Points: \(squad.points)")
                     .font(.title)
-                    .foregroundColor(.black)
+                    .foregroundColor(theme.TEXT_FOREGROUND)
 
                 ForEach(squad.pilots) { pilot in
                     Button(action: {
@@ -65,6 +65,7 @@ struct PilotDetailsView: View {
     let pilot: SquadPilot
     let displayUpgrades: Bool
     let displayHeaders: Bool
+    let theme: Theme = WestworldUITheme()
     
     @State var currentManeuver: String = ""
     
@@ -72,7 +73,7 @@ struct PilotDetailsView: View {
         HStack {
             Text("\(pilot.points)")
                 .font(.title)
-                .foregroundColor(.white)
+                .foregroundColor(theme.TEXT_FOREGROUND)
                 .padding()
                 .background(Color.blue)
                 .clipShape(Circle())
@@ -80,9 +81,11 @@ struct PilotDetailsView: View {
             VStack {
                 Text(pilot.name)
                     .font(.title)
+                    .foregroundColor(theme.TEXT_FOREGROUND)
                 
                 Text(pilot.ship)
                     .font(.body)
+                    .foregroundColor(theme.TEXT_FOREGROUND)
             }
             
             Spacer()
@@ -132,16 +135,20 @@ struct UpgradeSummaryView : View {
     let category: String
     let upgrades: [String]
     let displayHeader: Bool
+    let theme: Theme = WestworldUITheme()
     
     var body: some View {
         VStack {
             if (upgrades.count > 0) {
                 if (displayHeader) {
-                    Text(category).font(.title)
+                    Text(category)
+                        .font(.title)
+                        .foregroundColor(theme.TEXT_FOREGROUND)
                 }
                 
                 ForEach(upgrades, id:\.self) { upgrade in
                     Text("\(upgrade)")
+                        .foregroundColor(self.theme.TEXT_FOREGROUND)
                 }
             }
         }
@@ -218,7 +225,8 @@ struct CardView<Content: View>: View {
 
 struct PilotCardView: View {
     let pilot: SquadPilot
-    let theme: Theme = LightTheme()
+//    let theme: Theme = LightTheme()
+    let theme: Theme = WestworldUITheme()
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -248,7 +256,7 @@ struct PilotCardView: View {
     var body: some View {
         newView.overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.black, lineWidth: 2)
+                .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
         )
     }
 }
