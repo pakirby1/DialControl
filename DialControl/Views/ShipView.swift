@@ -104,14 +104,14 @@ class ShipViewModel: ObservableObject {
     
     func getUpgradeImageUrl(upgrade: UpgradeSummary) -> String
     {
-        func getJSON(forType: String) -> String {
+        func getJSON(forType: String, inDirectory: String) -> String {
             // Read json from file: forType.json
             let jsonFileName = "\(forType)"
             var upgradeJSON = ""
             
             if let path = Bundle.main.path(forResource: jsonFileName,
                                            ofType: "json",
-                                           inDirectory: "upgrades")
+                                           inDirectory: inDirectory)
             {
                 print("path: \(path)")
                 
@@ -127,10 +127,10 @@ class ShipViewModel: ObservableObject {
             return upgradeJSON
         }
         
-        func new(upgrade: UpgradeSummary) -> String {
+        func getImageURLFromJSON_new(upgrade: UpgradeSummary) -> String {
             var imageUrl = ""
             
-            let jsonString = getJSON(forType: upgrade.type)
+            let jsonString = getJSON(forType: upgrade.type, inDirectory: "upgrades")
             
             let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
             
@@ -147,11 +147,11 @@ class ShipViewModel: ObservableObject {
             return imageUrl
         }
         
-        func old(upgrade: UpgradeSummary) -> String {
+        func getImageURLFromJSON_old(upgrade: UpgradeSummary) -> String {
             return "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_70.png"
         }
         
-        return new(upgrade: upgrade)
+        return getImageURLFromJSON_new(upgrade: upgrade)
     }
     
     var shipLookupTable: [String:PilotFileUrl] = [
@@ -301,15 +301,15 @@ struct ShipView: View {
 //            showImageOverlay: $showImageOverlay).environmentObject(viewModel)
         
         let modifications: [UpgradeSummary] = viewModel.squadPilot.upgrades.modifications.map {
-            UpgradeSummary(type: "modification", name: $0)
+            UpgradeSummary(type: "modification", name: $0, prettyName: $0)
         }
         
         let sensors: [UpgradeSummary] = viewModel.squadPilot.upgrades.sensors.map {
-            UpgradeSummary(type: "sensor", name: $0)
+            UpgradeSummary(type: "sensor", name: $0, prettyName: $0)
         }
         
         let talents: [UpgradeSummary] = viewModel.squadPilot.upgrades.talents.map {
-            UpgradeSummary(type: "talent", name: $0)
+            UpgradeSummary(type: "talent", name: $0, prettyName: $0)
         }
         
         let upgrades = modifications + sensors + talents
@@ -363,6 +363,7 @@ struct UpgradeSummary : Identifiable {
     let id = UUID()
     let type: String
     let name: String
+    let prettyName: String
 }
 
 struct UpgradesView: View {
@@ -406,9 +407,10 @@ struct UpgradesView_New: View {
 struct UpgradeView: View {
     var name: String
     @Binding var showImageOverlay: Bool
+    var prettyName: String = " Test"
     
     var body: some View {
-        Text("\(name)")
+        Text("\(prettyName)")
             .foregroundColor(.white)
             .font(.largeTitle)
         //                        .frame(width: 200, height: 200)
@@ -427,6 +429,7 @@ struct UpgradeViewNew: View {
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
     let theme: Theme = WestworldUITheme()
+    var prettyName: String = " Test"
     
     var body: some View {
         Text("\(upgrade.name)")
@@ -441,6 +444,9 @@ struct UpgradeViewNew: View {
                 self.showImageOverlay = true
                 self.imageOverlayUrl = self.viewModel.getUpgradeImageUrl(upgrade: self.upgrade)
             }
+            .onAppear(perform: {
+            
+            })
     }
 }
 
