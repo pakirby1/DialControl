@@ -228,7 +228,7 @@ struct PilotCardView: View {
     let pilot: SquadPilot
 //    let theme: Theme = LightTheme()
     let theme: Theme = WestworldUITheme()
-    @State var ship: Ship? = nil
+    @State var shipPilot: ShipPilot? = nil
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -239,7 +239,7 @@ struct PilotCardView: View {
                 HStack {
                     Spacer()
                 
-                    Text("\(ship?.name ?? "None")")
+                    Text("\(shipPilot?.ship.name ?? "None")")
                         .font(.title)
                         .foregroundColor(Color.white)
                     
@@ -248,7 +248,7 @@ struct PilotCardView: View {
                 
                 Spacer()
                 
-                PilotDetailsView(ship: ship,
+                PilotDetailsView(ship: shipPilot?.ship,
                                  pilot: pilot,
                                  displayUpgrades: true,
                                  displayHeaders: false)
@@ -260,6 +260,39 @@ struct PilotCardView: View {
     }
     
     func getShip() {
+        func getJSON(forType: String, inDirectory: String) -> String {
+            // Read json from file: forType.json
+            let jsonFileName = "\(forType)"
+            var upgradeJSON = ""
+            
+            if let path = Bundle.main.path(forResource: jsonFileName,
+                                           ofType: "json",
+                                           inDirectory: inDirectory)
+            {
+                print("path: \(path)")
+                
+                do {
+                    upgradeJSON = try String(contentsOfFile: path)
+                    print("upgradeJSON: \(upgradeJSON)")
+                } catch {
+                    print("error reading from \(path)")
+                }
+            }
+            
+            //            return modificationsUpgradesJSON
+            return upgradeJSON
+        }
+        
+        func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {
+            let jsonString = getJSON(forType: upgradeCategory, inDirectory: "upgrades")
+            
+            let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+            
+            let matches: [Upgrade] = upgrades.filter({ $0.xws == upgradeName })
+            
+            return matches[0]
+        }
+        
         var shipJSON: String = ""
                 
         print("shipName: \(pilot.ship)")
@@ -289,9 +322,18 @@ struct PilotCardView: View {
         ship.pilots.removeAll()
         ship.pilots.append(foundPilots)
                 
-        self.ship = ship
-    }
+        // Add the upgrades from SquadPilot.upgrades
+        let sensors: [Upgrade] = pilot.upgrades.sensors.map{ getUpgrade(upgradeCategory: "sensor", upgradeName: $0) }
         
+        let talents: [Upgrade] = pilot.upgrades.talents.map{ getUpgrade(upgradeCategory: "talent", upgradeName: $0) }
+
+        let modifications: [Upgrade] = pilot.upgrades.modifications.map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
+
+        let upgrades = sensors + talents + modifications
+        
+        self.shipPilot = ShipPilot(ship: ship, upgrades: upgrades)
+    }
+    
     var body: some View {
         newView
             .onAppear(perform: getShip)

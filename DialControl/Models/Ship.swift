@@ -270,6 +270,11 @@ struct Ship: Codable {
     }
 }
 
+struct ShipPilot {
+    let ship: Ship
+    let upgrades: [Upgrade]
+}
+
 struct TieInInterceptor : ShipProtocol {
     let dial: [String] = [
         "1TW",
