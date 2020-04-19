@@ -255,7 +255,7 @@ struct Ship: Codable {
     let stats: [Stat]
     let actions: [Action]
     let icon: String
-    let pilots: [Pilot]
+    var pilots: [Pilot]
     
     var _xws: String?
     private var _ffg: Int?

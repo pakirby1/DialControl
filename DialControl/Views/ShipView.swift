@@ -154,13 +154,6 @@ class ShipViewModel: ObservableObject {
         return getImageURLFromJSON_new(upgrade: upgrade)
     }
     
-    var shipLookupTable: [String:PilotFileUrl] = [
-        "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
-        "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
-        "tieadvancedx1" : PilotFileUrl(fileName:"tie-advanced-x1", directoryPath: "pilots/galactic-empire"),
-        "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire")
-    ]
-    
     var force: Int {
         return ship?
             .pilots
@@ -188,6 +181,13 @@ class ShipViewModel: ObservableObject {
         return self.ship?.dial ?? []
     }
 }
+
+var shipLookupTable: [String:PilotFileUrl] = [
+    "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
+    "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
+    "tieadvancedx1" : PilotFileUrl(fileName:"tie-advanced-x1", directoryPath: "pilots/galactic-empire"),
+    "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire")
+]
 
 struct ShipView: View {
     let viewModel: ShipViewModel
@@ -251,7 +251,7 @@ struct ShipView: View {
             .frame(width: 150, height: 50, alignment: .leading)
             .border(Color.blue, width: 2)
             
-            PilotDetailsView(pilot: viewModel.squadPilot, displayUpgrades: true, displayHeaders: false)
+            PilotDetailsView(ship: nil, pilot: viewModel.squadPilot, displayUpgrades: true, displayHeaders: false)
                 .padding(2)
                 .border(Color.green, width: 2)
         }

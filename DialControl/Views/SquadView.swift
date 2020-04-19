@@ -62,6 +62,7 @@ struct SquadCardView: View {
 }
 
 struct PilotDetailsView: View {
+    let ship: Ship?
     let pilot: SquadPilot
     let displayUpgrades: Bool
     let displayHeaders: Bool
@@ -79,11 +80,11 @@ struct PilotDetailsView: View {
                 .clipShape(Circle())
             
             VStack {
-                Text(pilot.name)
+                Text("\(ship?.pilots[0].name ?? "No Pilot")")
                     .font(.title)
                     .foregroundColor(theme.TEXT_FOREGROUND)
                 
-                Text(pilot.ship)
+                Text("\(ship?.name ?? "No Ship")")
                     .font(.body)
                     .foregroundColor(theme.TEXT_FOREGROUND)
             }
@@ -227,6 +228,7 @@ struct PilotCardView: View {
     let pilot: SquadPilot
 //    let theme: Theme = LightTheme()
     let theme: Theme = WestworldUITheme()
+    @State var ship: Ship? = nil
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -237,7 +239,7 @@ struct PilotCardView: View {
                 HStack {
                     Spacer()
                 
-                    Text("\(pilot.name)")
+                    Text("\(ship?.name ?? "None")")
                         .font(.title)
                         .foregroundColor(Color.white)
                     
@@ -245,7 +247,11 @@ struct PilotCardView: View {
                 }.background(Color.black)
                 
                 Spacer()
-                PilotDetailsView(pilot: pilot, displayUpgrades: true, displayHeaders: false)
+                
+                PilotDetailsView(ship: ship,
+                                 pilot: pilot,
+                                 displayUpgrades: true,
+                                 displayHeaders: false)
                 Spacer()
             }
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
@@ -253,8 +259,43 @@ struct PilotCardView: View {
         }
     }
     
+    func getShip() {
+        var shipJSON: String = ""
+                
+        print("shipName: \(pilot.ship)")
+        print("pilotName: \(pilot.name)")
+                
+        if let pilotFileUrl = shipLookupTable[pilot.ship] {
+            print("pilotFileUrl: \(pilotFileUrl)")
+            
+            if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
+                                           ofType: "json",
+                                           inDirectory: pilotFileUrl.directoryPath)
+            {
+                print("path: \(path)")
+                
+                do {
+                    shipJSON = try String(contentsOfFile: path)
+                    print("jsonData: \(shipJSON)")
+                } catch {
+                    print("error reading from \(path)")
+                }
+            }
+        }
+        
+        var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+        let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilot.name }[0]
+
+        ship.pilots.removeAll()
+        ship.pilots.append(foundPilots)
+                
+        self.ship = ship
+    }
+        
     var body: some View {
-        newView.overlay(
+        newView
+            .onAppear(perform: getShip)
+            .overlay(
             RoundedRectangle(cornerRadius: 10)
                 .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
         )
