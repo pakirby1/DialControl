@@ -17,8 +17,11 @@ class ViewFactory: ObservableObject {
         switch(type) {
         case .squadView:
             return AnyView(SquadView().environmentObject(self))
-        case .shipView(let squadPilot):
-            return AnyView(ShipView(viewModel: ShipViewModel(squadPilot: squadPilot))
+//        case .shipView(let squadPilot):
+//            return AnyView(ShipView(viewModel: ShipViewModel(squadPilot: squadPilot))
+//                .environmentObject(self))
+        case .shipViewNew(let shipPilot):
+            return AnyView(ShipView(viewModel: ShipViewModel(shipPilot: shipPilot))
                 .environmentObject(self))
         }
     }
@@ -26,7 +29,8 @@ class ViewFactory: ObservableObject {
 
 enum ViewType {
     case squadView
-    case shipView(SquadPilot)
+//    case shipView(SquadPilot)
+    case shipViewNew(ShipPilot)
 }
 
 struct ContentView: View {

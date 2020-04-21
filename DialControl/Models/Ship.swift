@@ -270,9 +270,11 @@ struct Ship: Codable {
     }
 }
 
-struct ShipPilot {
+struct ShipPilot: Identifiable {
+    let id = UUID()
     let ship: Ship
     let upgrades: [Upgrade]
+    let points: Int
 }
 
 struct TieInInterceptor : ShipProtocol {

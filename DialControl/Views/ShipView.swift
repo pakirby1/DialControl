@@ -12,13 +12,17 @@ import Combine
 import TimelaneCombine
 
 class ShipViewModel: ObservableObject {
-    let squadPilot: SquadPilot
+    var shipPilot: ShipPilot
     var ship: Ship? = nil
     
-    init(squadPilot: SquadPilot) {
-        self.squadPilot = squadPilot
-        self.ship = self.getShip(shipName: squadPilot.ship,
-            pilotName: squadPilot.name).0
+//    init(squadPilot: SquadPilot) {
+//        self.squadPilot = squadPilot
+//        self.ship = self.getShip(shipName: squadPilot.ship,
+//            pilotName: squadPilot.name).0
+//    }
+    
+    init(shipPilot: ShipPilot) {
+        self.shipPilot = shipPilot
     }
     
     func getShip(shipName: String, pilotName: String) -> (Ship, Pilot) {
@@ -155,16 +159,12 @@ class ShipViewModel: ObservableObject {
     }
     
     var force: Int {
-        return ship?
-            .pilots
-            .filter{ $0.xws == squadPilot.name}[0]
+        return shipPilot.ship.pilots[0]
             .force?.value ?? 0
     }
     
     var charges: Int {
-        return ship?
-            .pilots
-            .filter{ $0.xws == squadPilot.name }[0]
+        return shipPilot.ship.pilots[0]
             .charges?.value ?? 0
     }
     
@@ -251,7 +251,9 @@ struct ShipView: View {
             .frame(width: 150, height: 50, alignment: .leading)
             .border(Color.blue, width: 2)
             
-            PilotDetailsView(ship: nil, pilot: viewModel.squadPilot, displayUpgrades: true, displayHeaders: false)
+            PilotDetailsView(shipPilot: viewModel.shipPilot,
+                             displayUpgrades: true,
+                             displayHeaders: false)
                 .padding(2)
                 .border(Color.green, width: 2)
         }
@@ -259,8 +261,8 @@ struct ShipView: View {
     
     var bodyContent: some View {
         HStack(alignment: .top) {
-            Image(uiImage: fetchImageFromURL(urlString: viewModel.getShipImageUrl(shipName: viewModel.squadPilot.ship,
-                                                                            pilotName: viewModel.squadPilot.name)))
+            Image(uiImage: fetchImageFromURL(urlString: viewModel.getShipImageUrl(shipName: viewModel.shipPilot.ship.xws,
+                                                                                  pilotName: viewModel.shipPilot.ship.pilots[0].xws)))
                     .resizable()
                     .frame(width: 350.0,height:500)
                     .border(Color.green, width: 2)
@@ -292,40 +294,16 @@ struct ShipView: View {
     }
     
     func footer(showImageOverlay: Binding<Bool>) -> some View {
-        UpgradesView(upgrades: viewModel.squadPilot.upgrades.modifications + viewModel.squadPilot.upgrades.sensors + viewModel.squadPilot.upgrades.talents,
+        UpgradesView(upgrades: viewModel.shipPilot.upgrades.map{ $0.name },
             showImageOverlay: $showImageOverlay).environmentObject(viewModel)
-    }
-    
-    func footer_New(showImageOverlay: Binding<Bool>) -> some View {
-//        UpgradesView(upgrades: viewModel.squadPilot.upgrades.modifications + viewModel.squadPilot.upgrades.sensors + viewModel.squadPilot.upgrades.talents,
-//            showImageOverlay: $showImageOverlay).environmentObject(viewModel)
-        
-        let modifications: [UpgradeSummary] = viewModel.squadPilot.upgrades.modifications.map {
-            UpgradeSummary(type: "modification", name: $0, prettyName: $0)
-        }
-        
-        let sensors: [UpgradeSummary] = viewModel.squadPilot.upgrades.sensors.map {
-            UpgradeSummary(type: "sensor", name: $0, prettyName: $0)
-        }
-        
-        let talents: [UpgradeSummary] = viewModel.squadPilot.upgrades.talents.map {
-            UpgradeSummary(type: "talent", name: $0, prettyName: $0)
-        }
-        
-        let upgrades = modifications + sensors + talents
-        
-        return UpgradesView_New(upgrades: upgrades,
-                                showImageOverlay: $showImageOverlay,
-                                imageOverlayUrl: $imageOverlayUrl)
-            .environmentObject(self.viewModel)
     }
     
     func buildView() -> AnyView {
         return AnyView(VStack(alignment: .leading) {
             headerView
             bodyContent
-//            footer(showImageOverlay: $showImageOverlay)
-            footer_New(showImageOverlay: $showImageOverlay)
+            footer(showImageOverlay: $showImageOverlay)
+//            footer_New(showImageOverlay: $showImageOverlay)
         }.border(Color.red, width: 2)
             .overlay(self.showImageOverlay == true ? upgradeImageOverlay(urlString: self.imageOverlayUrl) : AnyView(clearView))
             .onTapGesture{
