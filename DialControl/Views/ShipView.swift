@@ -286,7 +286,7 @@ struct ShipView: View {
                 DialView(temperature: 0,
                      diameter: 400,
                      currentManeuver: $currentManeuver,
-                     dial: self.viewModel.dial,
+                     dial: self.viewModel.shipPilot.ship.dial,
                      displayAngleRanges: false)
                 .frame(width: 400.0,height:400)
                     .border(theme.BORDER_ACTIVE, width: 2)
@@ -295,7 +295,8 @@ struct ShipView: View {
     
     func footer(showImageOverlay: Binding<Bool>) -> some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades.map{ $0.name },
-            showImageOverlay: $showImageOverlay).environmentObject(viewModel)
+            showImageOverlay: $showImageOverlay)
+            .environmentObject(viewModel)
     }
     
     func buildView() -> AnyView {
@@ -427,7 +428,6 @@ struct UpgradeViewNew: View {
             })
     }
 }
-
 
 struct ImageOverlay: View {
     @Binding var isShowing : Bool

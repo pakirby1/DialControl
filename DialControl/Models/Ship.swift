@@ -257,10 +257,24 @@ struct Ship: Codable {
     let icon: String
     var pilots: [Pilot]
     
-    var _xws: String?
+    private var _xws: String?
     private var _ffg: Int?
     private var _size: String?
 //    private var _dial: [String]?
+    
+    enum CodingKeys: String, CodingKey {
+        case name = "name"
+        case _xws = "xws"
+        case _ffg = "ffg"
+        case _size = "size"
+        case dial = "dial"
+        case dialCodes = "dialCodes"
+        case faction = "faction"
+        case stats = "stats"
+        case actions = "actions"
+        case icon = "icon"
+        case pilots = "pilots"
+    }
     
     static func serializeJSON(jsonString: String) -> Ship {
         let jsonData = jsonString.data(using: .utf8)!

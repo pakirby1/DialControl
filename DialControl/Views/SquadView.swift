@@ -193,76 +193,57 @@ struct PilotCardView: View {
 
 struct PilotDetailsView: View {
     let shipPilot: ShipPilot
-//    let pilot: SquadPilot
     let displayUpgrades: Bool
     let displayHeaders: Bool
     let theme: Theme = WestworldUITheme()
     
     @State var currentManeuver: String = ""
     
-    var body: some View {
-        HStack {
-            Text("\(shipPilot.points)")
+    var points: some View {
+        Text("\(shipPilot.points)")
+            .font(.title)
+            .foregroundColor(theme.TEXT_FOREGROUND)
+            .padding()
+            .background(Color.blue)
+            .clipShape(Circle())
+    }
+    
+    var names: some View {
+        VStack {
+            Text("\(shipPilot.ship.pilots[0].name)")
                 .font(.title)
                 .foregroundColor(theme.TEXT_FOREGROUND)
-                .padding()
-                .background(Color.blue)
-                .clipShape(Circle())
+            
+            Text("\(shipPilot.ship.name)")
+                .font(.body)
+                .foregroundColor(theme.TEXT_FOREGROUND)
+        }
+    }
+    
+    var upgrades: some View {
+        VStack(alignment: .leading) {
+            if (displayUpgrades) {
+                ForEach(shipPilot.upgrades) { upgrade in
+                    Text("\(upgrade.name)")
+                }
+            }
+        }
+    }
+    
+    var body: some View {
+        HStack {
+            points
             
             // Pilot Details
-            VStack {
-                Text("\(shipPilot.ship.pilots[0].name)")
-                    .font(.title)
-                    .foregroundColor(theme.TEXT_FOREGROUND)
-                
-                Text("\(shipPilot.ship.name)")
-                    .font(.body)
-                    .foregroundColor(theme.TEXT_FOREGROUND)
-            }
+            names
             
             Spacer()
             
             // Upgrades
-            VStack(alignment: .leading) {
-                if (displayUpgrades) {
-                    ForEach(shipPilot.upgrades) { upgrade in
-                        Text("\(upgrade.name)")
-                    }
-//                    UpgradeSummaryView(category: "Talent Upgrades",
-//                                       upgrades: shipPilot.upgrades.talents,
-//                                       displayHeader: displayHeaders)
-//
-//                    UpgradeSummaryView(category: "Sensor Upgrades",
-//                                       upgrades: shipPilot.upgrades.sensors,
-//                                       displayHeader: displayHeaders)
-//
-//                    UpgradeSummaryView(category: "Modification Upgrades",
-//                                       upgrades: shipPilot.upgrades.modifications,
-//                                       displayHeader: displayHeaders)
-                }
-            }
+            upgrades
             
             Spacer()
             
-//            DialView(temperature: 0, diameter: 500, currentManeuver: $currentManeuver, dial: [
-//              "1TW",
-//              "1YW",
-//              "2TB",
-//              "2BB",
-//              "2FB",
-//              "2NB",
-//              "2YB",
-//              "3LR",
-//              "3TW",
-//              "3BW",
-//              "3FB",
-//              "3NW",
-//              "3YW",
-//              "3PR",
-//              "4FB",
-//              "4KR",
-//              "5FW"
-//            ])
         }.padding(5)
     }
 }
