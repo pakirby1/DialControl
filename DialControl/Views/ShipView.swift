@@ -106,7 +106,7 @@ class ShipViewModel: ObservableObject {
         return url
     }
     
-    func getUpgradeImageUrl(upgrade: UpgradeWrapper) -> String
+    func getUpgradeImageUrl(upgrade: Upgrade) -> String
     {
         func getJSON(forType: String, inDirectory: String) -> String {
             // Read json from file: forType.json
@@ -131,14 +131,14 @@ class ShipViewModel: ObservableObject {
             return upgradeJSON
         }
         
-        func getImageURLFromJSON_new(upgrade: UpgradeWrapper) -> String {
+        func getImageURLFromJSON_new(upgrade: Upgrade) -> String {
             var imageUrl = ""
             
-            let jsonString = getJSON(forType: upgrade.type, inDirectory: "upgrades")
+            let jsonString = getJSON(forType: upgrade.type!, inDirectory: "upgrades")
             
             let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
             
-            let matches = upgrades.filter({ $0.xws == upgrade.upgrade.name })
+            let matches = upgrades.filter({ $0.xws == upgrade.xws })
             
             if (matches.count > 0) {
                 let sides = matches[0].sides
@@ -349,7 +349,7 @@ struct UpgradeSummary : Identifiable {
 struct UpgradesView: View {
     @EnvironmentObject var viewModel: ShipViewModel
     @State var imageName: String = ""
-    let upgrades: [UpgradeWrapper]
+    let upgrades: [Upgrade]
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
     
@@ -369,12 +369,12 @@ struct UpgradesView: View {
 
 struct UpgradeView: View {
     @EnvironmentObject var viewModel: ShipViewModel
-    var upgrade: UpgradeWrapper
+    var upgrade: Upgrade
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
     
     var body: some View {
-        Text("\(upgrade.upgrade.name)")
+        Text("\(upgrade.name)")
             .foregroundColor(.white)
             .font(.largeTitle)
             .padding(15)

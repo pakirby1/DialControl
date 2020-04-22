@@ -58,7 +58,15 @@ struct SquadCardView: View {
                 
                 let matches: [Upgrade] = upgrades.filter({ $0.xws == upgradeName })
                 
-                return matches[0]
+                let upgrade = matches[0]
+                
+                return Upgrade(name: upgrade.name,
+                               limited: upgrade.limited,
+                               sides: upgrade.sides,
+                               cost: upgrade.cost,
+                               hyperspace: upgrade.hyperspace,
+                               xws: upgrade.xws,
+                               type: upgradeCategory)
             }
             
             var shipJSON: String = ""
@@ -91,23 +99,20 @@ struct SquadCardView: View {
             ship.pilots.append(foundPilots)
                     
             // Add the upgrades from SquadPilot.upgrades
-            let sensors: [UpgradeWrapper] = squadPilot
+            let sensors: [Upgrade] = squadPilot
                 .upgrades
                 .sensors
                 .map{ getUpgrade(upgradeCategory: "sensor", upgradeName: $0) }
-                .map{ UpgradeWrapper(upgrade: $0, type: "sensor") }
             
-            let talents: [UpgradeWrapper] = squadPilot
+            let talents: [Upgrade] = squadPilot
                 .upgrades
                 .talents
                 .map{ getUpgrade(upgradeCategory: "talent", upgradeName: $0) }
-                .map{ UpgradeWrapper(upgrade: $0, type: "talent") }
 
-            let modifications: [UpgradeWrapper] = squadPilot
+            let modifications: [Upgrade] = squadPilot
                 .upgrades
                 .modifications
                 .map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
-                .map{ UpgradeWrapper(upgrade: $0, type: "modification")}
 
             let upgrades = sensors + talents + modifications
             
@@ -236,7 +241,7 @@ struct PilotDetailsView: View {
         VStack(alignment: .leading) {
             if (displayUpgrades) {
                 ForEach(shipPilot.upgrades) { upgrade in
-                    Text("\(upgrade.upgrade.name)")
+                    Text("\(upgrade.name)")
                 }
             }
         }

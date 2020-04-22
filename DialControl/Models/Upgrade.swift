@@ -446,12 +446,6 @@ struct Cost: Codable {
     }
 }
 
-struct UpgradeWrapper: Identifiable {
-    let id = UUID()
-    let upgrade: Upgrade
-    let type: String
-}
-
 struct Upgrade: Codable, Identifiable {
     let id = UUID()
     let name: String
@@ -460,6 +454,7 @@ struct Upgrade: Codable, Identifiable {
     let cost: Cost
     let hyperspace: Bool
     let xws: String
+    let type: String?   // Doesn't exist in json but has to be optional to set it later
 }
 
 struct Upgrades: Codable {

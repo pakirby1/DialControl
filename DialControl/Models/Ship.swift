@@ -287,7 +287,7 @@ struct Ship: Codable {
 struct ShipPilot: Identifiable {
     let id = UUID()
     let ship: Ship
-    let upgrades: [UpgradeWrapper]
+    let upgrades: [Upgrade]
     let points: Int
 }
 
