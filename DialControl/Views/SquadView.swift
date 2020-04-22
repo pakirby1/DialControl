@@ -118,14 +118,20 @@ struct SquadCardView: View {
                 .fill(theme.BORDER_INACTIVE)
 
             VStack(alignment: .leading) {
-                Text(squad.name)
-                    .font(.title)
-                    .foregroundColor(theme.TEXT_FOREGROUND)
-
-                Text("Points: \(squad.points)")
-                    .font(.title)
-                    .foregroundColor(theme.TEXT_FOREGROUND)
-
+                HStack {
+                    Text("\(squad.points)")
+                        .font(.title)
+                        .foregroundColor(theme.TEXT_FOREGROUND)
+                        .padding()
+                        .background(Color.blue)
+                        .clipShape(Circle())
+                    
+                    Text(squad.name)
+                        .font(.title)
+                        .lineLimit(1)
+                        .foregroundColor(theme.TEXT_FOREGROUND)
+                }
+                
                 ForEach(shipPilots) { shipPilot in
                     Button(action: {
                         self.viewFactory.viewType = .shipViewNew(shipPilot)
