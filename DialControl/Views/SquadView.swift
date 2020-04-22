@@ -144,6 +144,47 @@ struct SquadCardView: View {
     }
 }
 
+struct PilotCardView: View {
+    let theme: Theme = WestworldUITheme()
+    let shipPilot: ShipPilot
+    
+    var newView: some View {
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(theme.BUTTONBACKGROUND)
+
+            VStack {
+                HStack {
+                    Spacer()
+                
+                    Text("\(shipPilot.ship.name)")
+                        .font(.title)
+                        .foregroundColor(Color.white)
+                    
+                    Spacer()
+                }.background(Color.black)
+                
+                Spacer()
+                
+                PilotDetailsView(shipPilot: shipPilot,
+                                 displayUpgrades: true,
+                                 displayHeaders: false)
+                Spacer()
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .multilineTextAlignment(.center)
+        }
+    }
+    
+    var body: some View {
+        newView
+            .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
+        )
+    }
+}
+
 struct PilotDetailsView: View {
     let shipPilot: ShipPilot
 //    let pilot: SquadPilot
@@ -162,6 +203,7 @@ struct PilotDetailsView: View {
                 .background(Color.blue)
                 .clipShape(Circle())
             
+            // Pilot Details
             VStack {
                 Text("\(shipPilot.ship.pilots[0].name)")
                     .font(.title)
@@ -174,8 +216,12 @@ struct PilotDetailsView: View {
             
             Spacer()
             
-            VStack {
+            // Upgrades
+            VStack(alignment: .leading) {
                 if (displayUpgrades) {
+                    ForEach(shipPilot.upgrades) { upgrade in
+                        Text("\(upgrade.name)")
+                    }
 //                    UpgradeSummaryView(category: "Talent Upgrades",
 //                                       upgrades: shipPilot.upgrades.talents,
 //                                       displayHeader: displayHeaders)
@@ -307,46 +353,7 @@ struct CardView<Content: View>: View {
     }
 }
 
-struct PilotCardView: View {
-    let theme: Theme = WestworldUITheme()
-    let shipPilot: ShipPilot
-    
-    var newView: some View {
-        ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(theme.BUTTONBACKGROUND)
 
-            VStack {
-                HStack {
-                    Spacer()
-                
-                    Text("\(shipPilot.ship.name)")
-                        .font(.title)
-                        .foregroundColor(Color.white)
-                    
-                    Spacer()
-                }.background(Color.black)
-                
-                Spacer()
-                
-                PilotDetailsView(shipPilot: shipPilot,
-                                 displayUpgrades: true,
-                                 displayHeaders: false)
-                Spacer()
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .multilineTextAlignment(.center)
-        }
-    }
-    
-    var body: some View {
-        newView
-            .overlay(
-            RoundedRectangle(cornerRadius: 10)
-                .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
-        )
-    }
-}
 
 struct OldCardView: View {
     let content: () -> AnyView

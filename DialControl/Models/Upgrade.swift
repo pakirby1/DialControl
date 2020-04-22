@@ -446,7 +446,8 @@ struct Cost: Codable {
     }
 }
 
-struct Upgrade: Codable {
+struct Upgrade: Codable, Identifiable {
+    let id = UUID()
     let name: String
     let limited: Int
     let sides: [Side]
