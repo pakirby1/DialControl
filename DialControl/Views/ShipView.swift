@@ -106,7 +106,7 @@ class ShipViewModel: ObservableObject {
         return url
     }
     
-    func getUpgradeImageUrl(upgrade: UpgradeSummary) -> String
+    func getUpgradeImageUrl(upgrade: UpgradeWrapper) -> String
     {
         func getJSON(forType: String, inDirectory: String) -> String {
             // Read json from file: forType.json
@@ -131,14 +131,14 @@ class ShipViewModel: ObservableObject {
             return upgradeJSON
         }
         
-        func getImageURLFromJSON_new(upgrade: UpgradeSummary) -> String {
+        func getImageURLFromJSON_new(upgrade: UpgradeWrapper) -> String {
             var imageUrl = ""
             
             let jsonString = getJSON(forType: upgrade.type, inDirectory: "upgrades")
             
             let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
             
-            let matches = upgrades.filter({ $0.xws == upgrade.name })
+            let matches = upgrades.filter({ $0.xws == upgrade.upgrade.name })
             
             if (matches.count > 0) {
                 let sides = matches[0].sides
@@ -294,8 +294,9 @@ struct ShipView: View {
     }
     
     func footer(showImageOverlay: Binding<Bool>) -> some View {
-        UpgradesView(upgrades: viewModel.shipPilot.upgrades.map{ $0.name },
-            showImageOverlay: $showImageOverlay)
+        UpgradesView(upgrades: viewModel.shipPilot.upgrades,
+                     showImageOverlay: $showImageOverlay,
+                     imageOverlayUrl: $imageOverlayUrl)
             .environmentObject(viewModel)
     }
     
@@ -346,26 +347,9 @@ struct UpgradeSummary : Identifiable {
 }
 
 struct UpgradesView: View {
-    @State var imageName: String = ""
-    let upgrades: [String]
-    @Binding var showImageOverlay: Bool
-    
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                ForEach(upgrades, id:\.self) {
-                    UpgradeView(name: $0,
-                                showImageOverlay: self.$showImageOverlay)
-                }
-            }
-        }
-    }
-}
-
-struct UpgradesView_New: View {
     @EnvironmentObject var viewModel: ShipViewModel
     @State var imageName: String = ""
-    let upgrades: [UpgradeSummary]
+    let upgrades: [UpgradeWrapper]
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
     
@@ -373,7 +357,7 @@ struct UpgradesView_New: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(upgrades) {
-                    UpgradeViewNew(upgrade: $0,
+                    UpgradeView(upgrade: $0,
                                 showImageOverlay: self.$showImageOverlay,
                                 imageOverlayUrl: self.$imageOverlayUrl)
                         .environmentObject(self.viewModel)
@@ -384,48 +368,22 @@ struct UpgradesView_New: View {
 }
 
 struct UpgradeView: View {
-    var name: String
+    @EnvironmentObject var viewModel: ShipViewModel
+    var upgrade: UpgradeWrapper
     @Binding var showImageOverlay: Bool
-    var prettyName: String = " Test"
+    @Binding var imageOverlayUrl: String
     
     var body: some View {
-        Text("\(prettyName)")
+        Text("\(upgrade.upgrade.name)")
             .foregroundColor(.white)
             .font(.largeTitle)
-        //                        .frame(width: 200, height: 200)
             .padding(15)
             .background(Color.red)
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .onTapGesture {
                 self.showImageOverlay = true
-            }
-    }
-}
-
-struct UpgradeViewNew: View {
-    @EnvironmentObject var viewModel: ShipViewModel
-    var upgrade: UpgradeSummary
-    @Binding var showImageOverlay: Bool
-    @Binding var imageOverlayUrl: String
-    let theme: Theme = WestworldUITheme()
-    var prettyName: String = " Test"
-    
-    var body: some View {
-        Text("\(upgrade.name)")
-            .foregroundColor(theme.TEXT_FOREGROUND)
-            .font(.largeTitle)
-        //                        .frame(width: 200, height: 200)
-            .padding(15)
-//            .background(Color.red)
-            .background(theme.BUTTONBACKGROUND)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .onTapGesture {
-                self.showImageOverlay = true
                 self.imageOverlayUrl = self.viewModel.getUpgradeImageUrl(upgrade: self.upgrade)
             }
-            .onAppear(perform: {
-            
-            })
     }
 }
 

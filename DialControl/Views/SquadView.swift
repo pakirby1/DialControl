@@ -91,11 +91,23 @@ struct SquadCardView: View {
             ship.pilots.append(foundPilots)
                     
             // Add the upgrades from SquadPilot.upgrades
-            let sensors: [Upgrade] = squadPilot.upgrades.sensors.map{ getUpgrade(upgradeCategory: "sensor", upgradeName: $0) }
+            let sensors: [UpgradeWrapper] = squadPilot
+                .upgrades
+                .sensors
+                .map{ getUpgrade(upgradeCategory: "sensor", upgradeName: $0) }
+                .map{ UpgradeWrapper(upgrade: $0, type: "sensor") }
             
-            let talents: [Upgrade] = squadPilot.upgrades.talents.map{ getUpgrade(upgradeCategory: "talent", upgradeName: $0) }
+            let talents: [UpgradeWrapper] = squadPilot
+                .upgrades
+                .talents
+                .map{ getUpgrade(upgradeCategory: "talent", upgradeName: $0) }
+                .map{ UpgradeWrapper(upgrade: $0, type: "talent") }
 
-            let modifications: [Upgrade] = squadPilot.upgrades.modifications.map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
+            let modifications: [UpgradeWrapper] = squadPilot
+                .upgrades
+                .modifications
+                .map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
+                .map{ UpgradeWrapper(upgrade: $0, type: "modification")}
 
             let upgrades = sensors + talents + modifications
             
@@ -224,7 +236,7 @@ struct PilotDetailsView: View {
         VStack(alignment: .leading) {
             if (displayUpgrades) {
                 ForEach(shipPilot.upgrades) { upgrade in
-                    Text("\(upgrade.name)")
+                    Text("\(upgrade.upgrade.name)")
                 }
             }
         }

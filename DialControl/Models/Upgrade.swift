@@ -446,6 +446,12 @@ struct Cost: Codable {
     }
 }
 
+struct UpgradeWrapper: Identifiable {
+    let id = UUID()
+    let upgrade: Upgrade
+    let type: String
+}
+
 struct Upgrade: Codable, Identifiable {
     let id = UUID()
     let name: String
