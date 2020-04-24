@@ -13,8 +13,12 @@ import TimelaneCombine
 
 struct SquadView: View {
     @State var maneuver: String = ""
-    let squad: Squad = Squad.serializeJSON(jsonString: squadJSON)
+    let squad: Squad
     @EnvironmentObject var viewFactory: ViewFactory
+    
+    init(jsonString: String) {
+        self.squad = Squad.serializeJSON(jsonString: New_squadJSON)
+    }
     
     var body: some View {
         SquadCardView(squad: squad)
@@ -60,13 +64,7 @@ struct SquadCardView: View {
                 
                 let upgrade = matches[0]
                 
-                return Upgrade(name: upgrade.name,
-                               limited: upgrade.limited,
-                               sides: upgrade.sides,
-                               cost: upgrade.cost,
-                               hyperspace: upgrade.hyperspace,
-                               xws: upgrade.xws,
-                               type: upgradeCategory)
+                return upgrade
             }
             
             var shipJSON: String = ""
@@ -97,27 +95,28 @@ struct SquadCardView: View {
 
             ship.pilots.removeAll()
             ship.pilots.append(foundPilots)
-                    
-            // Add the upgrades from SquadPilot.upgrades
-            let sensors: [Upgrade] = squadPilot
-                .upgrades
-                .sensors
-                .map{ getUpgrade(upgradeCategory: "sensor", upgradeName: $0) }
             
-            let talents: [Upgrade] = squadPilot
-                .upgrades
-                .talents
-                .map{ getUpgrade(upgradeCategory: "talent", upgradeName: $0) }
+            var allUpgrades : [Upgrade] = []
+            
+            // Add the upgrades from SquadPilot.upgrades
+            if let upgrades = squadPilot.upgrades {
+                let sensors: [Upgrade] = upgrades
+                    .sensors
+                    .map{ getUpgrade(upgradeCategory: "sensor", upgradeName: $0) }
+                
+                let talents: [Upgrade] = upgrades
+                    .talents
+                    .map{ getUpgrade(upgradeCategory: "talent", upgradeName: $0) }
 
-            let modifications: [Upgrade] = squadPilot
-                .upgrades
-                .modifications
-                .map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
-
-            let upgrades = sensors + talents + modifications
+                let modifications: [Upgrade] = upgrades
+                    .modifications
+                    .map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
+                
+                allUpgrades = sensors + talents + modifications
+            }
             
             return ShipPilot(ship: ship,
-                             upgrades: upgrades,
+                             upgrades: allUpgrades,
                              points: squadPilot.points)
         }
         

@@ -454,10 +454,10 @@ struct Upgrade: Codable, Identifiable {
     let cost: Cost
     let hyperspace: Bool
     let xws: String
-    let type: String?   // Doesn't exist in json but has to be optional to set it later
+//    let type: String?   // Doesn't exist in json but has to be optional to set it later
 }
 
-struct Upgrades: Codable {
+struct Upgrades: Codable, JSONSerialization {
     let upgrades: [Upgrade]
     
     static func serializeJSON(jsonString: String) -> [Upgrade] {
@@ -468,20 +468,3 @@ struct Upgrades: Codable {
         return upgrades
     }
 }
-
-
-//struct SquadPilotUpgrade: Codable {
-//    var talents: [String] { return _talent ?? [] }
-//    var modifications: [String] { return _modification ?? [] }
-//    var sensors: [String] { return _sensor ?? [] }
-//    
-//    private var _sensor: [String]?
-//    private var _talent: [String]?
-//    private var _modification: [String]?
-//    
-//    enum CodingKeys: String, CodingKey {
-//        case _sensor = "sensor"
-//        case _talent = "talent"
-//        case _modification = "modification"
-//    }
-//}

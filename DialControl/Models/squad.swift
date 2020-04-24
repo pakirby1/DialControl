@@ -62,6 +62,72 @@ let squadJSON = """
 }
 """
 
+let New_squadJSON = """
+{
+  "description": "",
+  "faction": "rebelalliance",
+  "name": "CassianAPBraylenTen",
+  "pilots": [
+    {
+      "id": "cassianandor",
+      "name": "cassianandor",
+      "points": 59,
+      "ship": "ut60duwing",
+      "upgrades": {
+        "crew": [
+          "k2so"
+        ],
+        "configuration": [
+          "pivotwing"
+        ]
+      }
+    },
+    {
+      "id": "ap5",
+      "name": "ap5",
+      "points": 32,
+      "ship": "sheathipedeclassshuttle"
+    },
+    {
+      "id": "braylenstramm",
+      "name": "braylenstramm",
+      "points": 55,
+      "ship": "asf01bwing",
+      "upgrades": {
+        "cannon": [
+          "tractorbeam",
+          "jammingbeam"
+        ]
+      }
+    },
+    {
+      "id": "tennumb",
+      "name": "tennumb",
+      "points": 53,
+      "ship": "asf01bwing",
+      "upgrades": {
+        "cannon": [
+          "autoblasters",
+          "jammingbeam"
+        ],
+        "configuration": [
+          "stabilizedsfoils"
+        ]
+      }
+    }
+  ],
+  "points": 199,
+  "vendor": {
+    "yasb": {
+      "builder": "Yet Another Squad Builder 2.0",
+      "builder_url": "https://raithos.github.io/",
+      "link": "https://raithos.github.io/?f=Rebel%20Alliance&d=v8ZsZ200Z32XWW314WWW140Y72XWWWWY73XWW13W12WWWY74XWW232W12WWW313&sn=CassianAPBraylenTen&obs="
+    }
+  },
+  "version": "2.0.0"
+}
+"""
+
 struct SquadPilotUpgrade: Codable {
     var talents: [String] { return _talent ?? [] }
     var modifications: [String] { return _modification ?? [] }
@@ -83,7 +149,17 @@ struct SquadPilot: Codable, Identifiable {
     let name: String
     let points: Int
     let ship: String
-    let upgrades: SquadPilotUpgrade
+    var upgrades: SquadPilotUpgrade? { return _upgrades ?? nil }
+    
+    private var _upgrades: SquadPilotUpgrade?
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "id"
+        case name = "name"
+        case points = "points"
+        case ship = "ship"
+        case _upgrades = "upgrades"
+    }
 }
 
 struct SquadVendorDetails: Codable {
@@ -95,7 +171,7 @@ struct SquadVendor: Codable {
     let yasb: SquadVendorDetails
 }
 
-struct Squad: Codable {
+struct Squad: Codable, JSONSerialization {
     let description: String
     let faction: String
     let name: String

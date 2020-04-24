@@ -127,14 +127,15 @@ class ShipViewModel: ObservableObject {
                 }
             }
             
-//            return modificationsUpgradesJSON
             return upgradeJSON
         }
         
         func getImageURLFromJSON_new(upgrade: Upgrade) -> String {
             var imageUrl = ""
             
-            let jsonString = getJSON(forType: upgrade.type!, inDirectory: "upgrades")
+            let type = upgrade.sides[0].type.lowercased()
+            
+            let jsonString = getJSON(forType: type, inDirectory: "upgrades")
             
             let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
             
@@ -186,7 +187,10 @@ var shipLookupTable: [String:PilotFileUrl] = [
     "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
     "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
     "tieadvancedx1" : PilotFileUrl(fileName:"tie-advanced-x1", directoryPath: "pilots/galactic-empire"),
-    "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire")
+    "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire"),
+    "ut60duwing": PilotFileUrl(fileName:"ut-60d-u-wing", directoryPath: "pilots/rebel-alliance"),
+    "sheathipedeclassshuttle": PilotFileUrl(fileName:"sheathipede-class-shuttle", directoryPath: "pilots/rebel-alliance"),
+    "asf01bwing": PilotFileUrl(fileName:"a-sf-01-b-wing", directoryPath: "pilots/rebel-alliance")
 ]
 
 struct ShipView: View {

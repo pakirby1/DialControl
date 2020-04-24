@@ -11,18 +11,24 @@ import Combine
 import TimelaneCombine
 
 class ViewFactory: ObservableObject {
-    @Published var viewType: ViewType = .squadView
+    @Published var viewType: ViewType = .squadImportView
     
     func buildView(type: ViewType) -> AnyView {
         switch(type) {
         case .squadView:
-            return AnyView(SquadView().environmentObject(self))
+            return AnyView(SquadView(jsonString: squadJSON).environmentObject(self))
 //        case .shipView(let squadPilot):
 //            return AnyView(ShipView(viewModel: ShipViewModel(squadPilot: squadPilot))
 //                .environmentObject(self))
         case .shipViewNew(let shipPilot):
             return AnyView(ShipView(viewModel: ShipViewModel(shipPilot: shipPilot))
                 .environmentObject(self))
+        case .squadImportView:
+            return AnyView(SquadXWSImportView().environmentObject(self))
+        case .multiLineTextView:
+            return AnyView(MultilineTextView_ContentView())
+        case .squadViewNew(let jsonString):
+            return AnyView(SquadView(jsonString: jsonString).environmentObject(self))
         }
     }
 }
@@ -31,6 +37,9 @@ enum ViewType {
     case squadView
 //    case shipView(SquadPilot)
     case shipViewNew(ShipPilot)
+    case squadImportView
+    case multiLineTextView
+    case squadViewNew(String)
 }
 
 struct ContentView: View {
@@ -43,8 +52,9 @@ struct ContentView: View {
             viewFactory.buildView(type: viewFactory.viewType)
         }.onAppear() {
             print("ContentView.onAppear")
-        }.border(Color.green, width: 2)
-            .background(theme.BORDER_INACTIVE)
+        }
+//        .border(Color.green, width: 2)
+//            .background(theme.BORDER_INACTIVE)
     }
 }
 

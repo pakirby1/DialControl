@@ -192,6 +192,18 @@ enum Slot: String, Codable {
     case Astromech
     case Device
     case Gunner
+    case Crew
+    case Cannon
+    case Cargo
+    case Command
+    case Configuration
+    case Hardpoint
+    case Relay = "Tactical Relay"
+    case Team
+    case Tech
+    case Title
+    case Torpedo
+    case Turret
 }
 
 struct Force: Codable {
@@ -214,7 +226,7 @@ struct Pilot: Codable {
     let xws: String
     var text: String { return _text ?? "" }
     let image: String
-    let shipAbility: ShipAbility
+    var shipAbility: ShipAbility? { return _shipAbility ?? nil }
     let slots: [Slot]
     let artwork: String
     let ffg: Int
@@ -225,6 +237,7 @@ struct Pilot: Codable {
     private var _text: String?
     private var _force: Force?
     private var _charges: Charges?
+    private var _shipAbility: ShipAbility?
     
     enum CodingKeys: String, CodingKey {
         case _text = "text"
@@ -234,7 +247,7 @@ struct Pilot: Codable {
         case cost
         case xws
         case image
-        case shipAbility
+        case _shipAbility = "shipAbility"
         case slots
         case artwork
         case ffg
@@ -244,7 +257,24 @@ struct Pilot: Codable {
     }
 }
 
-struct Ship: Codable {
+protocol JSONSerialization {
+    static func serialize<T: Decodable>(jsonString: String) -> T
+}
+
+extension JSONSerialization {
+    static func serialize<T: Decodable>(jsonString: String) -> T {
+        let jsonData = jsonString.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        
+        guard let ret = try? decoder.decode(T.self, from: jsonData) else {
+            fatalError("Failed to decode from bundle \(jsonString).")
+        }
+
+        return ret
+    }
+}
+
+struct Ship: Codable, JSONSerialization {
     let name: String
     var xws: String { return _xws ?? "" }
     var ffg: Int { return _ffg ?? 0 }

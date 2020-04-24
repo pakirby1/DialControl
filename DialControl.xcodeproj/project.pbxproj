@@ -39,6 +39,9 @@
 		AE4D58E823F8087E00C66136 /* DialControlUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58E723F8087E00C66136 /* DialControlUITests.swift */; };
 		AE4D58F623F961D200C66136 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58F523F961D200C66136 /* Test.swift */; };
 		AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E08DD243B547800E7899A /* LinkedView.swift */; };
+		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
+		AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */; };
+		AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDE2452A8EA0017AEE8 /* TextView.swift */; };
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
 		AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */; };
 		AEAD19F924085E0A0020FABC /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAD19F824085E0A0020FABC /* TestView.swift */; };
@@ -103,6 +106,9 @@
 		AE4D58E923F8087E00C66136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE4D58F523F961D200C66136 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		AE4E08DD243B547800E7899A /* LinkedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedView.swift; sourceTree = "<group>"; };
+		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
+		AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextView.swift; sourceTree = "<group>"; };
+		AE93ADDE2452A8EA0017AEE8 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
 		AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures_SK9.ttf"; sourceTree = "<group>"; };
 		AEAD19F824085E0A0020FABC /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
@@ -162,6 +168,9 @@
 				AEF3B4612439B83100A49717 /* SelectionIndicator.swift */,
 				AEF3B4632439B9B200A49717 /* InnerCircle.swift */,
 				AE4E08DD243B547800E7899A /* LinkedView.swift */,
+				AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */,
+				AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */,
+				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -409,8 +418,10 @@
 				AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */,
 				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
 				AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */,
+				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
 				AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */,
+				AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */,
 				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
@@ -421,6 +432,7 @@
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
 				AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
+				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
