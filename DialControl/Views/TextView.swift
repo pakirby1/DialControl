@@ -14,6 +14,7 @@ struct TextView: UIViewRepresentable {
     
     var placeholderText: String = "Text View"
     @Binding var text: String
+    @EnvironmentObject var textViewObservable: TextViewObservable
     
     func makeUIView(context: UIViewRepresentableContext<TextView>) -> UITextView {
         let textView = UITextView()
@@ -24,6 +25,10 @@ struct TextView: UIViewRepresentable {
         
         textView.text = placeholderText
         textView.textColor = .placeholderText
+        
+        self.textViewObservable.height = textView.contentSize.height
+        textView.isEditable = true
+        textView.isUserInteractionEnabled = true
         
         return textView
     }
@@ -39,7 +44,10 @@ struct TextView: UIViewRepresentable {
     }
     
     func frame(numLines: CGFloat) -> some View {
-        let height = UIFont.systemFont(ofSize: 17).lineHeight * numLines
+        let height = UIFont
+            .systemFont(ofSize: 17)
+            .lineHeight * numLines
+        
         return self.frame(height: height)
     }
     
@@ -56,6 +64,7 @@ struct TextView: UIViewRepresentable {
         
         func textViewDidChange(_ textView: UITextView) {
             parent.text = textView.text
+            self.parent.textViewObservable.height = textView.contentSize.height
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
@@ -72,4 +81,8 @@ struct TextView: UIViewRepresentable {
             }
         }
     }
+}
+
+class TextViewObservable: ObservableObject {
+    @Published var height: CGFloat = 0
 }

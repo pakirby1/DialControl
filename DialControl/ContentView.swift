@@ -12,6 +12,7 @@ import TimelaneCombine
 
 class ViewFactory: ObservableObject {
     @Published var viewType: ViewType = .squadImportView
+    let textViewObservable = TextViewObservable()
     
     func buildView(type: ViewType) -> AnyView {
         switch(type) {
@@ -24,7 +25,10 @@ class ViewFactory: ObservableObject {
             return AnyView(ShipView(viewModel: ShipViewModel(shipPilot: shipPilot))
                 .environmentObject(self))
         case .squadImportView:
-            return AnyView(SquadXWSImportView().environmentObject(self))
+            return AnyView(SquadXWSImportView()
+                .environmentObject(self)
+                .environmentObject(textViewObservable)
+                )
         case .multiLineTextView:
             return AnyView(MultilineTextView_ContentView())
         case .squadViewNew(let jsonString):

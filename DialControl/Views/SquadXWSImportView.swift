@@ -12,15 +12,17 @@ import SwiftUI
 struct SquadXWSImportView : View {
     @State private var xws: String = ""
     @EnvironmentObject var viewFactory: ViewFactory
+    @EnvironmentObject var textViewObserver: TextViewObservable
     
     var body: some View {
         VStack {
             Text("Squad XWS Import")
                 .font(.title)
             
-            TextView(text: $xws)
-                .frame(numLines: 20)
+            TextView(placeholderText: "Squad XWS", text: $xws)
+                .frame(height: self.textViewObserver.height)
                 .border(Color.gray, width: 2)
+                .environmentObject(textViewObserver)
 //                .textFieldStyle(RoundedBorderTextFieldStyle())
                 
             
