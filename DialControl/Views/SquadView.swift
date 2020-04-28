@@ -17,15 +17,31 @@ struct SquadView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     
     init(jsonString: String) {
-        self.squad = Squad.serializeJSON(jsonString: New_squadJSON)
+        self.squad = Squad.serializeJSON(jsonString: jsonString)
+    }
+    
+    var header: some View {
+        HStack {
+            Button(action: {
+                self.viewFactory.viewType = .factionSquadList(.galactic_empire)
+            }) {
+                Text("< Faction Squad List")
+            }
+            
+            Spacer()
+        }.padding(10)
     }
     
     var body: some View {
-        SquadCardView(squad: squad)
-            .environmentObject(viewFactory)
-            .onAppear() {
-                print("SquadView.onAppear")
-            }
+        VStack {
+            header
+            SquadCardView(squad: squad)
+                .environmentObject(viewFactory)
+                .onAppear() {
+                    print("SquadView.onAppear")
+                }
+        }
+        
     }
 }
 

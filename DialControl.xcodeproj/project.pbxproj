@@ -42,6 +42,7 @@
 		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
 		AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */; };
 		AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDE2452A8EA0017AEE8 /* TextView.swift */; };
+		AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */; };
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
 		AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */; };
 		AEAD19F924085E0A0020FABC /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAD19F824085E0A0020FABC /* TestView.swift */; };
@@ -109,6 +110,7 @@
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
 		AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextView.swift; sourceTree = "<group>"; };
 		AE93ADDE2452A8EA0017AEE8 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSquadList.swift; sourceTree = "<group>"; };
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
 		AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures_SK9.ttf"; sourceTree = "<group>"; };
 		AEAD19F824085E0A0020FABC /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 				AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */,
 				AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */,
 				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
+				AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -418,6 +421,7 @@
 				AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */,
 				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
 				AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */,
+				AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */,
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
 				AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */,

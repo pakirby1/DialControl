@@ -11,16 +11,13 @@ import Combine
 import TimelaneCombine
 
 class ViewFactory: ObservableObject {
-    @Published var viewType: ViewType = .squadImportView
+    @Published var viewType: ViewType = .factionSquadList(.galactic_empire)
     let textViewObservable = TextViewObservable()
     
     func buildView(type: ViewType) -> AnyView {
         switch(type) {
         case .squadView:
             return AnyView(SquadView(jsonString: squadJSON).environmentObject(self))
-//        case .shipView(let squadPilot):
-//            return AnyView(ShipView(viewModel: ShipViewModel(squadPilot: squadPilot))
-//                .environmentObject(self))
         case .shipViewNew(let shipPilot):
             return AnyView(ShipView(viewModel: ShipViewModel(shipPilot: shipPilot))
                 .environmentObject(self))
@@ -33,8 +30,14 @@ class ViewFactory: ObservableObject {
             return AnyView(MultilineTextView_ContentView())
         case .squadViewNew(let jsonString):
             return AnyView(SquadView(jsonString: jsonString).environmentObject(self))
+        case .factionSquadList(let faction):
+            return AnyView(FactionSquadList(faction: faction.rawValue).environmentObject(self))
         }
     }
+}
+
+enum Faction: String {
+    case galactic_empire = "Galactic Empire"
 }
 
 enum ViewType {
@@ -44,6 +47,7 @@ enum ViewType {
     case squadImportView
     case multiLineTextView
     case squadViewNew(String)
+    case factionSquadList(Faction)
 }
 
 struct ContentView: View {
