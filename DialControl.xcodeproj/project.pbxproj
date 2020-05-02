@@ -39,6 +39,7 @@
 		AE4D58E823F8087E00C66136 /* DialControlUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58E723F8087E00C66136 /* DialControlUITests.swift */; };
 		AE4D58F623F961D200C66136 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58F523F961D200C66136 /* Test.swift */; };
 		AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E08DD243B547800E7899A /* LinkedView.swift */; };
+		AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC214245DA13400E92704 /* PopoverView.swift */; };
 		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
 		AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */; };
 		AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDE2452A8EA0017AEE8 /* TextView.swift */; };
@@ -107,6 +108,7 @@
 		AE4D58E923F8087E00C66136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE4D58F523F961D200C66136 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		AE4E08DD243B547800E7899A /* LinkedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedView.swift; sourceTree = "<group>"; };
+		AE7EC214245DA13400E92704 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
 		AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextView.swift; sourceTree = "<group>"; };
 		AE93ADDE2452A8EA0017AEE8 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */,
 				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
 				AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */,
+				AE7EC214245DA13400E92704 /* PopoverView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -426,6 +429,7 @@
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
 				AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */,
 				AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */,
+				AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */,
 				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
