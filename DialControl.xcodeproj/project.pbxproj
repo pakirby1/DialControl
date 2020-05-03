@@ -40,6 +40,7 @@
 		AE4D58F623F961D200C66136 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58F523F961D200C66136 /* Test.swift */; };
 		AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E08DD243B547800E7899A /* LinkedView.swift */; };
 		AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC214245DA13400E92704 /* PopoverView.swift */; };
+		AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC216245EE95B00E92704 /* FactionFilterView.swift */; };
 		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
 		AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */; };
 		AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDE2452A8EA0017AEE8 /* TextView.swift */; };
@@ -109,6 +110,7 @@
 		AE4D58F523F961D200C66136 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		AE4E08DD243B547800E7899A /* LinkedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedView.swift; sourceTree = "<group>"; };
 		AE7EC214245DA13400E92704 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
+		AE7EC216245EE95B00E92704 /* FactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionFilterView.swift; sourceTree = "<group>"; };
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
 		AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextView.swift; sourceTree = "<group>"; };
 		AE93ADDE2452A8EA0017AEE8 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -177,6 +179,7 @@
 				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
 				AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */,
 				AE7EC214245DA13400E92704 /* PopoverView.swift */,
+				AE7EC216245EE95B00E92704 /* FactionFilterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
+				AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
 				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,

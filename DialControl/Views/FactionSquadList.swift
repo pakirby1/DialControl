@@ -31,11 +31,21 @@ struct FactionSquadList: View {
     
     var headerView: some View {
         HStack {
-            Text("Faction Popover")
+            Button(action: {
+                self.viewFactory.viewType = .factionFilterView(.galactic_empire)
+            }) {
+                Text("Filter")
+            }
+            
             Spacer()
             titleView
             Spacer()
-            Text("Import XWS")
+            
+            Button(action: {
+                self.viewFactory.viewType = .squadImportView
+            }) {
+                Text("Import XWS")
+            }
         }
     }
     

@@ -180,10 +180,42 @@ struct Squad: Codable, JSONSerialization {
     let vendor: SquadVendor
     let version: String
     
-    static func serializeJSON(jsonString: String) -> Squad {
+    static var emptySquad: Squad {
+        get {
+            return Squad(description: "Invalid",
+                         faction: "",
+                         name: "Empty Squad",
+                         pilots: [],
+                         points: 0,
+                         vendor: SquadVendor.init(yasb: SquadVendorDetails.init(builder: "", builder_url: "")),
+                         version: "0.0")
+        }
+    }
+    
+    static func serializeJSON(jsonString: String,
+                              callBack: ((String) -> ())? = nil) -> Squad {
+        func handleError(errorString: String) {
+            print(errorString)
+            
+            if let cb = callBack {
+                cb(errorString)
+            }
+        }
+        
         let jsonData = jsonString.data(using: .utf8)!
         let decoder = JSONDecoder()
-        let squad = try! decoder.decode(Squad.self, from: jsonData)
-        return squad
+        
+        do {
+            let squad = try decoder.decode(Squad.self, from: jsonData)
+            return squad
+        } catch let DecodingError.dataCorrupted(context) {
+            let errorString: String = context.debugDescription
+            handleError(errorString: errorString)
+        } catch {
+            let errorString: String = "error: \(error)"
+            handleError(errorString: errorString)
+        }
+        
+        return Squad.emptySquad
     }
 }

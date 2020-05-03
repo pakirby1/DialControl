@@ -11,13 +11,27 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
+class SquadViewModel : ObservableObject {
+    @Published var alertText: String = ""
+    @Published var showAlert: Bool = false
+    
+    func loadSquad(jsonString: String) -> Squad {
+        return Squad.serializeJSON(jsonString: jsonString) { errorString in
+                    self.alertText = errorString
+                    self.showAlert = true
+                }
+    }
+}
+
 struct SquadView: View {
     @State var maneuver: String = ""
-    let squad: Squad
+    var squad: Squad
     @EnvironmentObject var viewFactory: ViewFactory
+    @ObservedObject var viewModel: SquadViewModel = SquadViewModel()
     
     init(jsonString: String) {
-        self.squad = Squad.serializeJSON(jsonString: jsonString)
+        self.squad = Squad.emptySquad
+        self.squad = viewModel.loadSquad(jsonString: jsonString)
     }
     
     var header: some View {
@@ -40,8 +54,11 @@ struct SquadView: View {
                 .onAppear() {
                     print("SquadView.onAppear")
                 }
+        }.alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text("Error"),
+                  message: Text(viewModel.alertText),
+                  dismissButton: .default(Text("OK")))
         }
-        
     }
 }
 

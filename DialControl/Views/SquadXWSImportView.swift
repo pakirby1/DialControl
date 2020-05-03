@@ -22,7 +22,7 @@ struct SquadXWSImportView : View {
             
             TextView(placeholderText: "Squad XWS", text: $xws)
                 .padding(10)
-                .frame(height: self.textViewObserver.height < 150 ? 150 : self.textViewObserver.height + lineHeight)
+                .frame(height: self.textViewObserver.height < 600 ? 600 : self.textViewObserver.height + lineHeight)
                 .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.blue, lineWidth: 1))
                 .environmentObject(textViewObserver)
             

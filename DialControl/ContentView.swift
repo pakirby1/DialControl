@@ -17,27 +17,45 @@ class ViewFactory: ObservableObject {
     func buildView(type: ViewType) -> AnyView {
         switch(type) {
         case .squadView:
-            return AnyView(SquadView(jsonString: squadJSON).environmentObject(self))
+            return AnyView(SquadView(jsonString: squadJSON)
+                .environmentObject(self))
+            
         case .shipViewNew(let shipPilot):
             return AnyView(ShipView(viewModel: ShipViewModel(shipPilot: shipPilot))
                 .environmentObject(self))
+            
         case .squadImportView:
             return AnyView(SquadXWSImportView()
                 .environmentObject(self)
                 .environmentObject(textViewObservable)
                 )
+            
         case .multiLineTextView:
             return AnyView(MultilineTextView_ContentView())
+        
         case .squadViewNew(let jsonString):
-            return AnyView(SquadView(jsonString: jsonString).environmentObject(self))
+            return AnyView(SquadView(jsonString: jsonString)
+                .environmentObject(self))
+            
         case .factionSquadList(let faction):
-            return AnyView(FactionSquadList(faction: faction.rawValue).environmentObject(self))
+            return AnyView(FactionSquadList(faction: faction.rawValue)
+                .environmentObject(self))
+            
+        case .factionFilterView(let faction):
+            return AnyView(FactionFilterView(faction: faction)
+                .environmentObject(self))
         }
     }
 }
 
-enum Faction: String {
+enum Faction: String, CaseIterable {
+    case galactic_republic = "Galactic Republic"
+    case separatists = "Separatists"
     case galactic_empire = "Galactic Empire"
+    case rebel_alliance = "Rebel Alliance"
+    case scum_villiany = "Scum & Villiany"
+    case resistance = "Resistance"
+    case first_order = "First Order"
 }
 
 enum ViewType {
@@ -48,6 +66,7 @@ enum ViewType {
     case multiLineTextView
     case squadViewNew(String)
     case factionSquadList(Faction)
+    case factionFilterView(Faction)
 }
 
 struct ContentView: View {
