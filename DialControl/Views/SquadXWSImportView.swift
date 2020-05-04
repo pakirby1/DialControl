@@ -9,14 +9,39 @@
 import Foundation
 import SwiftUI
 
+class SquadXWSImportViewModel : ObservableObject {
+    @Published var alertText: String = ""
+    @Published var showAlert: Bool = false
+    
+    func loadSquad(jsonString: String) -> Squad {
+        return Squad.serializeJSON(jsonString: jsonString) { errorString in
+            self.alertText = errorString
+            self.showAlert = true
+        }
+    }
+}
+
 struct SquadXWSImportView : View {
     @State private var xws: String = ""
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var textViewObserver: TextViewObservable
     let lineHeight = UIFont.systemFont(ofSize: 17).lineHeight
+    @State var showAlert: Bool = false
+    @State var alertText: String = ""
+    @ObservedObject var viewModel: SquadXWSImportViewModel = SquadXWSImportViewModel()
     
     var body: some View {
         VStack {
+            HStack {
+                Button(action: {
+                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
+                }) {
+                    Text("< Faction Squad List")
+                }
+                
+                Spacer()
+            }
+            
             Text("Squad XWS Import")
                 .font(.title)
             
@@ -27,11 +52,20 @@ struct SquadXWSImportView : View {
                 .environmentObject(textViewObserver)
             
             Button(action: {
-                self.viewFactory.viewType = .squadViewNew(self.xws)
+                let squad = self.viewModel.loadSquad(jsonString: self.xws)
+                
+                if squad.name != Squad.emptySquad.name {
+                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
+                }
             } ) {
                 Text("Import")
             }
         }.padding(10)
+            .alert(isPresented: $viewModel.showAlert) {
+            Alert(title: Text("Error"),
+                  message: Text(viewModel.alertText),
+                  dismissButton: .default(Text("OK")))
+        }
     }
 }
 
