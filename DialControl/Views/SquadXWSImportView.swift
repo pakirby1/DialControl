@@ -24,7 +24,7 @@ class SquadXWSImportViewModel : ObservableObject {
 struct SquadXWSImportView : View {
     @State private var xws: String = ""
     @EnvironmentObject var viewFactory: ViewFactory
-    @EnvironmentObject var textViewObserver: TextViewObservable
+    let textViewObserver: TextViewObservable = TextViewObservable()
     let lineHeight = UIFont.systemFont(ofSize: 17).lineHeight
     @State var showAlert: Bool = false
     @State var alertText: String = ""
@@ -34,9 +34,9 @@ struct SquadXWSImportView : View {
         VStack {
             HStack {
                 Button(action: {
-                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
+                    self.viewFactory.back()
                 }) {
-                    Text("< Faction Squad List")
+                    Text("< Back")
                 }
                 
                 Spacer()
@@ -55,6 +55,7 @@ struct SquadXWSImportView : View {
                 let squad = self.viewModel.loadSquad(jsonString: self.xws)
                 
                 if squad.name != Squad.emptySquad.name {
+                    // Save the squad JSON to CoreData
                     self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                 }
             } ) {

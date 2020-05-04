@@ -314,11 +314,15 @@ struct Ship: Codable, JSONSerialization {
     }
 }
 
-struct ShipPilot: Identifiable {
+struct ShipPilot: Identifiable, Equatable {
     let id = UUID()
     let ship: Ship
     let upgrades: [Upgrade]
     let points: Int
+    
+    static func ==(lhs: ShipPilot, rhs: ShipPilot) -> Bool {
+        return true
+    }
 }
 
 struct TieInInterceptor : ShipProtocol {

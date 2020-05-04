@@ -10,11 +10,62 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
-class ViewFactory: ObservableObject {
-    @Published var viewType: ViewType = .factionSquadList(.galactic_empire)
-    let textViewObservable = TextViewObservable()
+class Navigation {
+    var stack: [ViewType] = []
     
-    func buildView(type: ViewType) -> AnyView {
+    func push(type: ViewType) {
+        if !self.stack.contains(where: { $0 == type }) {
+            self.stack.append(type)
+            print("\(#function) Added \(type) to stack")
+        }
+    }
+    
+    func back() {
+        _ = self.stack.popLast()
+    }
+    
+    func current() -> ViewType? {
+        return self.stack.last
+    }
+}
+
+class ViewFactory: ObservableObject {
+    var previousViewType: ViewType = .factionSquadList(.galactic_empire)
+    private var navigation = Navigation()
+    
+    init() {
+        self.navigation.push(type: .factionSquadList(.galactic_empire))
+    }
+    
+    func view(viewType: ViewType) {
+        self.navigation.stack.removeAll()
+        self.viewType = viewType
+    }
+    
+    func back() {
+        self.navigation.back()
+        
+        if let current = self.navigation.current() {
+            self.viewType = current
+        }
+    }
+    
+    @Published var viewType: ViewType = .factionSquadList(.galactic_empire) {
+        willSet {
+            navigation.push(type: newValue)
+        }
+    }
+    
+    func buildView() -> AnyView {
+        if let type = navigation.current() {
+            return buildView(type: type)
+        }
+        
+        return AnyView(Text("\(#function) : Invalid current view"))
+    }
+    
+    private func buildView(type: ViewType) -> AnyView {
+        
         switch(type) {
         case .squadView:
             return AnyView(SquadView(jsonString: squadJSON)
@@ -27,7 +78,6 @@ class ViewFactory: ObservableObject {
         case .squadImportView:
             return AnyView(SquadXWSImportView()
                 .environmentObject(self)
-                .environmentObject(textViewObservable)
                 )
             
         case .multiLineTextView:
@@ -44,6 +94,14 @@ class ViewFactory: ObservableObject {
         case .factionFilterView(let faction):
             return AnyView(FactionFilterView(faction: faction)
                 .environmentObject(self))
+            
+        case .back:
+            self.navigation.back()
+            if let current = self.navigation.current() {
+                return buildView(type: current)
+            } else {
+                return AnyView(Text("Invalid back view on stack"))
+            }
         }
     }
 }
@@ -67,7 +125,39 @@ enum ViewType {
     case squadViewNew(String)
     case factionSquadList(Faction)
     case factionFilterView(Faction)
+    case back
 }
+
+extension ViewType: Equatable {
+    static func ==(lhs: ViewType, rhs: ViewType) -> Bool {
+        switch (lhs, rhs) {
+        case (.squadView, .squadView):
+            return true
+            
+        case (let .shipViewNew(pilotA), let .shipViewNew(pilotB)):
+            return pilotA == pilotB
+
+        case (.squadImportView, .squadImportView):
+            return true
+
+        case (.multiLineTextView, .multiLineTextView):
+            return true
+            
+        case (let .squadViewNew(A), let .squadViewNew(B)):
+            return A == B
+
+        case (.factionSquadList, .factionSquadList):
+            return true
+
+        case (.factionFilterView, .factionFilterView):
+            return true
+            
+        default:
+            return false
+        }
+    }
+}
+
 
 struct ContentView: View {
     @State var maneuver: String = ""
@@ -76,7 +166,8 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            viewFactory.buildView(type: viewFactory.viewType)
+//            viewFactory.buildView(type: viewFactory.viewType)
+            viewFactory.buildView()
         }.onAppear() {
             print("ContentView.onAppear")
         }
