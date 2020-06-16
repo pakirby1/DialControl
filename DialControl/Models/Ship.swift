@@ -325,6 +325,11 @@ struct ShipPilot: Identifiable, Equatable {
     }
 }
 
+extension ShipPilot {
+    var shipName: String { ship.xws }
+    var pilotName: String { ship.pilots[0].xws }
+}
+
 struct TieInInterceptor : ShipProtocol {
     let dial: [String] = [
         "1TW",

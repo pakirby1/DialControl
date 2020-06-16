@@ -14,6 +14,8 @@ import TimelaneCombine
 class ShipViewModel: ObservableObject {
     var shipPilot: ShipPilot
     var ship: Ship? = nil
+    @Published var shipImage: UIImage = UIImage()
+    @Published var upgradeImage: UIImage = UIImage()
     
 //    init(squadPilot: SquadPilot) {
 //        self.squadPilot = squadPilot
@@ -25,32 +27,37 @@ class ShipViewModel: ObservableObject {
         self.shipPilot = shipPilot
     }
     
+    var imageUrl: String {
+        getShip(shipName: shipPilot.shipName,
+                       pilotName: shipPilot.pilotName).1.image
+    }
+    
     func getShip(shipName: String, pilotName: String) -> (Ship, Pilot) {
         var shipJSON: String = ""
+        
+        print("shipName: \(shipName)")
+        print("pilotName: \(pilotName)")
+        
+        if let pilotFileUrl = shipLookupTable[shipName] {
+            print("pilotFileUrl: \(pilotFileUrl)")
+            
+            if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
+                                           ofType: "json",
+                                           inDirectory: pilotFileUrl.directoryPath)
+            {
+                print("path: \(path)")
                 
-                print("shipName: \(shipName)")
-                print("pilotName: \(pilotName)")
-                
-                if let pilotFileUrl = shipLookupTable[shipName] {
-                    print("pilotFileUrl: \(pilotFileUrl)")
-                    
-                    if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
-                                                   ofType: "json",
-                                                   inDirectory: pilotFileUrl.directoryPath)
-                    {
-                        print("path: \(path)")
-                        
-                        do {
-                            shipJSON = try String(contentsOfFile: path)
-                            print("jsonData: \(shipJSON)")
-                        } catch {
-                            print("error reading from \(path)")
-                        }
-                    }
+                do {
+                    shipJSON = try String(contentsOfFile: path)
+                    print("jsonData: \(shipJSON)")
+                } catch {
+                    print("error reading from \(path)")
                 }
-                
-                let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-                let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
+            }
+        }
+        
+        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+        let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
         
         return (ship, foundPilots)
     }
@@ -265,8 +272,7 @@ struct ShipView: View {
     
     var bodyContent: some View {
         HStack(alignment: .top) {
-            Image(uiImage: fetchImageFromURL(urlString: viewModel.getShipImageUrl(shipName: viewModel.shipPilot.ship.xws,
-                                                                                  pilotName: viewModel.shipPilot.ship.pilots[0].xws)))
+            Image(uiImage: fetchImageFromURL(urlString: viewModel.imageUrl))
                     .resizable()
                     .frame(width: 350.0,height:500)
                     .border(Color.green, width: 2)
@@ -361,7 +367,7 @@ struct UpgradesView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(upgrades) {
-                    UpgradeView(upgrade: $0,
+                    UpgradeView(viewModel: UpgradeView.UpgradeViewModel(upgrade: $0),
                                 showImageOverlay: self.$showImageOverlay,
                                 imageOverlayUrl: self.$imageOverlayUrl)
                         .environmentObject(self.viewModel)
@@ -372,13 +378,38 @@ struct UpgradesView: View {
 }
 
 struct UpgradeView: View {
-    @EnvironmentObject var viewModel: ShipViewModel
-    var upgrade: Upgrade
+    struct UpgradeViewModel {
+        let upgrade: Upgrade
+        
+        var imageUrl: String {
+            var imageUrl = ""
+            
+            let type = upgrade.sides[0].type.lowercased()
+            
+            let jsonString = getJSON(forType: type, inDirectory: "upgrades")
+            
+            let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+            
+            let matches = upgrades.filter({ $0.xws == upgrade.xws })
+            
+            if (matches.count > 0) {
+                let sides = matches[0].sides
+                
+                if (sides.count > 0) {
+                    imageUrl = sides[0].image
+                }
+            }
+            
+            return imageUrl
+        }
+    }
+    
+    let viewModel: UpgradeViewModel
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
     
     var body: some View {
-        Text("\(upgrade.name)")
+        Text("\(self.viewModel.upgrade.name)")
             .foregroundColor(.white)
             .font(.largeTitle)
             .padding(15)
@@ -386,7 +417,7 @@ struct UpgradeView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .onTapGesture {
                 self.showImageOverlay = true
-                self.imageOverlayUrl = self.viewModel.getUpgradeImageUrl(upgrade: self.upgrade)
+                self.imageOverlayUrl = self.viewModel.imageUrl
             }
     }
 }
@@ -540,4 +571,26 @@ enum UpgradeCardEnum {
     case title(String)
     case torpedo(String)
     case turret(String)
+}
+
+func getJSON(forType: String, inDirectory: String) -> String {
+    // Read json from file: forType.json
+    let jsonFileName = "\(forType)"
+    var upgradeJSON = ""
+    
+    if let path = Bundle.main.path(forResource: jsonFileName,
+                                   ofType: "json",
+                                   inDirectory: inDirectory)
+    {
+        print("path: \(path)")
+        
+        do {
+            upgradeJSON = try String(contentsOfFile: path)
+            print("upgradeJSON: \(upgradeJSON)")
+        } catch {
+            print("error reading from \(path)")
+        }
+    }
+    
+    return upgradeJSON
 }
