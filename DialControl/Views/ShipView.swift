@@ -17,12 +17,6 @@ class ShipViewModel: ObservableObject {
     @Published var shipImage: UIImage = UIImage()
     @Published var upgradeImage: UIImage = UIImage()
     
-//    init(squadPilot: SquadPilot) {
-//        self.squadPilot = squadPilot
-//        self.ship = self.getShip(shipName: squadPilot.ship,
-//            pilotName: squadPilot.name).0
-//    }
-    
     init(shipPilot: ShipPilot) {
         self.shipPilot = shipPilot
     }
@@ -90,26 +84,7 @@ class ShipViewModel: ObservableObject {
         }
         
         let url = buildUrl(shipName: shipName, pilotName: pilotName)
-        
-        //        fetchImage(from: foundPilots.image) { (imageData) in
-        //            if let data = imageData {
-        //                // referenced imageView from main thread
-        //                // as iOS SDK warns not to use images from
-        //                // a background thread
-        //                DispatchQueue.main.async {
-        //                    image = UIImage(data: data)
-        //                }
-        //            } else {
-        //                    // show as an alert if you want to
-        //                print("Error loading image");
-        //            }
-        //        }
-        
-        //        print("image Url: \(pilot.image)")
-        
-        //        let imageName = "" // your image name here
-        //        let imagePath: String = "\(NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0])/\(imageName).png"
-        //        let imageUrl: URL = URL(fileURLWithPath: imagePath)
+    
         return url
     }
     
@@ -272,12 +247,16 @@ struct ShipView: View {
     
     var bodyContent: some View {
         HStack(alignment: .top) {
-            Image(uiImage: fetchImageFromURL(urlString: viewModel.imageUrl))
-                    .resizable()
-                    .frame(width: 350.0,height:500)
-                    .border(Color.green, width: 2)
-                    .onTapGesture { self.showCardOverlay.toggle() }
-                    .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
+            PAKImageView(url: viewModel.imageUrl)
+                .onTapGesture { self.showCardOverlay.toggle() }
+                .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
+            
+//            Image(uiImage: fetchImageFromURL(urlString: viewModel.imageUrl))
+//                    .resizable()
+//                    .frame(width: 350.0,height:500)
+//                    .border(Color.green, width: 2)
+//                    .onTapGesture { self.showCardOverlay.toggle() }
+//                    .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 
                 VStack(spacing: 20) {
                     if (viewModel.force > 0) {
@@ -328,8 +307,8 @@ struct ShipView: View {
         return AnyView(
             ZStack {
                 Color.gray.opacity(0.5)
-                
-                Image(uiImage: fetchImageFromURL(urlString: urlString))
+                PAKImageView(url: urlString)
+//                Image(uiImage: fetchImageFromURL(urlString: urlString))
             })
     }
     
@@ -593,4 +572,27 @@ func getJSON(forType: String, inDirectory: String) -> String {
     }
     
     return upgradeJSON
+}
+
+struct PAKImageView: View {
+    let url: String
+    @ObservedObject var viewModel = PAKImageViewModel()
+    
+    var body: some View {
+        Image(uiImage: viewModel.image)
+            .resizable()
+            .frame(width: 350.0,height:500)
+            .border(Color.green, width: 2)
+            .onAppear {
+                self.viewModel.loadImage(url: self.url)
+            }
+    }
+}
+
+class PAKImageViewModel: ObservableObject {
+    @Published var image: UIImage = UIImage()
+    
+    func loadImage(url: String) {
+        self.image = fetchImageFromURL(urlString: url)
+    }
 }
