@@ -613,15 +613,17 @@ func getJSON(forType: String, inDirectory: String) -> String {
 
 struct PAKImageView: View {
     let url: String
-    @ObservedObject var viewModel = PAKImageViewModel()
+//    @ObservedObject var viewModel = PAKImageViewModel()
+    @State var image = UIImage()
     
     var body: some View {
-        Image(uiImage: viewModel.image)
+        Image(uiImage: image)
             .resizable()
             .border(Color.green, width: 2)
             .onAppear {
                 print("PAKImageView loadImage url: \(self.url)")
-                self.viewModel.loadImage(url: self.url)
+//                self.viewModel.loadImage(url: self.url)
+                self.image = fetchImageFromURL(urlString: self.url)
             }
     }
 }
