@@ -16,9 +16,19 @@ class ShipViewModel: ObservableObject {
     var ship: Ship? = nil
     @Published var shipImage: UIImage = UIImage()
     @Published var upgradeImage: UIImage = UIImage()
+    private var _displayImageOverlay: Bool = false
     
     init(shipPilot: ShipPilot) {
         self.shipPilot = shipPilot
+    }
+    
+    var displayImageOverlay: Bool {
+        get {
+            return _displayImageOverlay
+        }
+        set {
+            _displayImageOverlay = newValue
+        }
     }
     
     var imageUrl: String {
@@ -248,6 +258,7 @@ struct ShipView: View {
     var bodyContent: some View {
         HStack(alignment: .top) {
             PAKImageView(url: viewModel.imageUrl)
+                .frame(width: 350.0, height:500)
                 .onTapGesture { self.showCardOverlay.toggle() }
                 .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
             
@@ -289,6 +300,19 @@ struct ShipView: View {
             .environmentObject(viewModel)
     }
     
+    var imageOverlayView: AnyView {
+        let defaultView = AnyView(clearView)
+        
+        print("UpgradeView var imageOverlayView self.showImageOverlay=\(self.showImageOverlay)")
+        print("UpgradeView var imageOverlayView self.viewModel.displayImageOverlay=\(self.viewModel.displayImageOverlay)")
+        
+        if (self.viewModel.displayImageOverlay == true) {
+            return upgradeImageOverlay(urlString: self.imageOverlayUrl)
+        } else {
+            return defaultView
+        }
+    }
+    
     func buildView() -> AnyView {
         return AnyView(VStack(alignment: .leading) {
             headerView
@@ -296,18 +320,27 @@ struct ShipView: View {
             footer(showImageOverlay: $showImageOverlay)
 //            footer_New(showImageOverlay: $showImageOverlay)
         }.border(Color.red, width: 2)
-            .overlay(self.showImageOverlay == true ? upgradeImageOverlay(urlString: self.imageOverlayUrl) : AnyView(clearView))
-            .onTapGesture{
-                self.showImageOverlay = false
-            }
+            .overlay(imageOverlayView)
+//            .onTapGesture{
+//                self.showImageOverlay = false
+//                self.viewModel.displayImageOverlay = false
+//            }
         )
     }
     
     func upgradeImageOverlay(urlString: String) -> AnyView {
         return AnyView(
             ZStack {
-                Color.gray.opacity(0.5)
+                Color
+                    .gray
+                    .opacity(0.5)
+                    .onTapGesture{
+                        self.showImageOverlay = false
+                        self.viewModel.displayImageOverlay = false
+                    }
+                
                 PAKImageView(url: urlString)
+                    .frame(width: 500.0, height:350)
 //                Image(uiImage: fetchImageFromURL(urlString: urlString))
             })
     }
@@ -386,6 +419,7 @@ struct UpgradeView: View {
     let viewModel: UpgradeViewModel
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
+    @EnvironmentObject var shipViewModel: ShipViewModel
     
     var body: some View {
         Text("\(self.viewModel.upgrade.name)")
@@ -393,10 +427,12 @@ struct UpgradeView: View {
             .font(.largeTitle)
             .padding(15)
             .background(Color.red)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .contentShape(RoundedRectangle(cornerRadius: 10))
+//            .contentShape(RoundedRectangle(cornerRadius: 10))
+//            .clipShape(RoundedRectangle(cornerRadius: 10))
             .onTapGesture {
+                print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")
                 self.showImageOverlay = true
+                self.shipViewModel.displayImageOverlay = true
                 self.imageOverlayUrl = self.viewModel.imageUrl
             }
     }
@@ -582,9 +618,9 @@ struct PAKImageView: View {
     var body: some View {
         Image(uiImage: viewModel.image)
             .resizable()
-            .frame(width: 350.0,height:500)
             .border(Color.green, width: 2)
             .onAppear {
+                print("PAKImageView loadImage url: \(self.url)")
                 self.viewModel.loadImage(url: self.url)
             }
     }
