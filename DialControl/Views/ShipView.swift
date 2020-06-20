@@ -394,6 +394,7 @@ struct UpgradeView: View {
             .padding(15)
             .background(Color.red)
             .clipShape(RoundedRectangle(cornerRadius: 10))
+            .contentShape(RoundedRectangle(cornerRadius: 10))
             .onTapGesture {
                 self.showImageOverlay = true
                 self.imageOverlayUrl = self.viewModel.imageUrl
