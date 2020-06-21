@@ -11,9 +11,102 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
+// MARK:- Globals
+var shipLookupTable: [String:PilotFileUrl] = [
+    "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
+    "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
+    "tieadvancedx1" : PilotFileUrl(fileName:"tie-advanced-x1", directoryPath: "pilots/galactic-empire"),
+    "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire"),
+    "ut60duwing": PilotFileUrl(fileName:"ut-60d-u-wing", directoryPath: "pilots/rebel-alliance"),
+    "sheathipedeclassshuttle": PilotFileUrl(fileName:"sheathipede-class-shuttle", directoryPath: "pilots/rebel-alliance"),
+    "asf01bwing": PilotFileUrl(fileName:"a-sf-01-b-wing", directoryPath: "pilots/rebel-alliance")
+]
+
+struct PilotFileUrl: CustomStringConvertible {
+    let fileName: String
+    let directoryPath: String
+    
+    var description: String {
+        return "fileName: '\(fileName)' directoryPath: '\(directoryPath)'"
+    }
+}
+
+struct UpgradeSummary : Identifiable {
+    let id = UUID()
+    let type: String
+    let name: String
+    let prettyName: String
+}
+
+private func loadJSON(fileName: String, directoryPath: String) -> String {
+    if let path = Bundle.main.path(forResource: fileName,
+                                   ofType: "json",
+                                   inDirectory: directoryPath)
+    {
+        print("path: \(path)")
+        
+        do {
+            let json = try String(contentsOfFile: path)
+            print("jsonData: \(shipJSON)")
+            return json
+        } catch {
+            print("error reading from \(path)")
+            return ""
+        }
+    }
+    
+    return ""
+}
+
+func fetchImageFromURL(urlString: String) -> UIImage {
+    var image: UIImage? = nil
+    
+    let url = URL(string: urlString)!
+
+    // Synchronous download using Data & String
+    do {
+        // get the content as String synchronously
+//        let content = try String(contentsOf: url)
+//        print(content)
+
+        // get the content of the url as Data synchronously
+        let data = try Data(contentsOf: url)
+        image = UIImage(data: data)
+    }
+    catch {
+        print(error.localizedDescription)
+    }
+    
+    return image!
+}
+
+enum UpgradeCardEnum {
+    case astromech(String)
+    case cannon(String)
+    case cargo(String)
+    case command(String)
+    case configuration(String)
+    case crew(String)
+    case device(String)
+    case forcepower(String)
+    case gunner(String)
+    case hardpoint(String)
+    case illicit(String)
+    case missile(String)
+    case modification(String)
+    case sensor(String)
+    case tacticalrelay(String)
+    case talent(String)
+    case team(String)
+    case tech(String)
+    case title(String)
+    case torpedo(String)
+    case turret(String)
+}
+
+// MARK:- Ship view
 class ShipViewModel: ObservableObject {
     var shipPilot: ShipPilot
-    var ship: Ship? = nil
     @Published var shipImage: UIImage = UIImage()
     @Published var upgradeImage: UIImage = UIImage()
     private var _displayImageOverlay: Bool = false
@@ -31,12 +124,13 @@ class ShipViewModel: ObservableObject {
         }
     }
     
-    var imageUrl: String {
-        getShip(shipName: shipPilot.shipName,
+    lazy var shipImageURL: String = {
+        loadShipFromJSON(shipName: shipPilot.shipName,
                        pilotName: shipPilot.pilotName).1.image
-    }
+    }()
     
-    func getShip(shipName: String, pilotName: String) -> (Ship, Pilot) {
+    /// What do we return if we encounter an error (empty file)?
+    func loadShipFromJSON(shipName: String, pilotName: String) -> (Ship, Pilot) {
         var shipJSON: String = ""
         
         print("shipName: \(shipName)")
@@ -44,111 +138,14 @@ class ShipViewModel: ObservableObject {
         
         if let pilotFileUrl = shipLookupTable[shipName] {
             print("pilotFileUrl: \(pilotFileUrl)")
-            
-            if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
-                                           ofType: "json",
-                                           inDirectory: pilotFileUrl.directoryPath)
-            {
-                print("path: \(path)")
-                
-                do {
-                    shipJSON = try String(contentsOfFile: path)
-                    print("jsonData: \(shipJSON)")
-                } catch {
-                    print("error reading from \(path)")
-                }
-            }
+            shipJSON = loadJSON(fileName: pilotFileUrl.fileName,
+                                directoryPath: pilotFileUrl.directoryPath)
         }
         
         let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
         let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
         
         return (ship, foundPilots)
-    }
-    
-    //    "tieskstriker"
-    func getShipImageUrl(shipName: String, pilotName: String) -> String {
-        
-        func buildUrl(shipName: String, pilotName: String) -> String {
-            return getShip(shipName: shipName, pilotName: pilotName).1.image
-        }
-        
-        func fetchImage(from urlString: String,
-                        completionHandler: @escaping (_ data: Data?) -> ())
-        {
-            let session = URLSession.shared
-            let url = URL(string: urlString)
-            
-            print("url: \(String(describing: url))")
-            
-            let dataTask = session.dataTask(with: url!) { (data, response, error) in
-                if error != nil {
-                    print("Error fetching the image! 😢")
-                    completionHandler(nil)
-                } else {
-                    completionHandler(data)
-                }
-            }
-            
-            dataTask.resume()
-        }
-        
-        let url = buildUrl(shipName: shipName, pilotName: pilotName)
-    
-        return url
-    }
-    
-    func getUpgradeImageUrl(upgrade: Upgrade) -> String
-    {
-        func getJSON(forType: String, inDirectory: String) -> String {
-            // Read json from file: forType.json
-            let jsonFileName = "\(forType)"
-            var upgradeJSON = ""
-            
-            if let path = Bundle.main.path(forResource: jsonFileName,
-                                           ofType: "json",
-                                           inDirectory: inDirectory)
-            {
-                print("path: \(path)")
-                
-                do {
-                    upgradeJSON = try String(contentsOfFile: path)
-                    print("upgradeJSON: \(upgradeJSON)")
-                } catch {
-                    print("error reading from \(path)")
-                }
-            }
-            
-            return upgradeJSON
-        }
-        
-        func getImageURLFromJSON_new(upgrade: Upgrade) -> String {
-            var imageUrl = ""
-            
-            let type = upgrade.sides[0].type.lowercased()
-            
-            let jsonString = getJSON(forType: type, inDirectory: "upgrades")
-            
-            let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-            
-            let matches = upgrades.filter({ $0.xws == upgrade.xws })
-            
-            if (matches.count > 0) {
-                let sides = matches[0].sides
-                
-                if (sides.count > 0) {
-                    imageUrl = sides[0].image
-                }
-            }
-            
-            return imageUrl
-        }
-        
-        func getImageURLFromJSON_old(upgrade: UpgradeSummary) -> String {
-            return "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_70.png"
-        }
-        
-        return getImageURLFromJSON_new(upgrade: upgrade)
     }
     
     var force: Int {
@@ -162,30 +159,36 @@ class ShipViewModel: ObservableObject {
     }
     
     var shields: Int {
-        if ((ship?.stats.filter{ $0.type == "shields"}.count ?? 0) > 0) {
-            return ship?
-                .stats.filter{ $0.type == "shields" }[0].value ?? 0
+        let ship = self.shipPilot.ship
+        let shieldsStats: [Stat] = ship.stats.filter{ $0.type == "shields"}
+        
+        if (shieldsStats.count > 0) {
+            return shieldsStats[0].value
         } else {
             return 0
         }
     }
     
     var dial: [String] {
-        return self.ship?.dial ?? []
+        let ship = self.shipPilot.ship
+        
+        return ship.dial
     }
 }
 
-var shipLookupTable: [String:PilotFileUrl] = [
-    "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
-    "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
-    "tieadvancedx1" : PilotFileUrl(fileName:"tie-advanced-x1", directoryPath: "pilots/galactic-empire"),
-    "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire"),
-    "ut60duwing": PilotFileUrl(fileName:"ut-60d-u-wing", directoryPath: "pilots/rebel-alliance"),
-    "sheathipedeclassshuttle": PilotFileUrl(fileName:"sheathipede-class-shuttle", directoryPath: "pilots/rebel-alliance"),
-    "asf01bwing": PilotFileUrl(fileName:"a-sf-01-b-wing", directoryPath: "pilots/rebel-alliance")
-]
-
 struct ShipView: View {
+    struct TextOverlay: View {
+        @Binding var isShowing : Bool
+    
+        var body: some View {
+            Text("Charge")
+                .frame(width: 100, height: 100)
+                .background(Color.yellow)
+                .cornerRadius(20)
+                .opacity(self.isShowing ? 1 : 0)
+        }
+    }
+    
     let viewModel: ShipViewModel
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
@@ -257,7 +260,7 @@ struct ShipView: View {
     
     var bodyContent: some View {
         HStack(alignment: .top) {
-            PAKImageView(url: viewModel.imageUrl)
+            PAKImageView(url: viewModel.shipImageURL)
                 .frame(width: 350.0, height:500)
                 .onTapGesture { self.showCardOverlay.toggle() }
                 .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
@@ -315,16 +318,18 @@ struct ShipView: View {
     
     func buildView() -> AnyView {
         return AnyView(VStack(alignment: .leading) {
-            headerView
-            bodyContent
-            footer(showImageOverlay: $showImageOverlay)
-//            footer_New(showImageOverlay: $showImageOverlay)
-        }.border(Color.red, width: 2)
+                headerView
+                bodyContent
+                footer(showImageOverlay: $showImageOverlay)
+    //            footer_New(showImageOverlay: $showImageOverlay)
+            }
+            .border(Color.red, width: 2)
             .overlay(imageOverlayView)
-//            .onTapGesture{
-//                self.showImageOverlay = false
-//                self.viewModel.displayImageOverlay = false
-//            }
+            .background(theme.BUTTONBACKGROUND)
+    //            .onTapGesture{
+    //                self.showImageOverlay = false
+    //                self.viewModel.displayImageOverlay = false
+    //            }
         )
     }
     
@@ -352,22 +357,7 @@ struct ShipView: View {
     }
 }
 
-struct PilotFileUrl: CustomStringConvertible {
-    let fileName: String
-    let directoryPath: String
-    
-    var description: String {
-        return "fileName: '\(fileName)' directoryPath: '\(directoryPath)'"
-    }
-}
-
-struct UpgradeSummary : Identifiable {
-    let id = UUID()
-    let type: String
-    let name: String
-    let prettyName: String
-}
-
+// MARK:- Upgrades
 struct UpgradesView: View {
     @EnvironmentObject var viewModel: ShipViewModel
     @State var imageName: String = ""
@@ -398,7 +388,7 @@ struct UpgradeView: View {
             
             let type = upgrade.sides[0].type.lowercased()
             
-            let jsonString = getJSON(forType: type, inDirectory: "upgrades")
+            let jsonString = loadJSON(fileName: type, directoryPath: "upgrades")
             
             let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
             
@@ -438,30 +428,6 @@ struct UpgradeView: View {
     }
 }
 
-struct ImageOverlay: View {
-    @Binding var isShowing : Bool
-    
-    var body: some View {
-        Text("Charge")
-            .frame(width: 100, height: 100)
-            .background(Color.yellow)
-            .cornerRadius(20)
-            .opacity(self.isShowing ? 1 : 0)
-    }
-}
-
-struct TextOverlay: View {
-    @Binding var isShowing : Bool
-    
-    var body: some View {
-        Text("Charge")
-            .frame(width: 100, height: 100)
-            .background(Color.yellow)
-            .cornerRadius(20)
-            .opacity(self.isShowing ? 1 : 0)
-    }
-}
-
 /*
  func asyncMethod(completion: ((String) -> Void)) {
      //...
@@ -477,6 +443,7 @@ struct TextOverlay: View {
  }
  */
 
+// MARK:- Images
 /// https://theswiftdev.com/how-to-download-files-with-urlsession-using-combine-publishers-and-subscribers/
 /// https://www.vadimbulavin.com/asynchronous-swiftui-image-loading-from-url-with-combine-and-swift/
 // Fetches an image from an url and publishes the UIImage
@@ -543,95 +510,49 @@ struct URLImageView<T: View>: View {
     }
 }
 
-func fetchImageFromURL(urlString: String) -> UIImage {
-    var image: UIImage? = nil
-    
-    let url = URL(string: urlString)!
-
-    // Synchronous download using Data & String
-    do {
-        // get the content as String synchronously
-//        let content = try String(contentsOf: url)
-//        print(content)
-
-        // get the content of the url as Data synchronously
-        let data = try Data(contentsOf: url)
-        image = UIImage(data: data)
-    }
-    catch {
-        print(error.localizedDescription)
-    }
-    
-    return image!
-}
-
-enum UpgradeCardEnum {
-    case astromech(String)
-    case cannon(String)
-    case cargo(String)
-    case command(String)
-    case configuration(String)
-    case crew(String)
-    case device(String)
-    case forcepower(String)
-    case gunner(String)
-    case hardpoint(String)
-    case illicit(String)
-    case missile(String)
-    case modification(String)
-    case sensor(String)
-    case tacticalrelay(String)
-    case talent(String)
-    case team(String)
-    case tech(String)
-    case title(String)
-    case torpedo(String)
-    case turret(String)
-}
-
-func getJSON(forType: String, inDirectory: String) -> String {
-    // Read json from file: forType.json
-    let jsonFileName = "\(forType)"
-    var upgradeJSON = ""
-    
-    if let path = Bundle.main.path(forResource: jsonFileName,
-                                   ofType: "json",
-                                   inDirectory: inDirectory)
-    {
-        print("path: \(path)")
-        
-        do {
-            upgradeJSON = try String(contentsOfFile: path)
-            print("upgradeJSON: \(upgradeJSON)")
-        } catch {
-            print("error reading from \(path)")
-        }
-    }
-    
-    return upgradeJSON
-}
-
 struct PAKImageView: View {
     let url: String
-//    @ObservedObject var viewModel = PAKImageViewModel()
+    @ObservedObject var viewModel = PAKImageViewModel()
     @State var image = UIImage()
+    let id = UUID()
+    
+    init(url: String) {
+        self.url = url
+        print("PAKImageView.init(url: \(url)) id = \(id)")
+        self.viewModel.loadImage(url: url)
+    }
     
     var body: some View {
-        Image(uiImage: image)
+//        Image(uiImage: image)
+        Image(uiImage: viewModel.image)
             .resizable()
             .border(Color.green, width: 2)
             .onAppear {
-                print("PAKImageView loadImage url: \(self.url)")
-//                self.viewModel.loadImage(url: self.url)
-                self.image = fetchImageFromURL(urlString: self.url)
+                print("\(self.id) PAKImageView Image.onAppear loadImage url: \(self.url)")
+                self.viewModel.loadImage(url: self.url)
+//                self.image = fetchImageFromURL(urlString: self.url)
             }
     }
 }
 
 class PAKImageViewModel: ObservableObject {
-    @Published var image: UIImage = UIImage()
+//    @Published var image: UIImage = UIImage()
+    @Published var image: UIImage
+    
+    let id = UUID()
+    
+    deinit {
+        print("PAKImageViewModel.deinit \(#function).id \(id)")
+    }
+    
+    init() {
+        let url = "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_105.png"
+        self.image = fetchImageFromURL(urlString: url)
+        print("PAKImageViewModel.init = \(id) \(url)")
+    }
     
     func loadImage(url: String) {
         self.image = fetchImageFromURL(urlString: url)
+        print("PAKImageViewModel.loadImage = \(id) \(url)")
     }
 }
