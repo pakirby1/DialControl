@@ -512,7 +512,8 @@ struct URLImageView<T: View>: View {
 
 struct PAKImageView: View {
     let url: String
-    @ObservedObject var viewModel = PAKImageViewModel()
+//    @ObservedObject var viewModel = PAKImageViewModel()
+    @ObservedObject var viewModel = NetworkCacheViewModel()
     @State var image = UIImage()
     let id = UUID()
     
@@ -521,7 +522,7 @@ struct PAKImageView: View {
         print("PAKImageView.init(url: \(url)) id = \(id)")
         self.viewModel.loadImage(url: url)
     }
-    
+                                                                                      
     var body: some View {
 //        Image(uiImage: image)
         Image(uiImage: viewModel.image)
@@ -529,7 +530,7 @@ struct PAKImageView: View {
             .border(Color.green, width: 2)
             .onAppear {
                 print("\(self.id) PAKImageView Image.onAppear loadImage url: \(self.url)")
-                self.viewModel.loadImage(url: self.url)
+//                self.viewModel.loadImage(url: self.url)
 //                self.image = fetchImageFromURL(urlString: self.url)
             }
     }
@@ -556,3 +557,5 @@ class PAKImageViewModel: ObservableObject {
         print("PAKImageViewModel.loadImage = \(id) \(url)")
     }
 }
+
+extension PAKImageViewModel : INetworkCacheViewModel {}
