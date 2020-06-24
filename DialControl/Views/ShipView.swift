@@ -558,10 +558,13 @@ struct PAKImageView: View {
 //        self.image = self.viewModel.image
     }
     
-                                                                                
+                                                            
+    /// If the NetworkCacheViewModel adopts INetworkCacheViewModel, I get the following error
+    /// Thread 1: EXC_BAD_ACCESS (code=EXC_I386_GPFLT) when referencing self.viewModel.image.
+    /// It works if INetworkCacheViewModel is not adopted
     var body: some View {
 //        Image(uiImage: image)
-        Image(uiImage: self.viewModel.image)
+        Image(uiImage: self.viewModel.image) // Thread Error
             .resizable()
             .border(Color.green, width: 2)
             .onAppear {

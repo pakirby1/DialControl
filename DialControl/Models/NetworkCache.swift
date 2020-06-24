@@ -27,7 +27,6 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     private var cancellable: AnyCancellable?
     private var cache = [String:UIImage]()
     var classFuncString: String = ""
-    @Published var test = UIImage()
     
     init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore())) {
         self.service = service
@@ -41,7 +40,7 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     var imagePublisher: Published<UIImage>.Publisher { $image }
 }
 
-extension NetworkCacheViewModel : INetworkCacheViewModel {
+extension NetworkCacheViewModel {
     func loadImage(url: String) {
         func processCompletion(complete: Subscribers.Completion<Error>) {
             print("\(Date()) \(self).\(#function) received completion event")
@@ -82,16 +81,10 @@ extension NetworkCacheViewModel : INetworkCacheViewModel {
             .lane("PAK.NetworkCacheViewModel.loadData")
             .receive(on: RunLoop.main)
             .lane("PAK.NetworkCacheViewModel.receive")
-            .sink(receiveCompletion: { completion in
-                print("PAK.NetworkCacheViewModel.loadData received completion")
-            }, receiveValue: { value in
-                print("PAK.NetworkCacheViewModel.loadData received value")
-            })
-//            .sink(receiveCompletion: processCompletion,
-//                  receiveValue: processReceivedValue)
+            .sink(receiveCompletion: processCompletion,
+                  receiveValue: processReceivedValue)
     }
 }
-
 
 extension Just {
     var asFuture: Future<Output, Never> {
