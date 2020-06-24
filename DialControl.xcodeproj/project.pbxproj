@@ -54,6 +54,7 @@
 		AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */; };
 		AEAD19F924085E0A0020FABC /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAD19F824085E0A0020FABC /* TestView.swift */; };
 		AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrow.swift */; };
+		AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC1242F24A32CFC00C0599A /* NetworkService.swift */; };
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
 		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
@@ -129,6 +130,7 @@
 		AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures_SK9.ttf"; sourceTree = "<group>"; };
 		AEAD19F824085E0A0020FABC /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrow.swift; sourceTree = "<group>"; };
+		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
 		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AEC1242E24A32CC500C0599A /* Services */,
 				AE028C5C24A2C6B700DF689B /* CoreData */,
 				AE15E78C241D01A20002F696 /* Data */,
 				AE1FBE5A2416657D005C54F5 /* Models */,
@@ -299,6 +302,14 @@
 				AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		AEC1242E24A32CC500C0599A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AEC1242F24A32CFC00C0599A /* NetworkService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -479,6 +490,7 @@
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE028C5B249F82AF00DF689B /* Logging.swift in Sources */,
+				AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */,
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
 				AE1FBE6024166798005C54F5 /* Rotated.swift in Sources */,
 				AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */,
