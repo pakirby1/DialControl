@@ -38,7 +38,7 @@ class LocalStore : ILocalStore {
 
 class CoreDataLocalStore : ILocalStore {
     func loadData(url: String) -> AnyPublisher<Data, Error> {
-        
+        // bindableFRC.fetch(predicate: url)
         Just(Data()).tryMap{ data in
             guard data.count > 0 else {
                 throw StoreError.cacheMiss(url)
@@ -49,7 +49,7 @@ class CoreDataLocalStore : ILocalStore {
     }
     
     func saveData(key: String, value: Data) {
-        
+        // bindableFRC.moc.save()
     }
 }
 

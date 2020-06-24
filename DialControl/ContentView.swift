@@ -9,6 +9,7 @@
 import SwiftUI
 import Combine
 import TimelaneCombine
+import CoreData
 
 class Navigation {
     var stack: [ViewType] = []
@@ -32,8 +33,10 @@ class Navigation {
 class ViewFactory: ObservableObject {
     var previousViewType: ViewType = .factionSquadList(.galactic_empire)
     private var navigation = Navigation()
+    private var moc: NSManagedObjectContext
     
-    init() {
+    init(moc: NSManagedObjectContext) {
+        self.moc = moc
         self.navigation.push(type: .factionSquadList(.galactic_empire))
     }
     
@@ -72,7 +75,7 @@ class ViewFactory: ObservableObject {
                 .environmentObject(self))
             
         case .shipViewNew(let shipPilot):
-            return AnyView(ShipView(viewModel: ShipViewModel(shipPilot: shipPilot))
+            return AnyView(ShipView(viewModel: ShipViewModel(moc: self.moc, shipPilot: shipPilot))
                 .environmentObject(self))
             
         case .squadImportView:

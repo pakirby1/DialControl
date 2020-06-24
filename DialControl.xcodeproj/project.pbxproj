@@ -10,6 +10,9 @@
 		AE028C57249F81B200DF689B /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C56249F81B200DF689B /* Store.swift */; };
 		AE028C59249F825100DF689B /* NetworkCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C58249F825100DF689B /* NetworkCache.swift */; };
 		AE028C5B249F82AF00DF689B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C5A249F82AF00DF689B /* Logging.swift */; };
+		AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */; };
+		AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6424A2C93B00DF689B /* ImageData.swift */; };
+		AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */; };
 		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
 		AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */ = {isa = PBXBuildFile; fileRef = AE15E78D241D02120002F696 /* tie-in-interceptor.json */; };
 		AE1FBE562416608D005C54F5 /* TimelaneCombine in Frameworks */ = {isa = PBXBuildFile; productRef = AE1FBE552416608D005C54F5 /* TimelaneCombine */; };
@@ -33,7 +36,6 @@
 		AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
-		AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */; };
 		AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C923F8087C00C66136 /* ContentView.swift */; };
 		AE4D58CC23F8087D00C66136 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE4D58CB23F8087D00C66136 /* Assets.xcassets */; };
 		AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE4D58CE23F8087D00C66136 /* Preview Assets.xcassets */; };
@@ -78,6 +80,9 @@
 		AE028C56249F81B200DF689B /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		AE028C58249F825100DF689B /* NetworkCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCache.swift; sourceTree = "<group>"; };
 		AE028C5A249F82AF00DF689B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		AE028C5E24A2C6D300DF689B /* DialControl.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DialControl.xcdatamodel; sourceTree = "<group>"; };
+		AE028C6424A2C93B00DF689B /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
+		AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFetchedResultsController.swift; sourceTree = "<group>"; };
 		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AE15E78D241D02120002F696 /* tie-in-interceptor.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tie-in-interceptor.json"; sourceTree = "<group>"; };
 		AE1FBE5824166443005C54F5 /* DialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialView.swift; sourceTree = "<group>"; };
@@ -101,7 +106,6 @@
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58C223F8087C00C66136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AE4D58C423F8087C00C66136 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		AE4D58C723F8087C00C66136 /* DialControl.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DialControl.xcdatamodel; sourceTree = "<group>"; };
 		AE4D58C923F8087C00C66136 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AE4D58CB23F8087D00C66136 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE4D58CE23F8087D00C66136 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -156,6 +160,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AE028C5C24A2C6B700DF689B /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */,
+				AE028C6424A2C93B00DF689B /* ImageData.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		AE15E78C241D01A20002F696 /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +214,7 @@
 				AEF65F182445D3B4009D6BDC /* Upgrade.swift */,
 				AE028C56249F81B200DF689B /* Store.swift */,
 				AE028C58249F825100DF689B /* NetworkCache.swift */,
+				AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -231,6 +245,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AE028C5C24A2C6B700DF689B /* CoreData */,
 				AE15E78C241D01A20002F696 /* Data */,
 				AE1FBE5A2416657D005C54F5 /* Models */,
 				AE1FBE5724166422005C54F5 /* Views */,
@@ -241,7 +256,6 @@
 				AE4D58CB23F8087D00C66136 /* Assets.xcassets */,
 				AE4D58D023F8087D00C66136 /* LaunchScreen.storyboard */,
 				AE4D58D323F8087D00C66136 /* Info.plist */,
-				AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */,
 				AE4D58CD23F8087D00C66136 /* Preview Content */,
 				AEAD19F824085E0A0020FABC /* TestView.swift */,
 				AE1FBE5D24166675005C54F5 /* Extensions.swift */,
@@ -438,11 +452,14 @@
 				AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */,
 				AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */,
 				AE028C57249F81B200DF689B /* Store.swift in Sources */,
+				AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */,
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
 				AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */,
+				AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */,
 				AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */,
 				AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */,
+				AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */,
 				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
 				AE028C59249F825100DF689B /* NetworkCache.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
@@ -452,7 +469,6 @@
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
-				AE4D58C823F8087C00C66136 /* DialControl.xcdatamodeld in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
@@ -811,12 +827,12 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		AE4D58C623F8087C00C66136 /* DialControl.xcdatamodeld */ = {
+		AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				AE4D58C723F8087C00C66136 /* DialControl.xcdatamodel */,
+				AE028C5E24A2C6D300DF689B /* DialControl.xcdatamodel */,
 			);
-			currentVersion = AE4D58C723F8087C00C66136 /* DialControl.xcdatamodel */;
+			currentVersion = AE028C5E24A2C6D300DF689B /* DialControl.xcdatamodel */;
 			path = DialControl.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

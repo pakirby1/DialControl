@@ -11,26 +11,60 @@ import Combine
 import SwiftUI
 
 // MARK: - NetworkCacheViewModel
+// Workaround for https://swiftsenpai.com/swift/define-protocol-with-published-property-wrapper/
 protocol INetworkCacheViewModel {
     func loadImage(url: String)
     var image: UIImage { get }
+    var imagePublished: Published<UIImage> { get }
+    var imagePublisher: Published<UIImage>.Publisher { get }
 }
 
+//protocol ViewModelProtocol {
+//
+//    // Define name (wrapped value)
+//    var name: String { get }
+//    
+//    // Define name Published property wrapper
+//    var namePublished: Published<String> { get }
+//    
+//    // Define name publisher
+//    var namePublisher: Published<String>.Publisher { get }
+//}
+//
+//class MyViewModel: ViewModelProtocol {
+//
+//    @Published var name: String
+//    var namePublished: Published<String> { _name }
+//    var namePublisher: Published<String>.Publisher { $name }
+//
+//    // ... ...
+//    // ... ...
+//    // ... ...
+//}
+
 class NetworkCacheViewModel: ObservableObject, IPrintLog {
-    @Published var image = UIImage()
+    @Published var image: UIImage = UIImage()
     @Published var message = "Placeholder Image"
     
     private let service: INetworkCacheService
     private var cancellable: AnyCancellable?
     private var cache = [String:UIImage]()
     var classFuncString: String = ""
+    @Published var test = UIImage()
     
     init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore())) {
         self.service = service
     }
+    
+    deinit {
+        print("\(self).deinit")
+    }
+    
+    var imagePublished: Published<UIImage> { _image }
+    var imagePublisher: Published<UIImage>.Publisher { $image }
 }
 
-extension NetworkCacheViewModel: INetworkCacheViewModel {
+extension NetworkCacheViewModel : INetworkCacheViewModel {
     func loadImage(url: String) {
         func processCompletion(complete: Subscribers.Completion<Error>) {
             print("\(Date()) \(self).\(#function) received completion event")
@@ -68,9 +102,16 @@ extension NetworkCacheViewModel: INetworkCacheViewModel {
         
         self.cancellable = service
             .loadData(url: url)
+            .lane("PAK.NetworkCacheViewModel.loadData")
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: processCompletion,
-                  receiveValue: processReceivedValue)
+            .lane("PAK.NetworkCacheViewModel.receive")
+            .sink(receiveCompletion: { completion in
+                print("PAK.NetworkCacheViewModel.loadData received completion")
+            }, receiveValue: { value in
+                print("PAK.NetworkCacheViewModel.loadData received value")
+            })
+//            .sink(receiveCompletion: processCompletion,
+//                  receiveValue: processReceivedValue)
     }
 }
 
@@ -117,6 +158,7 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
                 self.localStore.saveData(key: url, value: data)
                 return data
             }
+            .print()
             .eraseToAnyPublisher()
     }
 }
