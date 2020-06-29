@@ -108,6 +108,7 @@ enum UpgradeCardEnum {
 // MARK:- Ship view
 class ShipViewModel: ObservableObject {
     var shipPilot: ShipPilot
+    var squad: Squad
     @Published var shipImage: UIImage = UIImage()
     @Published var upgradeImage: UIImage = UIImage()
     private var _displayImageOverlay: Bool = false
@@ -121,8 +122,12 @@ class ShipViewModel: ObservableObject {
 //    @ObservedObject var networkCacheViewModel: NetworkCacheViewModel
     @Published var images: [ImageData] = []
     
-    init(moc: NSManagedObjectContext, shipPilot: ShipPilot) {
+    init(moc: NSManagedObjectContext,
+         shipPilot: ShipPilot,
+         squad: Squad)
+    {
         self.shipPilot = shipPilot
+        self.squad = squad
         
         // CoreData
         self.moc = moc
@@ -250,7 +255,7 @@ struct ShipView: View {
 
     var backButtonView: some View {
         Button(action: {
-            self.viewFactory.viewType = .squadView
+            self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad)
         }) {
             HStack {
                 Image(systemName: "chevron.left")

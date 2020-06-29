@@ -118,6 +118,10 @@ class FactionSquadCardViewModel : ObservableObject {
         self.squadData = squadData
     }
     
+    private func loadSquad(jsonString: String) -> Squad {
+        return Squad.serializeJSON(jsonString: jsonString)
+    }
+    
     var buttonBackground: Color {
         theme.BUTTONBACKGROUND
     }
@@ -136,6 +140,14 @@ class FactionSquadCardViewModel : ObservableObject {
     
     var json: String {
         squadData.json ?? ""
+    }
+    
+    var squad: Squad {
+        if let json = squadData.json {
+            return loadSquad(jsonString: json)
+        }
+        
+        return Squad.emptySquad
     }
 }
 
@@ -177,7 +189,7 @@ struct FactionSquadCard: View {
     
     var body: some View {
         Button(action: {
-            self.viewFactory.viewType = .squadViewPAK(self.viewModel.json)
+            self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad)
         }) {
             ZStack {
                 background

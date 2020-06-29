@@ -29,9 +29,8 @@ struct SquadView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @ObservedObject var viewModel: SquadViewModel = SquadViewModel()
     
-    init(jsonString: String) {
-        self.squad = Squad.emptySquad
-        self.squad = viewModel.loadSquad(jsonString: jsonString)
+    init(squad: Squad) {
+        self.squad = squad
     }
     
     var header: some View {
@@ -183,7 +182,7 @@ struct SquadCardView: View {
                 
                 ForEach(shipPilots) { shipPilot in
                     Button(action: {
-                        self.viewFactory.viewType = .shipViewNew(shipPilot)
+                        self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
                     }) {
                         PilotCardView(shipPilot: shipPilot)
                     }

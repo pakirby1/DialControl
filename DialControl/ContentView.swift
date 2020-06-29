@@ -70,16 +70,16 @@ class ViewFactory: ObservableObject {
     private func buildView(type: ViewType) -> AnyView {
         
         switch(type) {
-        case .squadViewPAK(let json):
-            return AnyView(SquadView(jsonString: json)
+        case .squadViewPAK(let squad):
+            return AnyView(SquadView(squad: squad)
                 .environmentObject(self))
             
-        case .squadView:
-            return AnyView(SquadView(jsonString: squadJSON)
-                .environmentObject(self))
+        case .shipViewNew(let shipPilot, let squad):
+            let viewModel = ShipViewModel(moc: self.moc,
+                                          shipPilot: shipPilot,
+                                          squad: squad)
             
-        case .shipViewNew(let shipPilot):
-            return AnyView(ShipView(viewModel: ShipViewModel(moc: self.moc, shipPilot: shipPilot))
+            return AnyView(ShipView(viewModel: viewModel)
                 .environmentObject(self))
             
         case .squadImportView:
@@ -90,10 +90,6 @@ class ViewFactory: ObservableObject {
         case .multiLineTextView:
             return AnyView(MultilineTextView_ContentView())
         
-        case .squadViewNew(let jsonString):
-            return AnyView(SquadView(jsonString: jsonString)
-                .environmentObject(self))
-            
         case .factionSquadList(let faction):
             return AnyView(FactionSquadList(viewModel: FactionSquadListViewModel(faction: faction.rawValue, moc: self.moc))
                 .environmentObject(self))
@@ -124,26 +120,26 @@ enum Faction: String, CaseIterable {
 }
 
 enum ViewType {
-    case squadView
+//    case squadView
 //    case shipView(SquadPilot)
-    case shipViewNew(ShipPilot)
+    case shipViewNew(ShipPilot, Squad)
     case squadImportView
     case multiLineTextView
-    case squadViewNew(String)
+//    case squadViewNew(String)
     case factionSquadList(Faction)
     case factionFilterView(Faction)
-    case squadViewPAK(String)
+    case squadViewPAK(Squad)
     case back
 }
 
 extension ViewType: Equatable {
     static func ==(lhs: ViewType, rhs: ViewType) -> Bool {
         switch (lhs, rhs) {
-        case (.squadView, .squadView):
-            return true
+//        case (.squadView, .squadView):
+//            return true
             
-        case (let .shipViewNew(pilotA), let .shipViewNew(pilotB)):
-            return pilotA == pilotB
+//        case (let .shipViewNew(pilotA), let .shipViewNew(pilotB)):
+//            return pilotA == pilotB
 
         case (.squadImportView, .squadImportView):
             return true
@@ -151,8 +147,8 @@ extension ViewType: Equatable {
         case (.multiLineTextView, .multiLineTextView):
             return true
             
-        case (let .squadViewNew(A), let .squadViewNew(B)):
-            return A == B
+//        case (let .squadViewNew(A), let .squadViewNew(B)):
+//            return A == B
 
         case (.factionSquadList, .factionSquadList):
             return true
