@@ -70,6 +70,10 @@ class ViewFactory: ObservableObject {
     private func buildView(type: ViewType) -> AnyView {
         
         switch(type) {
+        case .squadViewPAK(let json):
+            return AnyView(SquadView(jsonString: json)
+                .environmentObject(self))
+            
         case .squadView:
             return AnyView(SquadView(jsonString: squadJSON)
                 .environmentObject(self))
@@ -128,6 +132,7 @@ enum ViewType {
     case squadViewNew(String)
     case factionSquadList(Faction)
     case factionFilterView(Faction)
+    case squadViewPAK(String)
     case back
 }
 

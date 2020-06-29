@@ -13,6 +13,7 @@ import CoreData
 class FactionSquadListViewModel : ObservableObject {
     @Published var squadNames : [String] = []
     @Published var numSquads: Int = 0
+    @Published var squadDataList: [SquadData] = []
     
     let faction: String
     let moc: NSManagedObjectContext
@@ -36,10 +37,10 @@ class FactionSquadListViewModel : ObservableObject {
                 let fetchedObjects = try self.moc.fetch(fetchRequest) as! [SquadData]
                 
                 fetchedObjects.forEach{ squad in
-                    self.squadNames.append(squad.name ?? "No Squad Name")
+                    self.squadDataList.append(squad)
                 }
                 
-                self.numSquads = fetchedObjects.count
+                self.numSquads = self.squadDataList.count
             } catch {
                 print(error)
             }
@@ -97,8 +98,8 @@ struct FactionSquadList: View {
     
     var squadList: some View {
         VStack {
-            ForEach(self.viewModel.squadNames, id:\.self) { name in
-                FactionSquadCard(viewModel: FactionSquadCardViewModel(name: name)).environmentObject(self.viewFactory)
+            ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
+                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData)).environmentObject(self.viewFactory)
             }
         }
         .padding(10)
@@ -109,12 +110,12 @@ struct FactionSquadList: View {
 }
 
 class FactionSquadCardViewModel : ObservableObject {
-    let points: Int = 200
-    let name: String
+    let points: Int = 150
     let theme: Theme = WestworldUITheme()
+    let squadData: SquadData
     
-    init(name: String) {
-        self.name = name
+    init(squadData: SquadData) {
+        self.squadData = squadData
     }
     
     var buttonBackground: Color {
@@ -127,6 +128,14 @@ class FactionSquadCardViewModel : ObservableObject {
     
     var border: Color {
         theme.BORDER_INACTIVE
+    }
+    
+    var name: String {
+        squadData.name ?? "Unnamed"
+    }
+    
+    var json: String {
+        squadData.json ?? ""
     }
 }
 
@@ -168,7 +177,7 @@ struct FactionSquadCard: View {
     
     var body: some View {
         Button(action: {
-            self.viewFactory.viewType = .squadView
+            self.viewFactory.viewType = .squadViewPAK(self.viewModel.json)
         }) {
             ZStack {
                 background
