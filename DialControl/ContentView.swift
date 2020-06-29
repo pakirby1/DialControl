@@ -71,7 +71,8 @@ class ViewFactory: ObservableObject {
         
         switch(type) {
         case .squadViewPAK(let squad):
-            return AnyView(SquadView(squad: squad)
+            let viewModel = SquadViewModel(squad: squad)
+            return AnyView(SquadView(viewModel: viewModel)
                 .environmentObject(self))
             
         case .shipViewNew(let shipPilot, let squad):

@@ -14,23 +14,20 @@ import TimelaneCombine
 class SquadViewModel : ObservableObject {
     @Published var alertText: String = ""
     @Published var showAlert: Bool = false
+    var squad: Squad
     
-    func loadSquad(jsonString: String) -> Squad {
-        return Squad.serializeJSON(jsonString: jsonString) { errorString in
-                    self.alertText = errorString
-                    self.showAlert = true
-                }
+    init(squad: Squad) {
+        self.squad = squad
     }
 }
 
 struct SquadView: View {
     @State var maneuver: String = ""
-    var squad: Squad
     @EnvironmentObject var viewFactory: ViewFactory
-    @ObservedObject var viewModel: SquadViewModel = SquadViewModel()
+    @ObservedObject var viewModel: SquadViewModel
     
-    init(squad: Squad) {
-        self.squad = squad
+    init(viewModel: SquadViewModel) {
+        self.viewModel = viewModel
     }
     
     var header: some View {
@@ -48,7 +45,7 @@ struct SquadView: View {
     var body: some View {
         VStack {
             header
-            SquadCardView(squad: squad)
+            SquadCardView(squad: viewModel.squad)
                 .environmentObject(viewFactory)
                 .onAppear() {
                     print("SquadView.onAppear")
