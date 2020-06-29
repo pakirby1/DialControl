@@ -255,7 +255,8 @@ struct ShipView: View {
 
     var backButtonView: some View {
         Button(action: {
-            self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad)
+//            self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad)
+            self.viewFactory.back()
         }) {
             HStack {
                 Image(systemName: "chevron.left")
