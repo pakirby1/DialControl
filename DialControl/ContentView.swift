@@ -33,7 +33,7 @@ class Navigation {
 class ViewFactory: ObservableObject {
     var previousViewType: ViewType = .factionSquadList(.galactic_empire)
     private var navigation = Navigation()
-    private var moc: NSManagedObjectContext
+    var moc: NSManagedObjectContext
     
     init(moc: NSManagedObjectContext) {
         self.moc = moc
@@ -79,7 +79,7 @@ class ViewFactory: ObservableObject {
                 .environmentObject(self))
             
         case .squadImportView:
-            return AnyView(SquadXWSImportView()
+            return AnyView(SquadXWSImportView(viewModel: SquadXWSImportViewModel(moc: self.moc))
                 .environmentObject(self)
                 )
             
@@ -91,7 +91,7 @@ class ViewFactory: ObservableObject {
                 .environmentObject(self))
             
         case .factionSquadList(let faction):
-            return AnyView(FactionSquadList(faction: faction.rawValue)
+            return AnyView(FactionSquadList(viewModel: FactionSquadListViewModel(faction: faction.rawValue, moc: self.moc))
                 .environmentObject(self))
             
         case .factionFilterView(let faction):

@@ -55,6 +55,8 @@
 		AEAD19F924085E0A0020FABC /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAD19F824085E0A0020FABC /* TestView.swift */; };
 		AEBA6361241B58D9008B00DB /* UpArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrow.swift */; };
 		AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC1242F24A32CFC00C0599A /* NetworkService.swift */; };
+		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
+		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
 		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
@@ -131,6 +133,8 @@
 		AEAD19F824085E0A0020FABC /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrow.swift; sourceTree = "<group>"; };
 		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
 		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
@@ -165,6 +169,8 @@
 		AE028C5C24A2C6B700DF689B /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */,
+				AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */,
 				AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */,
 				AE028C6424A2C93B00DF689B /* ImageData.swift */,
 			);
@@ -480,6 +486,7 @@
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
+				AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
@@ -494,6 +501,7 @@
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
 				AE1FBE6024166798005C54F5 /* Rotated.swift in Sources */,
 				AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */,
+				AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,10 +8,16 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 class SquadXWSImportViewModel : ObservableObject {
     @Published var alertText: String = ""
     @Published var showAlert: Bool = false
+    private let moc: NSManagedObjectContext
+    
+    init(moc: NSManagedObjectContext) {
+        self.moc = moc
+    }
     
     func loadSquad(jsonString: String) -> Squad {
         return Squad.serializeJSON(jsonString: jsonString) { errorString in
@@ -19,16 +25,34 @@ class SquadXWSImportViewModel : ObservableObject {
             self.showAlert = true
         }
     }
+    
+    func saveSquad(jsonString: String, name: String) {
+        let squadData = SquadData(context: self.moc)
+        squadData.id = UUID()
+        squadData.name = name
+        squadData.json = jsonString
+        
+        do {
+            try self.moc.save()
+        } catch {
+            print(error)
+        }
+    }
 }
 
 struct SquadXWSImportView : View {
     @State private var xws: String = ""
     @EnvironmentObject var viewFactory: ViewFactory
-    let textViewObserver: TextViewObservable = TextViewObservable()
-    let lineHeight = UIFont.systemFont(ofSize: 17).lineHeight
     @State var showAlert: Bool = false
     @State var alertText: String = ""
-    @ObservedObject var viewModel: SquadXWSImportViewModel = SquadXWSImportViewModel()
+    @ObservedObject var viewModel: SquadXWSImportViewModel
+
+    let textViewObserver: TextViewObservable = TextViewObservable()
+    let lineHeight = UIFont.systemFont(ofSize: 17).lineHeight
+    
+    init(viewModel: SquadXWSImportViewModel) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         VStack {
@@ -56,6 +80,7 @@ struct SquadXWSImportView : View {
                 
                 if squad.name != Squad.emptySquad.name {
                     // Save the squad JSON to CoreData
+                    self.viewModel.saveSquad(jsonString: self.xws, name: squad.name)
                     self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                 }
             } ) {

@@ -8,22 +8,56 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 class FactionSquadListViewModel : ObservableObject {
     @Published var squadNames : [String] = []
+    @Published var numSquads: Int = 0
     
-    init() {
-        self.squadNames = ["Worlds Champion 2019",
-                       "SaiDuchessTurr3Academies",
-                       "VaderSoontirEcho",
-                       "VagabondMaarekFifthBrotherTurr"]
+    let faction: String
+    let moc: NSManagedObjectContext
+    
+    init(faction: String, moc: NSManagedObjectContext) {
+        self.faction = faction
+        self.moc = moc
+    }
+    
+    func loadSquadsList() {
+        func initWithDummyNames() {
+            self.squadNames = ["Worlds Champion 2019",
+                               "SaiDuchessTurr3Academies",
+                               "VaderSoontirEcho",
+                               "VagabondMaarekFifthBrotherTurr"]
+        }
+        
+        func loadSquadsListFromCoreData() {
+            do {
+                let fetchRequest = SquadData.fetchRequest()
+                let fetchedObjects = try self.moc.fetch(fetchRequest) as! [SquadData]
+                
+                fetchedObjects.forEach{ squad in
+                    self.squadNames.append(squad.name ?? "No Squad Name")
+                }
+                
+                self.numSquads = fetchedObjects.count
+            } catch {
+                print(error)
+            }
+        }
+        
+//        initWithDummyNames()
+        loadSquadsListFromCoreData()
     }
 }
 
 struct FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
-    let faction: String
-    let viewModel = FactionSquadListViewModel()
+    
+    @ObservedObject var viewModel: FactionSquadListViewModel
+    
+    init(viewModel: FactionSquadListViewModel) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         VStack {
@@ -37,7 +71,7 @@ struct FactionSquadList: View {
     }
     
     var titleView: some View {
-        Text("\(faction)")
+        Text("\(self.viewModel.faction)")
             .font(.largeTitle)
     }
     
@@ -66,7 +100,11 @@ struct FactionSquadList: View {
             ForEach(self.viewModel.squadNames, id:\.self) { name in
                 FactionSquadCard(viewModel: FactionSquadCardViewModel(name: name)).environmentObject(self.viewFactory)
             }
-        }.padding(10)
+        }
+        .padding(10)
+        .onAppear {
+            self.viewModel.loadSquadsList()
+        }
     }
 }
 
