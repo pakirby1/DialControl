@@ -265,23 +265,23 @@ struct ShipView: View {
     var clearView: some View {
         Color
             .clear
-            .border(Color.red, width: 5)
+//            .border(Color.red, width: 5)
     }
     
     var headerView: some View {
         HStack {
             HStack(alignment: .top) {
                 backButtonView
-                    .border(Color.blue, width: 2)
+//                    .border(Color.blue, width: 2)
             }
             .frame(width: 150, height: 50, alignment: .leading)
-            .border(Color.blue, width: 2)
+//            .border(Color.blue, width: 2)
             
             PilotDetailsView(shipPilot: viewModel.shipPilot,
                              displayUpgrades: true,
                              displayHeaders: false)
                 .padding(2)
-                .border(Color.green, width: 2)
+//                .border(Color.green, width: 2)
         }
     }
     
@@ -311,7 +311,8 @@ struct ShipView: View {
                     if (viewModel.shields > 0) {
                         LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield)
                     }
-                }.border(Color.green, width: 2)
+                }
+//                .border(Color.green, width: 2)
 
                 DialView(temperature: 0,
                      diameter: 400,
@@ -319,7 +320,7 @@ struct ShipView: View {
                      dial: self.viewModel.shipPilot.ship.dial,
                      displayAngleRanges: false)
                 .frame(width: 400.0,height:400)
-                    .border(theme.BORDER_ACTIVE, width: 2)
+//                    .border(theme.BORDER_ACTIVE, width: 2)
             }
     }
     
@@ -350,7 +351,8 @@ struct ShipView: View {
                 footer(showImageOverlay: $showImageOverlay)
     //            footer_New(showImageOverlay: $showImageOverlay)
             }
-            .border(Color.red, width: 2)
+//            .border(Color.red, width: 2)
+            .padding()
             .overlay(imageOverlayView)
             .background(theme.BUTTONBACKGROUND)
     //            .onTapGesture{
@@ -566,7 +568,7 @@ struct PAKImageView: View {
 //        Image(uiImage: image)
         Image(uiImage: self.viewModel.image) // Thread Error
             .resizable()
-            .border(Color.green, width: 2)
+//            .border(Color.green, width: 2)
             .onAppear {
                 print("\(self.id) PAKImageView Image.onAppear loadImage url: \(self.url)")
 //                self.viewModel.loadImage(url: self.url)
