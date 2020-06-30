@@ -33,7 +33,7 @@ struct SquadView: View {
     var header: some View {
         HStack {
             Button(action: {
-                self.viewFactory.viewType = .factionSquadList(.galactic_empire)
+                self.viewFactory.back()
             }) {
                 Text("< Faction Squad List")
             }

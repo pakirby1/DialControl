@@ -219,3 +219,9 @@ struct Squad: Codable, JSONSerialization {
         return Squad.emptySquad
     }
 }
+
+extension Squad: Equatable {
+    static func ==(lhs: Squad, rhs: Squad) -> Bool {
+        return true
+    }
+}

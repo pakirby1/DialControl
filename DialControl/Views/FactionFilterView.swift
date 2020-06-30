@@ -16,7 +16,8 @@ struct FactionFilterView: View {
     var header: some View {
         HStack {
             Button(action: {
-                self.viewFactory.view(viewType: .factionSquadList(self.faction))
+//                self.viewFactory.view(viewType: .factionSquadList(self.faction))
+                self.viewFactory.back()
             }) {
                 Text("< Faction Squad List")
             }

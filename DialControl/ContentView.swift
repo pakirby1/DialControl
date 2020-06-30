@@ -121,12 +121,9 @@ enum Faction: String, CaseIterable {
 }
 
 enum ViewType {
-//    case squadView
-//    case shipView(SquadPilot)
     case shipViewNew(ShipPilot, Squad)
     case squadImportView
     case multiLineTextView
-//    case squadViewNew(String)
     case factionSquadList(Faction)
     case factionFilterView(Faction)
     case squadViewPAK(Squad)
@@ -136,21 +133,18 @@ enum ViewType {
 extension ViewType: Equatable {
     static func ==(lhs: ViewType, rhs: ViewType) -> Bool {
         switch (lhs, rhs) {
-//        case (.squadView, .squadView):
-//            return true
+        case (let .shipViewNew(pilotA, _), let .shipViewNew(pilotB, _)):
+            return pilotA == pilotB
             
-//        case (let .shipViewNew(pilotA), let .shipViewNew(pilotB)):
-//            return pilotA == pilotB
-
         case (.squadImportView, .squadImportView):
             return true
 
         case (.multiLineTextView, .multiLineTextView):
             return true
+        
+        case (let .squadViewPAK(A), let .squadViewPAK(B)) :
+            return A == B
             
-//        case (let .squadViewNew(A), let .squadViewNew(B)):
-//            return A == B
-
         case (.factionSquadList, .factionSquadList):
             return true
 
