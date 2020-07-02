@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import CoreData
 
 // MARK: - Local Store
 protocol ILocalStore {
@@ -26,7 +27,7 @@ class LocalStore : ILocalStore {
             }) {
                 promise(.success(keyValue.value))
             } else {
-                promise(.failure(StoreError.cacheMiss(url)))
+                promise(.failure(StoreError.localMiss(url)))
             }
         }.eraseToAnyPublisher()
     }
@@ -37,19 +38,44 @@ class LocalStore : ILocalStore {
 }
 
 class CoreDataLocalStore : ILocalStore {
+    let moc: NSManagedObjectContext
+    
+    init(moc: NSManagedObjectContext) {
+        self.moc = moc
+    }
+    
     func loadData(url: String) -> AnyPublisher<Data, Error> {
-        // bindableFRC.fetch(predicate: url)
-        Just(Data()).tryMap{ data in
-            guard data.count > 0 else {
-                throw StoreError.cacheMiss(url)
+        return Future<Data, Error> { promise in
+            do {
+                let fetchRequest = ImageData.fetchAllWith(url: url)
+                let fetchedObjects = try self.moc.fetch(fetchRequest)
+                
+                if let image = fetchedObjects.first {
+                    if let data = image.data {
+                        promise(.success(data))
+                    } else {
+                        throw StoreError.localMiss("missing data for \(url)")
+                    }
+                } else {
+                    throw StoreError.localMiss("missing entity ImageData for \(url)")
+                }
+            } catch {
+                print(error)
+                promise(.failure(error))
             }
-            
-            return data
         }.eraseToAnyPublisher()
     }
     
     func saveData(key: String, value: Data) {
-        // bindableFRC.moc.save()
+        let imageData = ImageData(context: self.moc)
+        imageData.url = key
+        imageData.data = value
+        
+        do {
+            try self.moc.save()
+        } catch {
+            print(error)
+        }
     }
 }
 
@@ -87,6 +113,6 @@ struct RemoteStore : IRemoteStore {
 
 // MARK:- Error
 enum StoreError : Error {
-    case cacheMiss(String)
+    case localMiss(String)
     case remoteMiss(String)
 }

@@ -43,6 +43,7 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
                 /// Cannot convert value of type 'Future<Local.LocalObject, Error>' to closure result type 'Future<Data, Error>'
                 self.remoteStore.loadData(url: url)
             }
+            .print()
             .map { result -> Data in
                 print("Success: \(result)")
                 let data = result as! Data

@@ -49,7 +49,7 @@ extension NetworkCacheViewModel {
             case .failure(let error):
                 if let storeError = error as? StoreError {
                     switch storeError {
-                    case .cacheMiss(let url):
+                    case .localMiss(let url):
                         let message = "No Image in local cache for: \n \(url)"
                         self.message = message
                         print("\(Date()) \(self).\(#function) \(message)")

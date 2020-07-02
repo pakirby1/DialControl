@@ -290,11 +290,12 @@ struct ShipView: View {
     
     var bodyContent: some View {
         HStack(alignment: .top) {
-            PAKImageView(url: viewModel.shipImageURL)
+            PAKImageView(url: viewModel.shipImageURL, shipViewModel: self.viewModel)
                 .frame(width: 350.0, height:500)
                 .onTapGesture { self.showCardOverlay.toggle() }
                 .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
-                
+                .environmentObject(viewModel)
+            
                 VStack(spacing: 20) {
                     if (viewModel.force > 0) {
                         LinkedView(maxCount: viewModel.force, type: StatButtonType.force)
@@ -369,8 +370,9 @@ struct ShipView: View {
                         self.viewModel.displayImageOverlay = false
                     }
                 
-                PAKImageView(url: urlString)
+                PAKImageView(url: urlString, shipViewModel: self.viewModel)
                     .frame(width: 500.0, height:350)
+                    .environmentObject(viewModel)
             })
     }
     
@@ -535,24 +537,20 @@ struct URLImageView<T: View>: View {
 }
 
 struct PAKImageView: View {
-    let url: String
-//    @ObservedObject var viewModel: PAKImageViewModel
-    @ObservedObject var viewModel : NetworkCacheViewModel
-    @State var image = UIImage()
     let id = UUID()
+    let url: String
+    @ObservedObject var viewModel : NetworkCacheViewModel
     
-    init(url: String) {
+    init(url: String, shipViewModel: ShipViewModel) {
         // Images Support
-        let dataStore = LocalStore()
+        let dataStore = CoreDataLocalStore(moc: shipViewModel.moc)
         let remoteStore = RemoteStore()
         let service = NetworkCacheService(localStore: dataStore, remoteStore: remoteStore)
         
-//        self.viewModel = PAKImageViewModel()
         self.viewModel = NetworkCacheViewModel(service: service)
         self.url = url
         print("PAKImageView.init(url: \(url)) id = \(id)")
         self.viewModel.loadImage(url: url)
-//        self.image = self.viewModel.image
     }
     
                                                             
@@ -560,14 +558,10 @@ struct PAKImageView: View {
     /// Thread 1: EXC_BAD_ACCESS (code=EXC_I386_GPFLT) when referencing self.viewModel.image.
     /// It works if INetworkCacheViewModel is not adopted
     var body: some View {
-//        Image(uiImage: image)
         Image(uiImage: self.viewModel.image) // Thread Error
             .resizable()
-//            .border(Color.green, width: 2)
             .onAppear {
                 print("\(self.id) PAKImageView Image.onAppear loadImage url: \(self.url)")
-//                self.viewModel.loadImage(url: self.url)
-//                self.image = fetchImageFromURL(urlString: self.url)
             }
     }
 }

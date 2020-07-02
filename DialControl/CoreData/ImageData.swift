@@ -12,6 +12,7 @@ import CoreData
 //@objc(ImageData)
 public class ImageData: NSManagedObject, Identifiable {
     @NSManaged public var url: String?
+    @NSManaged public var data: Data?
     
     public var id: UUID = UUID()
     
@@ -24,6 +25,14 @@ extension ImageData {
     static func fetchAll() -> NSFetchRequest<ImageData> {
         let request: NSFetchRequest<ImageData> = ImageData.fetchRequest() as! NSFetchRequest<ImageData>
         
+        request.sortDescriptors = [NSSortDescriptor(key: "url", ascending: true)]
+          
+        return request
+    }
+    
+    static func fetchAllWith(url: String) -> NSFetchRequest<ImageData> {
+        let request: NSFetchRequest<ImageData> = ImageData.fetchRequest() as! NSFetchRequest<ImageData>
+        request.predicate = NSPredicate(format: "url == %@", url)
         request.sortDescriptors = [NSSortDescriptor(key: "url", ascending: true)]
           
         return request
