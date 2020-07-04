@@ -57,6 +57,7 @@
 		AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC1242F24A32CFC00C0599A /* NetworkService.swift */; };
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
+		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
 		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
@@ -135,6 +136,7 @@
 		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
 		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 				AE2D80F32428C74700248CA4 /* Theme.swift */,
 				AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */,
 				AE028C5A249F82AF00DF689B /* Logging.swift */,
+				AEDAFCF724B095DD0073C60E /* Notes.txt */,
 			);
 			path = DialControl;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				AE2C0EC9243CA52A00042318 /* pilots in Resources */,
 				AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */,
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
+				AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */,
 				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
 				AE4D58CC23F8087D00C66136 /* Assets.xcassets in Resources */,
 				AE2D80F224278B8400248CA4 /* test.txt in Resources */,

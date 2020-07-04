@@ -20,9 +20,14 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
     let remoteStore: Remote
     private var cancellable: AnyCancellable?
     
-    init(localStore: Local, remoteStore: Remote) {
+    init(localStore: Local, remoteStore: Remote, label: String = "") {
         self.localStore = localStore
         self.remoteStore = remoteStore
+        print("\(Date()) \(label) NetworkCacheService.init")
+    }
+    
+    deinit {
+        print("\(Date()) NetworkCacheService.deinit")
     }
     
     /// if data is in local cache, return data
@@ -31,25 +36,33 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
     ///     else if data in not in remote, return StoreError.remoteMiss
     func loadData(url: String) -> AnyPublisher<Data, Error> {
         self.classFuncString = "\(self).\(#function)"
+        var localData: Bool = false
+        print("\(Date()) \(self.classFuncString)")
         
         // see if the image is in the local store
         return self.localStore
             .loadData(url: url)
+            .map { data in
+                print("local data")
+                localData = true
+                return data
+            }
             .catch { error in
                 /// If an error was encountered reading from the local store, eat the error and attempt to read from the remote store
                 /// we will return a new publisher (Future<Data, Error>) that contains either the data or a remote error
-                // .catch { error -> Future<Data, Error> in
-                /// Instance method 'catch' requires the types 'Local.LocalObject' and 'Data' be equivalent
-                /// Cannot convert value of type 'Future<Local.LocalObject, Error>' to closure result type 'Future<Data, Error>'
                 self.remoteStore.loadData(url: url)
             }
             .print()
             .map { result -> Data in
+                /// Did the result come from the local or Remote Store??  I can't tell...
                 print("Success: \(result)")
                 let data = result as! Data
                 
-                // write to the cache
-                self.localStore.saveData(key: url, value: data)
+                // write to the cache, only if it was sourced from the remoteStore
+                if (!localData) {
+                    self.localStore.saveData(key: url, value: data)
+                }
+                
                 return data
             }
             .print()

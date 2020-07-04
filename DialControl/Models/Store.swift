@@ -116,3 +116,8 @@ enum StoreError : Error {
     case localMiss(String)
     case remoteMiss(String)
 }
+
+struct PAKStoreError : Error {
+    let wrappedValue: StoreError
+    let currentValue: StoreError
+}

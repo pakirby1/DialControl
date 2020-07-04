@@ -23,13 +23,17 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     @Published var image: UIImage = UIImage()
     @Published var message = "Placeholder Image"
     
+    let printer: DeallocPrinter
     private let service: INetworkCacheService
     private var cancellable: AnyCancellable?
     private var cache = [String:UIImage]()
     var classFuncString: String = ""
+    let id = UUID()
     
     init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore())) {
+        printer = DeallocPrinter("NetworkCacheViewModel \(id)")
         self.service = service
+        print("\(self).init")
     }
     
     deinit {

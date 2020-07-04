@@ -13,6 +13,12 @@ import TimelaneCombine
 import CoreData
 
 // MARK:- Globals
+/// let dict: [String: PilotFileUrl] = [:]
+/// foreach file in directoryPath {
+///  let key = file.remove("-")
+///  let pfu = PilotFileUrl(filename: file, directoryPath: directoryPath)
+///  dict[key] = pfu
+/// }
 var shipLookupTable: [String:PilotFileUrl] = [
     "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
     "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
@@ -206,7 +212,22 @@ class ShipViewModel: ObservableObject {
     }
 }
 
+class DeallocPrinter {
+    let label: String
+    
+    init(_ label: String) {
+        self.label = label
+        print("allocated \(label)")
+    }
+    
+    deinit {
+        print("deallocated \(label)")
+    }
+}
+
 struct ShipView: View {
+    let printer = DeallocPrinter("ShipView")
+    
     struct TextOverlay: View {
         @Binding var isShowing : Bool
     
@@ -290,7 +311,9 @@ struct ShipView: View {
     
     var bodyContent: some View {
         HStack(alignment: .top) {
-            PAKImageView(url: viewModel.shipImageURL, shipViewModel: self.viewModel)
+            PAKImageView(url: viewModel.shipImageURL,
+                         shipViewModel: self.viewModel,
+                         label: "ship")
                 .frame(width: 350.0, height:500)
                 .onTapGesture { self.showCardOverlay.toggle() }
                 .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
@@ -370,7 +393,7 @@ struct ShipView: View {
                         self.viewModel.displayImageOverlay = false
                     }
                 
-                PAKImageView(url: urlString, shipViewModel: self.viewModel)
+                PAKImageView(url: urlString, shipViewModel: self.viewModel, label: "upgrade")
                     .frame(width: 500.0, height:350)
                     .environmentObject(viewModel)
             })
@@ -398,7 +421,7 @@ struct UpgradesView: View {
                     UpgradeView(viewModel: UpgradeView.UpgradeViewModel(upgrade: $0),
                                 showImageOverlay: self.$showImageOverlay,
                                 imageOverlayUrl: self.$imageOverlayUrl)
-                        .environmentObject(self.viewModel)
+//                        .environmentObject(self.viewModel)
                 }
             }
         }
@@ -536,18 +559,42 @@ struct URLImageView<T: View>: View {
     }
 }
 
+class TestModel: ObservableObject {
+    let service: INetworkCacheService
+    let id = UUID()
+    
+    init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore()))
+    {
+        self.service = service
+        print("allocated \(self) \(id)")
+        print("\(self).init")
+    }
+    
+    deinit {
+        print("deallocated \(self) \(id)")
+    }
+}
+
 struct PAKImageView: View {
+    var printer: DeallocPrinter
     let id = UUID()
     let url: String
     @ObservedObject var viewModel : NetworkCacheViewModel
     
-    init(url: String, shipViewModel: ShipViewModel) {
+    @ObservedObject var testModel: TestModel
+    
+    init(url: String, shipViewModel: ShipViewModel, label: String = "") {
+        printer = DeallocPrinter("PAKImageView \(id)")
+        
         // Images Support
         let dataStore = CoreDataLocalStore(moc: shipViewModel.moc)
         let remoteStore = RemoteStore()
-        let service = NetworkCacheService(localStore: dataStore, remoteStore: remoteStore)
+        let service = NetworkCacheService(localStore: dataStore,
+                                          remoteStore: remoteStore,
+                                          label: label)
         
         self.viewModel = NetworkCacheViewModel(service: service)
+        self.testModel = TestModel()
         self.url = url
         print("PAKImageView.init(url: \(url)) id = \(id)")
         self.viewModel.loadImage(url: url)
