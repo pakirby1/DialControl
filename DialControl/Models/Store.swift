@@ -20,6 +20,13 @@ protocol ILocalStore {
 class LocalStore : ILocalStore {
     private var cache = [String:Data]()
     
+//    let printer: DeallocPrinter
+    let id = UUID()
+    
+    init() {
+//        printer = DeallocPrinter("LocalStore \(id)")
+    }
+    
     func loadData(url: String) -> AnyPublisher<Data, Error> {
         Future<Data, Error> { promise in
             if let keyValue = self.cache.first(where: { tuple -> Bool in
@@ -37,11 +44,14 @@ class LocalStore : ILocalStore {
     }
 }
 
-class CoreDataLocalStore : ILocalStore {
+struct CoreDataLocalStore : ILocalStore {
     let moc: NSManagedObjectContext
+    let printer: DeallocPrinter
+    let id = UUID()
     
     init(moc: NSManagedObjectContext) {
         self.moc = moc
+        printer = DeallocPrinter("CoreDataLocalStore \(id)")
     }
     
     func loadData(url: String) -> AnyPublisher<Data, Error> {
@@ -86,6 +96,13 @@ protocol IRemoteStore {
 }
 
 struct RemoteStore : IRemoteStore {
+    let printer: DeallocPrinter
+    let id = UUID()
+    
+    init() {
+        printer = DeallocPrinter("RemoteStore \(id)")
+    }
+    
     func loadData(url: String) -> Future<Data, Error> {
         let future = Future<Data, Error> { promise in
             let u = URL(string: url)!

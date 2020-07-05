@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import CoreData
 
 // MARK: - NetworkCacheViewModel
 // Workaround for https://swiftsenpai.com/swift/define-protocol-with-published-property-wrapper/
@@ -23,21 +24,28 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     @Published var image: UIImage = UIImage()
     @Published var message = "Placeholder Image"
     
-    let printer: DeallocPrinter
+//    let printer: DeallocPrinter
     private let service: INetworkCacheService
-    private var cancellable: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
     private var cache = [String:UIImage]()
     var classFuncString: String = ""
     let id = UUID()
     
     init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore())) {
-        printer = DeallocPrinter("NetworkCacheViewModel \(id)")
+//        printer = DeallocPrinter("NetworkCacheViewModel \(id)")
         self.service = service
-        print("\(self).init")
+        print("allocated \(self) \(id)")
+    }
+    
+    convenience init(moc: NSManagedObjectContext) {
+        self.init(service: NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: RemoteStore()))
+        print("convenience \(self).init")
+//        print("allocated \(self) \(id)")
     }
     
     deinit {
         print("\(self).deinit")
+        print("deallocated \(self) \(id)")
     }
     
     var imagePublished: Published<UIImage> { _image }
@@ -80,13 +88,45 @@ extension NetworkCacheViewModel {
             }
         }
         
-        self.cancellable = service
-            .loadData(url: url)
-            .lane("PAK.NetworkCacheViewModel.loadData")
-            .receive(on: RunLoop.main)
-            .lane("PAK.NetworkCacheViewModel.receive")
-            .sink(receiveCompletion: processCompletion,
-                  receiveValue: processReceivedValue)
+        /// have to add [weak self] in closure to avoid retain cycle between sink and self
+        func loadImage() {
+            service
+                .loadData(url: url)
+                .lane("PAK.NetworkCacheViewModel.loadData")
+                .receive(on: RunLoop.main)
+                .lane("PAK.NetworkCacheViewModel.receive")
+                .sink(receiveCompletion: { [weak self] complete in
+                    print("\(Date()) \(self).\(#function) received completion event")
+                    
+                    switch complete {
+                    case .failure(let error):
+                        if let storeError = error as? StoreError {
+                            switch storeError {
+                            case .localMiss(let url):
+                                let message = "No Image in local cache for: \n \(url)"
+                                self?.message = message
+                                print("\(Date()) \(self).\(#function) \(message)")
+                            case .remoteMiss:
+                                let message = "No Image found in remote for: \(url)"
+                                self?.message = message
+                                print("\(Date()) \(self).\(#function) \(message)")
+                            }
+                        }
+                        
+                    case .finished:
+                        print("\(Date()) \(self).\(#function) finished")
+                    }
+                },
+                      receiveValue: { [weak self] value in
+                          if let image = UIImage(data: value) {
+                            self?.image = image
+                            self?.message = url
+                          }
+                      })
+                .store(in: &cancellables)
+        }
+        
+        loadImage()
     }
 }
 

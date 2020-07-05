@@ -212,6 +212,11 @@ class ShipViewModel: ObservableObject {
     }
 }
 
+protocol IDeallocPrinter {
+    var printer: DeallocPrinter { get set }
+    var id: UUID { get }
+}
+
 class DeallocPrinter {
     let label: String
     
@@ -562,6 +567,7 @@ struct URLImageView<T: View>: View {
 class TestModel: ObservableObject {
     let service: INetworkCacheService
     let id = UUID()
+    private var cancellable: AnyCancellable?
     
     init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore()))
     {
@@ -575,26 +581,75 @@ class TestModel: ObservableObject {
     }
 }
 
+extension TestModel {
+    func loadImage(url: String) {
+        func processCompletion(complete: Subscribers.Completion<Error>) {
+            print("\(Date()) \(self).\(#function) received completion event")
+            
+            switch complete {
+            case .failure(let error):
+                if let storeError = error as? StoreError {
+                    switch storeError {
+                    case .localMiss(let url):
+                        let message = "No Image in local cache for: \n \(url)"
+//                        self.message = message
+                        print("\(Date()) \(self).\(#function) \(message)")
+                    case .remoteMiss:
+                        let message = "No Image found in remote for: \(url)"
+//                        self.message = message
+                        print("\(Date()) \(self).\(#function) \(message)")
+                    }
+                }
+                
+            case .finished:
+                print("\(Date()) \(self).\(#function) finished")
+            }
+        }
+        
+        func processReceivedValue(value: Data) {
+//            self.printLog("received value")
+//            
+//            if let image = UIImage(data: value) {
+//                self.image = image
+//                self.message = url
+//                self.cache[url] = image
+//                self.printLog("cached \(url)")
+//            }
+        }
+        
+        self.cancellable = service
+            .loadData(url: url)
+            .lane("PAK.NetworkCacheViewModel.loadData")
+            .receive(on: RunLoop.main)
+            .lane("PAK.NetworkCacheViewModel.receive")
+            .sink(receiveCompletion: processCompletion,
+                  receiveValue: processReceivedValue)
+    }
+}
+
+
 struct PAKImageView: View {
     var printer: DeallocPrinter
     let id = UUID()
     let url: String
     @ObservedObject var viewModel : NetworkCacheViewModel
     
-    @ObservedObject var testModel: TestModel
+//    @ObservedObject var testModel: TestModel
     
     init(url: String, shipViewModel: ShipViewModel, label: String = "") {
         printer = DeallocPrinter("PAKImageView \(id)")
         
         // Images Support
-        let dataStore = CoreDataLocalStore(moc: shipViewModel.moc)
-        let remoteStore = RemoteStore()
-        let service = NetworkCacheService(localStore: dataStore,
-                                          remoteStore: remoteStore,
-                                          label: label)
+//        let dataStore = CoreDataLocalStore(moc: shipViewModel.moc)
+//        let remoteStore = RemoteStore()
+//        let service = NetworkCacheService(localStore: dataStore,
+//                                          remoteStore: remoteStore,
+//                                          label: label)
         
-        self.viewModel = NetworkCacheViewModel(service: service)
-        self.testModel = TestModel()
+//        self.viewModel = NetworkCacheViewModel(service: service)
+//        self.viewModel = NetworkCacheViewModel(moc: shipViewModel.moc)
+        self.viewModel = NetworkCacheViewModel(moc: shipViewModel.moc)
+//        self.testModel = TestModel(service: service)
         self.url = url
         print("PAKImageView.init(url: \(url)) id = \(id)")
         self.viewModel.loadImage(url: url)

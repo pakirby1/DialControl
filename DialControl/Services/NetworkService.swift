@@ -18,16 +18,19 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
     var classFuncString: String = ""
     let localStore: Local
     let remoteStore: Remote
-    private var cancellable: AnyCancellable?
+//    private var cancellable: AnyCancellable?
+    let id = UUID()
     
     init(localStore: Local, remoteStore: Remote, label: String = "") {
         self.localStore = localStore
         self.remoteStore = remoteStore
         print("\(Date()) \(label) NetworkCacheService.init")
+        print("allocated \(self) \(id)")
     }
     
     deinit {
         print("\(Date()) NetworkCacheService.deinit")
+        print("deallocated \(self) \(id)")
     }
     
     /// if data is in local cache, return data
