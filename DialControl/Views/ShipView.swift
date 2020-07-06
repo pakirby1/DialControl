@@ -29,6 +29,39 @@ var shipLookupTable: [String:PilotFileUrl] = [
     "asf01bwing": PilotFileUrl(fileName:"a-sf-01-b-wing", directoryPath: "pilots/rebel-alliance")
 ]
 
+struct ShipLookupBuilder {
+    func buildLookup() -> [String:PilotFileUrl] {
+        var ret : [String:PilotFileUrl] = [:]
+        let root = "DialControl/Data/pilots"
+        let fileManager = FileManager()
+        var dirs: [String] = []
+        
+        do {
+            dirs = try fileManager.contentsOfDirectory(atPath: root)
+            
+            for directory in dirs {
+                do {
+                    let files = try fileManager.contentsOfDirectory(atPath: directory)
+                    
+                    for file in files {
+                        let key = file.removeAll(character: "-")
+                        let pfu = PilotFileUrl(fileName: file,
+                                               directoryPath: directory)
+                        ret[key] = pfu
+                    }
+                }
+                catch {
+                    print(error)
+                }
+            }
+        } catch {
+            print(error)
+        }
+        
+        return ret
+    }
+}
+
 struct PilotFileUrl: CustomStringConvertible {
     let fileName: String
     let directoryPath: String
@@ -43,6 +76,12 @@ struct UpgradeSummary : Identifiable {
     let type: String
     let name: String
     let prettyName: String
+}
+
+extension String {
+    func removeAll(character: String) -> String {
+        return components(separatedBy: character).joined()
+    }
 }
 
 private func loadJSON(fileName: String, directoryPath: String) -> String {
