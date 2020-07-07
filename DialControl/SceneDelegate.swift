@@ -31,6 +31,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environment(\.managedObjectContext, moc)
             .environmentObject(viewFactory)
 
+        shipLookupTable = ShipLookupBuilder.buildLookup()
+
+        ShipLookupBuilder.buildAllUpgradesText()
+        
         // Get a list of all font names
         print("===== FONTS =====")
         for fontFamily in UIFont.familyNames.sorted() {

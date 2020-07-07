@@ -96,6 +96,99 @@ struct SquadCardView: View {
                 return upgrade
             }
             
+            /// 7/7/2020
+//            func buildAllUpgrades() {
+//                var allUpgrades : [Upgrade] = []
+//                
+//                if let upgrades = squadPilot.upgrades {
+//                    let astromechs : [Upgrade] = upgrades
+//                        .astromechs
+//                        .map{ getUpgrade(upgradeCategory: "astromech", upgradeName: $0) }
+//                    
+//                    let cannons : [Upgrade] = upgrades
+//                        .cannons
+//                        .map{ getUpgrade(upgradeCategory: "cannon", upgradeName: $0) }
+//                    
+//                    let cargos : [Upgrade] = upgrades
+//                        .cargos
+//                        .map{ getUpgrade(upgradeCategory: "cargo", upgradeName: $0) }
+//                    
+//                    let commands : [Upgrade] = upgrades
+//                        .commands
+//                        .map{ getUpgrade(upgradeCategory: "command", upgradeName: $0) }
+//                    
+//                    let configurations : [Upgrade] = upgrades
+//                        .configurations
+//                        .map{ getUpgrade(upgradeCategory: "configuration", upgradeName: $0) }
+//                    
+//                    let crews : [Upgrade] = upgrades
+//                        .crews
+//                        .map{ getUpgrade(upgradeCategory: "crew", upgradeName: $0) }
+//                    
+//                    let devices : [Upgrade] = upgrades
+//                        .devices
+//                        .map{ getUpgrade(upgradeCategory: "device", upgradeName: $0) }
+//                    
+//                    let forcepowers : [Upgrade] = upgrades
+//                        .forcepowers
+//                        .map{ getUpgrade(upgradeCategory: "forcepower", upgradeName: $0) }
+//                    
+//                    let gunners : [Upgrade] = upgrades
+//                        .gunners
+//                        .map{ getUpgrade(upgradeCategory: "gunner", upgradeName: $0) }
+//                    
+//                    let hardpoints : [Upgrade] = upgrades
+//                        .hardpoints
+//                        .map{ getUpgrade(upgradeCategory: "hardpoint", upgradeName: $0) }
+//                    
+//                    let illicits : [Upgrade] = upgrades
+//                        .illicits
+//                        .map{ getUpgrade(upgradeCategory: "illicit", upgradeName: $0) }
+//                    
+//                    let missiles : [Upgrade] = upgrades
+//                        .missiles
+//                        .map{ getUpgrade(upgradeCategory: "missile", upgradeName: $0) }
+//                    
+//                    let modifications : [Upgrade] = upgrades
+//                        .modifications
+//                        .map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
+//                    
+//                    let sensors : [Upgrade] = upgrades
+//                        .sensors
+//                        .map{ getUpgrade(upgradeCategory: "sensor", upgradeName: $0) }
+//                    
+//                    let tacticalrelays : [Upgrade] = upgrades
+//                        .tacticalrelays
+//                        .map{ getUpgrade(upgradeCategory: "tacticalrelay", upgradeName: $0) }
+//                    
+//                    let talents : [Upgrade] = upgrades
+//                        .talents
+//                        .map{ getUpgrade(upgradeCategory: "talent", upgradeName: $0) }
+//                    
+//                    let teams : [Upgrade] = upgrades
+//                        .teams
+//                        .map{ getUpgrade(upgradeCategory: "team", upgradeName: $0) }
+//                    
+//                    let techs : [Upgrade] = upgrades
+//                        .techs
+//                        .map{ getUpgrade(upgradeCategory: "tech", upgradeName: $0) }
+//                    
+//                    let titles : [Upgrade] = upgrades
+//                        .titles
+//                        .map{ getUpgrade(upgradeCategory: "title", upgradeName: $0) }
+//                    
+//                    let torpedos : [Upgrade] = upgrades
+//                        .torpedos
+//                        .map{ getUpgrade(upgradeCategory: "torpedo", upgradeName: $0) }
+//                    
+//                    let turrets : [Upgrade] = upgrades
+//                        .turrets
+//                        .map{ getUpgrade(upgradeCategory: "turret", upgradeName: $0) }
+//                
+//                    allUpgrades = astromechs + cannons + cargos + commands + configurations + crews + devices + forcepowers + gunners + hardpoints + illicits + missiles + modifications + sensors + tacticalrelays + talents + teams + techs + titles + torpedos + turrets
+//                }
+//            }
+            
             var shipJSON: String = ""
                     
             print("shipName: \(squadPilot.ship)")
@@ -104,8 +197,9 @@ struct SquadCardView: View {
             if let pilotFileUrl = shipLookupTable[squadPilot.ship] {
                 print("pilotFileUrl: \(pilotFileUrl)")
                 
+                let type = pilotFileUrl.fileName.fileExtension()
                 if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
-                                               ofType: "json",
+                                               ofType: type,
                                                inDirectory: pilotFileUrl.directoryPath)
                 {
                     print("path: \(path)")
@@ -127,7 +221,8 @@ struct SquadCardView: View {
             
             var allUpgrades : [Upgrade] = []
             
-            // Add the upgrades from SquadPilot.upgrades
+            // Add the upgrades from SquadPilot.upgrades by iterating over the
+            // UpgradeCardEnum cases and calling getUpgrade
             if let upgrades = squadPilot.upgrades {
                 let sensors: [Upgrade] = upgrades
                     .sensors
@@ -142,6 +237,8 @@ struct SquadCardView: View {
                     .map{ getUpgrade(upgradeCategory: "modification", upgradeName: $0) }
                 
                 allUpgrades = sensors + talents + modifications
+                
+//                allUpgrades = astromechs + cannons + cargos + commands + configurations + crews + devices + forcepowers + gunners + hardpoints + illicits + missiles + modifications + sensors + tacticalrelays + talents + teams + techs + titles + torpedos + turrets
             }
             
             return ShipPilot(ship: ship,

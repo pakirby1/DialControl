@@ -30,31 +30,97 @@ var shipLookupTable: [String:PilotFileUrl] = [
 ]
 
 struct ShipLookupBuilder {
-    func buildLookup() -> [String:PilotFileUrl] {
+    static func buildUpgradeVariable(upgrade: String) {
+        let plural = "\(upgrade)s"
+        
+        let template = """
+            let \(plural) : [Upgrade] = upgrades
+                .\(plural)
+                .map{ getUpgrade(upgradeCategory: "\(upgrade)", upgradeName: $0) }
+        
+        """
+        
+        print(template)
+    }
+
+    static func buildPublicVar(upgrade: String) -> String {
+        let publicVar = "var \(upgrade)s: [String] { return _\(upgrade) ?? [] }"
+        return publicVar
+    }
+    
+    static func buildPrivateVar(upgrade: String) -> String {
+        let privateVar = "private var _\(upgrade): [String]?"
+        return privateVar
+    }
+    
+    static func buildCodingKey(upgrade: String) -> String {
+        let codingKey = "case _\(upgrade) = \"\(upgrade)\""
+        return(codingKey)
+    }
+    
+    static func buildAllUpgradesText() {
+        
+        var allUpgrades = "allUpgrades = "
+        var publicVars: [String] = []
+        var privateVars: [String] = []
+        var codingKeys: [String] = []
+        
+        print("\nSquadCardView.getShips()\n")
+        
+        for upgrade in UpgradeCardEnum.allCases {
+            let formatted = "\(upgrade)".removeAll(character: "(\"\")")
+           allUpgrades += formatted + "s + "
+           buildUpgradeVariable(upgrade: formatted)
+           publicVars.append(buildPublicVar(upgrade: formatted))
+           privateVars.append(buildPrivateVar(upgrade: formatted))
+           codingKeys.append(buildCodingKey(upgrade: formatted))
+        }
+        
+//        let allUpgrades = "allUpgrades " + UpgradeCardEnum.allCases.joined(separator: " + ")
+        allUpgrades = allUpgrades.removeAll(character: "(\"\")")
+        
+        
+        print(allUpgrades)
+        
+        /// public vars
+        print("\nSquadPilotUpgrade public vars\n")
+        publicVars.forEach{ print($0) }
+        
+        print("\nSquadPilotUpgrade private vars\n")
+        privateVars.forEach{ print($0) }
+        
+        print("\nSquadPilotUpgrade coding keys\n")
+        codingKeys.forEach{ print($0) }
+    }
+
+    
+
+    static func buildLookup() -> [String:PilotFileUrl] {
         var ret : [String:PilotFileUrl] = [:]
-        let root = "DialControl/Data/pilots"
-        let fileManager = FileManager()
-        var dirs: [String] = []
+        let fm = FileManager.default
+        let path = Bundle.main.resourcePath! + "/pilots"
+        
+        print(path)
         
         do {
-            dirs = try fileManager.contentsOfDirectory(atPath: root)
-            
-            for directory in dirs {
-                do {
-                    let files = try fileManager.contentsOfDirectory(atPath: directory)
-                    
-                    for file in files {
-                        let key = file.removeAll(character: "-")
-                        let pfu = PilotFileUrl(fileName: file,
-                                               directoryPath: directory)
-                        ret[key] = pfu
-                    }
-                }
-                catch {
-                    print(error)
+            let dirs = try fm.contentsOfDirectory(atPath: path)
+
+            for dir in dirs {
+                print("\(dir)")
+                let subDir = path + "/" + dir
+                let files = try fm.contentsOfDirectory(atPath: subDir)
+                
+                for file in files {
+                    print("\t\(file)")
+                    let key = file.removeAll(character: "-")
+                    let directoryPath = "pilots/" + dir
+                    let pfu = PilotFileUrl(fileName: file,
+                                           directoryPath: directoryPath)
+                    ret[key] = pfu
                 }
             }
         } catch {
+            // failed to read directory – bad permissions, perhaps?
             print(error)
         }
         
@@ -126,7 +192,32 @@ func fetchImageFromURL(urlString: String) -> UIImage {
     return image!
 }
 
-enum UpgradeCardEnum {
+enum UpgradeCardEnum : CaseIterable {
+    static var allCases: [UpgradeCardEnum] {
+        return [.astromech(""),
+        .cannon(""),
+        .cargo(""),
+        .command(""),
+        .configuration(""),
+        .crew(""),
+        .device(""),
+        .forcepower(""),
+        .gunner(""),
+        .hardpoint(""),
+        .illicit(""),
+        .missile(""),
+        .modification(""),
+        .sensor(""),
+        .tacticalrelay(""),
+        .talent(""),
+        .team(""),
+        .tech(""),
+        .title(""),
+        .torpedo(""),
+        .turret("")]
+    }
+
+    
     case astromech(String)
     case cannon(String)
     case cargo(String)
