@@ -251,7 +251,9 @@ struct SquadCardView: View {
                              points: squadPilot.points)
         }
         
-        self.shipPilots = self.squad.pilots.map{ getShip(squadPilot: $0) }
+        self.shipPilots = self.squad.pilots.map{
+            getShip(squadPilot: $0)
+        }
     }
     
     let squad: Squad
@@ -273,10 +275,14 @@ struct SquadCardView: View {
                         .background(Color.blue)
                         .clipShape(Circle())
                     
+                    Spacer()
+                    
                     Text(squad.name)
                         .font(.title)
                         .lineLimit(1)
                         .foregroundColor(theme.TEXT_FOREGROUND)
+                    
+                    Spacer()
                 }
                 
                 ForEach(shipPilots) { shipPilot in
@@ -372,6 +378,7 @@ struct PilotDetailsView: View {
             if (displayUpgrades) {
                 ForEach(shipPilot.upgrades) { upgrade in
                     Text("\(upgrade.name)")
+                        .foregroundColor(Color.white)
                 }
             }
         }

@@ -147,7 +147,7 @@ extension String {
 
 private func loadJSON(fileName: String, directoryPath: String) -> String {
     if let path = Bundle.main.path(forResource: fileName,
-                                   ofType: "json",
+                                   ofType: "",
                                    inDirectory: directoryPath)
     {
         print("path: \(path)")
@@ -461,7 +461,7 @@ struct ShipView: View {
                     if (viewModel.shields > 0) {
                         LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield)
                     }
-                }
+                }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 
                 DialView(temperature: 0,
@@ -497,7 +497,9 @@ struct ShipView: View {
     func buildView() -> AnyView {
         return AnyView(VStack(alignment: .leading) {
                 headerView
+                CustomDivider()
                 bodyContent
+                CustomDivider()
                 footer(showImageOverlay: $showImageOverlay)
     //            footer_New(showImageOverlay: $showImageOverlay)
             }
@@ -565,7 +567,7 @@ struct UpgradeView: View {
         var imageUrl: String {
             var imageUrl = ""
             
-            let type = upgrade.sides[0].type.lowercased()
+            let type = upgrade.sides[0].type.lowercased() + ".json"
             
             let jsonString = loadJSON(fileName: type, directoryPath: "upgrades")
             
