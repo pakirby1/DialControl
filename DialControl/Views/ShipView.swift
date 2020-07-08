@@ -19,15 +19,8 @@ import CoreData
 ///  let pfu = PilotFileUrl(filename: file, directoryPath: directoryPath)
 ///  dict[key] = pfu
 /// }
-var shipLookupTable: [String:PilotFileUrl] = [
-    "alphaclassstarwing" : PilotFileUrl(fileName: "alpha-class-star-wing", directoryPath: "pilots/galactic-empire"),
-    "tieskstriker" : PilotFileUrl(fileName: "tie-sk-striker", directoryPath: "pilots/galactic-empire"),
-    "tieadvancedx1" : PilotFileUrl(fileName:"tie-advanced-x1", directoryPath: "pilots/galactic-empire"),
-    "tieininterceptor" : PilotFileUrl(fileName:"tie-in-interceptor", directoryPath: "pilots/galactic-empire"),
-    "ut60duwing": PilotFileUrl(fileName:"ut-60d-u-wing", directoryPath: "pilots/rebel-alliance"),
-    "sheathipedeclassshuttle": PilotFileUrl(fileName:"sheathipede-class-shuttle", directoryPath: "pilots/rebel-alliance"),
-    "asf01bwing": PilotFileUrl(fileName:"a-sf-01-b-wing", directoryPath: "pilots/rebel-alliance")
-]
+
+var shipLookupTable: [String:PilotFileUrl] = [:]
 
 struct ShipLookupBuilder {
     static func buildUpgradeVariable(upgrade: String) {
@@ -60,16 +53,17 @@ struct ShipLookupBuilder {
     
     static func buildAllUpgradesText() {
         
-        var allUpgrades = "allUpgrades = "
+        var allUpgrades: [String] = []
         var publicVars: [String] = []
         var privateVars: [String] = []
         var codingKeys: [String] = []
         
-        print("\nSquadCardView.getShips()\n")
+        
         
         for upgrade in UpgradeCardEnum.allCases {
             let formatted = "\(upgrade)".removeAll(character: "(\"\")")
-           allUpgrades += formatted + "s + "
+           
+            allUpgrades.append("allUpgrades.append(" + formatted + "s)")
            buildUpgradeVariable(upgrade: formatted)
            publicVars.append(buildPublicVar(upgrade: formatted))
            privateVars.append(buildPrivateVar(upgrade: formatted))
@@ -77,10 +71,10 @@ struct ShipLookupBuilder {
         }
         
 //        let allUpgrades = "allUpgrades " + UpgradeCardEnum.allCases.joined(separator: " + ")
-        allUpgrades = allUpgrades.removeAll(character: "(\"\")")
+//        allUpgrades = allUpgrades.removeAll(character: "(\"\")")
         
-        
-        print(allUpgrades)
+        print("\nSquadCardView.getShips()\n")
+        allUpgrades.forEach{ print($0) }
         
         /// public vars
         print("\nSquadPilotUpgrade public vars\n")
@@ -112,7 +106,8 @@ struct ShipLookupBuilder {
                 
                 for file in files {
                     print("\t\(file)")
-                    let key = file.removeAll(character: "-")
+                    let filename = file.fileName()
+                    let key = filename.removeAll(character: "-")
                     let directoryPath = "pilots/" + dir
                     let pfu = PilotFileUrl(fileName: file,
                                            directoryPath: directoryPath)

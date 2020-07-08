@@ -129,18 +129,72 @@ let New_squadJSON = """
 """
 
 struct SquadPilotUpgrade: Codable {
-    var talents: [String] { return _talent ?? [] }
+    var astromechs: [String] { return _astromech ?? [] }
+    var cannons: [String] { return _cannon ?? [] }
+    var cargos: [String] { return _cargo ?? [] }
+    var commands: [String] { return _command ?? [] }
+    var configurations: [String] { return _configuration ?? [] }
+    var crews: [String] { return _crew ?? [] }
+    var devices: [String] { return _device ?? [] }
+    var forcepowers: [String] { return _forcepower ?? [] }
+    var gunners: [String] { return _gunner ?? [] }
+    var hardpoints: [String] { return _hardpoint ?? [] }
+    var illicits: [String] { return _illicit ?? [] }
+    var missiles: [String] { return _missile ?? [] }
     var modifications: [String] { return _modification ?? [] }
     var sensors: [String] { return _sensor ?? [] }
-    
-    private var _sensor: [String]?
-    private var _talent: [String]?
+    var tacticalrelays: [String] { return _tacticalrelay ?? [] }
+    var talents: [String] { return _talent ?? [] }
+    var teams: [String] { return _team ?? [] }
+    var techs: [String] { return _tech ?? [] }
+    var titles: [String] { return _title ?? [] }
+    var torpedos: [String] { return _torpedo ?? [] }
+    var turrets: [String] { return _turret ?? [] }
+
+    private var _astromech: [String]?
+    private var _cannon: [String]?
+    private var _cargo: [String]?
+    private var _command: [String]?
+    private var _configuration: [String]?
+    private var _crew: [String]?
+    private var _device: [String]?
+    private var _forcepower: [String]?
+    private var _gunner: [String]?
+    private var _hardpoint: [String]?
+    private var _illicit: [String]?
+    private var _missile: [String]?
     private var _modification: [String]?
-    
+    private var _sensor: [String]?
+    private var _tacticalrelay: [String]?
+    private var _talent: [String]?
+    private var _team: [String]?
+    private var _tech: [String]?
+    private var _title: [String]?
+    private var _torpedo: [String]?
+    private var _turret: [String]?
+
     enum CodingKeys: String, CodingKey {
-        case _sensor = "sensor"
-        case _talent = "talent"
+        case _astromech = "astromech"
+        case _cannon = "cannon"
+        case _cargo = "cargo"
+        case _command = "command"
+        case _configuration = "configuration"
+        case _crew = "crew"
+        case _device = "device"
+        case _forcepower = "forcepower"
+        case _gunner = "gunner"
+        case _hardpoint = "hardpoint"
+        case _illicit = "illicit"
+        case _missile = "missile"
         case _modification = "modification"
+        case _sensor = "sensor"
+        case _tacticalrelay = "tacticalrelay"
+        case _talent = "talent"
+        case _team = "team"
+        case _tech = "tech"
+        case _title = "title"
+        case _torpedo = "torpedo"
+        case _turret = "turret"
     }
 }
 

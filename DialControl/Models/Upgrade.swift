@@ -451,7 +451,7 @@ struct Upgrade: Codable, Identifiable {
     let name: String
     let limited: Int
     let sides: [Side]
-    let cost: Cost
+    let cost: Cost?
     let hyperspace: Bool
     let xws: String
 //    let type: String?   // Doesn't exist in json but has to be optional to set it later
