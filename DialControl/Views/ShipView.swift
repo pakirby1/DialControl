@@ -87,8 +87,6 @@ struct ShipLookupBuilder {
         codingKeys.forEach{ print($0) }
     }
 
-    
-
     static func buildLookup() -> [String:PilotFileUrl] {
         var ret : [String:PilotFileUrl] = [:]
         let fm = FileManager.default
@@ -106,9 +104,14 @@ struct ShipLookupBuilder {
                 
                 for file in files {
                     print("\t\(file)")
-                    let filename = file.fileName()
-                    let key = filename.removeAll(character: "-")
-                    let directoryPath = "pilots/" + dir
+                    let filename = file.fileName()  // tie-ln-fighter.json
+                    var key = filename.removeAll(character: "-")    // tielnfighter
+                    let directoryPath = "pilots/" + dir // rebel-alliance
+                    
+                    if dir == "rebel-alliance" {
+                        key = "rebel" + key // rebeltielnfighter
+                    }
+                    
                     let pfu = PilotFileUrl(fileName: file,
                                            directoryPath: directoryPath)
                     ret[key] = pfu

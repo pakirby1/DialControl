@@ -261,11 +261,29 @@ struct SquadCardView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @State var shipPilots: [ShipPilot] = []
     
-    var body: some View {
+    var emptySection: some View {
+        Section {
+            Text("No ships found")
+        }
+    }
+      
+    var shipsSection: some View {
+        Section {
+            ForEach(shipPilots) { shipPilot in
+                Button(action: {
+                    self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
+                }) {
+                    PilotCardView(shipPilot: shipPilot)
+                }
+            }
+        }
+    }
+    
+    var content: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
                 .fill(theme.BORDER_INACTIVE)
-
+            
             VStack(alignment: .leading) {
                 HStack {
                     Text("\(squad.points)")
@@ -284,14 +302,14 @@ struct SquadCardView: View {
                     
                     Spacer()
                 }
-                
-                ForEach(shipPilots) { shipPilot in
-                    Button(action: {
-                        self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
-                    }) {
-                        PilotCardView(shipPilot: shipPilot)
+
+                List {
+                    if shipPilots.isEmpty {
+                        emptySection
+                    } else {
+                        shipsSection
                     }
-                }
+                }.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 
                 Spacer()
             }
@@ -300,6 +318,10 @@ struct SquadCardView: View {
         }
         .onAppear(perform: getShips)
         .frame(width: 600, height: 600)
+    }
+    
+    var body: some View {
+        content
     }
 }
 

@@ -167,7 +167,7 @@ struct FactionSquadCard: View {
     }
     
     var pointsView: some View {
-        Text("\(viewModel.points)")
+        Text("\(viewModel.squad.points)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -176,7 +176,7 @@ struct FactionSquadCard: View {
     }
     
     var nameView: some View {
-        Text(viewModel.name)
+        Text(viewModel.squad.name)
             .font(.title)
             .lineLimit(1)
             .foregroundColor(viewModel.textForeground)
