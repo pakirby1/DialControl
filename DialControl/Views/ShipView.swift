@@ -12,72 +12,7 @@ import Combine
 import TimelaneCombine
 import CoreData
 
-// MARK:- Globals
-/// let dict: [String: PilotFileUrl] = [:]
-/// foreach file in directoryPath {
-///  let key = file.remove("-")
-///  let pfu = PilotFileUrl(filename: file, directoryPath: directoryPath)
-///  dict[key] = pfu
-/// }
-
-
-struct UpgradeSummary : Identifiable {
-    let id = UUID()
-    let type: String
-    let name: String
-    let prettyName: String
-}
-
-enum UpgradeCardEnum : CaseIterable {
-    static var allCases: [UpgradeCardEnum] {
-        return [.astromech(""),
-        .cannon(""),
-        .cargo(""),
-        .command(""),
-        .configuration(""),
-        .crew(""),
-        .device(""),
-        .forcepower(""),
-        .gunner(""),
-        .hardpoint(""),
-        .illicit(""),
-        .missile(""),
-        .modification(""),
-        .sensor(""),
-        .tacticalrelay(""),
-        .talent(""),
-        .team(""),
-        .tech(""),
-        .title(""),
-        .torpedo(""),
-        .turret("")]
-    }
-
-    
-    case astromech(String)
-    case cannon(String)
-    case cargo(String)
-    case command(String)
-    case configuration(String)
-    case crew(String)
-    case device(String)
-    case forcepower(String)
-    case gunner(String)
-    case hardpoint(String)
-    case illicit(String)
-    case missile(String)
-    case modification(String)
-    case sensor(String)
-    case tacticalrelay(String)
-    case talent(String)
-    case team(String)
-    case tech(String)
-    case title(String)
-    case torpedo(String)
-    case turret(String)
-}
-
-// MARK:- Ship view
+// MARK:- ShipViewModel
 class ShipViewModel: ObservableObject {
     var shipPilot: ShipPilot
     var squad: Squad
@@ -178,27 +113,8 @@ class ShipViewModel: ObservableObject {
     }
 }
 
-protocol IDeallocPrinter {
-    var printer: DeallocPrinter { get set }
-    var id: UUID { get }
-}
-
-class DeallocPrinter {
-    let label: String
-    
-    init(_ label: String) {
-        self.label = label
-        print("allocated \(label)")
-    }
-    
-    deinit {
-        print("deallocated \(label)")
-    }
-}
-
+// MARK:- ShipView
 struct ShipView: View {
-    let printer = DeallocPrinter("ShipView")
-    
     struct TextOverlay: View {
         @Binding var isShowing : Bool
     
@@ -210,39 +126,61 @@ struct ShipView: View {
                 .opacity(self.isShowing ? 1 : 0)
         }
     }
-    
-    let viewModel: ShipViewModel
+
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
     @State var showCardOverlay: Bool = false
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
+    @State var displayOverlay: Bool = false
+    let viewModel: ShipViewModel
     let theme: Theme = WestworldUITheme()
-    
-    let dial: [String] = [
-                  "1TW",
-                  "1YW",
-                  "2TB",
-                  "2BB",
-                  "2FB",
-                  "2NB",
-                  "2YB",
-                  "3LR",
-                  "3TW",
-                  "3BW",
-                  "3FB",
-                  "3NW",
-                  "3YW",
-                  "3PR",
-                  "4FB",
-                  "4KR",
-                  "5FW"
-                ]
+    let printer = DeallocPrinter("ShipView")
     
     init(viewModel: ShipViewModel) {
         self.viewModel = viewModel
     }
 
+    // MARK:- computed properties
+    var body: some View {
+        buildView()
+    }
+    
+    var bodyContent: some View {
+        HStack(alignment: .top) {
+            ImageView(url: viewModel.shipImageURL,
+                         shipViewModel: self.viewModel,
+                         label: "ship")
+                .frame(width: 350.0, height:500)
+                .onTapGesture { self.showCardOverlay.toggle() }
+                .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
+                .environmentObject(viewModel)
+            
+                VStack(spacing: 20) {
+                    if (viewModel.force > 0) {
+                        LinkedView(maxCount: viewModel.force, type: StatButtonType.force)
+                    }
+                    
+                    if (viewModel.charges > 0) {
+                        LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge)
+                    }
+                    
+                    if (viewModel.shields > 0) {
+                        LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield)
+                    }
+                }.padding(.top, 20)
+//                .border(Color.green, width: 2)
+
+                DialView(temperature: 0,
+                     diameter: 400,
+                     currentManeuver: $currentManeuver,
+                     dial: self.viewModel.shipPilot.ship.dial,
+                     displayAngleRanges: false)
+                .frame(width: 400.0,height:400)
+//                    .border(theme.BORDER_ACTIVE, width: 2)
+            }
+    }
+    
     var backButtonView: some View {
         Button(action: {
             self.viewFactory.back()
@@ -280,42 +218,7 @@ struct ShipView: View {
         }
     }
     
-    var bodyContent: some View {
-        HStack(alignment: .top) {
-            PAKImageView(url: viewModel.shipImageURL,
-                         shipViewModel: self.viewModel,
-                         label: "ship")
-                .frame(width: 350.0, height:500)
-                .onTapGesture { self.showCardOverlay.toggle() }
-                .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
-                .environmentObject(viewModel)
-            
-                VStack(spacing: 20) {
-                    if (viewModel.force > 0) {
-                        LinkedView(maxCount: viewModel.force, type: StatButtonType.force)
-                    }
-                    
-                    if (viewModel.charges > 0) {
-                        LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge)
-                    }
-                    
-                    if (viewModel.shields > 0) {
-                        LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield)
-                    }
-                }.padding(.top, 20)
-//                .border(Color.green, width: 2)
-
-                DialView(temperature: 0,
-                     diameter: 400,
-                     currentManeuver: $currentManeuver,
-                     dial: self.viewModel.shipPilot.ship.dial,
-                     displayAngleRanges: false)
-                .frame(width: 400.0,height:400)
-//                    .border(theme.BORDER_ACTIVE, width: 2)
-            }
-    }
-    
-    func footer(showImageOverlay: Binding<Bool>) -> some View {
+    var footer: some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,
                      showImageOverlay: $showImageOverlay,
                      imageOverlayUrl: $imageOverlayUrl)
@@ -335,13 +238,14 @@ struct ShipView: View {
         }
     }
     
+    // MARK:- functions
     func buildView() -> AnyView {
         return AnyView(VStack(alignment: .leading) {
                 headerView
                 CustomDivider()
                 bodyContent
                 CustomDivider()
-                footer(showImageOverlay: $showImageOverlay)
+                footer
     //            footer_New(showImageOverlay: $showImageOverlay)
             }
 //            .border(Color.red, width: 2)
@@ -366,302 +270,12 @@ struct ShipView: View {
                         self.viewModel.displayImageOverlay = false
                     }
                 
-                PAKImageView(url: urlString, shipViewModel: self.viewModel, label: "upgrade")
+                ImageView(url: urlString, shipViewModel: self.viewModel, label: "upgrade")
                     .frame(width: 500.0, height:350)
                     .environmentObject(viewModel)
             })
     }
-    
-    @State var displayOverlay: Bool = false
-    
-    var body: some View {
-        buildView()
-    }
-}
-
-// MARK:- Upgrades
-struct UpgradesView: View {
-    @EnvironmentObject var viewModel: ShipViewModel
-    @State var imageName: String = ""
-    let upgrades: [Upgrade]
-    @Binding var showImageOverlay: Bool
-    @Binding var imageOverlayUrl: String
-    
-    var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 20) {
-                ForEach(upgrades) {
-                    UpgradeView(viewModel: UpgradeView.UpgradeViewModel(upgrade: $0),
-                                showImageOverlay: self.$showImageOverlay,
-                                imageOverlayUrl: self.$imageOverlayUrl)
-//                        .environmentObject(self.viewModel)
-                }
-            }
-        }
-    }
-}
-
-struct UpgradeView: View {
-    struct UpgradeViewModel {
-        let upgrade: Upgrade
-        
-        var imageUrl: String {
-            var imageUrl = ""
-            
-            let type = upgrade.sides[0].type.lowercased() + ".json"
-            
-            let jsonString = loadJSON(fileName: type, directoryPath: "upgrades")
-            
-            let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-            
-            let matches = upgrades.filter({ $0.xws == upgrade.xws })
-            
-            if (matches.count > 0) {
-                let sides = matches[0].sides
-                
-                if (sides.count > 0) {
-                    imageUrl = sides[0].image
-                }
-            }
-            
-            return imageUrl
-        }
-    }
-    
-    let viewModel: UpgradeViewModel
-    @Binding var showImageOverlay: Bool
-    @Binding var imageOverlayUrl: String
-    @EnvironmentObject var shipViewModel: ShipViewModel
-    
-    var body: some View {
-        Text("\(self.viewModel.upgrade.name)")
-            .foregroundColor(.white)
-            .font(.largeTitle)
-            .padding(15)
-            .background(Color.red)
-//            .contentShape(RoundedRectangle(cornerRadius: 10))
-//            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .onTapGesture {
-                print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")
-                self.showImageOverlay = true
-                self.shipViewModel.displayImageOverlay = true
-                self.imageOverlayUrl = self.viewModel.imageUrl
-            }
-    }
-}
-
-/*
- func asyncMethod(completion: ((String) -> Void)) {
-     //...
- }
-
- func promisifiedAsyncMethod() -> AnyPublisher<String, Never> {
-     Future<String, Never> { promise in
-         asyncMethod { value in
-             promise(.success(value))
-         }
-     }
-     .eraseToAnyPublisher()
- }
- */
-
-// MARK:- Images
-/// https://theswiftdev.com/how-to-download-files-with-urlsession-using-combine-publishers-and-subscribers/
-/// https://www.vadimbulavin.com/asynchronous-swiftui-image-loading-from-url-with-combine-and-swift/
-// Fetches an image from an url and publishes the UIImage
-// on a Combine publisher
-class ImageFetcher : ObservableObject {
-    @Published var image: UIImage?
-    var url: URL
-    
-    init(url: URL) {
-        self.url = url
-    }
-    
-    private var cancellable: AnyCancellable?
-    
-    deinit {
-        cancellable?.cancel()
-    }
-
-    func load() {
-        print("url: \(url.absoluteString)")
-        
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .map {
-                print("\($0.data.count)")
-                return UIImage(data: $0.data)
-            }
-            .replaceError(with: nil)
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.image, on: self)
-    }
-    
-    func cancel() {
-        cancellable?.cancel()
-    }
-}
-
-// View that references the ImageFetcher
-// let url = URL(string: "https://image.tmdb.org/t/p/original/pThyQovXQrw2m0s9x82twj48Jq4.jpg")!
-// URLImageView(url: URL(string: "https://image.tmdb.org/t/p/original/pThyQovXQrw2m0s9x82twj48Jq4.jpg")!, view: Text("Loading.."))
-struct URLImageView<T: View>: View {
-//    var url: URL
-    @ObservedObject private var imageFetcher: ImageFetcher
-    private let placeholder: T?
-
-    private var image: some View {
-        Group {
-            if imageFetcher.image != nil {
-                Image(uiImage: imageFetcher.image!)
-                    .resizable()
-            } else {
-                placeholder
-            }
-        }
-    }
-    
-    var body: some View {
-        image.onAppear(perform: imageFetcher.load)
-//        EmptyView()
-    }
-    
-    init(url: URL, view: T? = nil) {
-        self.imageFetcher = ImageFetcher(url: url)
-        self.placeholder = view
-    }
-}
-
-class TestModel: ObservableObject {
-    let service: INetworkCacheService
-    let id = UUID()
-    private var cancellable: AnyCancellable?
-    
-    init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore()))
-    {
-        self.service = service
-        print("allocated \(self) \(id)")
-        print("\(self).init")
-    }
-    
-    deinit {
-        print("deallocated \(self) \(id)")
-    }
-}
-
-extension TestModel {
-    func loadImage(url: String) {
-        func processCompletion(complete: Subscribers.Completion<Error>) {
-            print("\(Date()) \(self).\(#function) received completion event")
-            
-            switch complete {
-            case .failure(let error):
-                if let storeError = error as? StoreError {
-                    switch storeError {
-                    case .localMiss(let url):
-                        let message = "No Image in local cache for: \n \(url)"
-//                        self.message = message
-                        print("\(Date()) \(self).\(#function) \(message)")
-                    case .remoteMiss:
-                        let message = "No Image found in remote for: \(url)"
-//                        self.message = message
-                        print("\(Date()) \(self).\(#function) \(message)")
-                    }
-                }
-                
-            case .finished:
-                print("\(Date()) \(self).\(#function) finished")
-            }
-        }
-        
-        func processReceivedValue(value: Data) {
-//            self.printLog("received value")
-//            
-//            if let image = UIImage(data: value) {
-//                self.image = image
-//                self.message = url
-//                self.cache[url] = image
-//                self.printLog("cached \(url)")
-//            }
-        }
-        
-        self.cancellable = service
-            .loadData(url: url)
-            .lane("PAK.NetworkCacheViewModel.loadData")
-            .receive(on: RunLoop.main)
-            .lane("PAK.NetworkCacheViewModel.receive")
-            .sink(receiveCompletion: processCompletion,
-                  receiveValue: processReceivedValue)
-    }
 }
 
 
-struct PAKImageView: View {
-    var printer: DeallocPrinter
-    let id = UUID()
-    let url: String
-    @ObservedObject var viewModel : NetworkCacheViewModel
-    
-//    @ObservedObject var testModel: TestModel
-    
-    init(url: String, shipViewModel: ShipViewModel, label: String = "") {
-        printer = DeallocPrinter("PAKImageView \(id)")
-        
-        // Images Support
-//        let dataStore = CoreDataLocalStore(moc: shipViewModel.moc)
-//        let remoteStore = RemoteStore()
-//        let service = NetworkCacheService(localStore: dataStore,
-//                                          remoteStore: remoteStore,
-//                                          label: label)
-        
-//        self.viewModel = NetworkCacheViewModel(service: service)
-//        self.viewModel = NetworkCacheViewModel(moc: shipViewModel.moc)
-        self.viewModel = NetworkCacheViewModel(moc: shipViewModel.moc)
-//        self.testModel = TestModel(service: service)
-        self.url = url
-        print("PAKImageView.init(url: \(url)) id = \(id)")
-        self.viewModel.loadImage(url: url)
-    }
-    
-                                                            
-    /// If the NetworkCacheViewModel adopts INetworkCacheViewModel, I get the following error
-    /// Thread 1: EXC_BAD_ACCESS (code=EXC_I386_GPFLT) when referencing self.viewModel.image.
-    /// It works if INetworkCacheViewModel is not adopted
-    var body: some View {
-        Image(uiImage: self.viewModel.image) // Thread Error
-            .resizable()
-            .onAppear {
-                print("\(self.id) PAKImageView Image.onAppear loadImage url: \(self.url)")
-            }
-    }
-}
 
-class PAKImageViewModel: ObservableObject {
-    @Published var image: UIImage
-    
-    let id = UUID()
-    
-    deinit {
-        print("PAKImageViewModel.deinit \(#function).id \(id)")
-    }
-    
-    init() {
-        let url = "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_105.png"
-        self.image = fetchImageFromURL(urlString: url)
-        print("PAKImageViewModel.init = \(id) \(url)")
-    }
-    
-    func loadImage(url: String) {
-        self.image = fetchImageFromURL(urlString: url)
-        print("PAKImageViewModel.loadImage = \(id) \(url)")
-    }
-}
-
-// Workaround for https://swiftsenpai.com/swift/define-protocol-with-published-property-wrapper/
-extension PAKImageViewModel : INetworkCacheViewModel {
-    var imagePublisher: Published<UIImage>.Publisher {
-        $image
-    }
-    
-    var imagePublished: Published<UIImage> { _image }
-}
