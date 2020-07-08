@@ -134,10 +134,6 @@ class FactionSquadCardViewModel : ObservableObject {
         theme.BORDER_INACTIVE
     }
     
-    var name: String {
-        squadData.name ?? "Unnamed"
-    }
-    
     var json: String {
         squadData.json ?? ""
     }

@@ -95,13 +95,3 @@ struct SquadXWSImportView : View {
     }
 }
 
-public struct CustomStyle : TextFieldStyle {
-  public func _body(configuration: TextField<Self._Label>) -> some View {
-    configuration
-      .padding(7)
-      .background(
-        RoundedRectangle(cornerRadius: 15)
-          .strokeBorder(Color.black, lineWidth: 5)
-    )
-  }
-}

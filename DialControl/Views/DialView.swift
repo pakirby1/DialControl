@@ -11,18 +11,6 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
-class TimeCounter: ObservableObject {
-    @Published var time = 0
-
-    lazy var timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in self.time += 1
-        print("TimeCounter.time: \(self.time)")
-    }
-    
-    init() {
-        timer.fire()
-    }
-}
-
 struct DialView: View {
     @State private var value: CGFloat = 0
     @State private var oldCoordinate: (CGFloat, CGFloat) = (0.0, 0.0)
@@ -425,7 +413,7 @@ struct DialView: View {
                 .padding(2))
         }
         
-        // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font.
+        // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font. See baselineOffset
         if maneuverList[Int(currentSegment)].bearing == .F {
 //            return buildSFSymbolView()
             return AnyView(buildTextFontView(baselineOffset: -10))

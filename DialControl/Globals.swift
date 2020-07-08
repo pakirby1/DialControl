@@ -155,3 +155,40 @@ struct URLImageView<T: View>: View {
         self.placeholder = view
     }
 }
+
+struct NavigationContentView : View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Hello World")
+                NavigationLink(destination:Text("Hello")) {
+                    Text("Do Something")
+                }
+            }
+        }
+    }
+}
+
+class TimeCounter: ObservableObject {
+    @Published var time = 0
+
+    lazy var timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in self.time += 1
+        print("TimeCounter.time: \(self.time)")
+    }
+    
+    init() {
+        timer.fire()
+    }
+}
+
+
+public struct CustomStyle : TextFieldStyle {
+  public func _body(configuration: TextField<Self._Label>) -> some View {
+    configuration
+      .padding(7)
+      .background(
+        RoundedRectangle(cornerRadius: 15)
+          .strokeBorder(Color.black, lineWidth: 5)
+    )
+  }
+}

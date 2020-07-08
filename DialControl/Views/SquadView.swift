@@ -11,6 +11,7 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
+// MARK:- SquadView
 class SquadViewModel : ObservableObject {
     @Published var alertText: String = ""
     @Published var showAlert: Bool = false
@@ -325,6 +326,7 @@ struct SquadCardView: View {
     }
 }
 
+// MARK:- Pilots
 struct PilotCardView: View {
     let theme: Theme = WestworldUITheme()
     let shipPilot: ShipPilot
@@ -423,129 +425,3 @@ struct PilotDetailsView: View {
         }.padding(5)
     }
 }
-
-struct UpgradeSummaryView : View {
-    let category: String
-    let upgrades: [String]
-    let displayHeader: Bool
-    let theme: Theme = WestworldUITheme()
-    
-    var body: some View {
-        VStack {
-            if (upgrades.count > 0) {
-                if (displayHeader) {
-                    Text(category)
-                        .font(.title)
-                        .foregroundColor(theme.TEXT_FOREGROUND)
-                }
-                
-                ForEach(upgrades, id:\.self) { upgrade in
-                    Text("\(upgrade)")
-                        .foregroundColor(self.theme.TEXT_FOREGROUND)
-                }
-            }
-        }
-    }
-}
-
-struct CardViewModel {
-    let strokeColor: Color
-    let strokeWidth: CGFloat
-    let backgroundColor: Color
-    let headerText: String
-    let headerBackgroundColor: Color
-    let headerTextColor: Color
-    let cornerRadius: CGFloat
-}
-
-// content wrapper pattern
-//struct TrackinAreaView<Content>: View where Content : View {
-//    let onMove: (NSPoint) -> Void
-//    let content: () -> Content
-//
-//    init(onMove: @escaping (NSPoint) -> Void, @ViewBuilder content: @escaping () -> Content) {
-//        self.onMove = onMove
-//        self.content = content
-//    }
-//
-//    var body: some View {
-//        TrackingAreaRepresentable(onMove: onMove, content: self.content())
-//    }
-//}
-//
-// CardView<PilotDetailsView>
-// CardView<UpgradeCardView>
-struct CardView<Content: View>: View {
-    let cardViewModel: CardViewModel
-    let content: () -> Content
-    
-    init(cardViewModel: CardViewModel, @ViewBuilder content: @escaping () -> Content) {
-        self.cardViewModel = cardViewModel
-        self.content = content
-    }
-        
-    var newView: some View {
-        ZStack(alignment: .top) {
-            RoundedRectangle(cornerRadius: cardViewModel.cornerRadius, style: .continuous)
-                .fill(cardViewModel.backgroundColor)
-
-            VStack {
-                HStack {
-                    Spacer()
-                
-                    Text("\(cardViewModel.headerText)")
-                        .font(.title)
-                        .foregroundColor(cardViewModel.headerTextColor)
-                    
-                    Spacer()
-                }.background(cardViewModel.headerBackgroundColor)
-                
-//                PilotDetailsView(pilot: pilot, displayUpgrades: true, displayHeaders: false)
-                content()
-            }
-            .clipShape(RoundedRectangle(cornerRadius: cardViewModel.cornerRadius, style: .continuous))
-            .multilineTextAlignment(.center)
-        }
-    }
-    
-    var body: some View {
-        newView.overlay(
-            RoundedRectangle(cornerRadius: cardViewModel.cornerRadius)
-                .stroke(cardViewModel.strokeColor, lineWidth: cardViewModel.strokeWidth)
-        )
-    }
-}
-
-
-
-struct OldCardView: View {
-    let content: () -> AnyView
-    
-    var body: some View {
-        VStack {
-            content()
-        }
-    }
-}
-
-struct NavigationContentView : View {
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("Hello World")
-                NavigationLink(destination:Text("Hello")) {
-                    Text("Do Something")
-                }
-            }
-        }
-    }
-}
-
-
-/*
-2020-07-04 08:31:46 +0000 ship NetworkCacheService.init
-2020-07-04 08:31:51 +0000 ship NetworkCacheService.init
-2020-07-04 08:31:53 +0000 upgrade NetworkCacheService.init
-2020-07-04 08:32:02 +0000 ship NetworkCacheService.init
-2020-07-04 08:32:15 +0000 ship NetworkCacheService.init
-*/

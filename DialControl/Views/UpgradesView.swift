@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-// MARK:- Upgrades
+// MARK:- UpgradesView
 struct UpgradesView: View {
     @EnvironmentObject var viewModel: ShipViewModel
     @State var imageName: String = ""
@@ -31,6 +31,7 @@ struct UpgradesView: View {
     }
 }
 
+// MARK:- UpgradeView
 struct UpgradeView: View {
     struct UpgradeViewModel {
         let upgrade: Upgrade
@@ -79,61 +80,3 @@ struct UpgradeView: View {
             }
     }
 }
-
-
-struct UpgradeSummary : Identifiable {
-    let id = UUID()
-    let type: String
-    let name: String
-    let prettyName: String
-}
-
-enum UpgradeCardEnum : CaseIterable {
-    static var allCases: [UpgradeCardEnum] {
-        return [.astromech(""),
-        .cannon(""),
-        .cargo(""),
-        .command(""),
-        .configuration(""),
-        .crew(""),
-        .device(""),
-        .forcepower(""),
-        .gunner(""),
-        .hardpoint(""),
-        .illicit(""),
-        .missile(""),
-        .modification(""),
-        .sensor(""),
-        .tacticalrelay(""),
-        .talent(""),
-        .team(""),
-        .tech(""),
-        .title(""),
-        .torpedo(""),
-        .turret("")]
-    }
-
-    case astromech(String)
-    case cannon(String)
-    case cargo(String)
-    case command(String)
-    case configuration(String)
-    case crew(String)
-    case device(String)
-    case forcepower(String)
-    case gunner(String)
-    case hardpoint(String)
-    case illicit(String)
-    case missile(String)
-    case modification(String)
-    case sensor(String)
-    case tacticalrelay(String)
-    case talent(String)
-    case team(String)
-    case tech(String)
-    case title(String)
-    case torpedo(String)
-    case turret(String)
-}
-
-

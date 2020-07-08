@@ -130,11 +130,5 @@ extension NetworkCacheViewModel {
     }
 }
 
-extension Just {
-    var asFuture: Future<Output, Never> {
-        .init { promise in
-            promise(.success(self.output))
-        }
-    }
-}
+
 //let future: Future<Int, Never> = Just(1).asFuture

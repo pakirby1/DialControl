@@ -2,6 +2,7 @@
 //  LinkedView.swift
 //  DialControl
 //
+//  Linked button views on ShipView
 //  Created by Phil Kirby on 4/6/20.
 //  Copyright © 2020 SoftDesk. All rights reserved.
 //

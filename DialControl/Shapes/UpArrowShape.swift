@@ -1,8 +1,8 @@
 //
-//  UpArrow.swift
+//  UpArrowShape.swift
 //  DialControl
 //
-//  Created by Phil Kirby on 3/12/20.
+//  Created by Phil Kirby on 7/8/20.
 //  Copyright © 2020 SoftDesk. All rights reserved.
 //
 
@@ -36,13 +36,3 @@ struct UpArrow : Shape {
     }
 }
 
-struct UpArrowView: View {
-    let color: Color
-    
-    var body: some View {
-        UpArrow()
-            .fill(color)
-            .padding(2)
-//            .border(Color.white)
-    }
-}

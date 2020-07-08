@@ -98,10 +98,5 @@ struct ThemeKey: EnvironmentKey {
     static var defaultValue: Int = 10
 }
 
-extension EnvironmentValues {
-    var theme: Int {
-        get { self[ThemeKey.self] }
-        set { self[ThemeKey.self] = newValue }
-    }
-}
+
 

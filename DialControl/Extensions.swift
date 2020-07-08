@@ -10,6 +10,21 @@ import Foundation
 import SwiftUI
 import Combine
 
+extension Just {
+    var asFuture: Future<Output, Never> {
+        .init { promise in
+            promise(.success(self.output))
+        }
+    }
+}
+
+extension EnvironmentValues {
+    var theme: Int {
+        get { self[ThemeKey.self] }
+        set { self[ThemeKey.self] = newValue }
+    }
+}
+
 // https://stackoverflow.com/questions/58494193/swiftui-rotationeffect-framing-and-offsetting
 private struct SizeKey: PreferenceKey {
     static let defaultValue: CGSize = .zero

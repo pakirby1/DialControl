@@ -143,7 +143,34 @@ struct ShipView: View {
 
     // MARK:- computed properties
     var body: some View {
-        buildView()
+        content
+    }
+    
+    var content: some View {
+        VStack(alignment: .leading) {
+            headerView
+            CustomDivider()
+            bodyContent
+            CustomDivider()
+            footer
+        }
+        .padding()
+        .overlay(imageOverlayView)
+        .background(theme.BUTTONBACKGROUND)
+    }
+    
+    var headerView: some View {
+        HStack {
+            HStack(alignment: .top) {
+                backButtonView
+            }
+            .frame(width: 150, height: 50, alignment: .leading)
+            
+            PilotDetailsView(shipPilot: viewModel.shipPilot,
+                             displayUpgrades: true,
+                             displayHeaders: false)
+                .padding(2)
+        }
     }
     
     var bodyContent: some View {
@@ -181,6 +208,13 @@ struct ShipView: View {
             }
     }
     
+    var footer: some View {
+        UpgradesView(upgrades: viewModel.shipPilot.upgrades,
+                     showImageOverlay: $showImageOverlay,
+                     imageOverlayUrl: $imageOverlayUrl)
+            .environmentObject(viewModel)
+    }
+    
     var backButtonView: some View {
         Button(action: {
             self.viewFactory.back()
@@ -201,28 +235,22 @@ struct ShipView: View {
 //            .border(Color.red, width: 5)
     }
     
-    var headerView: some View {
-        HStack {
-            HStack(alignment: .top) {
-                backButtonView
-//                    .border(Color.blue, width: 2)
-            }
-            .frame(width: 150, height: 50, alignment: .leading)
-//            .border(Color.blue, width: 2)
+    var upgradeImageOverlay: some View {
+        ZStack {
+            Color
+                .gray
+                .opacity(0.5)
+                .onTapGesture{
+                    self.showImageOverlay = false
+                    self.viewModel.displayImageOverlay = false
+                }
             
-            PilotDetailsView(shipPilot: viewModel.shipPilot,
-                             displayUpgrades: true,
-                             displayHeaders: false)
-                .padding(2)
-//                .border(Color.green, width: 2)
+            ImageView(url: self.imageOverlayUrl,
+                      shipViewModel: self.viewModel,
+                      label: "upgrade")
+                .frame(width: 500.0, height:350)
+                .environmentObject(viewModel)
         }
-    }
-    
-    var footer: some View {
-        UpgradesView(upgrades: viewModel.shipPilot.upgrades,
-                     showImageOverlay: $showImageOverlay,
-                     imageOverlayUrl: $imageOverlayUrl)
-            .environmentObject(viewModel)
     }
     
     var imageOverlayView: AnyView {
@@ -232,48 +260,10 @@ struct ShipView: View {
         print("UpgradeView var imageOverlayView self.viewModel.displayImageOverlay=\(self.viewModel.displayImageOverlay)")
         
         if (self.viewModel.displayImageOverlay == true) {
-            return upgradeImageOverlay(urlString: self.imageOverlayUrl)
+            return AnyView(upgradeImageOverlay)
         } else {
             return defaultView
         }
-    }
-    
-    // MARK:- functions
-    func buildView() -> AnyView {
-        return AnyView(VStack(alignment: .leading) {
-                headerView
-                CustomDivider()
-                bodyContent
-                CustomDivider()
-                footer
-    //            footer_New(showImageOverlay: $showImageOverlay)
-            }
-//            .border(Color.red, width: 2)
-            .padding()
-            .overlay(imageOverlayView)
-            .background(theme.BUTTONBACKGROUND)
-    //            .onTapGesture{
-    //                self.showImageOverlay = false
-    //                self.viewModel.displayImageOverlay = false
-    //            }
-        )
-    }
-    
-    func upgradeImageOverlay(urlString: String) -> AnyView {
-        return AnyView(
-            ZStack {
-                Color
-                    .gray
-                    .opacity(0.5)
-                    .onTapGesture{
-                        self.showImageOverlay = false
-                        self.viewModel.displayImageOverlay = false
-                    }
-                
-                ImageView(url: urlString, shipViewModel: self.viewModel, label: "upgrade")
-                    .frame(width: 500.0, height:350)
-                    .environmentObject(viewModel)
-            })
     }
 }
 
