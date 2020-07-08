@@ -59,6 +59,8 @@
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
 		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
 		AEE98B4C24B5BD9F00E60128 /* CustomDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */; };
+		AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4D24B5D45900E60128 /* Globals.swift */; };
+		AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */; };
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
 		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
@@ -139,6 +141,8 @@
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 		AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDivider.swift; sourceTree = "<group>"; };
+		AEE98B4D24B5D45900E60128 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipLookupBuilder.swift; sourceTree = "<group>"; };
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
 		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
@@ -272,6 +276,8 @@
 				AE4D58D323F8087D00C66136 /* Info.plist */,
 				AE4D58CD23F8087D00C66136 /* Preview Content */,
 				AEAD19F824085E0A0020FABC /* TestView.swift */,
+				AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */,
+				AEE98B4D24B5D45900E60128 /* Globals.swift */,
 				AE1FBE5D24166675005C54F5 /* Extensions.swift */,
 				AE2D80F32428C74700248CA4 /* Theme.swift */,
 				AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */,
@@ -495,10 +501,12 @@
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
 				AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */,
+				AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
 				AE4D58F623F961D200C66136 /* Test.swift in Sources */,
 				AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */,
+				AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
 				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,

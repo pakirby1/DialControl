@@ -164,3 +164,8 @@ extension String {
     }
 }
 
+extension String {
+    func removeAll(character: String) -> String {
+        return components(separatedBy: character).joined()
+    }
+}
