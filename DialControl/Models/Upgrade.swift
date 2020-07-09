@@ -461,12 +461,16 @@ struct Upgrades: Codable, JSONSerialization {
     let upgrades: [Upgrade]
     
     static func serializeJSON(jsonString: String) -> [Upgrade] {
-        let jsonData = jsonString.data(using: .utf8)!
-        let decoder = JSONDecoder()
-        let upgrades = try! decoder.decode([Upgrade].self, from: jsonData)
-            
-        return upgrades
+        return serialize(jsonString: jsonString)
     }
+    
+//    static func serializeJSON(jsonString: String) -> [Upgrade] {
+//        let jsonData = jsonString.data(using: .utf8)!
+//        let decoder = JSONDecoder()
+//        let upgrades = try! decoder.decode([Upgrade].self, from: jsonData)
+//            
+//        return upgrades
+//    }
 }
 
 enum UpgradeCardEnum : CaseIterable {

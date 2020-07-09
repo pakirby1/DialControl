@@ -257,23 +257,6 @@ struct Pilot: Codable {
     }
 }
 
-protocol JSONSerialization {
-    static func serialize<T: Decodable>(jsonString: String) -> T
-}
-
-extension JSONSerialization {
-    static func serialize<T: Decodable>(jsonString: String) -> T {
-        let jsonData = jsonString.data(using: .utf8)!
-        let decoder = JSONDecoder()
-        
-        guard let ret = try? decoder.decode(T.self, from: jsonData) else {
-            fatalError("Failed to decode from bundle \(jsonString).")
-        }
-
-        return ret
-    }
-}
-
 struct Ship: Codable, JSONSerialization {
     let name: String
     var xws: String { return _xws ?? "" }
@@ -307,10 +290,7 @@ struct Ship: Codable, JSONSerialization {
     }
     
     static func serializeJSON(jsonString: String) -> Ship {
-        let jsonData = jsonString.data(using: .utf8)!
-        let decoder = JSONDecoder()
-        let ship = try! decoder.decode(Ship.self, from: jsonData)
-        return ship
+        return serialize(jsonString: jsonString)
     }
 }
 
