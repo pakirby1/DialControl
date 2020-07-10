@@ -31,8 +31,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environment(\.managedObjectContext, moc)
             .environmentObject(viewFactory)
 
-        shipLookupTable = ShipLookupBuilder.buildLookup()
-
+        shipLookupTable = ShipLookupBuilder.buildLookup_Old()
+        print(shipLookupTable)
+        
+        shipLookupTable_New = ShipLookupBuilder.buildLookup_New()
+        print(shipLookupTable_New)
+        
         ShipLookupBuilder.buildAllUpgradesText()
         
         // Get a list of all font names

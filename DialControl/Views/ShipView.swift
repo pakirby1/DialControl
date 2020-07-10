@@ -165,11 +165,13 @@ struct ShipView: View {
                 backButtonView
             }
             .frame(width: 150, height: 50, alignment: .leading)
+            //            .border(Color.blue, width: 2)
             
             PilotDetailsView(shipPilot: viewModel.shipPilot,
                              displayUpgrades: true,
                              displayHeaders: false)
                 .padding(2)
+            //                .border(Color.green, width: 2)
         }
     }
     
@@ -234,6 +236,8 @@ struct ShipView: View {
             .clear
 //            .border(Color.red, width: 5)
     }
+    
+    
     
     var upgradeImageOverlay: some View {
         ZStack {

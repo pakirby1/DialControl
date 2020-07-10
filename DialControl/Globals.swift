@@ -11,6 +11,7 @@ import SwiftUI
 import Combine
 
 var shipLookupTable: [String:PilotFileUrl] = [:]
+var shipLookupTable_New: [String:Array<PilotFileUrl>] = [:]
 
 func loadJSON(fileName: String, directoryPath: String) -> String {
     if let path = Bundle.main.path(forResource: fileName,
