@@ -62,30 +62,12 @@ class ShipViewModel: ObservableObject {
     }
     
     lazy var shipImageURL: String = {
-        loadShipFromJSON_New(shipName: shipPilot.shipName,
+        loadShipFromJSON(shipName: shipPilot.shipName,
                        pilotName: shipPilot.pilotName).1.image
     }()
     
     /// What do we return if we encounter an error (empty file)?
     func loadShipFromJSON(shipName: String, pilotName: String) -> (Ship, Pilot) {
-        var shipJSON: String = ""
-        
-        print("shipName: \(shipName)")
-        print("pilotName: \(pilotName)")
-        
-        if let pilotFileUrl = shipLookupTable[shipName] {
-            print("pilotFileUrl: \(pilotFileUrl)")
-            shipJSON = loadJSON(fileName: pilotFileUrl.fileName,
-                                directoryPath: pilotFileUrl.directoryPath)
-        }
-        
-        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-        let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
-        
-        return (ship, foundPilots)
-    }
-    
-    func loadShipFromJSON_New(shipName: String, pilotName: String) -> (Ship, Pilot) {
         var shipJSON: String = ""
         
         print("shipName: \(shipName)")
