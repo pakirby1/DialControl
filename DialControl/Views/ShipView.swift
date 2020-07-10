@@ -90,18 +90,8 @@ class ShipViewModel: ObservableObject {
         
         print("shipName: \(shipName)")
         print("pilotName: \(pilotName)")
-    
-        if let pilotFileUrls = shipLookupTable_New[shipName] {
-            let matchingFaction = pilotFileUrls.filter({ $0.faction == squad.faction })
         
-            if matchingFaction.count == 1 {
-                let pilotFileUrl = matchingFaction[0]
-                print("pilotFileUrl: \(pilotFileUrl)")
-                
-                shipJSON = loadJSON(fileName: pilotFileUrl.fileName,
-                                    directoryPath: pilotFileUrl.directoryPath)
-            }
-        }
+        shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
         
         let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
         let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]

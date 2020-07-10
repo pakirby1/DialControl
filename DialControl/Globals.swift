@@ -193,3 +193,34 @@ public struct CustomStyle : TextFieldStyle {
     )
   }
 }
+
+func getJSONFor(ship: String, faction: String) -> String {
+    var ret = ""
+    
+    if let pilotFileUrls = shipLookupTable_New[ship] {
+        let matchingFaction = pilotFileUrls.filter({ $0.faction == faction })
+        
+        if matchingFaction.count == 1 {
+            let pilotFileUrl = matchingFaction[0]
+            print("pilotFileUrl: \(pilotFileUrl)")
+            
+            if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
+                                           ofType: "",
+                                           inDirectory: pilotFileUrl.directoryPath)
+            {
+                print("path: \(path)")
+                
+                do {
+                    ret = try String(contentsOfFile: path)
+                    print("jsonData: \(shipJSON)")
+                } catch {
+                    print("error reading from \(path)")
+                }
+            }
+        } else {
+            print("No matching json for shipName: \(ship)\nfaction: \(faction)\n")
+        }
+    }
+    
+    return ret
+}

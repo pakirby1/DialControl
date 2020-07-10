@@ -409,36 +409,7 @@ struct SquadCardViewModel {
             
             var shipJSON: String = ""
             
-            func getJSON(ship: String, faction: String) -> String {
-                var ret = ""
-                
-                if let pilotFileUrls = shipLookupTable_New[ship] {
-                    let matchingFaction = pilotFileUrls.filter({ $0.faction == squad.faction })
-                    
-                    if matchingFaction.count == 1 {
-                        let pilotFileUrl = matchingFaction[0]
-                        print("pilotFileUrl: \(pilotFileUrl)")
-                        
-                        if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
-                                                       ofType: "",
-                                                       inDirectory: pilotFileUrl.directoryPath)
-                        {
-                            print("path: \(path)")
-                            
-                            do {
-                                ret = try String(contentsOfFile: path)
-                                print("jsonData: \(shipJSON)")
-                            } catch {
-                                print("error reading from \(path)")
-                            }
-                        }
-                    } else {
-                        print("No matching json for shipName: \(squadPilot.ship)\npilotName: \(squadPilot.name)\nfaction: \(squad.faction)\n")
-                    }
-                }
-                
-                return ret
-            }
+            
             
             
                     
@@ -446,34 +417,7 @@ struct SquadCardViewModel {
             print("pilotName: \(squadPilot.name)")
             print("faction: \(squad.faction)")
             
-            /*
-            if let pilotFileUrls = shipLookupTable_New[squadPilot.ship] {
-                let matchingFaction = pilotFileUrls.filter({ $0.faction == squad.faction })
-                
-                if matchingFaction.count == 1 {
-                    let pilotFileUrl = matchingFaction[0]
-                    print("pilotFileUrl: \(pilotFileUrl)")
-                    
-                    if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
-                                                   ofType: "",
-                                                   inDirectory: pilotFileUrl.directoryPath)
-                    {
-                        print("path: \(path)")
-                        
-                        do {
-                            shipJSON = try String(contentsOfFile: path)
-                            print("jsonData: \(shipJSON)")
-                        } catch {
-                            print("error reading from \(path)")
-                        }
-                    }
-                } else {
-                    print("No matching json for shipName: \(squadPilot.ship)\npilotName: \(squadPilot.name)\nfaction: \(squad.faction)\n")
-                }
-            }
-            */
-            
-            shipJSON = getJSON(ship: squadPilot.ship, faction: squad.faction)
+            shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
             
             var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
             let foundPilots: Pilot = ship.pilots.filter{ $0.xws == squadPilot.name }[0]
