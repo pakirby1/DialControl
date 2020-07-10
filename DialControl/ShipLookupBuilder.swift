@@ -86,76 +86,7 @@ struct ShipLookupBuilder {
 }
 
 extension ShipLookupBuilder {
-    
-    /// Due to naming collisions on the dictionary key
-    ///    Current
-    //    arc170starfighter -> PFU(arc-170-starfighter.json, pilots/rebel-alliance)
-    //    arc170starfighter -> PFU(arc-170-starfighter.json, pilots/galactic-republic)
-    //    tielnfighter -> PFU(tie-ln-fighter.json. pilots/rebel-alliance)
-    //    tielnfighter -> PFU(tie-ln-fighter.json. pilots/galactic-empire)
-    //
-    //
-    
-    static func buildLookup_Old() -> [String:PilotFileUrl] {
-        var ret : [String:PilotFileUrl] = [:]
-        let fm = FileManager.default
-        let path = Bundle.main.resourcePath! + "/pilots"
-        
-        func processDirectory(dir: String) {
-            func processFile(file: String, dir: String) {
-                print("\t\(file)")
-                let filename = file.fileName()  // tie-ln-fighter.json
-                let key = filename.removeAll(character: "-")    // tielnfighter
-                let directoryPath = "pilots/" + dir // rebel-alliance
-                let faction = dir.removeAll(character: "-")
-                let pfu = PilotFileUrl(fileName: file,
-                                       directoryPath: directoryPath,
-                                       faction: faction)
-                ret[key] = pfu
-            }
-            
-            print("\(dir)")
-                
-            do {
-                let subDir = path + "/" + dir
-                let files = try fm.contentsOfDirectory(atPath: subDir)
-                
-                for file in files {
-                    processFile(file: file, dir: dir)
-                }
-            }
-            catch {
-                print(error)
-            }
-        }
-
-        print(path)
-        
-        do {
-            let dirs = try fm.contentsOfDirectory(atPath: path)
-
-            for dir in dirs {
-                processDirectory(dir: dir)
-            }
-        } catch {
-            // failed to read directory – bad permissions, perhaps?
-            print(error)
-        }
-        
-        return ret
-    }
-    
-    ///    Proposed
-    //    arc170starfighter -> [ PFU(arc-170-starfighter.json, pilots/rebel-alliance),
-    //                           PFU(arc-170-starfighter.json, pilots/galactic-republic) }
-    //
-    //    tielnfighter -> [ PFU(tie-ln-fighter.json. pilots/rebel-alliance),
-    //                      PFU(tie-ln-fighter.json. pilots/galactic-empire) ]
-    //
-    //    rz1awing -> [ PFU(rz-1-a-wing.json, pilots/rebel-alliance) ]
-    // "arc170starfighter": [fileName: 'arc-170-starfighter.json' directoryPath: 'pilots/galactic-republic', fileName: 'arc-170-starfighter.json' directoryPath: 'pilots/rebel-alliance']
-    // "tielnfighter": [fileName: 'tie-ln-fighter.json' directoryPath: 'pilots/galactic-empire', fileName: 'tie-ln-fighter.json' directoryPath: 'pilots/rebel-alliance']
-    static func buildLookup_New() -> [String:Array<PilotFileUrl>] {
+    static func buildShipLookupTable() -> [String:Array<PilotFileUrl>] {
         var ret : [String:Array<PilotFileUrl>] = [:]
         let fm = FileManager.default
         let path = Bundle.main.resourcePath! + "/pilots"

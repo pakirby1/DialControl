@@ -31,11 +31,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environment(\.managedObjectContext, moc)
             .environmentObject(viewFactory)
 
-        shipLookupTable = ShipLookupBuilder.buildLookup_Old()
+        shipLookupTable = ShipLookupBuilder.buildShipLookupTable()
         print(shipLookupTable)
-        
-        shipLookupTable_New = ShipLookupBuilder.buildLookup_New()
-        print(shipLookupTable_New)
         
         ShipLookupBuilder.buildAllUpgradesText()
         

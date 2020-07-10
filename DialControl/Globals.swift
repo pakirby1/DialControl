@@ -10,8 +10,7 @@ import Foundation
 import SwiftUI
 import Combine
 
-var shipLookupTable: [String:PilotFileUrl] = [:]
-var shipLookupTable_New: [String:Array<PilotFileUrl>] = [:]
+var shipLookupTable: [String:Array<PilotFileUrl>] = [:]
 
 func loadJSON(fileName: String, directoryPath: String) -> String {
     if let path = Bundle.main.path(forResource: fileName,
@@ -197,7 +196,7 @@ public struct CustomStyle : TextFieldStyle {
 func getJSONFor(ship: String, faction: String) -> String {
     var ret = ""
     
-    if let pilotFileUrls = shipLookupTable_New[ship] {
+    if let pilotFileUrls = shipLookupTable[ship] {
         let matchingFaction = pilotFileUrls.filter({ $0.faction == faction })
         
         if matchingFaction.count == 1 {
