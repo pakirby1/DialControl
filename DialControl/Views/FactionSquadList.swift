@@ -145,6 +145,14 @@ class FactionSquadCardViewModel : ObservableObject {
         
         return Squad.emptySquad
     }
+    
+//    func deleteSquad(squad: NSManagedObject) {
+//        do {
+//            try self.moc.delete(obj: squad)
+//        } catch {
+//            print(error)
+//        }
+//    }
 }
 
 struct FactionSquadCard: View {
@@ -172,15 +180,26 @@ struct FactionSquadCard: View {
     }
     
     var nameView: some View {
-        Text(viewModel.squad.name)
-            .font(.title)
-            .lineLimit(1)
-            .foregroundColor(viewModel.textForeground)
+        HStack {
+            Text(viewModel.squad.name)
+                .font(.title)
+                .lineLimit(1)
+                .foregroundColor(viewModel.textForeground)
+        }
     }
     
     var border: some View {
         RoundedRectangle(cornerRadius: 15)
             .stroke(viewModel.border, lineWidth: 3)
+    }
+    
+    var deleteButton: some View {
+        Button(action: {
+        }) {
+            Image(systemName: "trash.fill")
+                .font(.title)
+                .foregroundColor(Color.red)
+        }
     }
     
     var body: some View {
@@ -191,6 +210,7 @@ struct FactionSquadCard: View {
                 background
                 pointsView.offset(x: -350, y: 0)
                 nameView
+                deleteButton.offset(x: 350, y: 0)
             }
         }
     }

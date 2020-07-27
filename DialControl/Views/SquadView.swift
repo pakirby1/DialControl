@@ -329,6 +329,11 @@ struct PilotCardView: View {
 
             VStack {
                 HStack {
+                    Text("\(shipPilot.ship.pilots[0].initiative)")
+                        .font(.title)
+                        .bold()
+                        .foregroundColor(Color.orange)
+                    
                     Spacer()
                 
                     Text("\(shipPilot.ship.name)")
@@ -336,7 +341,9 @@ struct PilotCardView: View {
                         .foregroundColor(Color.white)
                     
                     Spacer()
-                }.background(Color.black)
+                }
+                .padding(.leading, 5)
+                .background(Color.black)
                 
                 Spacer()
                 
