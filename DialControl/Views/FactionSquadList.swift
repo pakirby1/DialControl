@@ -49,6 +49,14 @@ class FactionSquadListViewModel : ObservableObject {
 //        initWithDummyNames()
         loadSquadsListFromCoreData()
     }
+    
+    func deleteSquad(squad: SquadData) {
+        do {
+            try self.moc.delete(squad)
+        } catch {
+            print(error)
+        }
+    }
 }
 
 struct FactionSquadList: View {
@@ -65,7 +73,8 @@ struct FactionSquadList: View {
             headerView
                 .padding(5)
             
-            squadList
+//            squadList
+            squadList_New
             
             Spacer()
         }
@@ -100,6 +109,34 @@ struct FactionSquadList: View {
         VStack {
             ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
                 FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData)).environmentObject(self.viewFactory)
+            }
+        }
+        .padding(10)
+        .onAppear {
+            self.viewModel.loadSquadsList()
+        }
+    }
+    
+    var emptySection: some View {
+        Section {
+            Text("No ships found")
+        }
+    }
+    
+    var shipsSection: some View {
+        Section {
+            ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
+                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData)).environmentObject(self.viewFactory)
+            }
+        }
+    }
+    
+    var squadList_New: some View {
+        List {
+            if self.viewModel.squadDataList.isEmpty {
+                emptySection
+            } else {
+                shipsSection
             }
         }
         .padding(10)
@@ -146,13 +183,7 @@ class FactionSquadCardViewModel : ObservableObject {
         return Squad.emptySquad
     }
     
-//    func deleteSquad(squad: NSManagedObject) {
-//        do {
-//            try self.moc.delete(obj: squad)
-//        } catch {
-//            print(error)
-//        }
-//    }
+
 }
 
 struct FactionSquadCard: View {
@@ -202,7 +233,7 @@ struct FactionSquadCard: View {
         }
     }
     
-    var body: some View {
+    var squadButton: some View {
         Button(action: {
             self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad)
         }) {
@@ -212,6 +243,14 @@ struct FactionSquadCard: View {
                 nameView
                 deleteButton.offset(x: 350, y: 0)
             }
+        }
+    }
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            squadButton
+            Spacer()
         }
     }
 }
