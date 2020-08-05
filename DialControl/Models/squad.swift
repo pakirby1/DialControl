@@ -234,6 +234,11 @@ struct Squad: Codable, JSONSerialization {
     let vendor: SquadVendor
     let version: String
     
+    var Myfaction: Faction? {
+        print(faction)
+        return Faction(rawValue: self.faction)
+    }
+    
     static var emptySquad: Squad {
         get {
             return Squad(description: "Invalid",

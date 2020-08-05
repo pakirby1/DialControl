@@ -88,7 +88,7 @@ struct FactionSquadList: View {
     var headerView: some View {
         HStack {
             Button(action: {
-                self.viewFactory.viewType = .factionFilterView(.galactic_empire)
+                self.viewFactory.viewType = .factionFilterView(.galacticempire)
             }) {
                 Text("Filter")
             }
@@ -189,6 +189,7 @@ class FactionSquadCardViewModel : ObservableObject {
 struct FactionSquadCard: View {
     @EnvironmentObject var viewFactory: ViewFactory
     let viewModel: FactionSquadCardViewModel
+    let symbolSize: CGFloat = 36.0
     
     init(viewModel: FactionSquadCardViewModel) {
         self.viewModel = viewModel
@@ -210,6 +211,14 @@ struct FactionSquadCard: View {
             .clipShape(Circle())
     }
     
+    var factionSymbol: some View {
+        let x: Faction? = Faction.buildFaction(jsonFaction: self.viewModel.squad.faction)
+        let characterCode = x?.characterCode
+        
+        return Text(characterCode ?? "")
+            .font(.custom("xwing-miniatures", size: self.symbolSize))
+    }
+    
     var nameView: some View {
         HStack {
             Text(viewModel.squad.name)
@@ -229,7 +238,7 @@ struct FactionSquadCard: View {
         }) {
             Image(systemName: "trash.fill")
                 .font(.title)
-                .foregroundColor(Color.red)
+                .foregroundColor(Color.white)
         }
     }
     
@@ -239,7 +248,8 @@ struct FactionSquadCard: View {
         }) {
             ZStack {
                 background
-                pointsView.offset(x: -350, y: 0)
+                factionSymbol.offset(x: -370, y: 0)
+                pointsView.offset(x: -310, y: 0)
                 nameView
                 deleteButton.offset(x: 350, y: 0)
             }

@@ -31,13 +31,13 @@ class Navigation {
 }
 
 class ViewFactory: ObservableObject {
-    var previousViewType: ViewType = .factionSquadList(.galactic_empire)
+    var previousViewType: ViewType = .factionSquadList(.galacticempire)
     private var navigation = Navigation()
     var moc: NSManagedObjectContext
     
     init(moc: NSManagedObjectContext) {
         self.moc = moc
-        self.navigation.push(type: .factionSquadList(.galactic_empire))
+        self.navigation.push(type: .factionSquadList(.galacticempire))
     }
     
     func view(viewType: ViewType) {
@@ -53,7 +53,7 @@ class ViewFactory: ObservableObject {
         }
     }
     
-    @Published var viewType: ViewType = .factionSquadList(.galactic_empire) {
+    @Published var viewType: ViewType = .factionSquadList(.galacticempire) {
         willSet {
             navigation.push(type: newValue)
         }
@@ -131,24 +131,56 @@ enum Token: String, CaseIterable {
 }
 
 enum Faction: String, CaseIterable {
-    case galactic_republic = "Galactic Republic"
-    case separatists = "Separatists"
-    case galactic_empire = "Galactic Empire"
-    case rebel_alliance = "Rebel Alliance"
-    case scum_villiany = "Scum & Villiany"
+    case galacticrepublic = "Galactic Republic"
+    case separatistalliance = "Separatist Alliance"
+    case galacticempire = "Galactic Empire"
+    case rebelalliance = "Rebel Alliance"
+    case scumandvillainy = "Scum and Villainy"
     case resistance = "Resistance"
-    case first_order = "First Order"
+    case firstorder = "First Order"
     
     var characterCode: String {
         switch(self) {
-        case .galactic_republic: return "\u{002f}" // Good
-        case .separatists: return "\u{002e}" // Good
-        case .galactic_empire: return "\u{0040}"
-        case .rebel_alliance: return "\u{002D}" // Good
-        case .scum_villiany: return "\u{0023}" // Good
+        case .galacticrepublic: return "\u{002f}" // Good
+        case .separatistalliance: return "\u{002e}" // Good
+        case .galacticempire: return "\u{0040}"
+        case .rebelalliance: return "\u{002D}" // Good
+        case .scumandvillainy: return "\u{0023}" // Good
         case .resistance: return "\u{0021}" // Good
-        case .first_order: return "\u{002B}"
+        case .firstorder: return "\u{002B}"
         }
+    }
+    
+    static func buildFaction(jsonFaction: String) -> Faction? {
+        if jsonFaction == "galacticempire" {
+            return Faction.galacticempire
+        }
+        
+        if jsonFaction == "galacticrepublic" {
+            return Faction.galacticrepublic
+        }
+        
+        if jsonFaction == "separatistalliance" {
+            return Faction.separatistalliance
+        }
+        
+        if jsonFaction == "rebelalliance" {
+            return Faction.rebelalliance
+        }
+        
+        if jsonFaction == "scumandvillainy" {
+            return Faction.scumandvillainy
+        }
+        
+        if jsonFaction == "resistance" {
+            return Faction.resistance
+        }
+        
+        if jsonFaction == "firstorder" {
+            return Faction.firstorder
+        }
+        
+        return nil
     }
 }
 
