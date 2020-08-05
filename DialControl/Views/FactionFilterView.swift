@@ -12,7 +12,9 @@ import SwiftUI
 struct FactionFilterView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     let faction: Faction
-
+    let symbolSize: CGFloat = 72.0
+    var string1 = "\u{002F}"
+    
     var header: some View {
         HStack {
             Button(action: {
@@ -34,7 +36,12 @@ struct FactionFilterView: View {
     
     func factionList() -> some View {
         List(Faction.allCases, id:\.self) { faction in
-            Text(faction.rawValue)
+            HStack {
+                Text(faction.characterCode)
+                    .font(.custom("xwing-miniatures", size: self.symbolSize))
+                
+                Text(faction.rawValue).font(.largeTitle)
+            }
         }
     }
     

@@ -22,8 +22,9 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>xwing-miniatures_SK9.ttf</string>
+		<string>xwing-miniatures.ttf</string>
 		<string>kimberley bl.ttf</string>
+		<string>xwing-miniatures-ships.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

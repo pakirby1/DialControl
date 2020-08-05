@@ -110,6 +110,26 @@ class ViewFactory: ObservableObject {
     }
 }
 
+enum Token: String, CaseIterable {
+    case chargeActive = "Charge Active"
+    case chargeInactive = "Charge Inactive"
+    case shieldActive = "Shield Active"
+    case shieldInactive = "Shield Inactive"
+    case forceActive = "Force Active"
+    case forceInactive = "Force Inactive"
+    
+    var characterCode: String {
+        switch(self) {
+        case .chargeActive: return "\u{00d3}"
+        case .chargeInactive: return "\u{00d2}"
+        case .forceActive: return "\u{00d5}"
+        case .forceInactive: return "\u{00d4}"
+        case .shieldActive: return "\u{00eb}"
+        case .shieldInactive: return "\u{00d1}"
+        }
+    }
+}
+
 enum Faction: String, CaseIterable {
     case galactic_republic = "Galactic Republic"
     case separatists = "Separatists"
@@ -118,6 +138,18 @@ enum Faction: String, CaseIterable {
     case scum_villiany = "Scum & Villiany"
     case resistance = "Resistance"
     case first_order = "First Order"
+    
+    var characterCode: String {
+        switch(self) {
+        case .galactic_republic: return "\u{002f}" // Good
+        case .separatists: return "\u{002e}" // Good
+        case .galactic_empire: return "\u{0040}"
+        case .rebel_alliance: return "\u{002D}" // Good
+        case .scum_villiany: return "\u{0023}" // Good
+        case .resistance: return "\u{0021}" // Good
+        case .first_order: return "\u{002B}"
+        }
+    }
 }
 
 enum ViewType {

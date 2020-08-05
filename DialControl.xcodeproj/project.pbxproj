@@ -47,6 +47,8 @@
 		AE4D58DD23F8087E00C66136 /* DialControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58DC23F8087E00C66136 /* DialControlTests.swift */; };
 		AE4D58E823F8087E00C66136 /* DialControlUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58E723F8087E00C66136 /* DialControlUITests.swift */; };
 		AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E08DD243B547800E7899A /* LinkedView.swift */; };
+		AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */; };
+		AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */; };
 		AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC214245DA13400E92704 /* PopoverView.swift */; };
 		AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC216245EE95B00E92704 /* FactionFilterView.swift */; };
 		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
@@ -54,7 +56,6 @@
 		AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDE2452A8EA0017AEE8 /* TextView.swift */; };
 		AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */; };
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
-		AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */; };
 		AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrowView.swift */; };
 		AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC1242F24A32CFC00C0599A /* NetworkService.swift */; };
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
@@ -131,6 +132,8 @@
 		AE4D58E723F8087E00C66136 /* DialControlUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DialControlUITests.swift; sourceTree = "<group>"; };
 		AE4D58E923F8087E00C66136 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AE4E08DD243B547800E7899A /* LinkedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedView.swift; sourceTree = "<group>"; };
+		AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures-ships.ttf"; sourceTree = "<group>"; };
+		AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures.ttf"; sourceTree = "<group>"; };
 		AE7EC214245DA13400E92704 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		AE7EC216245EE95B00E92704 /* FactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionFilterView.swift; sourceTree = "<group>"; };
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
@@ -138,7 +141,6 @@
 		AE93ADDE2452A8EA0017AEE8 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSquadList.swift; sourceTree = "<group>"; };
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
-		AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures_SK9.ttf"; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrowView.swift; sourceTree = "<group>"; };
 		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -330,8 +332,9 @@
 		AEAD19F32404F32C0020FABC /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */,
+				AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */,
 				AEAD19F42404F48B0020FABC /* kimberley bl.ttf */,
-				AEAD19F52404F48B0020FABC /* xwing-miniatures_SK9.ttf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -454,10 +457,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AEAD19F72404F48B0020FABC /* xwing-miniatures_SK9.ttf in Resources */,
+				AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */,
 				AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */,
 				AE2C0EC9243CA52A00042318 /* pilots in Resources */,
 				AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */,
+				AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */,
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
 				AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */,
 				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
