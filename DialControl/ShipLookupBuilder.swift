@@ -90,34 +90,57 @@ extension ShipLookupBuilder {
         var ret : [String:Array<PilotFileUrl>] = [:]
         let fm = FileManager.default
         let path = Bundle.main.resourcePath! + "/pilots"
+        var fileCount: Int = 0
+        
+        // Because sloppy filename convention that doesn't match xws in json
+        let exceptions:[(String, String)] = [
+            ("upsilon-class-command-shuttle", "upsilonclassshuttle"),
+            ("mg-100-starfortress-sf-17", "mg100starfortress")
+        ]
         
         func processDirectory(dir: String) {
+            func buildKey(filename: String) -> String {
+                print("\(#function) \(filename)")
+                
+                for exception in exceptions {
+                    if filename == exception.0 {
+                        return exception.1
+                    }
+                }
+                
+                return filename.removeAll(character: "-")
+            }
+            
             func processFile(file: String, dir: String) {
                 print("\t\(file)")
                 let filename = file.fileName()  // tie-ln-fighter.json
-                let key = filename.removeAll(character: "-")    // tielnfighter
+                let key = buildKey(filename: filename)    // tielnfighter
                 let directoryPath = "pilots/" + dir // rebel-alliance
                 let faction = dir.removeAll(character: "-")
                 let pfu = PilotFileUrl(fileName: file,
                                        directoryPath: directoryPath,
                                        faction: faction)
-                 
+                
                 if let array = ret[key] {
                     var newArray = array
                     newArray.append(pfu)
                     ret[key] = newArray
+                    print("\(#function) \(pfu.faction) \(pfu.fileName)")
                 } else {
+                    print("\(#function) adding \(key)")
+                    print("\(#function) \(pfu.faction) \(pfu.fileName)")
                     ret[key] = [pfu]
                 }
             }
             
-            print("\(dir)")
-                
+            print("\(#function) \(dir)")
+            
             do {
                 let subDir = path + "/" + dir
                 let files = try fm.contentsOfDirectory(atPath: subDir)
                 
                 for file in files {
+                    fileCount += 1
                     processFile(file: file, dir: dir)
                 }
             }
@@ -126,7 +149,7 @@ extension ShipLookupBuilder {
             }
         }
 
-        print(path)
+        print("\(#function) \(path)")
         
         do {
             let dirs = try fm.contentsOfDirectory(atPath: path)
@@ -137,6 +160,13 @@ extension ShipLookupBuilder {
         } catch {
             // failed to read directory – bad permissions, perhaps?
             print(error)
+        }
+        
+        print("\(#function) file count \(fileCount)")
+        print("\(#function) processed \(ret.count) files")
+        
+        for i in ret.enumerated() {
+            print("\(#function) \(i.element.key)\t\(i.element.value)\n")
         }
         
         return ret
