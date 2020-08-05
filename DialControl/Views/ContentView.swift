@@ -31,13 +31,13 @@ class Navigation {
 }
 
 class ViewFactory: ObservableObject {
-    var previousViewType: ViewType = .factionSquadList(.galacticempire)
+    var previousViewType: ViewType = .factionSquadList(.none)
     private var navigation = Navigation()
     var moc: NSManagedObjectContext
     
     init(moc: NSManagedObjectContext) {
         self.moc = moc
-        self.navigation.push(type: .factionSquadList(.galacticempire))
+        self.navigation.push(type: .factionSquadList(.none))
     }
     
     func view(viewType: ViewType) {
@@ -53,7 +53,7 @@ class ViewFactory: ObservableObject {
         }
     }
     
-    @Published var viewType: ViewType = .factionSquadList(.galacticempire) {
+    @Published var viewType: ViewType = .factionSquadList(.none) {
         willSet {
             navigation.push(type: newValue)
         }
@@ -138,6 +138,7 @@ enum Faction: String, CaseIterable {
     case scumandvillainy = "Scum and Villainy"
     case resistance = "Resistance"
     case firstorder = "First Order"
+    case none = ""
     
     var characterCode: String {
         switch(self) {
@@ -148,6 +149,7 @@ enum Faction: String, CaseIterable {
         case .scumandvillainy: return "\u{0023}" // Good
         case .resistance: return "\u{0021}" // Good
         case .firstorder: return "\u{002B}"
+        case .none: return ""
         }
     }
     

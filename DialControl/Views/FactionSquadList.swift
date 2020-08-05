@@ -36,6 +36,8 @@ class FactionSquadListViewModel : ObservableObject {
                 let fetchRequest = SquadData.fetchRequest()
                 let fetchedObjects = try self.moc.fetch(fetchRequest) as! [SquadData]
                 
+                self.squadDataList.removeAll()
+                
                 fetchedObjects.forEach{ squad in
                     self.squadDataList.append(squad)
                 }
@@ -52,7 +54,9 @@ class FactionSquadListViewModel : ObservableObject {
     
     func deleteSquad(squad: SquadData) {
         do {
-            try self.moc.delete(squad)
+            self.moc.delete(squad)
+            try moc.save()
+            self.loadSquadsList()
         } catch {
             print(error)
         }
@@ -88,7 +92,7 @@ struct FactionSquadList: View {
     var headerView: some View {
         HStack {
             Button(action: {
-                self.viewFactory.viewType = .factionFilterView(.galacticempire)
+                self.viewFactory.viewType = .factionFilterView(.none)
             }) {
                 Text("Filter")
             }
@@ -105,17 +109,17 @@ struct FactionSquadList: View {
         }
     }
     
-    var squadList: some View {
-        VStack {
-            ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
-                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData)).environmentObject(self.viewFactory)
-            }
-        }
-        .padding(10)
-        .onAppear {
-            self.viewModel.loadSquadsList()
-        }
-    }
+//    var squadList: some View {
+//        VStack {
+//            ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
+//                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData)).environmentObject(self.viewFactory)
+//            }
+//        }
+//        .padding(10)
+//        .onAppear {
+//            self.viewModel.loadSquadsList()
+//        }
+//    }
     
     var emptySection: some View {
         Section {
@@ -126,7 +130,7 @@ struct FactionSquadList: View {
     var shipsSection: some View {
         Section {
             ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
-                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData)).environmentObject(self.viewFactory)
+                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData, deleteCallback: self.viewModel.deleteSquad)).environmentObject(self.viewFactory)
             }
         }
     }
@@ -150,9 +154,11 @@ class FactionSquadCardViewModel : ObservableObject {
     let points: Int = 150
     let theme: Theme = WestworldUITheme()
     let squadData: SquadData
+    let deleteCallback: (SquadData) ->()
     
-    init(squadData: SquadData) {
+    init(squadData: SquadData, deleteCallback: @escaping (SquadData) -> ()) {
         self.squadData = squadData
+        self.deleteCallback = deleteCallback
     }
     
     private func loadSquad(jsonString: String) -> Squad {
@@ -235,6 +241,7 @@ struct FactionSquadCard: View {
     
     var deleteButton: some View {
         Button(action: {
+            self.viewModel.deleteCallback(self.viewModel.squadData)
         }) {
             Image(systemName: "trash.fill")
                 .font(.title)

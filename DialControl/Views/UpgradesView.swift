@@ -69,9 +69,13 @@ struct UpgradeView: View {
             .foregroundColor(.white)
             .font(.largeTitle)
             .padding(15)
-            .background(Color.red)
+//            .background(Color.red)
 //            .contentShape(RoundedRectangle(cornerRadius: 10))
 //            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.white, lineWidth: 1)
+            )
             .onTapGesture {
                 print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")
                 self.showImageOverlay = true
