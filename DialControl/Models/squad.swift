@@ -281,22 +281,22 @@ struct Squad: Codable, JSONSerialization {
     }
 }
 
-extension Squad {
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        
-        description = try values.decode(String.self, forKey: .description)
-        name = try values.decode(String.self, forKey: .name)
-        faction = try values.decode(String.self, forKey: .faction)
-        points = try values.decode(Int.self, forKey: .points)
-//        vendor = try values.decode(SquadVendor.self, forKey: .vendor)
-        version = try values.decode(String.self, forKey: .version)
-        pilots = try values.decode([SquadPilot].self, forKey: .pilots)
-        
-//        let additionalInfo = try values.nestedContainer(keyedBy: AdditionalInfoKeys.self, forKey: .additionalInfo)
-//        elevation = try additionalInfo.decode(Double.self, forKey: .elevation)
-    }
-}
+//extension Squad {
+//    init(from decoder: Decoder) throws {
+//        let values = try decoder.container(keyedBy: CodingKeys.self)
+//
+//        description = try values.decode(String.self, forKey: .description)
+//        name = try values.decode(String.self, forKey: .name)
+//        faction = try values.decode(String.self, forKey: .faction)
+//        points = try values.decode(Int.self, forKey: .points)
+////        vendor = try values.decode(SquadVendor.self, forKey: .vendor)
+//        version = try values.decode(String.self, forKey: .version)
+//        pilots = try values.decode([SquadPilot].self, forKey: .pilots)
+//
+////        let additionalInfo = try values.nestedContainer(keyedBy: AdditionalInfoKeys.self, forKey: .additionalInfo)
+////        elevation = try additionalInfo.decode(Double.self, forKey: .elevation)
+//    }
+//}
 
 extension Squad: Equatable {
     static func ==(lhs: Squad, rhs: Squad) -> Bool {
