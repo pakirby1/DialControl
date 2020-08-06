@@ -88,6 +88,13 @@ struct LinkedView: View {
     //            .background(Color.black))
     }
     
+    func hullToken(color: Color) -> AnyView {
+        return AnyView(Image(uiImage: UIImage(named: "Hull") ?? UIImage())
+            .resizable()
+            .frame(width: 90, height: 96)
+            .foregroundColor(color))
+    }
+    
     var body: some View {
         HStack(spacing: 25) {
             Button(action:{
@@ -108,11 +115,12 @@ struct LinkedView: View {
                     } else if type == .shield {
                         shieldToken(color: type.color)
                     } else {
-                        Text("\(type.symbol)")
-                            .font(.custom("xwing-miniatures", size: symbolSize))
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(type.color)
-                            .cornerRadius(20)
+                        hullToken(color: type.color)
+//                        Text("\(type.symbol)")
+//                            .font(.custom("xwing-miniatures", size: symbolSize))
+//                            .frame(width: 100, height: 100)
+//                            .foregroundColor(type.color)
+//                            .cornerRadius(20)
 //                            .border(Color.green, width: 2)
                     }
                 }
@@ -132,11 +140,12 @@ struct LinkedView: View {
                     } else if type == .shield {
                         shieldToken(color: StatButtonState.inactive.color)
                     } else {
-                        Text("\(type.symbol)")
-                            .font(.custom("xwing-miniatures", size: symbolSize))
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(StatButtonState.inactive.color)
-                            .cornerRadius(20)
+                        hullToken(color: StatButtonState.inactive.color)
+//                        Text("\(type.symbol)")
+//                            .font(.custom("xwing-miniatures", size: symbolSize))
+//                            .frame(width: 100, height: 100)
+//                            .foregroundColor(StatButtonState.inactive.color)
+//                            .cornerRadius(20)
 //                            .border(Color.green, width: 2)
                     }
                 }
