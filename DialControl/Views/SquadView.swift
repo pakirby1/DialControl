@@ -212,10 +212,6 @@ struct SquadCardViewModel {
             
             var shipJSON: String = ""
             
-            
-            
-            
-                    
             print("shipName: \(squadPilot.ship)")
             print("pilotName: \(squadPilot.name)")
             print("faction: \(squad.faction)")
@@ -223,7 +219,7 @@ struct SquadCardViewModel {
             shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
             
             var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            let foundPilots: Pilot = ship.pilots.filter{ $0.xws == squadPilot.name }[0]
+            let foundPilots: Pilot = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
 
             ship.pilots.removeAll()
             ship.pilots.append(foundPilots)

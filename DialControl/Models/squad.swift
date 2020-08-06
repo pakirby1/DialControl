@@ -200,16 +200,17 @@ struct SquadPilotUpgrade: Codable {
 
 struct SquadPilot: Codable, Identifiable {
     let id: String
-    let name: String
     let points: Int
     let ship: String
     var upgrades: SquadPilotUpgrade? { return _upgrades ?? nil }
+    var name: String? { return _name ?? nil }
     
     private var _upgrades: SquadPilotUpgrade?
+    private var _name: String?
     
     enum CodingKeys: String, CodingKey {
         case id = "id"
-        case name = "name"
+        case _name = "name"
         case points = "points"
         case ship = "ship"
         case _upgrades = "upgrades"
@@ -223,6 +224,7 @@ struct SquadVendorDetails: Codable {
 
 struct SquadVendor: Codable {
     let yasb: SquadVendorDetails
+//    let lbn: SquadVendorDetails
 }
 
 struct Squad: Codable, JSONSerialization {
@@ -231,7 +233,7 @@ struct Squad: Codable, JSONSerialization {
     let name: String
     let pilots: [SquadPilot]
     let points: Int
-    let vendor: SquadVendor
+//    let vendor: SquadVendor
     let version: String
     
     var Myfaction: Faction? {
@@ -246,7 +248,7 @@ struct Squad: Codable, JSONSerialization {
                          name: "Empty Squad",
                          pilots: [],
                          points: 0,
-                         vendor: SquadVendor.init(yasb: SquadVendorDetails.init(builder: "", builder_url: "")),
+//                         vendor: SquadVendor.init(yasb: SquadVendorDetails.init(builder: "", builder_url: "")),
                          version: "0.0")
         }
     }
@@ -276,6 +278,23 @@ struct Squad: Codable, JSONSerialization {
         }
         
         return Squad.emptySquad
+    }
+}
+
+extension Squad {
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        description = try values.decode(String.self, forKey: .description)
+        name = try values.decode(String.self, forKey: .name)
+        faction = try values.decode(String.self, forKey: .faction)
+        points = try values.decode(Int.self, forKey: .points)
+//        vendor = try values.decode(SquadVendor.self, forKey: .vendor)
+        version = try values.decode(String.self, forKey: .version)
+        pilots = try values.decode([SquadPilot].self, forKey: .pilots)
+        
+//        let additionalInfo = try values.nestedContainer(keyedBy: AdditionalInfoKeys.self, forKey: .additionalInfo)
+//        elevation = try additionalInfo.decode(Double.self, forKey: .elevation)
     }
 }
 
