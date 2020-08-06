@@ -14,13 +14,15 @@ enum StatButtonType {
     case force
     case shield
     case charge
+    case hull
     
     var color: Color {
         get {
             switch(self) {
             case .force: return Color.purple
             case .shield: return Color.blue
-            case .charge: return Color.yellow
+            case .charge: return Color.orange
+            case .hull: return Color.yellow
             }
         }
     }
@@ -31,6 +33,7 @@ enum StatButtonType {
             case .force: return "h"
             case .shield: return "*"
             case .charge: return "g"
+            case .hull: return "&"
             }
         }
     }
@@ -64,6 +67,27 @@ struct LinkedView: View {
         self.type = type
     }
     
+    func chargeToken(color: Color) -> AnyView {
+        return AnyView(Text("\u{00d3}")
+            .font(.custom("xwing-miniatures", size: 96.0))
+            .foregroundColor(color))
+//            .background(Color.black))
+    }
+    
+    func forceToken(color: Color) -> AnyView {
+        return AnyView(Text(Token.forceActive.characterCode)
+                .font(.custom("xwing-miniatures", size: 96.0))
+                .foregroundColor(color))
+    //            .background(Color.black))
+    }
+    
+    func shieldToken(color: Color) -> AnyView {
+        return AnyView(Text(Token.shieldActive.characterCode)
+                .font(.custom("xwing-miniatures", size: 96.0))
+                .foregroundColor(color))
+    //            .background(Color.black))
+    }
+    
     var body: some View {
         HStack(spacing: 25) {
             Button(action:{
@@ -73,16 +97,16 @@ struct LinkedView: View {
             })
             {
                 ZStack {
-                    Color.black
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(20)
+//                    Color.black
+//                        .frame(width: 100, height: 100)
+//                        .cornerRadius(20)
                     
                     if type == .charge {
-                        Text("g")
-                            .font(.custom("xwing-miniatures", size: symbolSize))
-                            .frame(width: 75, height: 75)
-                            .foregroundColor(type.color)
-                            .offset(x: 6, y: 0)
+                        chargeToken(color: type.color)
+                    } else if type == .force {
+                        forceToken(color: type.color)
+                    } else if type == .shield {
+                        shieldToken(color: type.color)
                     } else {
                         Text("\(type.symbol)")
                             .font(.custom("xwing-miniatures", size: symbolSize))
@@ -101,16 +125,12 @@ struct LinkedView: View {
             })
             {
                 ZStack {
-                    Color.black
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(20)
-                    
                     if type == .charge {
-                        Text("g")
-                            .font(.custom("xwing-miniatures", size: symbolSize))
-                            .frame(width: 75, height: 75)
-                            .foregroundColor(StatButtonState.inactive.color)
-                            .offset(x: 6, y: 0)
+                        chargeToken(color: StatButtonState.inactive.color)
+                    } else if type == .force {
+                        forceToken(color: StatButtonState.inactive.color)
+                    } else if type == .shield {
+                        shieldToken(color: StatButtonState.inactive.color)
                     } else {
                         Text("\(type.symbol)")
                             .font(.custom("xwing-miniatures", size: symbolSize))

@@ -102,6 +102,17 @@ class ShipViewModel: ObservableObject {
         }
     }
     
+    var hull: Int {
+        let ship = self.shipPilot.ship
+        let hullStats: [Stat] = ship.stats.filter{ $0.type == "hull"}
+        
+        if (hullStats.count > 0) {
+            return hullStats[0].value
+        } else {
+            return 0
+        }
+    }
+    
     var dial: [String] {
         let ship = self.shipPilot.ship
         
@@ -173,27 +184,31 @@ struct ShipView: View {
     
     var bodyContent: some View {
         HStack(alignment: .top) {
-            ImageView(url: viewModel.shipImageURL,
-                         shipViewModel: self.viewModel,
-                         label: "ship")
-                .frame(width: 350.0, height:500)
-                .onTapGesture { self.showCardOverlay.toggle() }
-                .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
-                .environmentObject(viewModel)
+                ImageView(url: viewModel.shipImageURL,
+                             shipViewModel: self.viewModel,
+                             label: "ship")
+                    .frame(width: 350.0, height:500)
+                    .onTapGesture { self.showCardOverlay.toggle() }
+                    .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
+                    .environmentObject(viewModel)
             
-                VStack(spacing: 20) {
-                    if (viewModel.force > 0) {
-                        LinkedView(maxCount: viewModel.force, type: StatButtonType.force)
-                    }
-                    
-                    if (viewModel.charges > 0) {
-                        LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge)
-                    }
-                    
-                    if (viewModel.shields > 0) {
-                        LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield)
-                    }
-                }.padding(.top, 20)
+                    VStack(spacing: 20) {
+                        if (viewModel.hull > 0) {
+                            LinkedView(maxCount: viewModel.hull, type: StatButtonType.hull)
+                        }
+                        
+                        if (viewModel.shields > 0) {
+                            LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield)
+                        }
+                        
+                        if (viewModel.force > 0) {
+                            LinkedView(maxCount: viewModel.force, type: StatButtonType.force)
+                        }
+                        
+                        if (viewModel.charges > 0) {
+                            LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge)
+                        }
+                    }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 
                 DialView(temperature: 0,
