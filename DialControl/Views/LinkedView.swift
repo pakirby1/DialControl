@@ -67,18 +67,39 @@ struct LinkedView: View {
         self.type = type
     }
     
-    func chargeToken(color: Color) -> AnyView {
-        return AnyView(Text("\u{00d3}")
-            .font(.custom("xwing-miniatures", size: 96.0))
-            .foregroundColor(color))
-//            .background(Color.black))
+    func createTokenView(symbol: String, color: Color, isActive: Bool) -> AnyView {
+        AnyView(
+            ZStack {
+                Image(uiImage: UIImage(named: "Token.Shape") ?? UIImage())
+                    .resizable()
+                    .frame(width: 90, height: 90)
+                    .foregroundColor(Color.black)
+                
+                if (isActive) {
+                    Image(uiImage: UIImage(named: "Token.Lines") ?? UIImage())
+                        .resizable()
+                        .frame(width: 90, height: 96)
+                        .foregroundColor(color)
+                }
+                
+                //                Text("\u{00d3}")
+                Text(symbol)
+                    .font(.custom("xwing-miniatures", size: 48))
+                    .foregroundColor(color)
+            }
+        )
+    }
+    
+    func chargeToken(color: Color, isActive: Bool) -> AnyView {
+        return createTokenView(symbol: StatButtonType.charge.symbol,
+                               color: color,
+                               isActive: isActive)
     }
     
     func forceToken(color: Color) -> AnyView {
-        return AnyView(Text(Token.forceActive.characterCode)
-                .font(.custom("xwing-miniatures", size: 96.0))
-                .foregroundColor(color))
-    //            .background(Color.black))
+        return createTokenView(symbol: StatButtonType.force.symbol,
+                               color: color,
+                               isActive: true)
     }
     
     func shieldToken(color: Color) -> AnyView {
@@ -109,7 +130,7 @@ struct LinkedView: View {
 //                        .cornerRadius(20)
                     
                     if type == .charge {
-                        chargeToken(color: type.color)
+                        chargeToken(color: type.color, isActive: true)
                     } else if type == .force {
                         forceToken(color: type.color)
                     } else if type == .shield {
@@ -124,7 +145,9 @@ struct LinkedView: View {
 //                            .border(Color.green, width: 2)
                     }
                 }
-            }.overlay(CountBannerView(count: self.activeCount, type: .active).offset(x: 50, y: -50))
+            }.overlay(CountBannerView(count: self.activeCount, type: .active)
+                .offset(x: CGFloat(50.0),
+                        y: CGFloat(-50)))
             
             Button(action:{
                 let active = min(self.activeCount + 1, self.maxCount)
@@ -134,7 +157,7 @@ struct LinkedView: View {
             {
                 ZStack {
                     if type == .charge {
-                        chargeToken(color: StatButtonState.inactive.color)
+                        chargeToken(color: StatButtonState.inactive.color, isActive: false)
                     } else if type == .force {
                         forceToken(color: StatButtonState.inactive.color)
                     } else if type == .shield {
