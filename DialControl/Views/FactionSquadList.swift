@@ -196,6 +196,7 @@ struct FactionSquadCard: View {
     @EnvironmentObject var viewFactory: ViewFactory
     let viewModel: FactionSquadCardViewModel
     let symbolSize: CGFloat = 36.0
+    @State var displayDeleteConfirmation: Bool = false
     
     init(viewModel: FactionSquadCardViewModel) {
         self.viewModel = viewModel
@@ -217,9 +218,17 @@ struct FactionSquadCard: View {
             .clipShape(Circle())
     }
     
-    var vendorButtonView: some View {
+    var vendorView: some View {
         Button("\(viewModel.squad.vendor.description)") {
             UIApplication.shared.open(URL(string: self.viewModel.squad.vendor.link)!)
+        }
+    }
+    
+    var favoriteView: some View {
+        Button(action: {}) {
+            Image(systemName: "star")
+                .font(.title)
+                .foregroundColor(Color.yellow)
         }
     }
     
@@ -235,7 +244,7 @@ struct FactionSquadCard: View {
         HStack {
             Text(viewModel.squad.name)
                 .font(.title)
-                .lineLimit(1)
+//                .lineLimit(1)
                 .foregroundColor(viewModel.textForeground)
             
             
@@ -249,7 +258,8 @@ struct FactionSquadCard: View {
     
     var deleteButton: some View {
         Button(action: {
-            self.viewModel.deleteCallback(self.viewModel.squadData)
+//            self.viewModel.deleteCallback(self.viewModel.squadData)
+            self.displayDeleteConfirmation = true
         }) {
             Image(systemName: "trash.fill")
                 .font(.title)
@@ -265,7 +275,8 @@ struct FactionSquadCard: View {
                 background
                 factionSymbol.offset(x: -370, y: 0)
                 pointsView.offset(x: -310, y: 0)
-                vendorButtonView.offset(x: -250, y: 0)
+                vendorView.offset(x: -250, y: 0)
+                favoriteView.offset(x: 300, y: 0)
                 nameView
                 deleteButton.offset(x: 350, y: 0)
             }
@@ -277,6 +288,16 @@ struct FactionSquadCard: View {
             Spacer()
             squadButton
             Spacer()
+        }.alert(isPresented: $displayDeleteConfirmation) {
+            Alert(title: Text("Delete"),
+                  message: Text("\(self.viewModel.squadData.name ?? "Squad")"),
+                primaryButton: Alert.Button.default(Text("Delete"), action: {
+                    self.viewModel.deleteCallback(self.viewModel.squadData)
+                }),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
+                    print("Cancelled Delete")
+                })
+            )
         }
     }
 }

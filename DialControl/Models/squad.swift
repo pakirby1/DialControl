@@ -273,6 +273,7 @@ struct Squad: Codable, JSONSerialization {
     let points: Int
     let vendor: SquadVendor
     let version: String
+//    let isFavorite: Bool = false
     
     var Myfaction: Faction? {
         print(faction)
@@ -285,7 +286,7 @@ struct Squad: Codable, JSONSerialization {
             
             return Squad(description: "Invalid",
                          faction: "",
-                         name: "Empty Squad",
+                         name: "",
                          pilots: [],
                          points: 0,
                          vendor: vendor,
