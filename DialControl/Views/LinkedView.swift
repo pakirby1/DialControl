@@ -82,7 +82,6 @@ struct LinkedView: View {
                         .foregroundColor(color)
                 }
                 
-                //                Text("\u{00d3}")
                 Text(symbol)
                     .font(.custom("xwing-miniatures", size: 48))
                     .foregroundColor(color)
@@ -90,30 +89,28 @@ struct LinkedView: View {
         )
     }
     
-    func chargeToken(color: Color, isActive: Bool) -> AnyView {
+    func chargeToken(color: Color, isActive: Bool = true) -> AnyView {
         return createTokenView(symbol: StatButtonType.charge.symbol,
                                color: color,
                                isActive: isActive)
     }
     
-    func forceToken(color: Color) -> AnyView {
+    func forceToken(color: Color, isActive: Bool = true) -> AnyView {
         return createTokenView(symbol: StatButtonType.force.symbol,
                                color: color,
-                               isActive: true)
+                               isActive: isActive)
     }
     
-    func shieldToken(color: Color) -> AnyView {
-        return AnyView(Text(Token.shieldActive.characterCode)
-                .font(.custom("xwing-miniatures", size: 96.0))
-                .foregroundColor(color))
-    //            .background(Color.black))
+    func shieldToken(color: Color, isActive: Bool = true) -> AnyView {
+        return createTokenView(symbol: StatButtonType.shield.symbol,
+                               color: color,
+                               isActive: isActive)
     }
     
-    func hullToken(color: Color) -> AnyView {
-        return AnyView(Image(uiImage: UIImage(named: "Hull") ?? UIImage())
-            .resizable()
-            .frame(width: 90, height: 96)
-            .foregroundColor(color))
+    func hullToken(color: Color, isActive: Bool = true) -> AnyView {
+        return createTokenView(symbol: StatButtonType.hull.symbol,
+                               color: color,
+                               isActive: isActive)
     }
     
     var body: some View {
@@ -130,7 +127,7 @@ struct LinkedView: View {
 //                        .cornerRadius(20)
                     
                     if type == .charge {
-                        chargeToken(color: type.color, isActive: true)
+                        chargeToken(color: type.color)
                     } else if type == .force {
                         forceToken(color: type.color)
                     } else if type == .shield {
@@ -159,11 +156,11 @@ struct LinkedView: View {
                     if type == .charge {
                         chargeToken(color: StatButtonState.inactive.color, isActive: false)
                     } else if type == .force {
-                        forceToken(color: StatButtonState.inactive.color)
+                        forceToken(color: StatButtonState.inactive.color, isActive: false)
                     } else if type == .shield {
-                        shieldToken(color: StatButtonState.inactive.color)
+                        shieldToken(color: StatButtonState.inactive.color, isActive: false)
                     } else {
-                        hullToken(color: StatButtonState.inactive.color)
+                        hullToken(color: StatButtonState.inactive.color, isActive: false)
 //                        Text("\(type.symbol)")
 //                            .font(.custom("xwing-miniatures", size: symbolSize))
 //                            .frame(width: 100, height: 100)
