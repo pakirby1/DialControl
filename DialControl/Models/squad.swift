@@ -220,11 +220,49 @@ struct SquadPilot: Codable, Identifiable {
 struct SquadVendorDetails: Codable {
     let builder: String
     let builder_url: String
+    let link: String
 }
 
 struct SquadVendor: Codable {
-    let yasb: SquadVendorDetails
-//    let lbn: SquadVendorDetails
+    var yasb: SquadVendorDetails? { return _yasb ?? nil }
+    var lbn: SquadVendorDetails? { return _lbn ?? nil }
+    
+    private var _yasb: SquadVendorDetails?
+    private var _lbn: SquadVendorDetails?
+    
+    enum CodingKeys: String, CodingKey {
+        case _yasb = "yasb"
+        case _lbn = "lbn"
+    }
+    
+    init(yasb: SquadVendorDetails?, lbn: SquadVendorDetails?) {
+        self._yasb = yasb
+        self._lbn = lbn
+    }
+    
+    var description: String {
+        var ret = ""
+        
+        if yasb != nil {
+            ret = "YASB"
+        } else if lbn != nil {
+            ret = "LBN"
+        }
+        
+        return ret
+    }
+    
+    var link: String {
+        var ret = ""
+        
+        if let y = yasb {
+            ret = y.link
+        } else if let l = lbn {
+            ret = l.link
+        }
+        
+        return ret
+    }
 }
 
 struct Squad: Codable, JSONSerialization {
@@ -233,7 +271,7 @@ struct Squad: Codable, JSONSerialization {
     let name: String
     let pilots: [SquadPilot]
     let points: Int
-//    let vendor: SquadVendor
+    let vendor: SquadVendor
     let version: String
     
     var Myfaction: Faction? {
@@ -243,12 +281,14 @@ struct Squad: Codable, JSONSerialization {
     
     static var emptySquad: Squad {
         get {
+            let vendor: SquadVendor = SquadVendor(yasb: nil, lbn: nil)
+            
             return Squad(description: "Invalid",
                          faction: "",
                          name: "Empty Squad",
                          pilots: [],
                          points: 0,
-//                         vendor: SquadVendor.init(yasb: SquadVendorDetails.init(builder: "", builder_url: "")),
+                         vendor: vendor,
                          version: "0.0")
         }
     }
@@ -281,6 +321,7 @@ struct Squad: Codable, JSONSerialization {
     }
 }
 
+// Custom JSON decoding
 //extension Squad {
 //    init(from decoder: Decoder) throws {
 //        let values = try decoder.container(keyedBy: CodingKeys.self)

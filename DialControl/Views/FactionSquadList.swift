@@ -217,6 +217,12 @@ struct FactionSquadCard: View {
             .clipShape(Circle())
     }
     
+    var vendorButtonView: some View {
+        Button("\(viewModel.squad.vendor.description)") {
+            UIApplication.shared.open(URL(string: self.viewModel.squad.vendor.link)!)
+        }
+    }
+    
     var factionSymbol: some View {
         let x: Faction? = Faction.buildFaction(jsonFaction: self.viewModel.squad.faction)
         let characterCode = x?.characterCode
@@ -231,6 +237,8 @@ struct FactionSquadCard: View {
                 .font(.title)
                 .lineLimit(1)
                 .foregroundColor(viewModel.textForeground)
+            
+            
         }
     }
     
@@ -257,6 +265,7 @@ struct FactionSquadCard: View {
                 background
                 factionSymbol.offset(x: -370, y: 0)
                 pointsView.offset(x: -310, y: 0)
+                vendorButtonView.offset(x: -250, y: 0)
                 nameView
                 deleteButton.offset(x: 350, y: 0)
             }
