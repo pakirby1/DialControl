@@ -78,7 +78,7 @@ struct LinkedView: View {
                 if (isActive) {
                     Image(uiImage: UIImage(named: "Token.Lines") ?? UIImage())
                         .resizable()
-                        .frame(width: 90, height: 96)
+                        .frame(width: 96, height: 96)   // Let the lines just barely overlap shape
                         .foregroundColor(color)
                 }
                 
