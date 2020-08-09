@@ -13,6 +13,8 @@
 		AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */; };
 		AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6424A2C93B00DF689B /* ImageData.swift */; };
 		AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */; };
+		AE0E38B924DF910A00A3A824 /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */; };
+		AE0E38BA24DF910A00A3A824 /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */; };
 		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
 		AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */ = {isa = PBXBuildFile; fileRef = AE15E78D241D02120002F696 /* tie-in-interceptor.json */; };
 		AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */; };
@@ -93,6 +95,8 @@
 		AE028C5E24A2C6D300DF689B /* DialControl.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DialControl.xcdatamodel; sourceTree = "<group>"; };
 		AE028C6424A2C93B00DF689B /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFetchedResultsController.swift; sourceTree = "<group>"; };
+		AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
+		AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AE15E78D241D02120002F696 /* tie-in-interceptor.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tie-in-interceptor.json"; sourceTree = "<group>"; };
 		AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradesView.swift; sourceTree = "<group>"; };
@@ -183,6 +187,8 @@
 		AE028C5C24A2C6B700DF689B /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */,
+				AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */,
 				AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */,
 				AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */,
 				AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */,
@@ -498,6 +504,7 @@
 				AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */,
 				AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */,
 				AE028C57249F81B200DF689B /* Store.swift in Sources */,
+				AE0E38B924DF910A00A3A824 /* PilotState+CoreDataClass.swift in Sources */,
 				AE1DF8F424B5E34500B84D38 /* UpArrowShape.swift in Sources */,
 				AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */,
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
@@ -509,6 +516,7 @@
 				AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */,
 				AE1DF8EF24B5D80E00B84D38 /* ImageView.swift in Sources */,
 				AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */,
+				AE0E38BA24DF910A00A3A824 /* PilotState+CoreDataProperties.swift in Sources */,
 				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
 				AE1DF8F124B5E0CD00B84D38 /* CardView.swift in Sources */,
 				AE028C59249F825100DF689B /* NetworkCache.swift in Sources */,

@@ -38,6 +38,35 @@ class SquadXWSImportViewModel : ObservableObject {
             print(error)
         }
     }
+    
+    func createPilotState() {}
+    
+    func savePilotState(squadID: UUID, state: String) {
+        let pilotState = PilotState(context: self.moc)
+        pilotState.id = UUID()
+        pilotState.squadID = squadID
+    }
+}
+
+struct UpgradeStateData {
+    let force_active : Int?
+    let force_inactive : Int?
+    let charge_active : Int?
+    let charge_inactive : Int?
+}
+
+struct PilotStateData {
+    let adjusted_attack : Int
+    let adjusted_defense : Int
+    let hull_active : Int
+    let hull_inactive : Int
+    let shield_active : Int
+    let shield_inactive : Int
+    let force_active : Int
+    let force_inactive : Int
+    let charge_active : Int
+    let charge_inactive : Int
+    let upgradeStates : [UpgradeStateData]?
 }
 
 struct SquadXWSImportView : View {

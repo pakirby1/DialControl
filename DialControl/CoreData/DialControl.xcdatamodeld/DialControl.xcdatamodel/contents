@@ -9,6 +9,11 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="PilotState" representedClassName="PilotState" syncable="YES">
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="json" optional="YES" attributeType="String"/>
+        <attribute name="squadID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
     <entity name="SquadData" representedClassName=".SquadData" syncable="YES">
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="json" attributeType="String"/>
@@ -22,5 +27,6 @@
     <elements>
         <element name="ImageData" positionX="-63" positionY="-18" width="128" height="73"/>
         <element name="SquadData" positionX="-63" positionY="-9" width="128" height="88"/>
+        <element name="PilotState" positionX="-63" positionY="9" width="128" height="88"/>
     </elements>
 </model>
