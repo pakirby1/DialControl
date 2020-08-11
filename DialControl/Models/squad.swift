@@ -265,15 +265,34 @@ struct SquadVendor: Codable {
     }
 }
 
+/// https://github.com/elistevens/xws-spec
 struct Squad: Codable, JSONSerialization {
-    let description: String
+    // Mandatory
     let faction: String
-    let name: String
     let pilots: [SquadPilot]
-    let points: Int
-    let vendor: SquadVendor
-    let version: String
+    
+    // Optional
+    var description: String? { return _description ?? nil }
+    var name: String? { return _name ?? nil }
+    var points: Int? { return _points ?? nil }
+    var vendor: SquadVendor? { return _vendor ?? nil }
+    var version: String
 //    let isFavorite: Bool = false
+    
+    private var _description: String?
+    private var _name: String?
+    private var _points: Int?
+    private var _vendor: SquadVendor?
+    
+    enum CodingKeys: String, CodingKey {
+        case _description = "description"
+        case _name = "name"
+        case _points = "points"
+        case _vendor = "vendor"
+        case faction = "faction"
+        case pilots = "pilots"
+        case version = "version"
+    }
     
     var Myfaction: Faction? {
         print(faction)
@@ -284,13 +303,14 @@ struct Squad: Codable, JSONSerialization {
         get {
             let vendor: SquadVendor = SquadVendor(yasb: nil, lbn: nil)
             
-            return Squad(description: "Invalid",
-                         faction: "",
-                         name: "",
+            return Squad(faction: "",
                          pilots: [],
-                         points: 0,
-                         vendor: vendor,
-                         version: "0.0")
+                         version: "0.0",
+                         _description: "Invalid",
+                         _name: "",
+                         _points: 0,
+                         _vendor: vendor
+                         )
         }
     }
     

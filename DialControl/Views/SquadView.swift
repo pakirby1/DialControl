@@ -274,7 +274,7 @@ struct SquadCardView: View {
             
             VStack(alignment: .leading) {
                 HStack {
-                    Text("\(squad.points)")
+                    Text("\(squad.points ?? 0)")
                         .font(.title)
                         .foregroundColor(theme.TEXT_FOREGROUND)
                         .padding()
@@ -283,7 +283,7 @@ struct SquadCardView: View {
                     
                     Spacer()
                     
-                    Text(squad.name)
+                    Text(squad.name ?? "Unnamed")
                         .font(.title)
                         .lineLimit(1)
                         .foregroundColor(theme.TEXT_FOREGROUND)

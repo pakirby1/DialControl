@@ -109,7 +109,7 @@ struct SquadXWSImportView : View {
                 
                 if squad.name != Squad.emptySquad.name {
                     // Save the squad JSON to CoreData
-                    self.viewModel.saveSquad(jsonString: self.xws, name: squad.name)
+                    self.viewModel.saveSquad(jsonString: self.xws, name: squad.name ?? "")
 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                     self.viewFactory.back()
                 }

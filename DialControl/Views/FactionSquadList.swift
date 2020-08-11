@@ -210,7 +210,7 @@ struct FactionSquadCard: View {
     }
     
     var pointsView: some View {
-        Text("\(viewModel.squad.points)")
+        Text("\(viewModel.squad.points ?? 0)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -219,8 +219,8 @@ struct FactionSquadCard: View {
     }
     
     var vendorView: some View {
-        Button("\(viewModel.squad.vendor.description)") {
-            UIApplication.shared.open(URL(string: self.viewModel.squad.vendor.link)!)
+        Button("\(viewModel.squad.vendor?.description ?? "")") {
+            UIApplication.shared.open(URL(string: self.viewModel.squad.vendor?.link ?? "")!)
         }
     }
     
@@ -242,7 +242,7 @@ struct FactionSquadCard: View {
     
     var nameView: some View {
         HStack {
-            Text(viewModel.squad.name)
+            Text(viewModel.squad.name ?? "Unnamed")
                 .font(.title)
 //                .lineLimit(1)
                 .foregroundColor(viewModel.textForeground)

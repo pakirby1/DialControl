@@ -68,7 +68,7 @@
     {
       "size" : "40x40",
       "idiom" : "ipad",
-      "filename" : "SquadManager_AppIcon.png",
+      "filename" : "SquadManager_AppIcon4.png",
       "scale" : "2x"
     },
     {
@@ -77,9 +77,8 @@
       "scale" : "1x"
     },
     {
-      "size" : "76x76",
       "idiom" : "ipad",
-      "filename" : "SquadManager_AppIcon-1.png",
+      "size" : "76x76",
       "scale" : "2x"
     },
     {
