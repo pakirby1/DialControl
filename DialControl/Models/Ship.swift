@@ -294,6 +294,48 @@ struct Ship: Codable, JSONSerialization {
     }
 }
 
+extension ShipPilot {
+    var hullStats: Int {
+        let stats: [Stat] = ship.stats.filter{ $0.type == "hull"}
+        
+        if (stats.count > 0) {
+            return stats[0].value
+        } else {
+            return 0
+        }
+    }
+    
+    var shieldStats: Int {
+        let stats: [Stat] = ship.stats.filter{ $0.type == "shield"}
+        
+        if (stats.count > 0) {
+            return stats[0].value
+        } else {
+            return 0
+        }
+    }
+    
+    var forceStats: Int {
+        let stats: [Stat] = ship.stats.filter{ $0.type == "force"}
+        
+        if (stats.count > 0) {
+            return stats[0].value
+        } else {
+            return 0
+        }
+    }
+    
+    var chargeStats: Int {
+        let stats: [Stat] = ship.stats.filter{ $0.type == "charge"}
+        
+        if (stats.count > 0) {
+            return stats[0].value
+        } else {
+            return 0
+        }
+    }
+}
+
 struct ShipPilot: Identifiable, Equatable {
     let id = UUID()
     let ship: Ship

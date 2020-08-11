@@ -15,6 +15,7 @@
 		AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */; };
 		AE0E38B924DF910A00A3A824 /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */; };
 		AE0E38BA24DF910A00A3A824 /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */; };
+		AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */; };
 		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
 		AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */ = {isa = PBXBuildFile; fileRef = AE15E78D241D02120002F696 /* tie-in-interceptor.json */; };
 		AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */; };
@@ -97,6 +98,7 @@
 		AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFetchedResultsController.swift; sourceTree = "<group>"; };
 		AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotStateData.swift; sourceTree = "<group>"; };
 		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AE15E78D241D02120002F696 /* tie-in-interceptor.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tie-in-interceptor.json"; sourceTree = "<group>"; };
 		AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradesView.swift; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				AE028C58249F825100DF689B /* NetworkCache.swift */,
 				AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */,
 				AE1DF8F524B73D1900B84D38 /* JSONSerialization.swift */,
+				AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
 				AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */,
+				AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */,
 				AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */,
 				AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,

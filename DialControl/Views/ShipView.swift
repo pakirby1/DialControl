@@ -92,25 +92,11 @@ class ShipViewModel: ObservableObject {
     }
     
     var shields: Int {
-        let ship = self.shipPilot.ship
-        let shieldsStats: [Stat] = ship.stats.filter{ $0.type == "shields"}
-        
-        if (shieldsStats.count > 0) {
-            return shieldsStats[0].value
-        } else {
-            return 0
-        }
+        self.shipPilot.shieldStats
     }
     
     var hull: Int {
-        let ship = self.shipPilot.ship
-        let hullStats: [Stat] = ship.stats.filter{ $0.type == "hull"}
-        
-        if (hullStats.count > 0) {
-            return hullStats[0].value
-        } else {
-            return 0
-        }
+        self.shipPilot.hullStats
     }
     
     var dial: [String] {

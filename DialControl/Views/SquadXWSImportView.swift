@@ -39,35 +39,68 @@ class SquadXWSImportViewModel : ObservableObject {
         }
     }
     
-    func createPilotState() {}
+    /*
+     struct UpgradeStateData {
+         let force_active : Int?
+         let force_inactive : Int?
+         let charge_active : Int?
+         let charge_inactive : Int?
+         let selected_side : Int
+     }
+
+     struct PilotStateData {
+         let adjusted_attack : Int
+         let adjusted_defense : Int
+         let hull_active : Int
+         let hull_inactive : Int
+         let shield_active : Int
+         let shield_inactive : Int
+         let force_active : Int
+         let force_inactive : Int
+         let charge_active : Int
+         let charge_inactive : Int
+         let selected_maneuver: String
+         let shipID: String
+         let upgradeStates : [UpgradeStateData]?
+     }
+     */
+    func createPilotState(squad: Squad) {
+        // for each pilot in squad.pilots
+        for pilot in squad.pilots {
+            // get the ship
+            let shipPilot = getShip(squad: squad, squadPilot: pilot)
+            
+            // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
+            
+            let pilotStateData = PilotStateData(
+                adjusted_attack: 0,
+                adjusted_defense: 0,
+                hull_active: shipPilot.hullStats,
+                hull_inactive: 0,
+                shield_active: shipPilot.shieldStats,
+                shield_inactive: 0,
+                force_active: shipPilot.forceStats,
+                force_inactive: 0,
+                charge_active: shipPilot.chargeStats,
+                charge_inactive: 0,
+                selected_maneuver: "",
+                shipID: "",
+                upgradeStates: []
+            )
+        }
+            
+        
+        
+    }
     
     func savePilotState(squadID: UUID, state: String) {
         let pilotState = PilotState(context: self.moc)
         pilotState.id = UUID()
         pilotState.squadID = squadID
+        pilotState.json = state
     }
 }
 
-struct UpgradeStateData {
-    let force_active : Int?
-    let force_inactive : Int?
-    let charge_active : Int?
-    let charge_inactive : Int?
-}
-
-struct PilotStateData {
-    let adjusted_attack : Int
-    let adjusted_defense : Int
-    let hull_active : Int
-    let hull_inactive : Int
-    let shield_active : Int
-    let shield_inactive : Int
-    let force_active : Int
-    let force_inactive : Int
-    let charge_active : Int
-    let charge_inactive : Int
-    let upgradeStates : [UpgradeStateData]?
-}
 
 struct SquadXWSImportView : View {
     @State private var xws: String = ""
@@ -110,6 +143,10 @@ struct SquadXWSImportView : View {
                 if squad.name != Squad.emptySquad.name {
                     // Save the squad JSON to CoreData
                     self.viewModel.saveSquad(jsonString: self.xws, name: squad.name ?? "")
+                    
+                    // Create the state and save to PilotState
+                    self.viewModel.createPilotState(squad: squad)
+                    
 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                     self.viewFactory.back()
                 }
