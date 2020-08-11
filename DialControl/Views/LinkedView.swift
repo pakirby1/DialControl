@@ -69,6 +69,14 @@ struct LinkedView: View {
         self.type = type
     }
     
+    init(type: StatButtonType, active: Int, inactive: Int, callback: @escaping (Int, Int) -> ()) {
+        self.maxCount = active + inactive
+        _activeCount = State(initialValue: active)
+        _inactiveCount = State(initialValue: inactive)
+        self.callback = callback
+        self.type = type
+    }
+    
     func createTokenView(symbol: String, color: Color, isActive: Bool) -> AnyView {
         AnyView(
             ZStack {
@@ -179,7 +187,8 @@ struct LinkedView: View {
         self.activeCount = active < 0 ? 0 : active
         self.inactiveCount = inactive < 0 ? 0 : inactive
         
-        // Update the PilotStateData somehow
+        // Update the PilotStateData
+        self.callback(self.activeCount, self.inactiveCount)
     }
 }
 

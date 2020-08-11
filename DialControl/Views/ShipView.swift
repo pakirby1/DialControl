@@ -20,6 +20,7 @@ class ShipViewModel: ObservableObject {
     @Published var upgradeImage: UIImage = UIImage()
     private var _displayImageOverlay: Bool = false
     private var cancellable: AnyCancellable?
+    var pilotStateData: PilotStateData? = nil
     
     // CoreData
     private let frc: BindableFetchedResultsController<ImageData>
@@ -81,6 +82,8 @@ class ShipViewModel: ObservableObject {
         return (ship, foundPilots)
     }
     
+    // Load values from pilotShipState, becuase shipPilot ontains the initial values
+    // Not the updated values
     var force: Int {
         return shipPilot.ship.pilots[0]
             .force?.value ?? 0
@@ -106,13 +109,11 @@ class ShipViewModel: ObservableObject {
     }
 
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
+        let newPilotStateData: PilotStateData
         
-    }
-    
-    func increment(type: PilotStatePropertyType, amount: Int = 0) {
         switch(type) {
         case .hull:
-            updateHull()
+            updateHull(currentState: self.pilotStateData!, active: active, inactive: inactive)
         case .shield:
             updateShield()
         case .force:
@@ -124,7 +125,23 @@ class ShipViewModel: ObservableObject {
         }
     }
     
-    func updateHull() {}
+    func updateHull(currentState: PilotStateData, active: Int, inactive: Int) {
+        let newState = PilotStateData(adjusted_attack: currentState.adjusted_attack,
+                       adjusted_defense: currentState.adjusted_defense,
+                       hull_active: active,
+                       hull_inactive: inactive,
+                       shield_active: currentState.shield_active,
+                       shield_inactive: currentState.shield_inactive,
+                       force_active: currentState.force_active,
+                       force_inactive: currentState.force_inactive,
+                       charge_active: currentState.charge_active,
+                       charge_inactive: currentState.charge_inactive,
+                       selected_maneuver: currentState.selected_maneuver,
+                       shipID: currentState.shipID,
+                       upgradeStates: currentState.upgradeStates)
+        
+        updateState(newState: newState)
+    }
     
     func updateShield() {}
     
@@ -134,6 +151,7 @@ class ShipViewModel: ObservableObject {
     
     func updateShipIDMarker(marker: String) {}
     
+    func updateState(newState: PilotStateData) {}
 }
 
 enum PilotStatePropertyType {
