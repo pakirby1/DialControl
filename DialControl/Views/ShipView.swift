@@ -104,6 +104,44 @@ class ShipViewModel: ObservableObject {
         
         return ship.dial
     }
+
+    func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
+        
+    }
+    
+    func increment(type: PilotStatePropertyType, amount: Int = 0) {
+        switch(type) {
+        case .hull:
+            updateHull()
+        case .shield:
+            updateShield()
+        case .force:
+            updateForce()
+        case .charge:
+            updateCharge()
+        case .shipIDMarker(let id):
+            updateShipIDMarker(marker: id)
+        }
+    }
+    
+    func updateHull() {}
+    
+    func updateShield() {}
+    
+    func updateForce() {}
+    
+    func updateCharge() {}
+    
+    func updateShipIDMarker(marker: String) {}
+    
+}
+
+enum PilotStatePropertyType {
+    case hull
+    case shield
+    case charge
+    case force
+    case shipIDMarker(String)
 }
 
 // MARK:- ShipView
@@ -180,19 +218,27 @@ struct ShipView: View {
             
                     VStack(spacing: 20) {
                         if (viewModel.hull > 0) {
-                            LinkedView(maxCount: viewModel.hull, type: StatButtonType.hull)
+                            LinkedView(maxCount: viewModel.hull, type: StatButtonType.hull) { (active, inactive) in
+                                self.viewModel.update(type: PilotStatePropertyType.hull, active: active, inactive: inactive)
+                            }
                         }
                         
                         if (viewModel.shields > 0) {
-                            LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield)
+                            LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield){ (active, inactive) in
+                                self.viewModel.update(type: PilotStatePropertyType.shield, active: active, inactive: inactive)
+                            }
                         }
                         
                         if (viewModel.force > 0) {
-                            LinkedView(maxCount: viewModel.force, type: StatButtonType.force)
+                            LinkedView(maxCount: viewModel.force, type: StatButtonType.force){ (active, inactive) in
+                                self.viewModel.update(type: PilotStatePropertyType.force, active: active, inactive: inactive)
+                            }
                         }
                         
                         if (viewModel.charges > 0) {
-                            LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge)
+                            LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge){ (active, inactive) in
+                                self.viewModel.update(type: PilotStatePropertyType.charge, active: active, inactive: inactive)
+                            }
                         }
                     }.padding(.top, 20)
 //                .border(Color.green, width: 2)

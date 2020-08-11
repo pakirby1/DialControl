@@ -59,11 +59,13 @@ struct LinkedView: View {
     let maxCount: Int
     let type: StatButtonType
     let symbolSize: CGFloat = 72
+    let callback: (Int, Int) -> ()
     
-    init(maxCount: Int, type: StatButtonType) {
+    init(maxCount: Int, type: StatButtonType, callback: @escaping (Int, Int) -> ()) {
         self.maxCount = maxCount
         _activeCount = State(initialValue: maxCount)
         _inactiveCount = State(initialValue: 0)
+        self.callback = callback
         self.type = type
     }
     
@@ -176,6 +178,8 @@ struct LinkedView: View {
     func setState(active: Int, inactive: Int) {
         self.activeCount = active < 0 ? 0 : active
         self.inactiveCount = inactive < 0 ? 0 : inactive
+        
+        // Update the PilotStateData somehow
     }
 }
 
