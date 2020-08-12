@@ -26,7 +26,7 @@ class SquadXWSImportViewModel : ObservableObject {
         }
     }
     
-    func saveSquad(jsonString: String, name: String) {
+    func saveSquad(jsonString: String, name: String) -> SquadData {
         let squadData = SquadData(context: self.moc)
         squadData.id = UUID()
         squadData.name = name
@@ -37,6 +37,8 @@ class SquadXWSImportViewModel : ObservableObject {
         } catch {
             print(error)
         }
+        
+        return squadData
     }
     
     /*
@@ -64,17 +66,20 @@ class SquadXWSImportViewModel : ObservableObject {
          let upgradeStates : [UpgradeStateData]?
      }
      */
-    func createPilotState(squad: Squad) {
+    func createPilotState(squad: Squad, squadData: SquadData) {
         // for each pilot in squad.pilots
         for pilot in squad.pilots {
             // get the ship
-            let shipPilot = getShip(squad: squad, squadPilot: pilot)
+            let shipPilot: ShipPilot = getShip(squad: squad, squadPilot: pilot)
             
             // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
             
+            let arc = shipPilot.arcStats
+            let agility = shipPilot.agilityStats
+            
             let pilotStateData = PilotStateData(
-                adjusted_attack: 0,
-                adjusted_defense: 0,
+                adjusted_attack: arc,
+                adjusted_defense: agility,
                 hull_active: shipPilot.hullStats,
                 hull_inactive: 0,
                 shield_active: shipPilot.shieldStats,
@@ -87,10 +92,10 @@ class SquadXWSImportViewModel : ObservableObject {
                 shipID: "",
                 upgradeStates: []
             )
-        }
             
-        
-        
+            let json = PilotStateData.serialize(type: pilotStateData)
+            savePilotState(squadID: squadData.id!, state: json)
+        }
     }
     
     func savePilotState(squadID: UUID, state: String) {
@@ -98,6 +103,12 @@ class SquadXWSImportViewModel : ObservableObject {
         pilotState.id = UUID()
         pilotState.squadID = squadID
         pilotState.json = state
+        
+        do {
+            try self.moc.save()
+        } catch {
+            print(error)
+        }
     }
 }
 
@@ -142,10 +153,10 @@ struct SquadXWSImportView : View {
                 
                 if squad.name != Squad.emptySquad.name {
                     // Save the squad JSON to CoreData
-                    self.viewModel.saveSquad(jsonString: self.xws, name: squad.name ?? "")
+                    let squadData = self.viewModel.saveSquad(jsonString: self.xws, name: squad.name ?? "")
                     
                     // Create the state and save to PilotState
-                    self.viewModel.createPilotState(squad: squad)
+                    self.viewModel.createPilotState(squad: squad, squadData: squadData)
                     
 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                     self.viewFactory.back()

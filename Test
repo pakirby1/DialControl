@@ -1,0 +1,153 @@
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-ba-interceptor.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-ba-interceptor.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-fo-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-fo-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-sf-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-sf-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-sf-fighter.json:    { "arc": "Single Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-vn-silencer.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/first-order/tie-vn-silencer.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/alpha-class-star-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/alpha-class-star-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/lambda-class-t-4a-shuttle.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/lambda-class-t-4a-shuttle.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/lambda-class-t-4a-shuttle.json:    { "arc": "Rear Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-advanced-v1.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-advanced-v1.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-advanced-x1.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-advanced-x1.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ag-aggressor.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ag-aggressor.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ca-punisher.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ca-punisher.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-d-defender.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-d-defender.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-in-interceptor.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-in-interceptor.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ln-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ln-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ph-phantom.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-ph-phantom.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-reaper.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-reaper.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-sa-bomber.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-sa-bomber.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-sk-striker.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/tie-sk-striker.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/vt-49-decimator.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-empire/vt-49-decimator.json:    { "arc": "Double Turret Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/arc-170-starfighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/arc-170-starfighter.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/arc-170-starfighter.json:    { "arc": "Rear Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/btl-b-y-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/btl-b-y-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/delta-7-aethersprite.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/delta-7-aethersprite.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/naboo-royal-n-1-starfighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/galactic-republic/naboo-royal-n-1-starfighter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/a-sf-01-b-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/a-sf-01-b-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/arc-170-starfighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/arc-170-starfighter.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/arc-170-starfighter.json:    { "arc": "Rear Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/attack-shuttle.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/attack-shuttle.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/auzituck-gunship.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/auzituck-gunship.json:    { "arc": "Full Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/btl-a4-y-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/btl-a4-y-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/btl-s8-k-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/btl-s8-k-wing.json:    { "arc": "Double Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/e-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/e-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/hwk-290-light-freighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/hwk-290-light-freighter.json:    { "arc": "Single Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/modified-yt-1300-light-freighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/modified-yt-1300-light-freighter.json:    { "arc": "Double Turret Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/rz-1-a-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/rz-1-a-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/sheathipede-class-shuttle.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/sheathipede-class-shuttle.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/sheathipede-class-shuttle.json:    { "arc": "Rear Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/t-65-x-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/t-65-x-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/tie-ln-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/tie-ln-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/ut-60d-u-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/ut-60d-u-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/vcx-100-light-freighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/vcx-100-light-freighter.json:    { "arc": "Front Arc", "type": "attack", "value": 4 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/yt-2400-light-freighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/yt-2400-light-freighter.json:    { "arc": "Double Turret Arc", "type": "attack", "value": 4 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/z-95-af4-headhunter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/rebel-alliance/z-95-af4-headhunter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/fireball.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/fireball.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/mg-100-starfortress-sf-17.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/mg-100-starfortress-sf-17.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/mg-100-starfortress-sf-17.json:    { "arc": "Double Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/resistance-transport-pod.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/resistance-transport-pod.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/resistance-transport.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/resistance-transport.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/rz-2-a-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/rz-2-a-wing.json:    { "arc": "Single Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/scavenged-yt-1300.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/scavenged-yt-1300.json:    { "arc": "Double Turret Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/t-70-x-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/resistance/t-70-x-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/aggressor-assault-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/aggressor-assault-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/btl-a4-y-wing.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/btl-a4-y-wing.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/customized-yt-1300-light-freighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/customized-yt-1300-light-freighter.json:    { "arc": "Double Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/escape-craft.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/escape-craft.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/fang-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/fang-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/firespray-class-patrol-craft.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/firespray-class-patrol-craft.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/firespray-class-patrol-craft.json:    { "arc": "Rear Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/g-1a-starfighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/g-1a-starfighter.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/hwk-290-light-freighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/hwk-290-light-freighter.json:    { "arc": "Single Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/jumpmaster-5000.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/jumpmaster-5000.json:    { "arc": "Single Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/kihraxz-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/kihraxz-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/lancer-class-pursuit-craft.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/lancer-class-pursuit-craft.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/lancer-class-pursuit-craft.json:    { "arc": "Single Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/m3-a-interceptor.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/m3-a-interceptor.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/m12-l-kimogila-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/m12-l-kimogila-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/modified-tie-ln-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/modified-tie-ln-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/quadrijet-transfer-spacetug.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/quadrijet-transfer-spacetug.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/scurrg-h-6-bomber.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/scurrg-h-6-bomber.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/starviper-class-attack-platform.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/starviper-class-attack-platform.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/yv-666-light-freighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/yv-666-light-freighter.json:    { "arc": "Full Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/z-95-af4-headhunter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/scum-and-villainy/z-95-af4-headhunter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/hyena-class-droid-bomber.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/hyena-class-droid-bomber.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/nantex-class-starfighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/nantex-class-starfighter.json:    { "arc": "Bullseye Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/nantex-class-starfighter.json:    { "arc": "Single Turret Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/sith-infiltrator.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/sith-infiltrator.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/vulture-class-droid-fighter.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/pilots/separatist-alliance/vulture-class-droid-fighter.json:    { "arc": "Front Arc", "type": "attack", "value": 2 },
+/Users/philkirby/Documents/DialControl/DialControl/Data/tie-in-interceptor.json
+/Users/philkirby/Documents/DialControl/DialControl/Data/tie-in-interceptor.json:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Models/Ship.swift
+/Users/philkirby/Documents/DialControl/DialControl/Models/Ship.swift:    { "arc": "Front Arc", "type": "attack", "value": 3 },
+/Users/philkirby/Documents/DialControl/DialControl/Models/Upgrade.swift
+/Users/philkirby/Documents/DialControl/DialControl/Models/Upgrade.swift:  { "arc": "Front Arc",

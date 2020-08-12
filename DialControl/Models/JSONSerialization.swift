@@ -10,6 +10,7 @@ import Foundation
 
 protocol JSONSerialization {
     static func serialize<T: Decodable>(jsonString: String) -> T
+    static func serialize<T: Encodable>(type: T) -> String
 }
 
 extension JSONSerialization {
@@ -22,6 +23,19 @@ extension JSONSerialization {
         }
 
         return ret
+    }
+    
+    static func serialize<T: Encodable>(type: T) -> String {
+        let encoder = JSONEncoder()
+        
+        // open func encode<T>(_ value: T) throws -> Data where T : Encodable
+        guard let data = try? encoder.encode(type) else {
+            fatalError("Failed to encode.")
+        }
+
+        let str = String(decoding: data, as: UTF8.self)
+        
+        return str
     }
 }
 

@@ -295,6 +295,34 @@ struct Ship: Codable, JSONSerialization {
 }
 
 extension ShipPilot {
+    var agilityStats: Int {
+        let stats: [Stat] = ship.stats.filter{ $0.type == "agility"}
+            
+            if (stats.count > 0) {
+                return stats[0].value
+            } else {
+                return 0
+            }
+    }
+    
+    /*
+     "Front Arc"
+     "Single Turret Arc"
+     "Bullseye Arc"
+     "Full Front Arc"
+     "Double Turret Arc"
+     "Rear Arc"
+     */
+    var arcStats: Int {
+        let stats: [Stat] = ship.stats.filter{ $0.type == "arc"}
+            
+            if (stats.count > 0) {
+                return stats[0].value
+            } else {
+                return 0
+            }
+    }
+    
     var hullStats: Int {
         let stats: [Stat] = ship.stats.filter{ $0.type == "hull"}
         
@@ -306,7 +334,7 @@ extension ShipPilot {
     }
     
     var shieldStats: Int {
-        let stats: [Stat] = ship.stats.filter{ $0.type == "shield"}
+        let stats: [Stat] = ship.stats.filter{ $0.type == "shields"}
         
         if (stats.count > 0) {
             return stats[0].value

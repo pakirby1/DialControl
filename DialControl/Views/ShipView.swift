@@ -21,6 +21,7 @@ class ShipViewModel: ObservableObject {
     private var _displayImageOverlay: Bool = false
     private var cancellable: AnyCancellable?
     var pilotStateData: PilotStateData? = nil
+    // let pilotStateService:
     
     // CoreData
     private let frc: BindableFetchedResultsController<ImageData>
@@ -140,6 +141,7 @@ class ShipViewModel: ObservableObject {
                        shipID: currentState.shipID,
                        upgradeStates: currentState.upgradeStates)
         
+        // Call service.updateState
         updateState(newState: newState)
     }
     

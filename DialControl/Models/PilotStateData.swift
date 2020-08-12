@@ -9,7 +9,7 @@
 import Foundation
 
 
-struct UpgradeStateData {
+struct UpgradeStateData : Codable {
     let force_active : Int?
     let force_inactive : Int?
     let charge_active : Int?
@@ -17,7 +17,7 @@ struct UpgradeStateData {
     let selected_side : Int
 }
 
-struct PilotStateData {
+struct PilotStateData : Codable, JSONSerialization {
     let adjusted_attack : Int
     let adjusted_defense : Int
     let hull_active : Int
