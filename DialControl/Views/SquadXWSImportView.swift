@@ -117,7 +117,6 @@ class SquadXWSImportViewModel : ObservableObject {
     }
 }
 
-
 struct SquadXWSImportView : View {
     @State private var xws: String = ""
     @EnvironmentObject var viewFactory: ViewFactory

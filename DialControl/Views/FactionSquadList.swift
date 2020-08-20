@@ -269,7 +269,7 @@ struct FactionSquadCard: View {
     
     var squadButton: some View {
         Button(action: {
-            self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad)
+            self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad, self.viewModel.squadData)
         }) {
             ZStack {
                 background

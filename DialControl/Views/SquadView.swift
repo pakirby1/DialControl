@@ -16,9 +16,11 @@ class SquadViewModel : ObservableObject {
     @Published var alertText: String = ""
     @Published var showAlert: Bool = false
     var squad: Squad
+    var squadData: SquadData
     
-    init(squad: Squad) {
+    init(squad: Squad, squadData: SquadData) {
         self.squad = squad
+        self.squadData = squadData
     }
 }
 
@@ -46,7 +48,7 @@ struct SquadView: View {
     var body: some View {
         VStack {
             header
-            SquadCardView(squad: viewModel.squad)
+            SquadCardView(squad: viewModel.squad, squadData: viewModel.squadData)
                 .environmentObject(viewFactory)
                 .onAppear() {
                     print("SquadView.onAppear")
@@ -246,6 +248,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot) -> ShipPilot {
 }
 struct SquadCardView: View {
     let squad: Squad
+    let squadData: SquadData
     let theme: Theme = WestworldUITheme()
     @EnvironmentObject var viewFactory: ViewFactory
     @State var shipPilots: [ShipPilot] = []

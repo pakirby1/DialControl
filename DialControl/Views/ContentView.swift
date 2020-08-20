@@ -70,8 +70,8 @@ class ViewFactory: ObservableObject {
     private func buildView(type: ViewType) -> AnyView {
         
         switch(type) {
-        case .squadViewPAK(let squad):
-            let viewModel = SquadViewModel(squad: squad)
+        case .squadViewPAK(let squad, let squadData):
+            let viewModel = SquadViewModel(squad: squad, squadData: squadData)
             return AnyView(SquadView(viewModel: viewModel)
                 .environmentObject(self))
             
@@ -192,7 +192,7 @@ enum ViewType {
     case multiLineTextView
     case factionSquadList(Faction)
     case factionFilterView(Faction)
-    case squadViewPAK(Squad)
+    case squadViewPAK(Squad, SquadData)
     case back
 }
 
