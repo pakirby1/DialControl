@@ -13,8 +13,6 @@
 		AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */; };
 		AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6424A2C93B00DF689B /* ImageData.swift */; };
 		AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */; };
-		AE0E38B924DF910A00A3A824 /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */; };
-		AE0E38BA24DF910A00A3A824 /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */; };
 		AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */; };
 		AE0E38C024E37BEB00A3A824 /* Test in Resources */ = {isa = PBXBuildFile; fileRef = AE0E38BF24E37BEB00A3A824 /* Test */; };
 		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
@@ -53,6 +51,8 @@
 		AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E08DD243B547800E7899A /* LinkedView.swift */; };
 		AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */; };
 		AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */; };
+		AE741B7424EE92E700B0531D /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */; };
+		AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */; };
 		AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC214245DA13400E92704 /* PopoverView.swift */; };
 		AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC216245EE95B00E92704 /* FactionFilterView.swift */; };
 		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
@@ -97,8 +97,6 @@
 		AE028C5E24A2C6D300DF689B /* DialControl.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DialControl.xcdatamodel; sourceTree = "<group>"; };
 		AE028C6424A2C93B00DF689B /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFetchedResultsController.swift; sourceTree = "<group>"; };
-		AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
-		AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotStateData.swift; sourceTree = "<group>"; };
 		AE0E38BF24E37BEB00A3A824 /* Test */ = {isa = PBXFileReference; lastKnownFileType = text; path = Test; sourceTree = "<group>"; };
 		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
@@ -142,6 +140,8 @@
 		AE4E08DD243B547800E7899A /* LinkedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedView.swift; sourceTree = "<group>"; };
 		AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures-ships.ttf"; sourceTree = "<group>"; };
 		AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures.ttf"; sourceTree = "<group>"; };
+		AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
+		AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AE7EC214245DA13400E92704 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		AE7EC216245EE95B00E92704 /* FactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionFilterView.swift; sourceTree = "<group>"; };
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
@@ -191,8 +191,8 @@
 		AE028C5C24A2C6B700DF689B /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				AE0E38B724DF910A00A3A824 /* PilotState+CoreDataClass.swift */,
-				AE0E38B824DF910A00A3A824 /* PilotState+CoreDataProperties.swift */,
+				AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */,
+				AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */,
 				AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */,
 				AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */,
 				AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */,
@@ -511,7 +511,6 @@
 				AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */,
 				AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */,
 				AE028C57249F81B200DF689B /* Store.swift in Sources */,
-				AE0E38B924DF910A00A3A824 /* PilotState+CoreDataClass.swift in Sources */,
 				AE1DF8F424B5E34500B84D38 /* UpArrowShape.swift in Sources */,
 				AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */,
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
@@ -523,8 +522,8 @@
 				AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */,
 				AE1DF8EF24B5D80E00B84D38 /* ImageView.swift in Sources */,
 				AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */,
-				AE0E38BA24DF910A00A3A824 /* PilotState+CoreDataProperties.swift in Sources */,
 				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
+				AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */,
 				AE1DF8F124B5E0CD00B84D38 /* CardView.swift in Sources */,
 				AE028C59249F825100DF689B /* NetworkCache.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
@@ -537,6 +536,7 @@
 				AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */,
 				AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */,
 				AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */,
+				AE741B7424EE92E700B0531D /* PilotState+CoreDataClass.swift in Sources */,
 				AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,

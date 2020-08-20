@@ -83,6 +83,19 @@ class ShipViewModel: ObservableObject {
         return (ship, foundPilots)
     }
     
+    func loadPilotStateFromCoreData() {
+        do {
+            let fetchRequest = PilotState.fetchRequest()
+            let fetchedObjects = try self.moc.fetch(fetchRequest) as! [PilotState]
+            
+            if fetchedObjects.count > 0 {
+                let filtered = fetchedObjects.filter{ _ in true }
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
     // Load values from pilotShipState, becuase shipPilot ontains the initial values
     // Not the updated values
     var force: Int {
@@ -114,7 +127,7 @@ class ShipViewModel: ObservableObject {
         
         switch(type) {
         case .hull:
-            updateHull(currentState: self.pilotStateData!, active: active, inactive: inactive)
+            updateHull(active: active, inactive: inactive)
         case .shield:
             updateShield()
         case .force:
@@ -126,23 +139,11 @@ class ShipViewModel: ObservableObject {
         }
     }
     
-    func updateHull(currentState: PilotStateData, active: Int, inactive: Int) {
-        let newState = PilotStateData(adjusted_attack: currentState.adjusted_attack,
-                       adjusted_defense: currentState.adjusted_defense,
-                       hull_active: active,
-                       hull_inactive: inactive,
-                       shield_active: currentState.shield_active,
-                       shield_inactive: currentState.shield_inactive,
-                       force_active: currentState.force_active,
-                       force_inactive: currentState.force_inactive,
-                       charge_active: currentState.charge_active,
-                       charge_inactive: currentState.charge_inactive,
-                       selected_maneuver: currentState.selected_maneuver,
-                       shipID: currentState.shipID,
-                       upgradeStates: currentState.upgradeStates)
-        
-        // Call service.updateState
-        updateState(newState: newState)
+    func updateHull(active: Int, inactive: Int) {
+        if let psd = pilotStateData {
+            pilotStateData?.updateHull(active: active, inactive: inactive)
+            updateState(newState: psd)
+        }
     }
     
     func updateShield() {}
@@ -153,7 +154,9 @@ class ShipViewModel: ObservableObject {
     
     func updateShipIDMarker(marker: String) {}
     
-    func updateState(newState: PilotStateData) {}
+    func updateState(newState: PilotStateData) {
+        print(newState.description)
+    }
 }
 
 enum PilotStatePropertyType {
@@ -239,25 +242,32 @@ struct ShipView: View {
                     VStack(spacing: 20) {
                         if (viewModel.hull > 0) {
                             LinkedView(maxCount: viewModel.hull, type: StatButtonType.hull) { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.hull, active: active, inactive: inactive)
+                                self.viewModel.update(type: PilotStatePropertyType.hull,
+                                                      active: active,
+                                                      inactive: inactive)
                             }
                         }
                         
                         if (viewModel.shields > 0) {
                             LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield){ (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.shield, active: active, inactive: inactive)
+                                self.viewModel.update(type: PilotStatePropertyType.shield,                          active: active,
+                                                      inactive: inactive)
                             }
                         }
                         
                         if (viewModel.force > 0) {
                             LinkedView(maxCount: viewModel.force, type: StatButtonType.force){ (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.force, active: active, inactive: inactive)
+                                self.viewModel.update(type: PilotStatePropertyType.force,
+                                                      active: active,
+                                                      inactive: inactive)
                             }
                         }
                         
                         if (viewModel.charges > 0) {
                             LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge){ (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.charge, active: active, inactive: inactive)
+                                self.viewModel.update(type: PilotStatePropertyType.charge,
+                                                      active: active,
+                                                      inactive: inactive)
                             }
                         }
                     }.padding(.top, 20)

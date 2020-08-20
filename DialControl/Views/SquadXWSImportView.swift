@@ -67,6 +67,8 @@ class SquadXWSImportViewModel : ObservableObject {
      }
      */
     func createPilotState(squad: Squad, squadData: SquadData) {
+        var pilotIndex: Int = 0
+        
         // for each pilot in squad.pilots
         for pilot in squad.pilots {
             // get the ship
@@ -78,6 +80,7 @@ class SquadXWSImportViewModel : ObservableObject {
             let agility = shipPilot.agilityStats
             
             let pilotStateData = PilotStateData(
+                pilot_index: pilotIndex,
                 adjusted_attack: arc,
                 adjusted_defense: agility,
                 hull_active: shipPilot.hullStats,
@@ -94,14 +97,16 @@ class SquadXWSImportViewModel : ObservableObject {
             )
             
             let json = PilotStateData.serialize(type: pilotStateData)
-            savePilotState(squadID: squadData.id!, state: json)
+            savePilotState(squadData: squadData, state: json)
+            
+            pilotIndex += 1
         }
     }
     
-    func savePilotState(squadID: UUID, state: String) {
+    func savePilotState(squadData: SquadData, state: String) {
         let pilotState = PilotState(context: self.moc)
         pilotState.id = UUID()
-        pilotState.squadID = squadID
+        pilotState.squadData = squadData
         pilotState.json = state
         
         do {

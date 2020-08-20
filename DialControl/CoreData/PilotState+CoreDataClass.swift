@@ -2,7 +2,7 @@
 //  PilotState+CoreDataClass.swift
 //  DialControl
 //
-//  Created by Phil Kirby on 8/8/20.
+//  Created by Phil Kirby on 8/20/20.
 //  Copyright © 2020 SoftDesk. All rights reserved.
 //
 //
