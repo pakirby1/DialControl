@@ -119,12 +119,16 @@ class ShipViewModel: ObservableObject {
             .charges?.value ?? 0
     }
     
-    var shields: Int {
-        self.shipPilot.shieldStats
+    var shieldsActive: Int {
+//        self.shipPilot.shieldStats
+        guard let state = self.pilotStateData else { return 0 }
+        return state.shield_active
     }
     
-    var hull: Int {
-        self.shipPilot.hullStats
+    var hullActive: Int {
+//        self.shipPilot.hullStats
+        guard let state = self.pilotStateData else { return 0 }
+        return state.hull_active
     }
     
     var dial: [String] {
@@ -132,7 +136,17 @@ class ShipViewModel: ObservableObject {
         
         return ship.dial
     }
+    
+    var hullMax: Int {
+        guard let state = self.pilotStateData else { return 0 }
+        return state.hull_active + state.hull_inactive
+    }
 
+    var shieldsMax: Int {
+        guard let state = self.pilotStateData else { return 0 }
+        return state.shield_active + state.shield_inactive
+    }
+    
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
         let newPilotStateData: PilotStateData
         
@@ -140,7 +154,7 @@ class ShipViewModel: ObservableObject {
         case .hull:
             updateHull(active: active, inactive: inactive)
         case .shield:
-            updateShield()
+            updateShield(active: active, inactive: inactive)
         case .force:
             updateForce()
         case .charge:
@@ -157,7 +171,16 @@ class ShipViewModel: ObservableObject {
         }
     }
     
-    func updateShield() {}
+    func updateShield(active: Int, inactive: Int) {
+        if let psd = pilotStateData {
+            self.pilotStateData?.change(update: {
+                $0.updateShield(active: active, inactive: inactive)
+            })
+            
+            print(self.pilotStateData!)
+            updateState(newState: self.pilotStateData!)
+        }
+    }
     
     func updateForce() {}
     
@@ -251,16 +274,25 @@ struct ShipView: View {
                     .environmentObject(viewModel)
             
                     VStack(spacing: 20) {
-                        if (viewModel.hull > 0) {
-                            LinkedView(maxCount: viewModel.hull, type: StatButtonType.hull) { (active, inactive) in
+                        if (viewModel.hullActive > 0) {
+                            LinkedView(type: StatButtonType.hull,
+                                       active: viewModel.hullActive,
+                                       inactive: viewModel.hullMax - viewModel.hullActive)
+                            { (active, inactive) in
                                 self.viewModel.update(type: PilotStatePropertyType.hull,
                                                       active: active,
                                                       inactive: inactive)
                             }
+                            
+//                            LinkedView(maxCount: viewModel.hullMax, type: StatButtonType.hull) { (active, inactive) in
+//                                self.viewModel.update(type: PilotStatePropertyType.hull,
+//                                                      active: active,
+//                                                      inactive: inactive)
+//                            }
                         }
                         
-                        if (viewModel.shields > 0) {
-                            LinkedView(maxCount: viewModel.shields, type: StatButtonType.shield){ (active, inactive) in
+                        if (viewModel.shieldsActive > 0) {
+                            LinkedView(maxCount: viewModel.shieldsMax, type: StatButtonType.shield){ (active, inactive) in
                                 self.viewModel.update(type: PilotStatePropertyType.shield,                          active: active,
                                                       inactive: inactive)
                             }
