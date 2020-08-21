@@ -290,7 +290,7 @@ struct Ship: Codable, JSONSerialization {
     }
     
     static func serializeJSON(jsonString: String) -> Ship {
-        return serialize(jsonString: jsonString)
+        return deserialize(jsonString: jsonString)
     }
 }
 
@@ -369,6 +369,7 @@ struct ShipPilot: Identifiable, Equatable {
     let ship: Ship
     let upgrades: [Upgrade]
     let points: Int
+    let pilotStateId: UUID?
     
     static func ==(lhs: ShipPilot, rhs: ShipPilot) -> Bool {
         return true

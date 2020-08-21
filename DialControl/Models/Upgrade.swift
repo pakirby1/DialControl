@@ -461,7 +461,7 @@ struct Upgrades: Codable, JSONSerialization {
     let upgrades: [Upgrade]
     
     static func serializeJSON(jsonString: String) -> [Upgrade] {
-        return serialize(jsonString: jsonString)
+        return deserialize(jsonString: jsonString)
     }
 }
 

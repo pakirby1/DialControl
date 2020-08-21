@@ -97,17 +97,21 @@ class SquadXWSImportViewModel : ObservableObject {
             )
             
             let json = PilotStateData.serialize(type: pilotStateData)
-            savePilotState(squadData: squadData, state: json)
+            savePilotState(squadData: squadData, state: json, pilotIndex: pilotIndex)
             
             pilotIndex += 1
         }
     }
     
-    func savePilotState(squadData: SquadData, state: String) {
+    func savePilotState(squadData: SquadData,
+                        state: String,
+                        pilotIndex: Int)
+    {
         let pilotState = PilotState(context: self.moc)
         pilotState.id = UUID()
         pilotState.squadData = squadData
         pilotState.json = state
+        pilotState.pilotIndex = Int32(pilotIndex)
         
         do {
             try self.moc.save()

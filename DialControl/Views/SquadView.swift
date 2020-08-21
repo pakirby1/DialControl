@@ -45,6 +45,8 @@ struct SquadView: View {
         }.padding(10)
     }
     
+    /// Don't pass in the SquadViewModel directly to SquadCardView since we don't need
+    /// the alertText, etc. from the view model for use in the SquadCardView
     var body: some View {
         VStack {
             header
@@ -62,16 +64,23 @@ struct SquadView: View {
 }
 
 struct SquadCardViewModel {
-    static func getShips(squad: Squad) -> [ShipPilot] {
+    static func getShips(squad: Squad, squadData: SquadData) -> [ShipPilot] {
+        guard let pilotStateSet = squadData.pilotState else { return [] }
+        let pilotStates =  Array(pilotStateSet as! Set<PilotState>).sorted(by: { $0.pilotIndex < $1.pilotIndex })
+        let pilotStateIds = pilotStates.map{ $0.id }
+        _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
         
+        let zipped: Zip2Sequence<[SquadPilot], [UUID?]> = zip(squad.pilots, pilotStateIds)
         
-        return squad.pilots.map{
-            getShip(squad: squad, squadPilot: $0)
+        _ = zipped.map{ print("\($0.0.name): \($0.1)")}
+        
+        return zipped.map{
+            getShip(squad: squad, squadPilot: $0.0, pilotStateId: $0.1)
         }
     }
 }
 
-func getShip(squad: Squad, squadPilot: SquadPilot) -> ShipPilot {
+func getShip(squad: Squad, squadPilot: SquadPilot, pilotStateId: UUID? = nil) -> ShipPilot {
     func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
         // Read json from file: forType.json
         let jsonFileName = "\(forType)"
@@ -225,6 +234,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot) -> ShipPilot {
     print("shipName: \(squadPilot.ship)")
     print("pilotName: \(squadPilot.name)")
     print("faction: \(squad.faction)")
+    print("pilotStateId: \(String(describing: pilotStateId))")
     
     shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
     
@@ -244,7 +254,8 @@ func getShip(squad: Squad, squadPilot: SquadPilot) -> ShipPilot {
     
     return ShipPilot(ship: ship,
                      upgrades: allUpgrades,
-                     points: squadPilot.points)
+                     points: squadPilot.points,
+                     pilotStateId: pilotStateId)
 }
 struct SquadCardView: View {
     let squad: Squad
@@ -308,7 +319,8 @@ struct SquadCardView: View {
             .padding(20)
             .multilineTextAlignment(.center)
         }
-        .onAppear(perform: { self.shipPilots = SquadCardViewModel.getShips(squad: self.squad) })
+        .onAppear(perform: { self.shipPilots = SquadCardViewModel.getShips(squad: self.squad,
+                                                                           squadData: self.squadData) })
         .frame(width: 600, height: 600)
     }
     

@@ -9,12 +9,12 @@
 import Foundation
 
 protocol JSONSerialization {
-    static func serialize<T: Decodable>(jsonString: String) -> T
+    static func deserialize<T: Decodable>(jsonString: String) -> T
     static func serialize<T: Encodable>(type: T) -> String
 }
 
 extension JSONSerialization {
-    static func serialize<T: Decodable>(jsonString: String) -> T {
+    static func deserialize<T: Decodable>(jsonString: String) -> T {
         let jsonData = jsonString.data(using: .utf8)!
         let decoder = JSONDecoder()
         

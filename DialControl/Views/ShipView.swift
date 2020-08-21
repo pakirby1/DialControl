@@ -52,6 +52,8 @@ class ShipViewModel: ObservableObject {
             .print()
             .receive(on: DispatchQueue.main)
             .assign(to: \ShipViewModel.images, on: self)
+        
+        self.loadPilotStateFromCoreData()
     }
     
     var displayImageOverlay: Bool {
@@ -86,10 +88,19 @@ class ShipViewModel: ObservableObject {
     func loadPilotStateFromCoreData() {
         do {
             let fetchRequest = PilotState.fetchRequest()
-            let fetchedObjects = try self.moc.fetch(fetchRequest) as! [PilotState]
+            let pilotStates = try self.moc.fetch(fetchRequest) as! [PilotState]
             
-            if fetchedObjects.count > 0 {
-                let filtered = fetchedObjects.filter{ _ in true }
+            if pilotStates.count > 0 {
+                _ = pilotStates.map{ print("\(String(describing: $0.id)) shipPilot.pilotStateId \(shipPilot.pilotStateId)") }
+                
+                let filtered = pilotStates.filter{ $0.id == shipPilot.pilotStateId }
+                
+                if filtered.count == 1 {
+                    guard let state: PilotState = filtered.first else { return }
+                    guard let json = state.json else { return }
+                    let data: PilotStateData = PilotStateData.deserialize(jsonString: json)
+                    self.pilotStateData = data
+                }
             }
         } catch {
             print(error)
