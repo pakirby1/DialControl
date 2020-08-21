@@ -175,10 +175,8 @@ class ShipViewModel: ObservableObject {
         if let psd = pilotStateData {
             self.pilotStateData?.change(update: {
                 $0.updateShield(active: active, inactive: inactive)
+                self.updateState(newState: $0)
             })
-            
-            print(self.pilotStateData!)
-            updateState(newState: self.pilotStateData!)
         }
     }
     
