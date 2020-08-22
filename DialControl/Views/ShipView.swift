@@ -21,7 +21,7 @@ class ShipViewModel: ObservableObject {
     private var _displayImageOverlay: Bool = false
     private var cancellable: AnyCancellable?
     var pilotStateData: PilotStateData? = nil
-    // let pilotStateService:
+    let pilotStateService: PilotStateServiceProtocol
     
     // CoreData
     private let frc: BindableFetchedResultsController<ImageData>
@@ -33,10 +33,12 @@ class ShipViewModel: ObservableObject {
     
     init(moc: NSManagedObjectContext,
          shipPilot: ShipPilot,
-         squad: Squad)
+         squad: Squad,
+         pilotStateService: PilotStateServiceProtocol)
     {
         self.shipPilot = shipPilot
         self.squad = squad
+        self.pilotStateService = pilotStateService
         
         // CoreData
         self.moc = moc
@@ -148,17 +150,15 @@ class ShipViewModel: ObservableObject {
     }
     
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
-        let newPilotStateData: PilotStateData
-        
         switch(type) {
         case .hull:
             updateHull(active: active, inactive: inactive)
         case .shield:
             updateShield(active: active, inactive: inactive)
         case .force:
-            updateForce()
+            updateForce(active: active, inactive: inactive)
         case .charge:
-            updateCharge()
+            updateCharge(active: active, inactive: inactive)
         case .shipIDMarker(let id):
             updateShipIDMarker(marker: id)
         }
@@ -172,7 +172,7 @@ class ShipViewModel: ObservableObject {
     }
     
     func updateShield(active: Int, inactive: Int) {
-        if let psd = pilotStateData {
+        if let _ = pilotStateData {
             self.pilotStateData?.change(update: {
                 $0.updateShield(active: active, inactive: inactive)
                 self.updateState(newState: $0)
@@ -180,14 +180,34 @@ class ShipViewModel: ObservableObject {
         }
     }
     
-    func updateForce() {}
+    func updateForce(active: Int, inactive: Int) {
+        if let _ = pilotStateData {
+            self.pilotStateData?.change(update: {
+                $0.updateForce(active: active, inactive: inactive)
+                self.updateState(newState: $0)
+            })
+        }
+    }
     
-    func updateCharge() {}
+    func updateCharge(active: Int, inactive: Int) {
+        if let _ = pilotStateData {
+            self.pilotStateData?.change(update: {
+                $0.updateCharge(active: active, inactive: inactive)
+                self.updateState(newState: $0)
+            })
+        }
+    }
     
     func updateShipIDMarker(marker: String) {}
     
     func updateState(newState: PilotStateData) {
         print(newState.description)
+        
+        let json = PilotStateData.serialize(type: newState)
+        /// where do we get a PilotState instance????
+//        self.pilotStateService.updatePilotState(pilotState: newState,
+//                                                state: json,
+//                                                pilotIndex: newState.pilot_index)
     }
 }
 

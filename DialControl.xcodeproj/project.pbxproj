@@ -68,6 +68,9 @@
 		AEE98B4C24B5BD9F00E60128 /* CustomDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */; };
 		AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4D24B5D45900E60128 /* Globals.swift */; };
 		AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */; };
+		AEEB546824F11EB40050913C /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEEB546724F11EB40050913C /* DIContainer.swift */; };
+		AEEB546A24F11F3C0050913C /* SquadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEEB546924F11F3C0050913C /* SquadService.swift */; };
+		AEEB546C24F11FE50050913C /* PilotStateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEEB546B24F11FE50050913C /* PilotStateService.swift */; };
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
 		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
@@ -157,6 +160,9 @@
 		AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDivider.swift; sourceTree = "<group>"; };
 		AEE98B4D24B5D45900E60128 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipLookupBuilder.swift; sourceTree = "<group>"; };
+		AEEB546724F11EB40050913C /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
+		AEEB546924F11F3C0050913C /* SquadService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadService.swift; sourceTree = "<group>"; };
+		AEEB546B24F11FE50050913C /* PilotStateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotStateService.swift; sourceTree = "<group>"; };
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
 		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
@@ -355,6 +361,9 @@
 			isa = PBXGroup;
 			children = (
 				AEC1242F24A32CFC00C0599A /* NetworkService.swift */,
+				AEEB546724F11EB40050913C /* DIContainer.swift */,
+				AEEB546924F11F3C0050913C /* SquadService.swift */,
+				AEEB546B24F11FE50050913C /* PilotStateService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -511,6 +520,7 @@
 				AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */,
 				AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */,
 				AE028C57249F81B200DF689B /* Store.swift in Sources */,
+				AEEB546A24F11F3C0050913C /* SquadService.swift in Sources */,
 				AE1DF8F424B5E34500B84D38 /* UpArrowShape.swift in Sources */,
 				AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */,
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
@@ -527,6 +537,7 @@
 				AE1DF8F124B5E0CD00B84D38 /* CardView.swift in Sources */,
 				AE028C59249F825100DF689B /* NetworkCache.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
+				AEEB546824F11EB40050913C /* DIContainer.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
@@ -547,6 +558,7 @@
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
 				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
+				AEEB546C24F11FE50050913C /* PilotStateService.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE028C5B249F82AF00DF689B /* Logging.swift in Sources */,
 				AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */,

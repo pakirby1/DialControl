@@ -18,7 +18,9 @@ class SquadViewModel : ObservableObject {
     var squad: Squad
     var squadData: SquadData
     
-    init(squad: Squad, squadData: SquadData) {
+    init(squad: Squad,
+         squadData: SquadData)
+    {
         self.squad = squad
         self.squadData = squadData
     }

@@ -34,9 +34,11 @@ class ViewFactory: ObservableObject {
     var previousViewType: ViewType = .factionSquadList(.none)
     private var navigation = Navigation()
     var moc: NSManagedObjectContext
+    var diContainer: DIContainer
     
-    init(moc: NSManagedObjectContext) {
+    init(moc: NSManagedObjectContext, diContainer: DIContainer) {
         self.moc = moc
+        self.diContainer = diContainer
         self.navigation.push(type: .factionSquadList(.none))
     }
     
@@ -71,20 +73,23 @@ class ViewFactory: ObservableObject {
         
         switch(type) {
         case .squadViewPAK(let squad, let squadData):
-            let viewModel = SquadViewModel(squad: squad, squadData: squadData)
+            let viewModel = SquadViewModel(squad: squad,
+                                           squadData: squadData)
+            
             return AnyView(SquadView(viewModel: viewModel)
                 .environmentObject(self))
             
         case .shipViewNew(let shipPilot, let squad):
             let viewModel = ShipViewModel(moc: self.moc,
                                           shipPilot: shipPilot,
-                                          squad: squad)
+                                          squad: squad,
+                                          pilotStateService: self.diContainer.pilotStateService)
             
             return AnyView(ShipView(viewModel: viewModel)
                 .environmentObject(self))
             
         case .squadImportView:
-            return AnyView(SquadXWSImportView(viewModel: SquadXWSImportViewModel(moc: self.moc))
+            return AnyView(SquadXWSImportView(viewModel: SquadXWSImportViewModel(moc: self.moc, squadService: self.diContainer.squadService, pilotStateService: self.diContainer.pilotStateService))
                 .environmentObject(self)
                 )
             

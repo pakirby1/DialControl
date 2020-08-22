@@ -10,13 +10,21 @@ import Foundation
 import SwiftUI
 import CoreData
 
+
 class SquadXWSImportViewModel : ObservableObject {
     @Published var alertText: String = ""
     @Published var showAlert: Bool = false
-    private let moc: NSManagedObjectContext
+    let moc: NSManagedObjectContext
+    let squadService: SquadServiceProtocol
+    let pilotStateService: PilotStateServiceProtocol
     
-    init(moc: NSManagedObjectContext) {
+    init(moc: NSManagedObjectContext,
+         squadService: SquadServiceProtocol,
+         pilotStateService: PilotStateServiceProtocol)
+    {
         self.moc = moc
+        self.squadService = squadService
+        self.pilotStateService = pilotStateService
     }
     
     func loadSquad(jsonString: String) -> Squad {
@@ -27,18 +35,11 @@ class SquadXWSImportViewModel : ObservableObject {
     }
     
     func saveSquad(jsonString: String, name: String) -> SquadData {
-        let squadData = SquadData(context: self.moc)
-        squadData.id = UUID()
-        squadData.name = name
-        squadData.json = jsonString
-        
-        do {
-            try self.moc.save()
-        } catch {
-            print(error)
-        }
-        
-        return squadData
+        return self.squadService.saveSquad(jsonString: jsonString, name: name)
+    }
+    
+    func createPilotState(squad: Squad, squadData: SquadData) {
+        self.pilotStateService.createPilotState(squad: squad, squadData: squadData)
     }
     
     /*
@@ -66,59 +67,11 @@ class SquadXWSImportViewModel : ObservableObject {
          let upgradeStates : [UpgradeStateData]?
      }
      */
-    func createPilotState(squad: Squad, squadData: SquadData) {
-        var pilotIndex: Int = 0
-        
-        // for each pilot in squad.pilots
-        for pilot in squad.pilots {
-            // get the ship
-            let shipPilot: ShipPilot = getShip(squad: squad, squadPilot: pilot)
-            
-            // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
-            
-            let arc = shipPilot.arcStats
-            let agility = shipPilot.agilityStats
-            
-            let pilotStateData = PilotStateData(
-                pilot_index: pilotIndex,
-                adjusted_attack: arc,
-                adjusted_defense: agility,
-                hull_active: shipPilot.hullStats,
-                hull_inactive: 0,
-                shield_active: shipPilot.shieldStats,
-                shield_inactive: 0,
-                force_active: shipPilot.forceStats,
-                force_inactive: 0,
-                charge_active: shipPilot.chargeStats,
-                charge_inactive: 0,
-                selected_maneuver: "",
-                shipID: "",
-                upgradeStates: []
-            )
-            
-            let json = PilotStateData.serialize(type: pilotStateData)
-            savePilotState(squadData: squadData, state: json, pilotIndex: pilotIndex)
-            
-            pilotIndex += 1
-        }
-    }
     
-    func savePilotState(squadData: SquadData,
-                        state: String,
-                        pilotIndex: Int)
-    {
-        let pilotState = PilotState(context: self.moc)
-        pilotState.id = UUID()
-        pilotState.squadData = squadData
-        pilotState.json = state
-        pilotState.pilotIndex = Int32(pilotIndex)
-        
-        do {
-            try self.moc.save()
-        } catch {
-            print(error)
-        }
-    }
+    
+    
+    
+    
 }
 
 struct SquadXWSImportView : View {
@@ -161,7 +114,8 @@ struct SquadXWSImportView : View {
                 
                 if squad.name != Squad.emptySquad.name {
                     // Save the squad JSON to CoreData
-                    let squadData = self.viewModel.saveSquad(jsonString: self.xws, name: squad.name ?? "")
+                    let squadData = self.viewModel.saveSquad(jsonString: self.xws,
+                                                             name: squad.name ?? "")
                     
                     // Create the state and save to PilotState
                     self.viewModel.createPilotState(squad: squad, squadData: squadData)

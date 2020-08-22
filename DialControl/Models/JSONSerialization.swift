@@ -14,6 +14,7 @@ protocol JSONSerialization {
 }
 
 extension JSONSerialization {
+    /// JSON -> T
     static func deserialize<T: Decodable>(jsonString: String) -> T {
         let jsonData = jsonString.data(using: .utf8)!
         let decoder = JSONDecoder()
@@ -25,6 +26,7 @@ extension JSONSerialization {
         return ret
     }
     
+    /// T -> JSON
     static func serialize<T: Encodable>(type: T) -> String {
         let encoder = JSONEncoder()
         
