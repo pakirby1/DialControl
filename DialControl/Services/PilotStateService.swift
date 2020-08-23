@@ -29,7 +29,9 @@ class PilotStateService: PilotStateServiceProtocol {
         // for each pilot in squad.pilots
         for pilot in squad.pilots {
             // get the ship
-            let shipPilot: ShipPilot = getShip(squad: squad, squadPilot: pilot)
+            let shipPilot: ShipPilot = getShip(squad: squad,
+                                               squadPilot: pilot,
+                                               pilotState: squadData.getPilotState(index: pilotIndex))
             
             // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
             

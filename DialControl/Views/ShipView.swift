@@ -20,8 +20,9 @@ class ShipViewModel: ObservableObject {
     @Published var upgradeImage: UIImage = UIImage()
     private var _displayImageOverlay: Bool = false
     private var cancellable: AnyCancellable?
-    var pilotStateData: PilotStateData? = nil
+    var pilotStateData: PilotStateData
     let pilotStateService: PilotStateServiceProtocol
+    var pilotState: PilotState? = nil
     
     // CoreData
     private let frc: BindableFetchedResultsController<ImageData>
@@ -39,6 +40,8 @@ class ShipViewModel: ObservableObject {
         self.shipPilot = shipPilot
         self.squad = squad
         self.pilotStateService = pilotStateService
+        self.pilotStateData = shipPilot.pilotStateData!
+        self.pilotState = shipPilot.pilotState
         
         // CoreData
         self.moc = moc
@@ -55,7 +58,7 @@ class ShipViewModel: ObservableObject {
             .receive(on: DispatchQueue.main)
             .assign(to: \ShipViewModel.images, on: self)
         
-        self.loadPilotStateFromCoreData()
+//        self.loadPilotStateFromCoreData()
     }
     
     var displayImageOverlay: Bool {
@@ -93,15 +96,16 @@ class ShipViewModel: ObservableObject {
             let pilotStates = try self.moc.fetch(fetchRequest) as! [PilotState]
             
             if pilotStates.count > 0 {
-                _ = pilotStates.map{ print("\(String(describing: $0.id)) shipPilot.pilotStateId \(shipPilot.pilotStateId)") }
+                _ = pilotStates.map{ print("\(String(describing: $0.id)) shipPilot.pilotStateId \(shipPilot.pilotState.id)") }
                 
-                let filtered = pilotStates.filter{ $0.id == shipPilot.pilotStateId }
+                let filtered = pilotStates.filter{ $0.id == shipPilot.pilotState.id }
                 
                 if filtered.count == 1 {
                     guard let state: PilotState = filtered.first else { return }
                     guard let json = state.json else { return }
                     let data: PilotStateData = PilotStateData.deserialize(jsonString: json)
                     self.pilotStateData = data
+                    self.pilotState = state
                 }
             }
         } catch {
@@ -123,30 +127,26 @@ class ShipViewModel: ObservableObject {
     
     var shieldsActive: Int {
 //        self.shipPilot.shieldStats
-        guard let state = self.pilotStateData else { return 0 }
-        return state.shield_active
+        return self.pilotStateData.shield_active
     }
     
     var hullActive: Int {
 //        self.shipPilot.hullStats
-        guard let state = self.pilotStateData else { return 0 }
-        return state.hull_active
+        return self.pilotStateData.hull_active
+    }
+    
+    var forceActive: Int {
+        return self.pilotStateData.force_active
+    }
+    
+    var chargeActive: Int {
+        return self.pilotStateData.charge_active
     }
     
     var dial: [String] {
         let ship = self.shipPilot.ship
         
         return ship.dial
-    }
-    
-    var hullMax: Int {
-        guard let state = self.pilotStateData else { return 0 }
-        return state.hull_active + state.hull_inactive
-    }
-
-    var shieldsMax: Int {
-        guard let state = self.pilotStateData else { return 0 }
-        return state.shield_active + state.shield_inactive
     }
     
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
@@ -165,49 +165,45 @@ class ShipViewModel: ObservableObject {
     }
     
     func updateHull(active: Int, inactive: Int) {
-        if let psd = pilotStateData {
-            pilotStateData?.updateHull(active: active, inactive: inactive)
-            updateState(newState: psd)
-        }
+            self.pilotStateData.change(update: {
+                $0.updateHull(active: active, inactive: inactive)
+                self.updateState(newData: $0)
+            })
     }
     
     func updateShield(active: Int, inactive: Int) {
-        if let _ = pilotStateData {
-            self.pilotStateData?.change(update: {
+            self.pilotStateData.change(update: {
                 $0.updateShield(active: active, inactive: inactive)
-                self.updateState(newState: $0)
+                self.updateState(newData: $0)
             })
-        }
     }
     
     func updateForce(active: Int, inactive: Int) {
-        if let _ = pilotStateData {
-            self.pilotStateData?.change(update: {
+            self.pilotStateData.change(update: {
                 $0.updateForce(active: active, inactive: inactive)
-                self.updateState(newState: $0)
+                self.updateState(newData: $0)
             })
-        }
     }
     
     func updateCharge(active: Int, inactive: Int) {
-        if let _ = pilotStateData {
-            self.pilotStateData?.change(update: {
+            self.pilotStateData.change(update: {
                 $0.updateCharge(active: active, inactive: inactive)
-                self.updateState(newState: $0)
+                self.updateState(newData: $0)
             })
-        }
     }
     
     func updateShipIDMarker(marker: String) {}
     
-    func updateState(newState: PilotStateData) {
-        print(newState.description)
+    func updateState(newData: PilotStateData) {
+        print(newData.description)
         
-        let json = PilotStateData.serialize(type: newState)
+        let json = PilotStateData.serialize(type: newData)
         /// where do we get a PilotState instance????
-//        self.pilotStateService.updatePilotState(pilotState: newState,
-//                                                state: json,
-//                                                pilotIndex: newState.pilot_index)
+        guard let state = self.pilotState else { return }
+        
+        self.pilotStateService.updatePilotState(pilotState: state,
+                                                state: json,
+                                                pilotIndex: newData.pilot_index)
     }
 }
 
@@ -292,40 +288,48 @@ struct ShipView: View {
                     .environmentObject(viewModel)
             
                     VStack(spacing: 20) {
-                        if (viewModel.hullActive > 0) {
+                        // Hull
+                        if (viewModel.pilotStateData.hullMax > 0) {
                             LinkedView(type: StatButtonType.hull,
                                        active: viewModel.hullActive,
-                                       inactive: viewModel.hullMax - viewModel.hullActive)
+                                       inactive: viewModel.pilotStateData.hullMax - viewModel.hullActive)
                             { (active, inactive) in
                                 self.viewModel.update(type: PilotStatePropertyType.hull,
                                                       active: active,
                                                       inactive: inactive)
                             }
-                            
-//                            LinkedView(maxCount: viewModel.hullMax, type: StatButtonType.hull) { (active, inactive) in
-//                                self.viewModel.update(type: PilotStatePropertyType.hull,
-//                                                      active: active,
-//                                                      inactive: inactive)
-//                            }
                         }
                         
-                        if (viewModel.shieldsActive > 0) {
-                            LinkedView(maxCount: viewModel.shieldsMax, type: StatButtonType.shield){ (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.shield,                          active: active,
+                        // Shield
+                        if (viewModel.pilotStateData.shieldsMax > 0) {
+                            LinkedView(type: StatButtonType.shield,
+                                       active: viewModel.shieldsActive,
+                                       inactive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive)
+                            { (active, inactive) in
+                                self.viewModel.update(type: PilotStatePropertyType.shield,
+                                                      active: active,
                                                       inactive: inactive)
                             }
                         }
                         
-                        if (viewModel.force > 0) {
-                            LinkedView(maxCount: viewModel.force, type: StatButtonType.force){ (active, inactive) in
+                        // Force
+                        if (viewModel.pilotStateData.forceMax > 0) {
+                            LinkedView(type: StatButtonType.force,
+                                       active: viewModel.forceActive,
+                                       inactive: viewModel.pilotStateData.forceMax - viewModel.forceActive)
+                            { (active, inactive) in
                                 self.viewModel.update(type: PilotStatePropertyType.force,
                                                       active: active,
                                                       inactive: inactive)
                             }
                         }
                         
-                        if (viewModel.charges > 0) {
-                            LinkedView(maxCount: viewModel.charges, type: StatButtonType.charge){ (active, inactive) in
+                        // Charge
+                        if (viewModel.pilotStateData.chargeMax > 0) {
+                            LinkedView(type: StatButtonType.charge,
+                                       active: viewModel.chargeActive,
+                                       inactive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive)
+                            { (active, inactive) in
                                 self.viewModel.update(type: PilotStatePropertyType.charge,
                                                       active: active,
                                                       inactive: inactive)

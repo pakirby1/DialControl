@@ -85,6 +85,11 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
         
         return arr.joined(separator: "\n")
     }
+    
+    var hullMax: Int { return self.hull_active + self.hull_inactive }
+    var shieldsMax: Int { return self.shield_active + self.shield_inactive }
+    var forceMax: Int { return self.force_active + self.force_inactive }
+    var chargeMax: Int { return self.charge_active + self.charge_inactive }
 }
 
 extension PilotStateData {

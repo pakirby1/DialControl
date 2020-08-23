@@ -67,22 +67,20 @@ struct SquadView: View {
 
 struct SquadCardViewModel {
     static func getShips(squad: Squad, squadData: SquadData) -> [ShipPilot] {
-        guard let pilotStateSet = squadData.pilotState else { return [] }
-        let pilotStates =  Array(pilotStateSet as! Set<PilotState>).sorted(by: { $0.pilotIndex < $1.pilotIndex })
-        let pilotStateIds = pilotStates.map{ $0.id }
+        let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
         _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
         
-        let zipped: Zip2Sequence<[SquadPilot], [UUID?]> = zip(squad.pilots, pilotStateIds)
+        let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
         
-        _ = zipped.map{ print("\($0.0.name): \($0.1)")}
+        _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
         
         return zipped.map{
-            getShip(squad: squad, squadPilot: $0.0, pilotStateId: $0.1)
+            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
     }
 }
 
-func getShip(squad: Squad, squadPilot: SquadPilot, pilotStateId: UUID? = nil) -> ShipPilot {
+func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
     func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
         // Read json from file: forType.json
         let jsonFileName = "\(forType)"
@@ -236,7 +234,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotStateId: UUID? = nil) ->
     print("shipName: \(squadPilot.ship)")
     print("pilotName: \(squadPilot.name)")
     print("faction: \(squad.faction)")
-    print("pilotStateId: \(String(describing: pilotStateId))")
+    print("pilotStateId: \(String(describing: pilotState.id))")
     
     shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
     
@@ -257,8 +255,9 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotStateId: UUID? = nil) ->
     return ShipPilot(ship: ship,
                      upgrades: allUpgrades,
                      points: squadPilot.points,
-                     pilotStateId: pilotStateId)
+                     pilotState: pilotState)
 }
+
 struct SquadCardView: View {
     let squad: Squad
     let squadData: SquadData
