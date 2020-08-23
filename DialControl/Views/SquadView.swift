@@ -80,44 +80,43 @@ struct SquadCardViewModel {
     }
 }
 
-func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
-    func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
-        // Read json from file: forType.json
-        let jsonFileName = "\(forType)"
-        var upgradeJSON = ""
-        
-        if let path = Bundle.main.path(forResource: jsonFileName,
-                                       ofType: "json",
-                                       inDirectory: inDirectory)
-        {
-            print("path: \(path)")
+struct UpgradeUtility {
+    static func buildAllUpgrades(_ upgrades: SquadPilotUpgrade) -> [Upgrade] {
+        func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
+            // Read json from file: forType.json
+            let jsonFileName = "\(forType)"
+            var upgradeJSON = ""
             
-            do {
-                upgradeJSON = try String(contentsOfFile: path)
-                print("upgradeJSON: \(upgradeJSON)")
-            } catch {
-                print("error reading from \(path)")
+            if let path = Bundle.main.path(forResource: jsonFileName,
+                                           ofType: "json",
+                                           inDirectory: inDirectory)
+            {
+                print("path: \(path)")
+                
+                do {
+                    upgradeJSON = try String(contentsOfFile: path)
+                    print("upgradeJSON: \(upgradeJSON)")
+                } catch {
+                    print("error reading from \(path)")
+                }
             }
+            
+            //            return modificationsUpgradesJSON
+            return upgradeJSON
         }
         
-        //            return modificationsUpgradesJSON
-        return upgradeJSON
-    }
-    
-    func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {
-        let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
+        func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {
+            let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
+            
+            let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+            
+            let matches: [Upgrade] = upgrades.filter({ $0.xws == upgradeName })
+            
+            let upgrade = matches[0]
+            
+            return upgrade
+        }
         
-        let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-        
-        let matches: [Upgrade] = upgrades.filter({ $0.xws == upgradeName })
-        
-        let upgrade = matches[0]
-        
-        return upgrade
-    }
-    
-    /// 7/7/2020
-    func buildAllUpgrades(_ upgrades: SquadPilotUpgrade) -> [Upgrade] {
         var allUpgrades : [Upgrade] = []
         
         let astromechs : [Upgrade] = upgrades
@@ -228,7 +227,8 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
 
         return allUpgrades
     }
-    
+}
+func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
     var shipJSON: String = ""
     
     print("shipName: \(squadPilot.ship)")
@@ -249,7 +249,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
     // Add the upgrades from SquadPilot.upgrades by iterating over the
     // UpgradeCardEnum cases and calling getUpgrade
     if let upgrades = squadPilot.upgrades {
-        allUpgrades = buildAllUpgrades(upgrades)
+        allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
     }
     
     return ShipPilot(ship: ship,

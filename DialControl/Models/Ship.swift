@@ -294,9 +294,9 @@ struct Ship: Codable, JSONSerialization {
     }
 }
 
-extension ShipPilot {
+extension Ship {
     var agilityStats: Int {
-        let stats: [Stat] = ship.stats.filter{ $0.type == "agility"}
+        let stats: [Stat] = self.stats.filter{ $0.type == "agility"}
             
             if (stats.count > 0) {
                 return stats[0].value
@@ -314,7 +314,7 @@ extension ShipPilot {
      "Rear Arc"
      */
     var arcStats: Int {
-        let stats: [Stat] = ship.stats.filter{ $0.type == "arc"}
+        let stats: [Stat] = self.stats.filter{ $0.type == "arc"}
             
             if (stats.count > 0) {
                 return stats[0].value
@@ -324,7 +324,7 @@ extension ShipPilot {
     }
     
     var hullStats: Int {
-        let stats: [Stat] = ship.stats.filter{ $0.type == "hull"}
+        let stats: [Stat] = self.stats.filter{ $0.type == "hull"}
         
         if (stats.count > 0) {
             return stats[0].value
@@ -334,7 +334,7 @@ extension ShipPilot {
     }
     
     var shieldStats: Int {
-        let stats: [Stat] = ship.stats.filter{ $0.type == "shields"}
+        let stats: [Stat] = self.stats.filter{ $0.type == "shields"}
         
         if (stats.count > 0) {
             return stats[0].value
@@ -343,24 +343,20 @@ extension ShipPilot {
         }
     }
     
-    var forceStats: Int {
-        let stats: [Stat] = ship.stats.filter{ $0.type == "force"}
-        
-        if (stats.count > 0) {
-            return stats[0].value
-        } else {
+    var pilotForce: Int {
+        guard let force = self.pilots[0].force?.value else {
             return 0
         }
+        
+        return force
     }
     
-    var chargeStats: Int {
-        let stats: [Stat] = ship.stats.filter{ $0.type == "charge"}
-        
-        if (stats.count > 0) {
-            return stats[0].value
-        } else {
+    var pilotCharge: Int {
+        guard let charge = self.pilots[0].charges?.value else {
             return 0
         }
+        
+        return charge
     }
 }
 

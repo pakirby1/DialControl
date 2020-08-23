@@ -24,31 +24,31 @@ class PilotStateService: PilotStateServiceProtocol {
     }
     
     func createPilotState(squad: Squad, squadData: SquadData) {
-        var pilotIndex: Int = 0
-        
-        // for each pilot in squad.pilots
-        for pilot in squad.pilots {
-            // get the ship
-            let shipPilot: ShipPilot = getShip(squad: squad,
-                                               squadPilot: pilot,
-                                               pilotState: squadData.getPilotState(index: pilotIndex))
+        func buildPilotStateData(squad: Squad,
+                                 squadPilot: SquadPilot,
+                                 pilotIndex: Int) -> String
+        {
+            var shipJSON: String = ""
+            shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
+            
+            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
             
             // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
             
-            let arc = shipPilot.arcStats
-            let agility = shipPilot.agilityStats
+            let arc = ship.arcStats
+            let agility = ship.agilityStats
             
             let pilotStateData = PilotStateData(
                 pilot_index: pilotIndex,
                 adjusted_attack: arc,
                 adjusted_defense: agility,
-                hull_active: shipPilot.hullStats,
+                hull_active: ship.hullStats,
                 hull_inactive: 0,
-                shield_active: shipPilot.shieldStats,
+                shield_active: ship.shieldStats,
                 shield_inactive: 0,
-                force_active: shipPilot.forceStats,
+                force_active: ship.pilotForce,
                 force_inactive: 0,
-                charge_active: shipPilot.chargeStats,
+                charge_active: ship.pilotCharge,
                 charge_inactive: 0,
                 selected_maneuver: "",
                 shipID: "",
@@ -56,9 +56,21 @@ class PilotStateService: PilotStateServiceProtocol {
             )
             
             let json = PilotStateData.serialize(type: pilotStateData)
+            return json
+        }
+        
+        var pilotIndex: Int = 0
+        
+        // for each pilot in squad.pilots
+        for pilot in squad.pilots {
+            // get the ship
+            let json = buildPilotStateData(squad: squad,
+                                               squadPilot: pilot,
+                                               pilotIndex: pilotIndex)
+            
             savePilotState(squadData: squadData,
-                                             state: json,
-                                             pilotIndex: pilotIndex)
+                           state: json,
+                           pilotIndex: pilotIndex)
             
             pilotIndex += 1
         }
