@@ -19,7 +19,7 @@
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="json" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
-        <relationship name="pilotState" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PilotState" inverseName="squadData" inverseEntity="PilotState"/>
+        <relationship name="pilotState" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PilotState" inverseName="squadData" inverseEntity="PilotState"/>
         <uniquenessConstraints>
             <uniquenessConstraint>
                 <constraint value="name"/>
