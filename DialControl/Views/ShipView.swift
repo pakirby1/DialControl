@@ -23,7 +23,7 @@ class ShipViewModel: ObservableObject {
     var pilotStateData: PilotStateData
     let pilotStateService: PilotStateServiceProtocol
     var pilotState: PilotState? = nil
-    @Published var currentManeuver: String = "3B"
+    @Published var currentManeuver: String = ""
 
     // CoreData
     private let frc: BindableFetchedResultsController<ImageData>
@@ -264,7 +264,7 @@ struct ShipView: View {
     }
 
     @EnvironmentObject var viewFactory: ViewFactory
-    @State var currentManeuver: String = ""
+    @State var currentManeuver: String = "3B"
     
     @State var showCardOverlay: Bool = false
     @State var showImageOverlay: Bool = false
@@ -276,7 +276,7 @@ struct ShipView: View {
     
     init(viewModel: ShipViewModel) {
         self.viewModel = viewModel
-        self.currentManeuver = "3B"
+        self.currentManeuver = ""
     }
 
     // MARK:- computed properties
@@ -377,13 +377,10 @@ struct ShipView: View {
                     }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 
-                DialView(temperature: 0,
+                DialView(temperature: 100,
                      diameter: 400,
 //                     currentManeuver: self.$viewModel.currentManeuver,
-                    currentManeuver: $currentManeuver.onUpdate{ (maneuver) in
-//                        self.viewModel.updateSelectedManeuver(maneuver: maneuver)
-                        self.viewModel.currentManeuver = maneuver
-                    },
+                    currentManeuver: $currentManeuver,
                      dial: self.viewModel.shipPilot.ship.dial,
                      displayAngleRanges: false) { (maneuver) in
                         self.viewModel.updateSelectedManeuver(maneuver: maneuver)
@@ -392,6 +389,11 @@ struct ShipView: View {
 //                    .border(theme.BORDER_ACTIVE, width: 2)
             }
     }
+    
+//    .onUpdate{ (maneuver) in
+//    //                        self.viewModel.updateSelectedManeuver(maneuver: maneuver)
+//                            self.viewModel.currentManeuver = maneuver
+//                        }
     
     var footer: some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,

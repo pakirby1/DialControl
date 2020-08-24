@@ -159,6 +159,9 @@ struct DialView: View {
         self.displayAngleRanges = displayAngleRanges
         
         self._currentManeuver = currentManeuver // Have to use `_` character to set the binding
+        print(currentManeuver.wrappedValue)
+        
+        
         
         self.dial = dial
         buildDial(dial: dial)
@@ -294,9 +297,9 @@ struct DialView: View {
             }
         }
         .onAppear(perform: {
-            let percentage = self.initialTemperature / self.maxTemperature
-            self.value = percentage
-            self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
+//            let percentage = self.initialTemperature / self.maxTemperature
+//            self.value = percentage
+//            self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
         })
     }
     

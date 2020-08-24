@@ -56,6 +56,38 @@ struct InnerCircle: View {
                 print("rotated: \(value.degrees)")
             }
             .store(in: &cancellables)
+        
+        for i in 0...angleRanges.count - 1 {
+            print("\(maneuverList[i]) \(angleRanges[i])")
+        }
+        
+        /*
+         Command-Control Space to bring up emoji keyboard
+         1T -11.25 0.0 11.25 0      ✅
+         1B 11.25 22.5 33.75 1      ❗️4F (360-22.5 = 337.5 => 4F)
+         1F 33.75 45.0 56.25 2      ❗️3Y (360-45.0 = 315.0 => 3Y)
+         1N 56.25 67.5 78.75 3      ❗️3N (360-67.5 = 292.5 => 3N)
+         1Y 78.75 90.0 101.25 4
+         2T 101.25 112.5 123.75 5
+         2B 123.75 135.0 146.25 6
+         2F 146.25 157.5 168.75 7
+         2N 168.75 180.0 191.25 8
+         2Y 191.25 202.5 213.75 9
+         3T 213.75 225.0 236.25 10
+         3B 236.25 247.5 258.75 11
+         3F 258.75 270.0 281.25 12
+         3N 281.25 292.5 303.75 13
+         3Y 303.75 315.0 326.25 14
+         4F 326.25 337.5 348.75 15
+         
+         360-Mid(Maneuver) = angle
+         */
+        let sector = getSector(maneuver: currentManeuver.wrappedValue)
+        let angle = self.angleRanges[sector]
+        let newAngle = 360 - angle.mid
+        print("angle: \(angle) maneuver: \(currentManeuver.wrappedValue) newAngle: \(newAngle)")
+        self._currentTemperature = State(initialValue: newAngle)
+        self._currentSegment = State(initialValue: UInt(sector))
     }
     
     mutating func buildDial(dial: [String]) {
@@ -248,6 +280,19 @@ struct InnerCircle: View {
         let segment = angleRanges.getSegment(withAngle: newAngle)
         
         return UInt(segment)
+    }
+    
+    func getSector(maneuver: String) -> Int {
+        if let sector = maneuverList
+            .enumerated()
+            .filter({ $0.element.description == maneuver })
+            .map({ $0.offset })
+            .first
+        {
+            return sector
+        } else {
+            return 0
+        }
     }
     
     func calculateCurrentSegment(percentage: CGFloat) -> UInt {
