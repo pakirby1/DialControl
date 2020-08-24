@@ -77,7 +77,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
         arr.append("charge_active: \(charge_active)")
         arr.append("charge_inactive: \(charge_inactive)")
         arr.append("selected_maneuver: \(selected_maneuver)")
-        arr.append("shipdID: \(shipID)")
+        arr.append("shipID: \(shipID)")
         
         if let upgradeStates = upgradeStates {
             arr.append("upgadeStates: \(upgradeStates.description)")
@@ -116,5 +116,13 @@ extension PilotStateData {
     mutating func updateCharge(active: Int, inactive: Int) {
         charge_active = active
         charge_inactive = inactive
+    }
+    
+    mutating func updateManeuver(maneuver: String) {
+        selected_maneuver = maneuver
+    }
+    
+    mutating func updateShipID(shipID: String) {
+        self.shipID = shipID
     }
 }

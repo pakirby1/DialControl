@@ -143,14 +143,17 @@ struct DialView: View {
     // @ObservedObject var timeCounter = TimeCounter()
     private var pathNodes: [PathNodeStruct<ManeuverDialSelection>] = []
     let dial: [String]
+    let updateManeuver: (String) -> ()
     
     init(temperature: CGFloat,
          diameter: CGFloat,
          currentManeuver: Binding<String>,
          dial: [String],
-         displayAngleRanges: Bool)
+         displayAngleRanges: Bool,
+         callback: @escaping (String) -> ())
     {
         print("DialView.init()")
+        self.updateManeuver = callback
         self.initialTemperature = temperature
         self.outerDiameter = diameter
         self.displayAngleRanges = displayAngleRanges
@@ -178,7 +181,6 @@ struct DialView: View {
             }
             .store(in: &cancellables)
     }
-    
     
     private func buildPathNodes(radius: CGFloat, maneuvers: [Maneuver]) -> [PathNodeStruct<ManeuverDialSelection>]
     {
@@ -274,96 +276,15 @@ struct DialView: View {
         
         return UInt(segment)
     }
-
-    var innerCircle: some View {
-        ZStack {
-            ZStack {
-                DialCircle(innerDiameter: self.innerDiameter,
-                           rotationAngle: self.currentTemperature)
-
-                ForEach(pathNodes, id:\.id) { node in
-                    node.view
-                        .rotated(Angle.degrees(node.rotationAngle.degrees))
-                        .offset(x: node.offset.0,
-                                y: node.offset.1)
-                        .rotationEffect(Angle.degrees(Double(self.currentTemperature)))
-                }
-            }
-            .gesture(
-                    DragGesture().onChanged() { value in
-                        print("self.oldCoordinate: x=\(self.oldCoordinate.0) y=\(self.oldCoordinate.1)")
-                        print("self.oldAngle = \(self.oldAngle)")
-                        
-                        print("value.location.x=\(value.location.x)")
-                        print("value.location.y=\(value.location.y)")
-                        
-                        let x: CGFloat = min(max(value.location.x, 0), self.innerDiameter)
-                        let y: CGFloat = min(max(value.location.y, 0), self.innerDiameter)
-
-                        let ending = CGPoint(x: x, y: y)
-                        let start = CGPoint(x: self.radius, y: self.radius)
-
-                        print("start=\(start)")
-                        print("ending=\(ending)")
-                        
-                        let angle = self.angle(between: start, ending: ending)
-                        self.value = CGFloat(Int(((angle / 360) * (self.maxTemperature / self.stepSize)))) / (self.maxTemperature / self.stepSize)
-                        
-                        self.currentSegment = self.calculateCurrentSegment(percentage: self.value)
-                        
-                        self.currentSegment = self.getSector(baseline: start.x,
-                                                    x: ending.x,
-                                                    angleFromBaseline: angle)
-                        
-                        self.currentTemperature = self.value * self.maxTemperature
-                        
-                        self.topSegment = UInt(self.angleRanges.getSegment(withAngle: self.currentTemperature))
-                        
-                        print("angle: \(angle) oldAngle: \(self.oldAngle) self.value= \(self.value) self.currentSegment= \(self.currentSegment) rotatingClockwise: \(self.rotatingClockwise)")
-                        
-                        self.rotatingClockwise = (angle - self.oldAngle) > 0
-                        self.oldAngle = angle
-                        
-                        self.anglePublisher.send(Angle(degrees: Double(angle)))
-                        self.currentManeuver = self.maneuverList[Int(self.currentSegment)].description
-                    }
-                )
-        
-            VStack {
-                buildSymbolView()
-                    .frame(width: 32, height: 40, alignment: .center)
-//                    .border(Color.white)
-                
-                Text("\(maneuverList[Int(currentSegment)].description)")
-                    .font(.largeTitle)
-                    .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color)
-                    .fontWeight(.semibold)
-
-//                Text("\(currentTemperature, specifier: "%.1f") \u{2103} \n segment: \(currentSegment)")
-//                    .font(.body)
-//                    .foregroundColor(Color.white)
-            }
-            
-            GeometryReader { g in
-                SelectionIndicator(sectorAngle: self.pathNodes[0].sectorAngle.degrees,
-                                       radius: self.radius)
-                .fill(Color.clear,
-                      opacity: 0.5,
-                      strokeWidth: 3,
-                      strokeColor: Color.white)
-            }
-        }
-//        .border(Color.blue)
-    }
     
     var body: some View {
-        ZStack(alignment: .center) {
+        print("DialView.body currentManeuver: \(self.currentManeuver)")
+        
+        return ZStack(alignment: .center) {
             InnerCircle(innerDiameter: self.innerDiameter,
                         currentManeuver: self.$currentManeuver,
                         dial: self.dial)
             
-//            innerCircle
-
             if (displayAngleRanges) {
                 VStack {
                     ForEach(self.angleRanges, id:\.id) { angle in

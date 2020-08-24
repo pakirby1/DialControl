@@ -165,6 +165,7 @@ struct InnerCircle: View {
 //                    .border(Color.white)
                 
                 Text("\(maneuverList[Int(currentSegment)].description)")
+//                    Text("\(currentManeuver)")
                     .font(.largeTitle)
                     .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color)
                     .fontWeight(.semibold)
