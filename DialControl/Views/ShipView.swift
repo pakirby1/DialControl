@@ -264,7 +264,7 @@ struct ShipView: View {
     }
 
     @EnvironmentObject var viewFactory: ViewFactory
-    @State var currentManeuver: String = "3B"
+    @State var currentManeuver: String = ""
     
     @State var showCardOverlay: Bool = false
     @State var showImageOverlay: Bool = false
@@ -379,8 +379,11 @@ struct ShipView: View {
 
                 DialView(temperature: 100,
                      diameter: 400,
-//                     currentManeuver: self.$viewModel.currentManeuver,
-                    currentManeuver: $currentManeuver,
+                     currentManeuver: self.$viewModel.currentManeuver,
+//                    currentManeuver: $currentManeuver.onUpdate{ (maneuver) in
+//                        self.viewModel.updateSelectedManeuver(maneuver: maneuver)
+//                    //                            self.viewModel.currentManeuver = maneuver
+//                    },
                      dial: self.viewModel.shipPilot.ship.dial,
                      displayAngleRanges: false) { (maneuver) in
                         self.viewModel.updateSelectedManeuver(maneuver: maneuver)
@@ -390,10 +393,7 @@ struct ShipView: View {
             }
     }
     
-//    .onUpdate{ (maneuver) in
-//    //                        self.viewModel.updateSelectedManeuver(maneuver: maneuver)
-//                            self.viewModel.currentManeuver = maneuver
-//                        }
+
     
     var footer: some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,
