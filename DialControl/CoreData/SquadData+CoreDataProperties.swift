@@ -20,6 +20,7 @@ extension SquadData {
     @NSManaged public var id: UUID?
     @NSManaged public var json: String?
     @NSManaged public var name: String?
+    @NSManaged public var favorite: Bool
     
     /// way easier to use:
 //    @NSManaged public var pilotState: Set<PilotState>
@@ -44,15 +45,4 @@ extension SquadData {
     @objc(removePilotState:)
     @NSManaged public func removeFromPilotState(_ values: NSSet)
 
-}
-
-extension SquadData {
-    func getPilotState(index: Int) -> PilotState {
-        let arr = Array(pilotState as! Set<PilotState>)
-        return arr[index]
-    }
-    
-    public var pilotStateArray: [PilotState] {
-        return Array(pilotState as! Set<PilotState>)
-    }
 }

@@ -224,3 +224,14 @@ extension Array where Element: Equatable {
         return self.enumerated().filter({ element == $0.element }).map({ $0.offset })
     }
 }
+
+extension SquadData {
+    func getPilotState(index: Int) -> PilotState {
+        let arr = Array(pilotState as! Set<PilotState>)
+        return arr[index]
+    }
+    
+    public var pilotStateArray: [PilotState] {
+        return Array(pilotState as! Set<PilotState>)
+    }
+}

@@ -23,15 +23,19 @@ protocol SquadServiceProtocol : class {
     var alertText: String { get set }
     var moc: NSManagedObjectContext { get }
     func loadSquad(jsonString: String) -> Squad
-    func saveSquad(jsonString: String, name: String) -> SquadData
+    func saveSquad(jsonString: String, name: String, isFavorite: Bool) -> SquadData
 }
     
 extension SquadServiceProtocol {
-    func saveSquad(jsonString: String, name: String) -> SquadData {
+    func saveSquad(jsonString: String,
+                   name: String,
+                   isFavorite: Bool = false) -> SquadData
+    {
         let squadData = SquadData(context: self.moc)
         squadData.id = UUID()
         squadData.name = name
         squadData.json = jsonString
+        squadData.favorite = isFavorite
         
         do {
             try self.moc.save()

@@ -65,8 +65,8 @@ class FactionSquadListViewModel : ObservableObject {
 
 struct FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
-    
     @ObservedObject var viewModel: FactionSquadListViewModel
+    @State var displayDeleteAllConfirmation: Bool = false
     
     init(viewModel: FactionSquadListViewModel) {
         self.viewModel = viewModel
@@ -80,7 +80,22 @@ struct FactionSquadList: View {
 //            squadList
             squadList_New
             
+            deleteAllButton
+                .padding(10)
+            
             Spacer()
+        }
+    }
+    
+    var deleteAllButton: some View {
+        Button(action: {
+            //            self.viewModel.deleteCallback(self.viewModel.squadData)
+                if self.viewModel.squadDataList.count > 0 {
+                    self.displayDeleteAllConfirmation = true
+                }
+            })
+        {
+            Text("Delete All Squads")
         }
     }
     
@@ -123,7 +138,7 @@ struct FactionSquadList: View {
     
     var emptySection: some View {
         Section {
-            Text("No ships found")
+            Text("No squads found")
         }
     }
     
@@ -146,6 +161,16 @@ struct FactionSquadList: View {
         .padding(10)
         .onAppear {
             self.viewModel.loadSquadsList()
+        }.alert(isPresented: $displayDeleteAllConfirmation) {
+            Alert(title: Text("Delete"),
+                  message: Text("All Squads?"),
+                primaryButton: Alert.Button.default(Text("Delete"), action: {
+                    _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squad: $0) }
+                }),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
+                    print("Cancelled Delete")
+                })
+            )
         }
     }
 }
@@ -266,6 +291,8 @@ struct FactionSquadCard: View {
                 .foregroundColor(Color.white)
         }
     }
+    
+    
     
     var squadButton: some View {
         Button(action: {
