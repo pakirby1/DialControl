@@ -125,4 +125,20 @@ extension PilotStateData {
     mutating func updateShipID(shipID: String) {
         self.shipID = shipID
     }
+    
+    var health: Int {
+        hull_active + hull_inactive + shield_active + shield_inactive
+    }
+    
+    var halfHealth: Int {
+        let ret: Int
+        
+        if health.isMultiple(of: 2) {
+            ret = (health / 2)
+        } else {
+            ret = (health + 1) / 2
+        }
+        
+        return ret
+    }
 }

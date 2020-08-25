@@ -394,6 +394,12 @@ extension ShipPilot {
             return (points + 1) / 2
         }
     }
+    
+    var threshold: Int {
+        guard let data = pilotStateData else { return 0 }
+        
+        return data.halfHealth
+    }
 }
 
 struct TieInInterceptor : ShipProtocol {

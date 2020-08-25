@@ -449,6 +449,11 @@ struct PilotDetailsView: View {
             buildPointsView()
             
             buildPointsView(half: true)
+            
+            IndicatorView(label: "\(shipPilot.threshold)",
+                bgColor: Color.yellow,
+                fgColor: Color.black)
+            
             // Pilot Details
 //            names
             
