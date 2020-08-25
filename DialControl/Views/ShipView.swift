@@ -310,6 +310,11 @@ struct ShipView: View {
                              displayHeaders: false)
                 .padding(2)
             //                .border(Color.green, width: 2)
+            
+            Text("Reset")
+            Image(uiImage: UIImage(named: "repeat_new", in: nil, with: regularMediumSymbolConfig)!.withRenderingMode(.alwaysTemplate))
+                .foregroundColor(.accentColor)
+            
         }
     }
     

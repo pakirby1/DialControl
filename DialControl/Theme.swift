@@ -32,3 +32,7 @@ struct WestworldUITheme : Theme {
     let BORDER_INACTIVE: Color = Color(red:102/255, green: 105/255, blue: 111/255)
     let TEXT_FOREGROUND: Color = Color.white
 }
+
+let regularMediumSymbolConfig = UIImage.SymbolConfiguration(pointSize: 48.0,
+                                                            weight: .regular,
+                                                            scale: .medium)
