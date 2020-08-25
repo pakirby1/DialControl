@@ -343,16 +343,24 @@ extension Ship {
         }
     }
     
-    var pilotForce: Int {
-        guard let force = self.pilots[0].force?.value else {
+    func selectedPilot(pilotId: String) -> Pilot {
+        pilots.filter{ $0.xws == pilotId }[0]
+    }
+    
+    func pilotForce(pilotId: String) -> Int {
+        let pilot = selectedPilot(pilotId: pilotId)
+        
+        guard let force = pilot.force?.value else {
             return 0
         }
         
         return force
     }
     
-    var pilotCharge: Int {
-        guard let charge = self.pilots[0].charges?.value else {
+    func pilotCharge(pilotId: String) -> Int {
+        let pilot = selectedPilot(pilotId: pilotId)
+        
+        guard let charge = pilot.charges?.value else {
             return 0
         }
         
