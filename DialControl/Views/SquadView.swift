@@ -349,10 +349,15 @@ struct PilotCardView: View {
                     
                     Spacer()
                 
-                    Text("\(shipPilot.ship.name)")
-                        .font(.title)
-                        .foregroundColor(Color.white)
+                    VStack {
+                        Text("\(shipPilot.pilot.name)")
+                            .font(.body)
                     
+                        Text("\(shipPilot.ship.name)")
+                            .font(.caption)
+                            .foregroundColor(Color.white)
+                    }
+
                     Spacer()
                 }
                 .padding(.leading, 5)
@@ -379,6 +384,21 @@ struct PilotCardView: View {
     }
 }
 
+struct IndicatorView: View {
+    let label: String
+    let bgColor: Color
+    let fgColor: Color
+    
+    var body: some View {
+        Text("\(label)")
+            .font(.title)
+            .foregroundColor(fgColor)
+            .padding()
+            .background(bgColor)
+            .clipShape(Circle())
+    }
+}
+
 struct PilotDetailsView: View {
     let shipPilot: ShipPilot
     let displayUpgrades: Bool
@@ -387,13 +407,18 @@ struct PilotDetailsView: View {
     
     @State var currentManeuver: String = ""
     
-    var points: some View {
-        Text("\(shipPilot.points)")
-            .font(.title)
-            .foregroundColor(theme.TEXT_FOREGROUND)
-            .padding()
-            .background(Color.blue)
-            .clipShape(Circle())
+    func buildPointsView(half: Bool = false) -> AnyView {
+        let points = half ? shipPilot.halfPoints : shipPilot.points
+        let color = half ? Color.red : Color.blue
+        let label = "\(points)"
+        
+        return AnyView(IndicatorView(label:label,
+                                     bgColor: color,
+                                     fgColor: theme.TEXT_FOREGROUND))
+    }
+    
+    var dialView: some View {
+        IndicatorView(label:"99", bgColor: Color.black, fgColor: Color.blue)
     }
     
     var names: some View {
@@ -421,10 +446,11 @@ struct PilotDetailsView: View {
     
     var body: some View {
         HStack {
-            points
+            buildPointsView()
             
+            buildPointsView(half: true)
             // Pilot Details
-            names
+//            names
             
             Spacer()
             
@@ -433,6 +459,7 @@ struct PilotDetailsView: View {
             
             Spacer()
             
-        }.padding(5)
+            dialView
+        }.padding(15)
     }
 }

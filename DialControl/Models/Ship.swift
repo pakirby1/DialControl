@@ -382,6 +382,18 @@ extension ShipPilot {
         
         return nil
     }
+    
+    var pilot: Pilot {
+        return ship.pilots[0]
+    }
+    
+    var halfPoints: Int {
+        if points.isMultiple(of: 2) {
+            return points / 2
+        } else {
+            return (points + 1) / 2
+        }
+    }
 }
 
 struct TieInInterceptor : ShipProtocol {
