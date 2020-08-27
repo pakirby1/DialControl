@@ -406,6 +406,7 @@ struct PilotDetailsView: View {
     let theme: Theme = WestworldUITheme()
     
     @State var currentManeuver: String = ""
+    @State var dialFlipped = false
     
     func buildPointsView(half: Bool = false) -> AnyView {
         let points = half ? shipPilot.halfPoints : shipPilot.points
@@ -417,8 +418,65 @@ struct PilotDetailsView: View {
                                      fgColor: theme.TEXT_FOREGROUND))
     }
     
+    /*
+     maneuverList
+     ▿ 7 : 3L
+       - speed : 3
+       - bearing : DialControl.ManeuverBearing.L
+       - difficulty : DialControl.ManeuverDifficulty.R
+     ▿ 8 : 3T
+       - speed : 3
+       - bearing : DialControl.ManeuverBearing.T
+       - difficulty : DialControl.ManeuverDifficulty.W
+     */
+    
+    func buildManeuverView(isFlipped: Bool) -> AnyView {
+        let x = shipPilot.selectedManeuver
+        var view: AnyView = AnyView(EmptyView())
+        
+        if isFlipped {
+            if x.count > 0 {
+                let m = Maneuver.buildManeuver(maneuver: x)
+                view = m.view
+            }
+        } else {
+            view = AnyView(Text("Dial").padding(15))
+        }
+    
+        return AnyView(ZStack {
+            Circle()
+                .frame(width: 65, height: 65, alignment: .center)
+                .foregroundColor(Color.black)
+
+            view
+        })
+    }
+    
+    var dialViewNew: some View {
+        buildManeuverView(isFlipped: self.dialFlipped)
+            .padding(10)
+            .rotation3DEffect(self.dialFlipped ? Angle(degrees: 360): Angle(degrees: 0),
+                          axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
+            .animation(.default) // implicitly applying animation
+            .onTapGesture {
+                // explicitly apply animation on toggle (choose either or)
+                //withAnimation {
+                    self.dialFlipped.toggle()
+                //}
+            }
+    }
+    
     var dialView: some View {
         IndicatorView(label:"99", bgColor: Color.black, fgColor: Color.blue)
+            .rotation3DEffect(self.dialFlipped ? Angle(degrees: 180): Angle(degrees: 0),
+                          axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
+            .animation(.default) // implicitly applying animation
+            .onTapGesture {
+                // explicitly apply animation on toggle (choose either or)
+                //withAnimation {
+                    self.dialFlipped.toggle()
+                //}
+            }
     }
     
     var names: some View {
@@ -464,7 +522,38 @@ struct PilotDetailsView: View {
             
             Spacer()
             
-            dialView
+//            dialView
+            dialViewNew
         }.padding(15)
     }
+}
+
+struct SimpleFlipper : View {
+      @State var flipped = false
+
+      var body: some View {
+
+        let flipDegrees: Double = flipped ? 180.0 : 0
+
+            return VStack{
+                  Spacer()
+
+                  ZStack() {
+                    Text("Front")
+//                        .placedOnCard(Color.yellow)
+//                        .flipRotate(flipDegrees)
+                        .opacity(flipped ? 0.0 : 1.0)
+                        .clipShape(Circle())
+                    
+                    Text("Back")
+//                        .placedOnCard(Color.blue)
+//                        .flipRotate(-180 + flipDegrees)
+                        .opacity(flipped ? 1.0 : 0.0)
+                        .clipShape(Circle())
+                  }
+                  .animation(.easeInOut(duration: 0.8))
+                  .onTapGesture { self.flipped.toggle() }
+                  Spacer()
+            }
+      }
 }

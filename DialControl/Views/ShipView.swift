@@ -439,6 +439,10 @@ struct ShipView: View {
                     self.viewModel.displayImageOverlay = false
                 }
             
+            // If the upgrade has two sides...
+            /*
+             UpgradeCardFlipView(frontURL, backURL)
+             */
             ImageView(url: self.imageOverlayUrl,
                       shipViewModel: self.viewModel,
                       label: "upgrade")

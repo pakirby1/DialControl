@@ -118,7 +118,7 @@ struct Maneuver: CustomStringConvertible {
     let difficulty: ManeuverDifficulty
     
     var description: String {
-        return "\(speed)\(bearing.rawValue)"
+        return "\(speed)\(bearing.rawValue)\(difficulty.rawValue)"
     }
     
     static func buildManeuver(maneuver: String) -> Maneuver {
@@ -134,4 +134,47 @@ struct Maneuver: CustomStringConvertible {
 
         return ret
     }
+    
+    var view : AnyView {
+        let view = HStack {
+            Text("\(speed)")
+                .font(.system(size: 30.0, weight: .bold))
+                .foregroundColor(difficulty.color)
+//                .border(Color.white, width: 1)
+            
+            buildSymbolView()
+//                .border(Color.red, width: 1)
+        }
+        
+        return AnyView(view)
+    }
+    
+    func buildSymbolView() -> AnyView {
+            func buildSFSymbolView() -> AnyView {
+                return AnyView(Image(systemName: "arrow.up")
+                    .font(.system(size: 30.0, weight: .bold))
+                    .foregroundColor(difficulty.color))
+            }
+            
+            func buildArrowView() -> AnyView {
+                return AnyView(UpArrowView(color: difficulty.color))
+            }
+            
+            func buildTextFontView(baselineOffset: CGFloat = 0) -> AnyView {
+                return AnyView(Text(bearing.getSymbolCharacter()).baselineOffset(baselineOffset)
+                    .font(.custom("xwing-miniatures", size: 36))
+                    .foregroundColor(difficulty.color)
+                    .padding(2))
+            }
+            
+            // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font. See baselineOffset
+            if bearing == .F {
+    //            return buildSFSymbolView()
+                return AnyView(buildTextFontView(baselineOffset: -10))
+            } else if bearing == .K {
+                return AnyView(buildTextFontView(baselineOffset: -5))
+            } else {
+                return AnyView(buildTextFontView())
+            }
+        }
 }

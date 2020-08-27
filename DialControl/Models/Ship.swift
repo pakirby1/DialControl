@@ -408,6 +408,12 @@ extension ShipPilot {
         
         return data.halfHealth
     }
+    
+    var selectedManeuver: String {
+        guard let data = pilotStateData else { return "" }
+        
+        return data.selected_maneuver
+    }
 }
 
 struct TieInInterceptor : ShipProtocol {

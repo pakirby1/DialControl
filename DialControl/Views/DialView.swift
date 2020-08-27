@@ -347,6 +347,8 @@ struct DialView: View {
             return AnyView(buildTextFontView())
         }
     }
+    
+    
 }
 
 struct DialCircle : View {

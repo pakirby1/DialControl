@@ -32,6 +32,9 @@ struct UpgradesView: View {
 }
 
 // MARK:- UpgradeView
+/*
+ 
+ */
 struct UpgradeView: View {
     struct UpgradeViewModel {
         let upgrade: Upgrade
@@ -78,6 +81,36 @@ struct UpgradeView: View {
                 self.showImageOverlay = true
                 self.shipViewModel.displayImageOverlay = true
                 self.imageOverlayUrl = self.viewModel.imageUrl
+            }
+    }
+}
+
+struct UpgradeCardFlipView : View {
+    struct CardFlipViewModel {
+        let sidesUrls: [String] = ["Card_Upgrade_108",
+             "Card_Upgrade_108b"]
+        
+        var front: UIImage {
+            let image = UIImage(named: sidesUrls[0])
+            return image!
+        }
+        
+        var back: UIImage {
+            return UIImage(named: sidesUrls[1])!
+        }
+    }
+    
+    @State var flipped = false
+    let viewModel = CardFlipViewModel()
+    
+    var body: some View {
+        Image(uiImage: self.flipped ? viewModel.back : viewModel.front)
+            .rotation3DEffect(self.flipped ? Angle(degrees: 360): Angle(degrees:
+                0),
+                              axis: (x: CGFloat(0), y: CGFloat(1), z: CGFloat(0)))
+            .animation(.default) // implicitly applying animation
+            .onTapGesture {
+                self.flipped.toggle()
             }
     }
 }
