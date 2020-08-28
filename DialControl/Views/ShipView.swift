@@ -317,7 +317,8 @@ struct ShipView: View {
                 //            Image(uiImage: UIImage(named: "repeat_new", in: nil, with: regularMediumSymbolConfig)!.withRenderingMode(.alwaysTemplate))
                 //                .foregroundColor(.accentColor)
                             
-                Image(systemName: "arrow.clockwise.circle.fill")
+//                Image(systemName: "arrow.clockwise.circle.fill")
+                Image(systemName: "repeat")
                     .font(.largeTitle)
                     .foregroundColor(.accentColor)
             }.padding(15)
