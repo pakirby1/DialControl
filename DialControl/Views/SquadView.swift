@@ -367,7 +367,8 @@ struct PilotCardView: View {
                 
                 PilotDetailsView(shipPilot: shipPilot,
                                  displayUpgrades: true,
-                                 displayHeaders: false)
+                                 displayHeaders: false,
+                                 displayDial: true)
                 Spacer()
             }
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
@@ -403,6 +404,7 @@ struct PilotDetailsView: View {
     let shipPilot: ShipPilot
     let displayUpgrades: Bool
     let displayHeaders: Bool
+    let displayDial: Bool
     let theme: Theme = WestworldUITheme()
     
     @State var currentManeuver: String = ""
@@ -523,7 +525,9 @@ struct PilotDetailsView: View {
             Spacer()
             
 //            dialView
-            dialViewNew
+            if (displayDial) {
+                dialViewNew
+            }
         }.padding(15)
     }
 }

@@ -307,14 +307,24 @@ struct ShipView: View {
             
             PilotDetailsView(shipPilot: viewModel.shipPilot,
                              displayUpgrades: true,
-                             displayHeaders: false)
+                             displayHeaders: false,
+                             displayDial: false)
                 .padding(2)
             //                .border(Color.green, width: 2)
             
-            Text("Reset")
-            Image(uiImage: UIImage(named: "repeat_new", in: nil, with: regularMediumSymbolConfig)!.withRenderingMode(.alwaysTemplate))
-                .foregroundColor(.accentColor)
-            
+            HStack {
+                Text("Reset")
+                //            Image(uiImage: UIImage(named: "repeat_new", in: nil, with: regularMediumSymbolConfig)!.withRenderingMode(.alwaysTemplate))
+                //                .foregroundColor(.accentColor)
+                            
+                Image(systemName: "arrow.clockwise.circle.fill")
+                    .font(.largeTitle)
+                    .foregroundColor(.accentColor)
+            }.padding(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.white, lineWidth: 1)
+            )
         }
     }
     

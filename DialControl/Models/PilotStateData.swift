@@ -61,6 +61,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var selected_maneuver: String
     var shipID: String
     var upgradeStates : [UpgradeStateData]?
+    var dial_revealed: Bool
     
     var description: String {
         var arr: [String] = []
@@ -83,6 +84,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
             arr.append("upgadeStates: \(upgradeStates.description)")
         }
         
+        arr.append("dial_revealed: \(dial_revealed)")
         return arr.joined(separator: "\n")
     }
     
@@ -124,6 +126,10 @@ extension PilotStateData {
     
     mutating func updateShipID(shipID: String) {
         self.shipID = shipID
+    }
+    
+    mutating func updateDialRevealed(revealed: Bool) {
+        self.dial_revealed = revealed
     }
     
     var health: Int {

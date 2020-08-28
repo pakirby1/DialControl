@@ -52,7 +52,8 @@ class PilotStateService: PilotStateServiceProtocol {
                 charge_inactive: 0,
                 selected_maneuver: "",
                 shipID: "",
-                upgradeStates: []
+                upgradeStates: [],
+                dial_revealed: false
             )
             
             let json = PilotStateData.serialize(type: pilotStateData)
