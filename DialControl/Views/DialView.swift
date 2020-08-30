@@ -98,6 +98,8 @@ struct DialView: View {
     }
 
     mutating func buildDial(dial: [String]) {
+        
+    
         let count = dial.count
         let sectorAngle: CGFloat = CGFloat(360) / CGFloat(count) // 30
         
@@ -136,6 +138,8 @@ struct DialView: View {
         
         self.pathNodes = self.buildPathNodes(radius: self.textCircleRadius,
                                     maneuvers: maneuverList)
+        
+        
     }
     
     var anglePublisher = PassthroughSubject<Angle, Never>()

@@ -359,6 +359,8 @@ struct PilotCardView: View {
                     }
 
                     Spacer()
+                    
+                    halfStatus
                 }
                 .padding(.leading, 5)
                 .background(Color.black)
@@ -382,6 +384,18 @@ struct PilotCardView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
         )
+    }
+    
+    var halfStatus: some View {
+        if let data = shipPilot.pilotStateData {
+            if data.isDestroyed {
+                return Text("Destroyed").padding(5).foregroundColor(Color.red)
+            } else if data.isHalved {
+                return Text("Half").padding(5).foregroundColor(Color.yellow)
+            }
+        }
+        
+        return Text("Full").padding(5).foregroundColor(Color.white)
     }
 }
 

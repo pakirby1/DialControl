@@ -147,4 +147,25 @@ extension PilotStateData {
         
         return ret
     }
+    
+    var isHalved: Bool {
+        let currentDamage = hull_inactive + shield_inactive
+        
+        if currentDamage >= halfHealth {
+            return true
+        }
+        
+        return false
+    }
+    
+    var isDestroyed: Bool {
+        let noHull = (hull_active == 0)
+        let noShields = (shield_active == 0)
+        
+        if noHull && noShields {
+            return true
+        }
+        
+        return false
+    }
 }

@@ -151,6 +151,8 @@ struct InnerCircle: View {
             }
             .gesture(
                     DragGesture().onChanged() { value in
+                        let startTime = CACurrentMediaTime()
+                        
                         print("self.oldCoordinate: x=\(self.oldCoordinate.0) y=\(self.oldCoordinate.1)")
                         print("self.oldAngle = \(self.oldAngle)")
                         
@@ -188,6 +190,9 @@ struct InnerCircle: View {
                         
                         self.anglePublisher.send(Angle(degrees: Double(angle)))
                         self.currentManeuver = self.maneuverList[Int(self.currentSegment)].description
+                        
+                        let endTime = CACurrentMediaTime()
+                        print("\(#function) Total Runtime: \(endTime - startTime) s")
                     }
                 )
         
