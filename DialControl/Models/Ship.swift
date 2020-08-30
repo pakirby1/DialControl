@@ -378,6 +378,12 @@ struct ShipPilot: Identifiable, Equatable {
     static func ==(lhs: ShipPilot, rhs: ShipPilot) -> Bool {
         return true
     }
+    
+    enum Status {
+        case full
+        case half(Int)
+        case destroyed(Int)
+    }
 }
 
 extension ShipPilot {
@@ -413,6 +419,30 @@ extension ShipPilot {
         guard let data = pilotStateData else { return "" }
         
         return data.selected_maneuver
+    }
+    
+    var totalActiveHealth: Int {
+        guard let data = pilotStateData else { return 0 }
+        let active = data.hull_active + data.shield_active
+        
+        return active
+    }
+    
+    var totalInactiveHealth: Int {
+        guard let data = pilotStateData else { return 0 }
+        let inactive = data.hull_inactive + data.shield_inactive
+        
+        return inactive
+    }
+    
+    var healthStatus: ShipPilot.Status {
+        if (totalActiveHealth == 0) {
+            return .destroyed(points)
+        } else if (totalInactiveHealth) > threshold {
+            return .half(halfPoints)
+        }
+        
+        return .full
     }
 }
 
