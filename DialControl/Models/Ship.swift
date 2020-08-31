@@ -438,7 +438,7 @@ extension ShipPilot {
     var healthStatus: ShipPilot.Status {
         if (totalActiveHealth == 0) {
             return .destroyed(points)
-        } else if (totalInactiveHealth) > threshold {
+        } else if (totalInactiveHealth) >= threshold {
             return .half(halfPoints)
         }
         

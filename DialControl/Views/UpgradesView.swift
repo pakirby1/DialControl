@@ -44,7 +44,9 @@ struct UpgradeView: View {
             
             let type = upgrade.sides[0].type.lowercased() + ".json"
             
-            let jsonString = loadJSON(fileName: type, directoryPath: "upgrades")
+            let newType = type.replacingOccurrences(of: " ", with: "-")
+            
+            let jsonString = loadJSON(fileName: newType, directoryPath: "upgrades")
             
             let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
             

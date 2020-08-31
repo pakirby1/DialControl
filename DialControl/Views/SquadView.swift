@@ -149,7 +149,7 @@ struct UpgradeUtility {
         
         let forcepowers : [Upgrade] = upgrades
             .forcepowers
-            .map{ getUpgrade(upgradeCategory: "forcepower", upgradeName: $0) }
+            .map{ getUpgrade(upgradeCategory: "force-power", upgradeName: $0) }
         
         let gunners : [Upgrade] = upgrades
             .gunners
@@ -177,7 +177,7 @@ struct UpgradeUtility {
         
         let tacticalrelays : [Upgrade] = upgrades
             .tacticalrelays
-            .map{ getUpgrade(upgradeCategory: "tacticalrelay", upgradeName: $0) }
+            .map{ getUpgrade(upgradeCategory: "tactical-relay", upgradeName: $0) }
         
         let talents : [Upgrade] = upgrades
             .talents
@@ -305,6 +305,13 @@ struct SquadCardView: View {
                         .foregroundColor(theme.TEXT_FOREGROUND)
                     
                     Spacer()
+                    
+                    Text("\(damagedPoints)")
+                        .font(.title)
+                        .foregroundColor(theme.TEXT_FOREGROUND)
+                        .padding()
+                        .background(Color.red)
+                        .clipShape(Circle())
                 }
 
                 List {
@@ -327,6 +334,21 @@ struct SquadCardView: View {
     
     var body: some View {
         content
+    }
+    
+    var damagedPoints: Int {
+        let points: [Int] = self.shipPilots.map { shipPilot in
+            switch(shipPilot.healthStatus) {
+            case .destroyed(let value):
+                return value
+            case .half(let value):
+                return value
+            default:
+                return 0
+            }
+        }
+        
+        return points.reduce(0, +)
     }
 }
 
