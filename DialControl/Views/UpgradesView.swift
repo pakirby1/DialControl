@@ -16,6 +16,7 @@ struct UpgradesView: View {
     let upgrades: [Upgrade]
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
+    @Binding var imageOverlayUrlBack: String
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -23,7 +24,8 @@ struct UpgradesView: View {
                 ForEach(upgrades) {
                     UpgradeView(viewModel: UpgradeView.UpgradeViewModel(upgrade: $0),
                                 showImageOverlay: self.$showImageOverlay,
-                                imageOverlayUrl: self.$imageOverlayUrl)
+                                imageOverlayUrl: self.$imageOverlayUrl,
+                                imageOverlayUrlBack: self.$imageOverlayUrlBack)
 //                        .environmentObject(self.viewModel)
                 }
             }
@@ -62,11 +64,40 @@ struct UpgradeView: View {
             
             return imageUrl
         }
+        
+        var imageUrlBack: String {
+            var imageUrl = ""
+            
+            let numSides = upgrade.sides.count
+            
+            if (numSides > 1) {
+                let type = upgrade.sides[1].type.lowercased() + ".json"
+                
+                let newType = type.replacingOccurrences(of: " ", with: "-")
+                
+                let jsonString = loadJSON(fileName: newType, directoryPath: "upgrades")
+                
+                let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+                
+                let matches = upgrades.filter({ $0.xws == upgrade.xws })
+                
+                if (matches.count > 0) {
+                    let sides = matches[0].sides
+                    
+                    if (sides.count > 1) {
+                        imageUrl = sides[1].image
+                    }
+                }
+            }
+            
+            return imageUrl
+        }
     }
     
     let viewModel: UpgradeViewModel
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
+    @Binding var imageOverlayUrlBack: String
     @EnvironmentObject var shipViewModel: ShipViewModel
     
     var body: some View {
@@ -83,30 +114,21 @@ struct UpgradeView: View {
                 self.showImageOverlay = true
                 self.shipViewModel.displayImageOverlay = true
                 self.imageOverlayUrl = self.viewModel.imageUrl
+                self.imageOverlayUrlBack = self.viewModel.imageUrlBack
             }
     }
 }
 
 struct UpgradeCardFlipView : View {
-    struct CardFlipViewModel {
-        let sidesUrls: [String] = ["Card_Upgrade_108",
-             "Card_Upgrade_108b"]
-        
-        var front: UIImage {
-            let image = UIImage(named: sidesUrls[0])
-            return image!
-        }
-        
-        var back: UIImage {
-            return UIImage(named: sidesUrls[1])!
-        }
-    }
-    
     @State var flipped = false
-    let viewModel = CardFlipViewModel()
+    let frontUrl: String
+    let backUrl: String
+    let shipViewModel: ShipViewModel
     
     var body: some View {
-        Image(uiImage: self.flipped ? viewModel.back : viewModel.front)
+        ImageView(url: self.flipped ? self.frontUrl : self.backUrl,
+              shipViewModel: self.shipViewModel,
+              label: "upgrade")
             .rotation3DEffect(self.flipped ? Angle(degrees: 360): Angle(degrees:
                 0),
                               axis: (x: CGFloat(0), y: CGFloat(1), z: CGFloat(0)))
@@ -114,5 +136,7 @@ struct UpgradeCardFlipView : View {
             .onTapGesture {
                 self.flipped.toggle()
             }
+            .frame(width: 500.0, height:350)
+            .environmentObject(self.shipViewModel)
     }
 }

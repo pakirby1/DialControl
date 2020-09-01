@@ -269,6 +269,7 @@ struct ShipView: View {
     @State var showCardOverlay: Bool = false
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
+    @State var imageOverlayUrlBack: String = ""
     @State var displayOverlay: Bool = false
     @ObservedObject var viewModel: ShipViewModel
     let theme: Theme = WestworldUITheme()
@@ -414,7 +415,8 @@ struct ShipView: View {
     var footer: some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,
                      showImageOverlay: $showImageOverlay,
-                     imageOverlayUrl: $imageOverlayUrl)
+                     imageOverlayUrl: $imageOverlayUrl,
+                     imageOverlayUrlBack: $imageOverlayUrlBack)
             .environmentObject(viewModel)
     }
     
@@ -454,12 +456,22 @@ struct ShipView: View {
             /*
              UpgradeCardFlipView(frontURL, backURL)
              */
-            ImageView(url: self.imageOverlayUrl,
-                      shipViewModel: self.viewModel,
-                      label: "upgrade")
-                .frame(width: 500.0, height:350)
-                .environmentObject(viewModel)
+            upgradeCardImage
         }
+    }
+    
+    var upgradeCardImage: AnyView {
+        var ret = AnyView(ImageView(url: self.imageOverlayUrl,
+              shipViewModel: self.viewModel,
+              label: "upgrade")
+        .frame(width: 500.0, height:350)
+        .environmentObject(viewModel))
+        
+        if (self.imageOverlayUrlBack != "") {
+            ret = AnyView(UpgradeCardFlipView(frontUrl: self.imageOverlayUrl, backUrl: self.imageOverlayUrlBack, shipViewModel: self.viewModel))
+        }
+        
+        return ret
     }
     
     var imageOverlayView: AnyView {
