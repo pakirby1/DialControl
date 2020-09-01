@@ -59,20 +59,27 @@ class FactionSquadListViewModel : ObservableObject {
     
     func deleteSquad(squadData: SquadData) {
         self.squadService.deleteSquad(squadData: squadData)
-        self.loadSquadsList()
+        refreshSquadsList()
     }
     
     func updateSquad(squadData: SquadData) {
         self.squadService.updateSquad(squadData: squadData)
-        self.loadSquadsList()
+        refreshSquadsList()
     }
     
-    func filterByFavorites(showFavoritesOnly: Bool) {
+    func refreshSquadsList() {
+        let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+        
+        self.loadSquadsList()
+        
         if showFavoritesOnly {
             self.squadDataList = self.squadDataList.filter{ $0.favorite == true }
-        } else {
-            self.loadSquadsList()
         }
+    }
+    
+    func updateFavorites(showFavoritesOnly: Bool) {
+        UserDefaults.standard.set(showFavoritesOnly, forKey: "displayFavoritesOnly")
+        refreshSquadsList()
     }
 }
 
@@ -121,8 +128,7 @@ struct FactionSquadList: View {
     var favoritesFilterView: some View {
         Button(action: {
             self.displayFavoritesOnly.toggle()
-            UserDefaults.standard.set(self.displayFavoritesOnly, forKey: "displayFavoritesOnly")
-            self.viewModel.filterByFavorites(showFavoritesOnly: self.displayFavoritesOnly)
+            self.viewModel.updateFavorites(showFavoritesOnly: self.displayFavoritesOnly)
         }) {
             if (self.displayFavoritesOnly) {
                 Text("Show All")
@@ -189,8 +195,7 @@ struct FactionSquadList: View {
         }
         .padding(10)
         .onAppear {
-            self.viewModel.loadSquadsList()
-            self.viewModel.filterByFavorites(showFavoritesOnly: self.displayFavoritesOnly)
+            self.viewModel.refreshSquadsList()
         }.alert(isPresented: $displayDeleteAllConfirmation) {
             Alert(title: Text("Delete"),
                   message: Text("All Squads?"),
