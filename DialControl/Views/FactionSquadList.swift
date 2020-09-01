@@ -17,10 +17,15 @@ class FactionSquadListViewModel : ObservableObject {
     
     let faction: String
     let moc: NSManagedObjectContext
+    let squadService: SquadServiceProtocol
     
-    init(faction: String, moc: NSManagedObjectContext) {
+    init(faction: String,
+         moc: NSManagedObjectContext,
+         squadService: SquadServiceProtocol)
+    {
         self.faction = faction
         self.moc = moc
+        self.squadService = squadService
     }
     
     func loadSquadsList() {
@@ -52,13 +57,21 @@ class FactionSquadListViewModel : ObservableObject {
         loadSquadsListFromCoreData()
     }
     
-    func deleteSquad(squad: SquadData) {
-        do {
-            self.moc.delete(squad)
-            try moc.save()
+    func deleteSquad(squadData: SquadData) {
+        self.squadService.deleteSquad(squadData: squadData)
+        self.loadSquadsList()
+    }
+    
+    func updateSquad(squadData: SquadData) {
+        self.squadService.updateSquad(squadData: squadData)
+        self.loadSquadsList()
+    }
+    
+    func filterByFavorites(showFavoritesOnly: Bool) {
+        if showFavoritesOnly {
+            self.squadDataList = self.squadDataList.filter{ $0.favorite == true }
+        } else {
             self.loadSquadsList()
-        } catch {
-            print(error)
         }
     }
 }
@@ -67,7 +80,8 @@ struct FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @ObservedObject var viewModel: FactionSquadListViewModel
     @State var displayDeleteAllConfirmation: Bool = false
-    
+    @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+
     init(viewModel: FactionSquadListViewModel) {
         self.viewModel = viewModel
     }
@@ -104,6 +118,20 @@ struct FactionSquadList: View {
             .font(.largeTitle)
     }
     
+    var favoritesFilterView: some View {
+        Button(action: {
+            self.displayFavoritesOnly.toggle()
+            UserDefaults.standard.set(self.displayFavoritesOnly, forKey: "displayFavoritesOnly")
+            self.viewModel.filterByFavorites(showFavoritesOnly: self.displayFavoritesOnly)
+        }) {
+            if (self.displayFavoritesOnly) {
+                Text("Show All")
+            } else {
+                Text("Favorites Only")
+            }
+        }
+    }
+    
     var headerView: some View {
         HStack {
             Button(action: {
@@ -114,6 +142,7 @@ struct FactionSquadList: View {
             
             Spacer()
             titleView
+            favoritesFilterView
             Spacer()
             
             Button(action: {
@@ -145,7 +174,7 @@ struct FactionSquadList: View {
     var shipsSection: some View {
         Section {
             ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
-                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData, deleteCallback: self.viewModel.deleteSquad)).environmentObject(self.viewFactory)
+                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData, deleteCallback: self.viewModel.deleteSquad, updateCallback: self.viewModel.updateSquad)).environmentObject(self.viewFactory)
             }
         }
     }
@@ -161,11 +190,12 @@ struct FactionSquadList: View {
         .padding(10)
         .onAppear {
             self.viewModel.loadSquadsList()
+            self.viewModel.filterByFavorites(showFavoritesOnly: self.displayFavoritesOnly)
         }.alert(isPresented: $displayDeleteAllConfirmation) {
             Alert(title: Text("Delete"),
                   message: Text("All Squads?"),
                 primaryButton: Alert.Button.default(Text("Delete"), action: {
-                    _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squad: $0) }
+                    _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squadData: $0) }
                 }),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
                     print("Cancelled Delete")
@@ -179,11 +209,16 @@ class FactionSquadCardViewModel : ObservableObject {
     let points: Int = 150
     let theme: Theme = WestworldUITheme()
     let squadData: SquadData
-    let deleteCallback: (SquadData) ->()
+    let deleteCallback: (SquadData) -> ()
+    let updateCallback: (SquadData) -> ()
     
-    init(squadData: SquadData, deleteCallback: @escaping (SquadData) -> ()) {
+    init(squadData: SquadData,
+         deleteCallback: @escaping (SquadData) -> (),
+         updateCallback: @escaping (SquadData) -> ())
+    {
         self.squadData = squadData
         self.deleteCallback = deleteCallback
+        self.updateCallback = updateCallback
     }
     
     private func loadSquad(jsonString: String) -> Squad {
@@ -214,7 +249,7 @@ class FactionSquadCardViewModel : ObservableObject {
         return Squad.emptySquad
     }
     
-
+    
 }
 
 struct FactionSquadCard: View {
@@ -250,8 +285,12 @@ struct FactionSquadCard: View {
     }
     
     var favoriteView: some View {
-        Button(action: {}) {
-            Image(systemName: "star")
+        Button(action: {
+            self.viewModel.squadData.favorite.toggle()
+            self.viewModel.updateCallback(self.viewModel.squadData)
+        }) {
+            Image(systemName: self.viewModel.squadData.favorite ? "star.fill" :
+            "star")
                 .font(.title)
                 .foregroundColor(Color.yellow)
         }

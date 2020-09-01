@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 
 class DIContainer {
-    var squadService: SquadService!
+    var squadService: SquadServiceProtocol!
     var pilotStateService: PilotStateService!
     
     func registerServices(moc: NSManagedObjectContext) {

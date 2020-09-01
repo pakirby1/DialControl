@@ -97,7 +97,7 @@ class ViewFactory: ObservableObject {
             return AnyView(MultilineTextView_ContentView())
         
         case .factionSquadList(let faction):
-            return AnyView(FactionSquadList(viewModel: FactionSquadListViewModel(faction: faction.rawValue, moc: self.moc))
+            return AnyView(FactionSquadList(viewModel: FactionSquadListViewModel(faction: faction.rawValue, moc: self.moc, squadService: self.diContainer.squadService))
                 .environmentObject(self))
             
         case .factionFilterView(let faction):

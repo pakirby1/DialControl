@@ -24,6 +24,8 @@ protocol SquadServiceProtocol : class {
     var moc: NSManagedObjectContext { get }
     func loadSquad(jsonString: String) -> Squad
     func saveSquad(jsonString: String, name: String, isFavorite: Bool) -> SquadData
+    func updateSquad(squadData: SquadData)
+    func deleteSquad(squadData: SquadData)
 }
     
 extension SquadServiceProtocol {
@@ -49,6 +51,23 @@ extension SquadServiceProtocol {
     func loadSquad(jsonString: String) -> Squad {
         return Squad.serializeJSON(jsonString: jsonString) { [weak self] errorString in
             self?.alertText = errorString
+        }
+    }
+    
+    func updateSquad(squadData: SquadData) {
+        do {
+            try self.moc.save()
+        } catch {
+            print(error)
+        }
+    }
+    
+    func deleteSquad(squadData: SquadData) {
+        do {
+            self.moc.delete(squadData)
+            try moc.save()
+        } catch {
+            print(error)
         }
     }
 }
