@@ -417,7 +417,7 @@ struct PilotCardView: View {
             }
         }
         
-        return Text("Full").padding(5).foregroundColor(Color.white)
+        return Text("").padding(5).foregroundColor(Color.white)
     }
 }
 

@@ -33,7 +33,7 @@
         "slots" : [
           "Gunner"
         ],
-        "image" : "file://suppressivegunner\n",
+        "image" : "file://suppressivegunner",
         "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_U_162.jpg",
         "ffg" : 388
       }
@@ -656,8 +656,8 @@
         "slots" : [
           "Gunner"
         ],
-        "ability" : "While you perform an attack, you may spend 1 [Focus] result.  If you do, each friendly ship that has the defender in its [Bulleye Arc] may gain 1 strain to perform a [Focus] action\n",
-        "image" : "file://clonecaptainrex\n",
+        "ability" : "While you perform an attack, you may spend 1 [Focus] result.  If you do, each friendly ship that has the defender in its [Bulleye Arc] may gain 1 strain to perform a [Focus] action.",
+        "image" : "file://clonecaptainrex",
         "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/209d0df0333dc348c74c0e8a760ca741.jpg",
         "ffg" : 552
       }

@@ -2,6 +2,7 @@
   "name" : "LAAT/i Gunship",
   "xws" : "laatigunship",
   "size" : "Medium",
+  "ffg" : 0,
   "dial" : [
     "0OR",
     "1BW",
@@ -20,6 +21,9 @@
     "4FR"
   ],
   "faction" : "Galactic Republic",
+  "dialCodes" : [
+    "LA"
+  ],
   "stats" : [
     {
       "arc" : "Double Turret Arc",
@@ -69,34 +73,101 @@
       "xws" : "212thbattalionpilot",
       "text" : "Capable of functioning in space assaults and atmospheric battles alike, the LAAT/i gunship transports Republic troops to battlefronts on planets besieged by the Separatists.",
       "hyperspace" : false,
-      "image" : "file://212thbattalionpilot"
+      "image" : "file://212thbattalionpilot",
+      "slots" : [
+        "Torpedo",
+        "Crew",
+        "Crew",
+        "Gunner",
+        "Astromech",
+        "Modification"
+      ],
+      "cost" : 45,
+      "ffg" : 0,
+      "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/5081daee997a2a55de474dad2e8e4a07.jpg",
+      "charges" : {
+        "value" : 2,
+        "recovers" : 1
+      }
     },
     {
+      "charges" : {
+        "value" : 2,
+        "recovers" : 1
+      },
+      "slots" : [
+        "Torpedo",
+        "Crew",
+        "Crew",
+        "Gunner",
+        "Astromech",
+        "Modification",
+        "Talent"
+      ],
+      "cost" : 47,
       "name" : "Warthog",
       "initiative" : 3,
-      "limited" : 0,
+      "limited" : 1,
       "xws" : "warthog",
       "ability" : "After you or a friendly non-limited ship at range 0-2 are destroyed during the Engagement Phase, that ship is not removed until the end of that phase",
       "hyperspace" : false,
-      "image" : "file://warthog"
+      "image" : "file://warthog",
+      "ffg" : 0,
+      "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/5081daee997a2a55de474dad2e8e4a07.jpg",
+      "caption" : "Veteran of Kadavo"
     },
     {
+      "slots" : [
+        "Torpedo",
+        "Crew",
+        "Crew",
+        "Gunner",
+        "Astromech",
+        "Modification",
+        "Talent"
+      ],
+      "charges" : {
+        "value" : 2,
+        "recovers" : 1
+      },
+      "caption" : "Vigilant Tracker",
+      "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/5081daee997a2a55de474dad2e8e4a07.jpg",
       "name" : "Hound",
       "initiative" : 2,
-      "limited" : 0,
+      "limited" : 1,
       "xws" : "hound",
       "ability" : "After a friendly small ship in your [Turret Arc] gains a deplete or strain token, if you have no tokens of that type, you may transfer that token to yourself.",
       "hyperspace" : false,
-      "image" : "file://hound\n"
+      "image" : "file://hound",
+      "cost" : 43,
+      "ffg" : 0
     },
     {
+      "slots" : [
+        "Torpedo",
+        "Crew",
+        "Crew",
+        "Gunner",
+        "Astromech",
+        "Modification",
+        "Talent"
+      ],
+      "ffg" : 0,
+      "cost" : 50,
+      "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/5081daee997a2a55de474dad2e8e4a07.jpg",
+      "caption" : "Valkyrie 2929",
       "name" : "Hawk",
       "initiative" : 4,
-      "limited" : 0,
+      "limited" : 1,
       "xws" : "hawk",
       "ability" : "At the start of the End Phase, each friendly ship at range 0-1 that has a revealed maneuver of speed 3-5 may gain 1 strain token to perform a [Barrel Roll] or [Boost] action.",
       "hyperspace" : false,
-      "image" : "file://hawk\n\n"
+      "image" : "file://hawk",
+      "charges" : {
+        "value" : 2,
+        "recovers" : 1
+      }
     }
-  ]
+  ],
+  "icon" : "https://sb-cdn.fantasyflightgames.com/ship_types/I_Arc-170.png"
 }

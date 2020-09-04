@@ -18,12 +18,30 @@ extension JSONSerialization {
     static func deserialize<T: Decodable>(jsonString: String) -> T {
         let jsonData = jsonString.data(using: .utf8)!
         let decoder = JSONDecoder()
+        var ret: T? = nil   // FIXME: How do I NOT use optionals???
         
-        guard let ret = try? decoder.decode(T.self, from: jsonData) else {
-            fatalError("Failed to decode from bundle \(jsonString).")
+//        guard let ret = try? decoder.decode(T.self, from: jsonData) else {
+//            fatalError("Failed to decode from bundle \(jsonString).")
+//        }
+        
+        do {
+            ret = try decoder.decode(T.self, from: jsonData)
+        } catch let DecodingError.dataCorrupted(context) {
+            print(context)
+        } catch let DecodingError.keyNotFound(key, context) {
+            print("Key '\(key)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch let DecodingError.valueNotFound(value, context) {
+            print("Value '\(value)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch let DecodingError.typeMismatch(type, context)  {
+            print("Type '\(type)' mismatch:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch {
+            print("error: ", error)
         }
-
-        return ret
+    
+        return ret! // FIXME: How do I NOT use optionals???
     }
     
     /// T -> JSON
