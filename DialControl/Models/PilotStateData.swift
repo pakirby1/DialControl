@@ -63,9 +63,12 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var upgradeStates : [UpgradeStateData]?
     var dial_revealed: Bool
     
+    var id = UUID()
+    
     var description: String {
         var arr: [String] = []
-    
+        
+        arr.append("id: \(id)")
         arr.append("pilot_index: \(pilot_index)")
         arr.append("adjusted_attack: \(adjusted_attack)")
         arr.append("adjusted_defense: \(adjusted_defense)")
@@ -92,6 +95,25 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var shieldsMax: Int { return self.shield_active + self.shield_inactive }
     var forceMax: Int { return self.force_active + self.force_inactive }
     var chargeMax: Int { return self.charge_active + self.charge_inactive }
+    
+    enum CodingKeys: String, CodingKey {
+        case pilot_index
+        case adjusted_attack
+        case adjusted_defense
+        case hull_active
+        case hull_inactive
+        case shield_active
+        case shield_inactive
+        case force_active
+        case force_inactive
+        case charge_active
+        case charge_inactive
+        case selected_maneuver
+        case shipID
+        case upgradeStates
+        case dial_revealed
+    }
+    
 }
 
 extension PilotStateData {

@@ -185,34 +185,43 @@ class ShipViewModel: ObservableObject {
     }
     
     func updateHull(active: Int, inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
             self.pilotStateData.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateHull(active: active, inactive: inactive)
                 self.updateState(newData: $0)
             })
     }
     
     func updateShield(active: Int, inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
             self.pilotStateData.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateShield(active: active, inactive: inactive)
                 self.updateState(newData: $0)
             })
     }
     
     func updateForce(active: Int, inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
             self.pilotStateData.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateForce(active: active, inactive: inactive)
                 self.updateState(newData: $0)
             })
     }
     
     func updateCharge(active: Int, inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
             self.pilotStateData.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateCharge(active: active, inactive: inactive)
                 self.updateState(newData: $0)
             })
     }
     
     func updateShipIDMarker(marker: String) {
+        print("\(Date()) \(#function) : \(marker)")
         self.pilotStateData.change(update: {
             $0.updateShipID(shipID: marker)
             self.updateState(newData: $0)
@@ -228,7 +237,7 @@ class ShipViewModel: ObservableObject {
     }
     
     func updateState(newData: PilotStateData) {
-        print(newData.description)
+        print("\(Date()) PAK_updateState: \(newData.description)")
         
         let json = PilotStateData.serialize(type: newData)
         /// where do we get a PilotState instance????

@@ -405,6 +405,17 @@ struct Grant: Codable {
     }
 }
 
+/*
+ Crew Upgrades
+ "file://aaylasecura\n",
+ "file://ghostcompany\n\n",
+ "file://wolfpack\n\n\n",
+ "file://suppressivegunner\n",
+ "file://fives"
+ "file://clonecaptainrex\n\n\n\n",
+ "file://kitfisto\n\n\n\n\n",
+ "file://yoda\n\n\n\n\n\n",
+ */
 struct Side: Codable {
     var ffg: Int { return _ffg ?? 0 }
     var title: String { return _title ?? "" }
