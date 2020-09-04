@@ -1,0 +1,75 @@
+{
+  "name" : "LAATProxy",
+  "description" : "",
+  "faction" : "galacticrepublic",
+  "points" : 744,
+  "version" : "2.7.8",
+  "pilots" : [
+    {
+      "id" : "hawk",
+      "ship" : "laatigunship",
+      "points" : 200,
+      "upgrades" : {
+        "crew" : [
+          "kitfisto",
+          "aaylasecura"
+        ],
+        "gunner" : [
+          "suppressivegunner"
+        ]
+      }
+    },
+    {
+      "id" : "r2d2",
+      "ship" : "btlbywing",
+      "points" : 234,
+      "upgrades" : {
+        "crew" : [
+          "yoda"
+        ],
+        "gunner" : [
+          "suppressivegunner"
+        ],
+        "turret" : [
+          "dorsalturret"
+        ]
+      }
+    },
+    {
+      "id" : "wolffe",
+      "ship" : "arc170starfighter",
+      "points" : 262,
+      "upgrades" : {
+        "crew" : [
+          "plokoon"
+        ],
+        "gunner" : [
+          "ahsokatano"
+        ]
+      }
+    },
+    {
+      "id" : "anakinskywalker-nabooroyaln1starfighter",
+      "ship" : "nabooroyaln1starfighter",
+      "points" : 48,
+      "upgrades" : {
+        "sensor" : [
+          "passivesensors"
+        ],
+        "talent" : [
+          "deadeyeshot"
+        ],
+        "torpedo" : [
+          "advprotontorpedoes"
+        ]
+      }
+    }
+  ],
+  "vendor" : {
+    "lbn" : {
+      "builder" : "Launch Bay Next",
+      "builder_url" : "https://launch-bay-next.herokuapp.com",
+      "link" : "https://launch-bay-next.herokuapp.com/print?lbx='LAATProxy'.744.6.0.('laatigunship'.'laat-l4').(68.600.(16.'suppressivegunner').(4.260)).(31.524.(8.'kitfisto').(16.615)).(63.558.(2.577).(5.262))"
+    }
+  }
+}

@@ -61,6 +61,7 @@
 		AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */; };
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
 		AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrowView.swift */; };
+		AEBDCDAE25020A2E0004415F /* LAATProxy.json in Resources */ = {isa = PBXBuildFile; fileRef = AEBDCDAD25020A2E0004415F /* LAATProxy.json */; };
 		AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC1242F24A32CFC00C0599A /* NetworkService.swift */; };
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
@@ -153,6 +154,7 @@
 		AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSquadList.swift; sourceTree = "<group>"; };
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrowView.swift; sourceTree = "<group>"; };
+		AEBDCDAD25020A2E0004415F /* LAATProxy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LAATProxy.json; sourceTree = "<group>"; };
 		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				AE2C0EC8243CA52A00042318 /* pilots */,
 				AE15E78D241D02120002F696 /* tie-in-interceptor.json */,
 				AE2D80EB24277F0100248CA4 /* squad.json */,
+				AEBDCDAD25020A2E0004415F /* LAATProxy.json */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -481,6 +484,7 @@
 				AE0E38C024E37BEB00A3A824 /* Test in Resources */,
 				AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */,
 				AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */,
+				AEBDCDAE25020A2E0004415F /* LAATProxy.json in Resources */,
 				AE2C0EC9243CA52A00042318 /* pilots in Resources */,
 				AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */,
 				AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */,

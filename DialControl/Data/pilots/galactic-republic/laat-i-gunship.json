@@ -73,7 +73,7 @@
       "xws" : "212thbattalionpilot",
       "text" : "Capable of functioning in space assaults and atmospheric battles alike, the LAAT/i gunship transports Republic troops to battlefronts on planets besieged by the Separatists.",
       "hyperspace" : false,
-      "image" : "file://212thbattalionpilot",
+      "image" : "https://pakirby1.github.io/images/IMG_2050.png",
       "slots" : [
         "Torpedo",
         "Crew",
@@ -111,7 +111,7 @@
       "xws" : "warthog",
       "ability" : "After you or a friendly non-limited ship at range 0-2 are destroyed during the Engagement Phase, that ship is not removed until the end of that phase",
       "hyperspace" : false,
-      "image" : "file://warthog",
+      "image" : "https://pakirby1.github.io/images/IMG_2053.png",
       "ffg" : 0,
       "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/5081daee997a2a55de474dad2e8e4a07.jpg",
       "caption" : "Veteran of Kadavo"
@@ -138,7 +138,7 @@
       "xws" : "hound",
       "ability" : "After a friendly small ship in your [Turret Arc] gains a deplete or strain token, if you have no tokens of that type, you may transfer that token to yourself.",
       "hyperspace" : false,
-      "image" : "file://hound",
+      "image" : "https://pakirby1.github.io/images/IMG_2052.png",
       "cost" : 43,
       "ffg" : 0
     },
@@ -162,7 +162,7 @@
       "xws" : "hawk",
       "ability" : "At the start of the End Phase, each friendly ship at range 0-1 that has a revealed maneuver of speed 3-5 may gain 1 strain token to perform a [Barrel Roll] or [Boost] action.",
       "hyperspace" : false,
-      "image" : "file://hawk",
+      "image" : "https://pakirby1.github.io/images/IMG_2051.png",
       "charges" : {
         "value" : 2,
         "recovers" : 1
