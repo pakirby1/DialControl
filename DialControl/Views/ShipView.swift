@@ -246,6 +246,8 @@ class ShipViewModel: ObservableObject {
         self.pilotStateService.updatePilotState(pilotState: state,
                                                 state: json,
                                                 pilotIndex: newData.pilot_index)
+        
+        self.pilotStateData = newData
     }
 }
 
