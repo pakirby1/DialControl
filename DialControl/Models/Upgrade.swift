@@ -410,11 +410,23 @@ struct Grant: Codable {
  "file://aaylasecura\n",
  "file://ghostcompany\n\n",
  "file://wolfpack\n\n\n",
- "file://suppressivegunner\n",
  "file://fives"
- "file://clonecaptainrex\n\n\n\n",
  "file://kitfisto\n\n\n\n\n",
  "file://yoda\n\n\n\n\n\n",
+ file://plokoon
+ 
+ Gunner
+ "file://suppressivegunner\n",
+ "file://clonecaptainrex\n\n\n\n",
+ 
+ Pilots
+ file://212thbattalionpilot
+ file://warthog
+ file://hound
+ file://hawk
+ 
+ Talent
+ file://deadeyeshot
  */
 struct Side: Codable {
     var ffg: Int { return _ffg ?? 0 }
