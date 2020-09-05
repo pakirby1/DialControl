@@ -374,11 +374,11 @@ struct ShipPilot: Identifiable, Equatable {
     let upgrades: [Upgrade]
     let points: Int
     let pilotState: PilotState
-    
+
     static func ==(lhs: ShipPilot, rhs: ShipPilot) -> Bool {
         return true
     }
-    
+
     enum Status {
         case full
         case half(Int)

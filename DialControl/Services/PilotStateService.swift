@@ -24,6 +24,15 @@ class PilotStateService: PilotStateServiceProtocol {
     }
     
     func createPilotState(squad: Squad, squadData: SquadData) {
+        func calculate_force_active(ship: Ship,
+                                    squadPilot: SquadPilot,
+                                    allUpgrades: [Upgrade]) -> Int
+        {
+
+//            allUpgrades.reduce(0, { $0.})
+            return ship.pilotForce(pilotId: squadPilot.id)
+        }
+        
         func buildPilotStateData(squad: Squad,
                                  squadPilot: SquadPilot,
                                  pilotIndex: Int) -> String
@@ -37,6 +46,13 @@ class PilotStateService: PilotStateServiceProtocol {
             
             let arc = ship.arcStats
             let agility = ship.agilityStats
+            var allUpgrades : [Upgrade] = []
+            
+            // Add the upgrades from SquadPilot.upgrades by iterating over the
+            // UpgradeCardEnum cases and calling getUpgrade
+            if let upgrades = squadPilot.upgrades {
+                allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+            }
             
             let pilotStateData = PilotStateData(
                 pilot_index: pilotIndex,
@@ -46,7 +62,7 @@ class PilotStateService: PilotStateServiceProtocol {
                 hull_inactive: 0,
                 shield_active: ship.shieldStats,
                 shield_inactive: 0,
-                force_active: ship.pilotForce(pilotId: squadPilot.id),
+                force_active: calculate_force_active(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
                 force_inactive: 0,
                 charge_active: ship.pilotCharge(pilotId: squadPilot.id),
                 charge_inactive: 0,

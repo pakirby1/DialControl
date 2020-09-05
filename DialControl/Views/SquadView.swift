@@ -444,7 +444,7 @@ struct PilotDetailsView: View {
     let theme: Theme = WestworldUITheme()
     
     @State var currentManeuver: String = ""
-    @State var dialFlipped = false
+    @State var dialFlipped = true
     
     func buildPointsView(half: Bool = false) -> AnyView {
         let points = half ? shipPilot.halfPoints : shipPilot.points
