@@ -14,13 +14,24 @@ protocol PilotStateServiceProtocol : class {
     func savePilotState(squadData: SquadData, state: String, pilotIndex: Int)
     func updatePilotState(pilotState: PilotState, state: String, pilotIndex: Int)
     func createPilotState(squad: Squad, squadData: SquadData)
+    func updateState(newData: PilotStateData, state: PilotState)
 }
 
-class PilotStateService: PilotStateServiceProtocol {
+class PilotStateService: PilotStateServiceProtocol, ObservableObject {
     let moc: NSManagedObjectContext
     
     init(moc: NSManagedObjectContext) {
         self.moc = moc
+    }
+    
+    func updateState(newData: PilotStateData, state: PilotState) {
+        print("\(Date()) PAK_updateState: \(newData.description)")
+        
+        let json = PilotStateData.serialize(type: newData)
+        
+        self.updatePilotState(pilotState: state,
+                              state: json,
+                              pilotIndex: newData.pilot_index)
     }
     
     func createPilotState(squad: Squad, squadData: SquadData) {

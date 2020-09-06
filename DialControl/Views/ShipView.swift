@@ -249,6 +249,15 @@ class ShipViewModel: ObservableObject {
         
         self.pilotStateData = newData
     }
+    
+    func updateState_New(newData: PilotStateData) {
+        guard let state = self.pilotState else { return }
+        
+        self.pilotStateService.updateState(newData: newData,
+                                           state: state)
+        
+        self.pilotStateData = newData
+    }
 }
 
 enum PilotStatePropertyType {
@@ -317,10 +326,11 @@ struct ShipView: View {
             .frame(width: 150, height: 50, alignment: .leading)
             //            .border(Color.blue, width: 2)
             
-            PilotDetailsView(shipPilot: viewModel.shipPilot,
-                             displayUpgrades: true,
-                             displayHeaders: false,
-                             displayDial: false)
+            PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService),
+                     displayUpgrades: true,
+                     displayHeaders: false,
+                     displayDial: false)
+                
                 .padding(2)
             //                .border(Color.green, width: 2)
             

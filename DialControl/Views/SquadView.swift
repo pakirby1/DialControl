@@ -30,6 +30,7 @@ struct SquadView: View {
     @State var maneuver: String = ""
     @EnvironmentObject var viewFactory: ViewFactory
     @ObservedObject var viewModel: SquadViewModel
+    @EnvironmentObject var pilotStateService: PilotStateService
     
     init(viewModel: SquadViewModel) {
         self.viewModel = viewModel
@@ -54,6 +55,7 @@ struct SquadView: View {
             header
             SquadCardView(squad: viewModel.squad, squadData: viewModel.squadData)
                 .environmentObject(viewFactory)
+                .environmentObject(self.pilotStateService)
                 .onAppear() {
                     print("SquadView.onAppear")
                 }
@@ -263,6 +265,7 @@ struct SquadCardView: View {
     let squadData: SquadData
     let theme: Theme = WestworldUITheme()
     @EnvironmentObject var viewFactory: ViewFactory
+    @EnvironmentObject var pilotStateService: PilotStateService
     @State var shipPilots: [ShipPilot] = []
     
     var emptySection: some View {
@@ -278,6 +281,7 @@ struct SquadCardView: View {
                     self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
                 }) {
                     PilotCardView(shipPilot: shipPilot)
+                        .environmentObject(self.pilotStateService)
                 }
             }
         }
@@ -356,6 +360,7 @@ struct SquadCardView: View {
 struct PilotCardView: View {
     let theme: Theme = WestworldUITheme()
     let shipPilot: ShipPilot
+    @EnvironmentObject var pilotStateService: PilotStateService
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -389,10 +394,16 @@ struct PilotCardView: View {
                 
                 Spacer()
                 
-                PilotDetailsView(shipPilot: shipPilot,
-                                 displayUpgrades: true,
-                                 displayHeaders: false,
-                                 displayDial: true)
+                PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.shipPilot, pilotStateService: self.pilotStateService as PilotStateServiceProtocol),
+                displayUpgrades: true,
+                displayHeaders: false,
+                displayDial: false)
+                
+//                PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.shipPilot, pilotStateService: self.pilotStateService),
+//                                 displayUpgrades: true,
+//                                 displayHeaders: false,
+//                                 displayDial: true)
+                
                 Spacer()
             }
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
@@ -436,18 +447,50 @@ struct IndicatorView: View {
     }
 }
 
-struct PilotDetailsView: View {
+class PilotDetailsViewModel: ObservableObject {
+    @Published var dialFlipped = true
     let shipPilot: ShipPilot
+    let pilotStateService: PilotStateServiceProtocol
+    
+    init(shipPilot: ShipPilot,
+         pilotStateService: PilotStateServiceProtocol)
+    {
+        self.shipPilot = shipPilot
+        self.pilotStateService = pilotStateService
+    }
+    
+    func flipDial() {
+        self.dialFlipped.toggle()
+        print("\(#function) self.dialFlipped=\(self.dialFlipped)")
+        
+        if var data = self.shipPilot.pilotStateData {
+            data.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
+                $0.dial_revealed = self.dialFlipped
+                self.updateState(newData: $0)
+            })
+        }
+    }
+    
+    func updateState(newData: PilotStateData) {
+        self.pilotStateService.updateState(newData: newData,
+                                           state: self.shipPilot.pilotState)
+        
+//        self.shipPilot.pilotStateData = newData
+    }
+}
+
+struct PilotDetailsView: View {
+    @ObservedObject var viewModel: PilotDetailsViewModel
     let displayUpgrades: Bool
     let displayHeaders: Bool
     let displayDial: Bool
     let theme: Theme = WestworldUITheme()
-    
     @State var currentManeuver: String = ""
-    @State var dialFlipped = true
+    
     
     func buildPointsView(half: Bool = false) -> AnyView {
-        let points = half ? shipPilot.halfPoints : shipPilot.points
+        let points = half ? self.viewModel.shipPilot.halfPoints : self.viewModel.shipPilot.points
         let color = half ? Color.red : Color.blue
         let label = "\(points)"
         
@@ -469,7 +512,7 @@ struct PilotDetailsView: View {
      */
     
     func buildManeuverView(isFlipped: Bool) -> AnyView {
-        let x = shipPilot.selectedManeuver
+        let x = self.viewModel.shipPilot.selectedManeuver
         var view: AnyView = AnyView(EmptyView())
         
         if isFlipped {
@@ -491,39 +534,39 @@ struct PilotDetailsView: View {
     }
     
     var dialViewNew: some View {
-        buildManeuverView(isFlipped: self.dialFlipped)
+        buildManeuverView(isFlipped: self.viewModel.dialFlipped)
             .padding(10)
-            .rotation3DEffect(self.dialFlipped ? Angle(degrees: 360): Angle(degrees: 0),
+            .rotation3DEffect(self.viewModel.dialFlipped ? Angle(degrees: 360): Angle(degrees: 0),
                           axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
             .animation(.default) // implicitly applying animation
             .onTapGesture {
                 // explicitly apply animation on toggle (choose either or)
                 //withAnimation {
-                    self.dialFlipped.toggle()
+                self.viewModel.flipDial()
                 //}
             }
     }
     
     var dialView: some View {
         IndicatorView(label:"99", bgColor: Color.black, fgColor: Color.blue)
-            .rotation3DEffect(self.dialFlipped ? Angle(degrees: 180): Angle(degrees: 0),
+            .rotation3DEffect(self.viewModel.dialFlipped ? Angle(degrees: 180): Angle(degrees: 0),
                           axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
             .animation(.default) // implicitly applying animation
             .onTapGesture {
                 // explicitly apply animation on toggle (choose either or)
                 //withAnimation {
-                    self.dialFlipped.toggle()
+                self.viewModel.dialFlipped.toggle()
                 //}
             }
     }
     
     var names: some View {
         VStack {
-            Text("\(shipPilot.ship.pilots[0].name)")
+            Text("\(self.viewModel.shipPilot.ship.pilots[0].name)")
                 .font(.title)
                 .foregroundColor(theme.TEXT_FOREGROUND)
             
-            Text("\(shipPilot.ship.name)")
+            Text("\(self.viewModel.shipPilot.ship.name)")
                 .font(.body)
                 .foregroundColor(theme.TEXT_FOREGROUND)
         }
@@ -532,7 +575,7 @@ struct PilotDetailsView: View {
     var upgrades: some View {
         VStack(alignment: .leading) {
             if (displayUpgrades) {
-                ForEach(shipPilot.upgrades) { upgrade in
+                ForEach(self.viewModel.shipPilot.upgrades) { upgrade in
                     Text("\(upgrade.name)")
                         .foregroundColor(Color.white)
                 }
@@ -546,7 +589,7 @@ struct PilotDetailsView: View {
             
             buildPointsView(half: true)
             
-            IndicatorView(label: "\(shipPilot.threshold)",
+            IndicatorView(label: "\(self.viewModel.shipPilot.threshold)",
                 bgColor: Color.yellow,
                 fgColor: Color.black)
             
