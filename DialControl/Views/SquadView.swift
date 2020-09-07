@@ -281,7 +281,7 @@ struct SquadCardView: View {
                     self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
                 }) {
                     PilotCardView(shipPilot: shipPilot)
-                        .environmentObject(self.pilotStateService)
+//                        .environmentObject(self.pilotStateService)
                 }
             }
         }
@@ -360,7 +360,8 @@ struct SquadCardView: View {
 struct PilotCardView: View {
     let theme: Theme = WestworldUITheme()
     let shipPilot: ShipPilot
-    @EnvironmentObject var pilotStateService: PilotStateService
+//    @EnvironmentObject var pilotStateService: PilotStateService
+    @EnvironmentObject var viewFactory: ViewFactory
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -394,10 +395,11 @@ struct PilotCardView: View {
                 
                 Spacer()
                 
-                PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.shipPilot, pilotStateService: self.pilotStateService as PilotStateServiceProtocol),
+                // https://medium.com/swlh/swiftui-and-the-missing-environment-object-1a4bf8913ba7
+                PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.shipPilot, pilotStateService: self.viewFactory.diContainer.pilotStateService as PilotStateServiceProtocol),
                 displayUpgrades: true,
                 displayHeaders: false,
-                displayDial: false)
+                displayDial: true)
                 
 //                PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.shipPilot, pilotStateService: self.pilotStateService),
 //                                 displayUpgrades: true,
@@ -448,7 +450,7 @@ struct IndicatorView: View {
 }
 
 class PilotDetailsViewModel: ObservableObject {
-    @Published var dialFlipped = true
+    @Published var dialFlipped: Bool
     let shipPilot: ShipPilot
     let pilotStateService: PilotStateServiceProtocol
     
@@ -457,6 +459,7 @@ class PilotDetailsViewModel: ObservableObject {
     {
         self.shipPilot = shipPilot
         self.pilotStateService = pilotStateService
+        self.dialFlipped = self.shipPilot.pilotStateData?.dial_revealed ?? false
     }
     
     func flipDial() {
@@ -467,16 +470,10 @@ class PilotDetailsViewModel: ObservableObject {
             data.change(update: {
                 print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.dial_revealed = self.dialFlipped
-                self.updateState(newData: $0)
+                self.pilotStateService.updateState(newData: $0,
+                                                   state: self.shipPilot.pilotState)
             })
         }
-    }
-    
-    func updateState(newData: PilotStateData) {
-        self.pilotStateService.updateState(newData: newData,
-                                           state: self.shipPilot.pilotState)
-        
-//        self.shipPilot.pilotStateData = newData
     }
 }
 
@@ -487,7 +484,6 @@ struct PilotDetailsView: View {
     let displayDial: Bool
     let theme: Theme = WestworldUITheme()
     @State var currentManeuver: String = ""
-    
     
     func buildPointsView(half: Bool = false) -> AnyView {
         let points = half ? self.viewModel.shipPilot.halfPoints : self.viewModel.shipPilot.points
