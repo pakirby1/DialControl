@@ -138,8 +138,6 @@ struct DialView: View {
         
         self.pathNodes = self.buildPathNodes(radius: self.textCircleRadius,
                                     maneuvers: maneuverList)
-        
-        
     }
     
     var anglePublisher = PassthroughSubject<Angle, Never>()
@@ -164,8 +162,6 @@ struct DialView: View {
         
         self._currentManeuver = currentManeuver // Have to use `_` character to set the binding
         print(currentManeuver.wrappedValue)
-        
-        
         
         self.dial = dial
         buildDial(dial: dial)
@@ -351,8 +347,6 @@ struct DialView: View {
             return AnyView(buildTextFontView())
         }
     }
-    
-    
 }
 
 struct DialCircle : View {

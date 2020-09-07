@@ -328,7 +328,11 @@ struct InnerCircle: View {
             }
             
             func buildTextFontView(baselineOffset: CGFloat = 0) -> AnyView {
-                return AnyView(Text(maneuverList[Int(currentSegment)].bearing.getSymbolCharacter()).baselineOffset(baselineOffset)
+                let symbol = maneuverList[Int(currentSegment)]
+                    .bearing
+                    .getSymbolCharacter()
+                
+                return AnyView(Text(symbol).baselineOffset(baselineOffset)
                     .font(.custom("xwing-miniatures", size: 30))
                     .frame(width: 32, height: 40, alignment: .center)
                     .foregroundColor(maneuverList[Int(currentSegment)].difficulty.color)

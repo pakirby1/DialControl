@@ -161,7 +161,9 @@ struct Maneuver: CustomStringConvertible {
             }
             
             func buildTextFontView(baselineOffset: CGFloat = 0) -> AnyView {
-                return AnyView(Text(bearing.getSymbolCharacter()).baselineOffset(baselineOffset)
+                let symbol = bearing.getSymbolCharacter()
+                
+                return AnyView(Text(symbol).baselineOffset(baselineOffset)
                     .font(.custom("xwing-miniatures", size: 36))
                     .foregroundColor(difficulty.color)
                     .padding(2))
