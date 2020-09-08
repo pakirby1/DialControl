@@ -17,6 +17,7 @@ class SquadViewModel : ObservableObject {
     @Published var showAlert: Bool = false
     var squad: Squad
     var squadData: SquadData
+    @Published var displayAsList: Bool = true
     
     init(squad: Squad,
          squadData: SquadData)
@@ -24,6 +25,12 @@ class SquadViewModel : ObservableObject {
         self.squad = squad
         self.squadData = squadData
     }
+}
+
+struct SquadViewState {
+    
+  let activateInitiativeOrder: Bool = true
+  let hideAllDials: Bool = true
 }
 
 struct SquadView: View {
@@ -45,9 +52,25 @@ struct SquadView: View {
             }
             
             Spacer()
+            
+            Button(action: {
+                self.viewModel.displayAsList.toggle()
+            }) {
+                Text(self.viewModel.displayAsList ? "List" : "Grid")
+//                Text(getListGridText())
+            }
+            
+//            Spacer()
         }.padding(10)
     }
     
+    func getListGridText() -> String {
+        if (self.viewModel.displayAsList == true) {
+            return "List"
+        } else {
+            return "Grid"
+        }
+    }
     /// Don't pass in the SquadViewModel directly to SquadCardView since we don't need
     /// the alertText, etc. from the view model for use in the SquadCardView
     var body: some View {
@@ -267,16 +290,30 @@ struct SquadCardView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var pilotStateService: PilotStateService
     @State var shipPilots: [ShipPilot] = []
+    @State var activationOrder: Bool = true
+    @State var revealAllDials: Bool = true
     
     var emptySection: some View {
         Section {
             Text("No ships found")
         }
     }
-      
+    
+    var sortedShipPilots: [ShipPilot] {
+        var copy = self.shipPilots
+        
+        if (activationOrder) {
+            copy.sort(by: { $0.ship.pilots[0].initiative < $1.ship.pilots[0].initiative })
+        } else {
+            copy.sort(by: { $0.ship.pilots[0].initiative > $1.ship.pilots[0].initiative })
+        }
+        
+        return copy
+    }
+    
     var shipsSection: some View {
         Section {
-            ForEach(shipPilots) { shipPilot in
+            ForEach(sortedShipPilots) { shipPilot in
                 Button(action: {
                     self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
                 }) {
@@ -303,6 +340,15 @@ struct SquadCardView: View {
                     
                     Spacer()
                     
+                    Button(action: {
+                        self.activationOrder.toggle()
+                    }) {
+                        Text(self.activationOrder ? "Engage" : "Activate").foregroundColor(Color.white)
+                        //                Text(getListGridText())
+                    }
+                    
+                    Spacer()
+                    
                     Text(squad.name ?? "Unnamed")
                         .font(.title)
                         .lineLimit(1)
@@ -310,6 +356,14 @@ struct SquadCardView: View {
                     
                     Spacer()
                     
+                    Button(action: {
+                        self.revealAllDials.toggle()
+                    }) {
+                        Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
+                        //                Text(getListGridText())
+                    }
+                    
+                    Spacer()
                     Text("\(damagedPoints)")
                         .font(.title)
                         .foregroundColor(theme.TEXT_FOREGROUND)
