@@ -291,7 +291,7 @@ struct SquadCardView: View {
     @EnvironmentObject var pilotStateService: PilotStateService
     @State var shipPilots: [ShipPilot] = []
     @State var activationOrder: Bool = true
-    @State var revealAllDials: Bool = true
+    @State private var revealAllDials: Bool = false
     
     var emptySection: some View {
         Section {
@@ -317,9 +317,30 @@ struct SquadCardView: View {
                 Button(action: {
                     self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
                 }) {
-                    PilotCardView(shipPilot: shipPilot)
+                    self.buildPilotCardView(shipPilot: shipPilot, dialRevealed: self.revealAllDials)
 //                        .environmentObject(self.pilotStateService)
                 }
+            }
+        }
+    }
+    
+    func buildPilotCardView(shipPilot: ShipPilot, dialRevealed: Bool) -> some View {
+        print("PAK_Hide self.revealAllDials = \(self.revealAllDials)")
+        
+        return PilotCardView(shipPilot: shipPilot,
+                      dialRevealed: dialRevealed)
+    }
+    
+    func updateAllDials() {
+        sortedShipPilots.forEach{ shipPilot in
+            if var data = shipPilot.pilotStateData {
+                data.change(update: {
+                    print("PAK_\(#function) pilotStateData.id: \($0)")
+                    $0.dial_revealed = self.revealAllDials
+                    self.pilotStateService.updateState(newData: $0,
+                                                       state: shipPilot.pilotState)
+                    print("PAK_Hide updateAllDials $0.dial_revealed = \(self.revealAllDials)")
+                })
             }
         }
     }
@@ -358,6 +379,10 @@ struct SquadCardView: View {
                     
                     Button(action: {
                         self.revealAllDials.toggle()
+                        
+                        print("PAK_Hide Button: \(self.revealAllDials)")
+                        
+                        self.updateAllDials()
                     }) {
                         Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
                         //                Text(getListGridText())
@@ -416,6 +441,8 @@ struct PilotCardView: View {
     let shipPilot: ShipPilot
 //    @EnvironmentObject var pilotStateService: PilotStateService
     @EnvironmentObject var viewFactory: ViewFactory
+//    @State var dialRevealed: Bool
+    let dialRevealed: Bool
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -450,10 +477,8 @@ struct PilotCardView: View {
                 Spacer()
                 
                 // https://medium.com/swlh/swiftui-and-the-missing-environment-object-1a4bf8913ba7
-                PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.shipPilot, pilotStateService: self.viewFactory.diContainer.pilotStateService as PilotStateServiceProtocol),
-                displayUpgrades: true,
-                displayHeaders: false,
-                displayDial: true)
+                
+                buildPilotDetailsView()
                 
 //                PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.shipPilot, pilotStateService: self.pilotStateService),
 //                                 displayUpgrades: true,
@@ -465,6 +490,21 @@ struct PilotCardView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .multilineTextAlignment(.center)
         }
+    }
+    
+    func buildPilotDetailsView() -> some View {
+        print("PAK_Hide buildPilotDetailsView() self.dialRevealed = \(dialRevealed)")
+        
+        let viewModel = PilotDetailsViewModel(shipPilot: self.shipPilot,
+                                              pilotStateService: self.viewFactory.diContainer.pilotStateService as PilotStateServiceProtocol,
+                                              dialFlipped: self.dialRevealed)
+        
+        print("PAK_Hide buildPilotDetailsView().viewModel.dialFlipped = \(dialRevealed)")
+        
+        return PilotDetailsView(viewModel: viewModel,
+            displayUpgrades: true,
+            displayHeaders: false,
+            displayDial: true)
     }
     
     var body: some View {
@@ -509,11 +549,14 @@ class PilotDetailsViewModel: ObservableObject {
     let pilotStateService: PilotStateServiceProtocol
     
     init(shipPilot: ShipPilot,
-         pilotStateService: PilotStateServiceProtocol)
+         pilotStateService: PilotStateServiceProtocol,
+         dialFlipped: Bool)
     {
         self.shipPilot = shipPilot
         self.pilotStateService = pilotStateService
-        self.dialFlipped = self.shipPilot.pilotStateData?.dial_revealed ?? false
+        self.dialFlipped = dialFlipped
+//        self.dialFlipped = self.shipPilot.pilotStateData?.dial_revealed ?? false
+        print("PAK_Hide PilotDetailsViewModel.dialFlipped = \(self.dialFlipped)")
     }
     
     func flipDial() {
@@ -690,3 +733,12 @@ struct SimpleFlipper : View {
             }
       }
 }
+
+func buildPilotDetailsViewModel(shipPilot: ShipPilot, pilotStateService: PilotStateService,
+                                dialFlipped: Bool) -> PilotDetailsViewModel
+{
+    return PilotDetailsViewModel(shipPilot: shipPilot,
+                                 pilotStateService: pilotStateService,
+                                 dialFlipped: dialFlipped)
+}
+
