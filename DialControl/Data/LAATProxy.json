@@ -14,8 +14,11 @@
           "kitfisto",
           "aaylasecura"
         ],
-        "gunner" : [
-          "suppressivegunner"
+        "astromech" : [
+          "r4astromech"
+        ],
+        "missile" : [
+          "multimissilepods"
         ]
       }
     },
@@ -24,11 +27,11 @@
       "ship" : "btlbywing",
       "points" : 234,
       "upgrades" : {
+        "astromech" : [
+          "r4astromech"
+        ],
         "crew" : [
           "yoda"
-        ],
-        "gunner" : [
-          "suppressivegunner"
         ],
         "turret" : [
           "dorsalturret"

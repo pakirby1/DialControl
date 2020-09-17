@@ -63,6 +63,7 @@
 		AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrowView.swift */; };
 		AEBDCDAE25020A2E0004415F /* LAATProxy.json in Resources */ = {isa = PBXBuildFile; fileRef = AEBDCDAD25020A2E0004415F /* LAATProxy.json */; };
 		AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC1242F24A32CFC00C0599A /* NetworkService.swift */; };
+		AEC125E42513468600021096 /* UpgradeUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC125E32513468600021096 /* UpgradeUtility.swift */; };
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
 		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
@@ -156,6 +157,7 @@
 		AEBA6360241B58D9008B00DB /* UpArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrowView.swift; sourceTree = "<group>"; };
 		AEBDCDAD25020A2E0004415F /* LAATProxy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LAATProxy.json; sourceTree = "<group>"; };
 		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		AEC125E32513468600021096 /* UpgradeUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeUtility.swift; sourceTree = "<group>"; };
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
@@ -320,6 +322,7 @@
 				AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */,
 				AE028C5A249F82AF00DF689B /* Logging.swift */,
 				AEDAFCF724B095DD0073C60E /* Notes.txt */,
+				AEC125E32513468600021096 /* UpgradeUtility.swift */,
 			);
 			path = DialControl;
 			sourceTree = "<group>";
@@ -563,6 +566,7 @@
 				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,
 				AEEB546C24F11FE50050913C /* PilotStateService.swift in Sources */,
+				AEC125E42513468600021096 /* UpgradeUtility.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE028C5B249F82AF00DF689B /* Logging.swift in Sources */,
 				AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */,
