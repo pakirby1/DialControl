@@ -104,7 +104,7 @@ struct FactionSquadList: View {
             deleteAllButton
                 .padding(10)
             
-            Spacer()
+//            Spacer()
         }
     }
     

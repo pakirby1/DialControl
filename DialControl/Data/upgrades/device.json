@@ -210,5 +210,23 @@
       }
     ],
     "cost": { "value": 6 }
+  },
+  {
+    "name": "Concussion Bombs",
+    "limited": 0,
+    "xws": "concussionbombs",
+    "hyperspace": true,
+    "sides": [
+      {
+        "title": "Concussion Bombs",
+        "type": "Device",
+        "slots": ["Device"],
+        "ffg": 0,
+        "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/f69c5ecaca9ab01380f6329e49970ddf.jpg",
+        "image": "https://pakirby1.github.io/images/CCC7D51C-C4C1-42D9-B81E-473D863A7178.png",
+        "ability": "Bomb During the System Phase, you may spend 1 [Charge] to drop an Ion Bomb using the [1 [Straight]] template."
+      }
+    ],
+    "cost": { "value": 6 }
   }
 ]

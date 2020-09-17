@@ -52,36 +52,23 @@ struct SquadView: View {
             }
             
             Spacer()
-            
-            Button(action: {
-                self.viewModel.displayAsList.toggle()
-            }) {
-                Text(self.viewModel.displayAsList ? "List" : "Grid")
-//                Text(getListGridText())
-            }
-            
-//            Spacer()
         }.padding(10)
     }
     
-    func getListGridText() -> String {
-        if (self.viewModel.displayAsList == true) {
-            return "List"
-        } else {
-            return "Grid"
-        }
-    }
     /// Don't pass in the SquadViewModel directly to SquadCardView since we don't need
     /// the alertText, etc. from the view model for use in the SquadCardView
     var body: some View {
         VStack {
             header
-            SquadCardView(squad: viewModel.squad, squadData: viewModel.squadData)
+            SquadCardView(squad: viewModel.squad,
+                          squadData: viewModel.squadData,
+                          displayAsList: self.viewModel.displayAsList)
                 .environmentObject(viewFactory)
                 .environmentObject(self.pilotStateService)
                 .onAppear() {
                     print("SquadView.onAppear")
                 }
+//            Spacer()
         }.alert(isPresented: $viewModel.showAlert) {
             Alert(title: Text("Error"),
                   message: Text(viewModel.alertText),
@@ -138,6 +125,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
 struct SquadCardView: View {
     let squad: Squad
     let squadData: SquadData
+    let displayAsList: Bool
     let theme: Theme = WestworldUITheme()
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var pilotStateService: PilotStateService
@@ -149,6 +137,17 @@ struct SquadCardView: View {
         Section {
             Text("No ships found")
         }
+    }
+    
+    private var shipsView: AnyView {
+        switch displayAsList {
+        case true: return AnyView(shipsGrid)
+        case false: return AnyView(shipsGrid)
+        }
+    }
+    
+    var chunkedShips : [[ShipPilot]] {
+        return sortedShipPilots.chunked(into: 2)
     }
     
     var sortedShipPilots: [ShipPilot] {
@@ -163,16 +162,39 @@ struct SquadCardView: View {
         return copy
     }
     
-    var shipsSection: some View {
+    var shipsListSection: some View {
         Section {
             ForEach(sortedShipPilots) { shipPilot in
-                Button(action: {
-                    self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
-                }) {
-                    self.buildPilotCardView(shipPilot: shipPilot, dialRevealed: self.revealAllDials)
-//                        .environmentObject(self.pilotStateService)
-                }
+                self.buildShipButton(shipPilot: shipPilot)
             }
+        }
+    }
+    
+    var shipsGrid: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            ForEach(0..<chunkedShips.count) { index in
+                HStack {
+                    ForEach(self.chunkedShips[index]) { shipPilot in
+                        self.buildShipButton(shipPilot: shipPilot)
+                    }
+                }
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+            }
+        }
+        
+//        Section {
+//
+//        }
+    }
+    
+    func buildShipButton(shipPilot: ShipPilot) -> some View {
+        return Button(action: {
+            self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
+        }) {
+            self.buildPilotCardView(shipPilot: shipPilot,
+                                    dialRevealed: self.revealAllDials)
+        //                        .environmentObject(self.pilotStateService)
         }
     }
     
@@ -204,73 +226,87 @@ struct SquadCardView: View {
     }
     
     var content: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 25, style: .continuous)
-                .fill(theme.BORDER_INACTIVE)
+        let points = Text("\(squad.points ?? 0)")
+            .font(.title)
+            .foregroundColor(theme.TEXT_FOREGROUND)
+            .padding()
+            .background(Color.blue)
+            .clipShape(Circle())
+        
+        let engage = Button(action: {
+            self.activationOrder.toggle()
+        }) {
+            Text(self.activationOrder ? "Engage" : "Activate").foregroundColor(Color.white)
+        }
+        
+        let title = Text(squad.name ?? "Unnamed")
+            .font(.title)
+            .lineLimit(1)
+            .foregroundColor(theme.TEXT_FOREGROUND)
+        
+        let hide = Button(action: {
+            self.revealAllDials.toggle()
+            
+            print("PAK_Hide Button: \(self.revealAllDials)")
+            
+            self.updateAllDials()
+        }) {
+            Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
+        }
+        
+        let damaged = Text("\(damagedPoints)")
+            .font(.title)
+            .foregroundColor(theme.TEXT_FOREGROUND)
+            .padding()
+            .background(Color.red)
+            .clipShape(Circle())
+        
+        return ZStack {
+//            RoundedRectangle(cornerRadius: 25, style: .continuous)
+//                .fill(theme.BORDER_INACTIVE)
             
             VStack(alignment: .leading) {
+                // Header
                 HStack {
-                    Text("\(squad.points ?? 0)")
-                        .font(.title)
-                        .foregroundColor(theme.TEXT_FOREGROUND)
-                        .padding()
-                        .background(Color.blue)
-                        .clipShape(Circle())
+                    points
                     
                     Spacer()
                     
-                    Button(action: {
-                        self.activationOrder.toggle()
-                    }) {
-                        Text(self.activationOrder ? "Engage" : "Activate").foregroundColor(Color.white)
-                        //                Text(getListGridText())
-                    }
+                    engage
                     
                     Spacer()
                     
-                    Text(squad.name ?? "Unnamed")
-                        .font(.title)
-                        .lineLimit(1)
-                        .foregroundColor(theme.TEXT_FOREGROUND)
+                    title
                     
                     Spacer()
                     
-                    Button(action: {
-                        self.revealAllDials.toggle()
-                        
-                        print("PAK_Hide Button: \(self.revealAllDials)")
-                        
-                        self.updateAllDials()
-                    }) {
-                        Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
-                        //                Text(getListGridText())
-                    }
+                    hide
                     
                     Spacer()
-                    Text("\(damagedPoints)")
-                        .font(.title)
-                        .foregroundColor(theme.TEXT_FOREGROUND)
-                        .padding()
-                        .background(Color.red)
-                        .clipShape(Circle())
-                }
+                    
+                    damaged
+                }.padding(20)
 
-                List {
+                // Body
+//                List {
                     if shipPilots.isEmpty {
                         emptySection
                     } else {
-                        shipsSection
+                        shipsView
                     }
-                }.clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+//                }
+//                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
                 
-                Spacer()
+//                Spacer()
             }
-            .padding(20)
+//            .padding(20)
             .multilineTextAlignment(.center)
         }
-        .onAppear(perform: { self.shipPilots = SquadCardViewModel.getShips(squad: self.squad,
-                                                                           squadData: self.squadData) })
-        .frame(width: 600, height: 600)
+        .onAppear(perform: { self.shipPilots = SquadCardViewModel.getShips(
+            squad: self.squad,
+            squadData: self.squadData)
+        })
+//        .frame(width: 1000, height: 600)
     }
     
     var body: some View {
@@ -477,7 +513,7 @@ struct PilotDetailsView: View {
     
         return AnyView(ZStack {
             Circle()
-                .frame(width: 65, height: 65, alignment: .center)
+                .frame(width: 75, height: 75, alignment: .center)
                 .foregroundColor(Color.black)
 
             view
@@ -599,4 +635,26 @@ func buildPilotDetailsViewModel(shipPilot: ShipPilot, pilotStateService: PilotSt
                                  pilotStateService: pilotStateService,
                                  dialFlipped: dialFlipped)
 }
+
+//struct ShipGridView : View {
+//    let chunkedDishes = ShipGridView.getChunkedArray()
+//
+//    var body: some View {
+//        List {
+//            ForEach(0..<chunkedDishes.count) { index in
+//                HStack {
+//                    ForEach(self.chunkedDishes[index]) { cell in
+//                        CardView(cell: cell)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    static func getChunkedArray() -> [[Cell]] {
+//        let chunkedDishes = Row.all_flat().chunked(into: 2)
+//        return chunkedDishes
+//    }
+//}
+
 

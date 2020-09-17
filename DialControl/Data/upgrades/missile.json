@@ -269,7 +269,10 @@
         "ability": "Attack ([Calculate] or [Lock]): Spend 1 [Charge]. If the defender is in your [Front Arc], you may spend 1 [Charge] to roll 1 additional attack die. If the defender is in your [Bullseye Arc], you map spend up to 2 [Charge] to roll that many additional attack dice instead.",
         "title": "Multi-Missile Pods",
         "type": "Missile",
-        "slots": ["Missile", "Missile"]
+        "slots": ["Missile", "Missile"],
+        "ffg": 0,
+        "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/71140b3339226017653867076e19310f.jpg",
+        "image": "https://pakirby1.github.io/images/D0954E4D-8B7E-40EC-BF5E-FEE6457D0A77.png"
       }
     ]
   }

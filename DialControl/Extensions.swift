@@ -225,6 +225,15 @@ extension Array where Element: Equatable {
     }
 }
 
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        return stride(from: 0, to: count, by: size).map {
+            Array(self[$0 ..< Swift.min($0 + size, count)])
+        }
+    }
+}
+
+
 extension SquadData {
     func getPilotState(index: Int) -> PilotState {
         let arr = Array(pilotState as! Set<PilotState>)

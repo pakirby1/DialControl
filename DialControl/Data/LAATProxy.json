@@ -1,5 +1,5 @@
 {
-  "name" : "LAATProxy",
+  "name" : "LAATProxy2",
   "description" : "",
   "faction" : "galacticrepublic",
   "points" : 744,
@@ -11,7 +11,6 @@
       "points" : 200,
       "upgrades" : {
         "crew" : [
-          "kitfisto",
           "aaylasecura"
         ],
         "astromech" : [
@@ -30,11 +29,11 @@
         "astromech" : [
           "r4astromech"
         ],
-        "crew" : [
-          "yoda"
-        ],
         "turret" : [
           "dorsalturret"
+        ],
+        "device" : [
+          "concussionbombs"
         ]
       }
     },
