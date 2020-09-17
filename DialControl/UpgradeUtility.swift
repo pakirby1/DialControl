@@ -77,7 +77,9 @@ struct UpgradeUtility {
         
         let forcepowers : [Upgrade] = upgrades
             .forcepowers
-            .map{ getUpgrade(upgradeCategory: "force-power", upgradeName: $0) }
+            .map{
+                getUpgrade(upgradeCategory: "force-power", upgradeName: $0)
+            }
         
         let gunners : [Upgrade] = upgrades
             .gunners

@@ -27,7 +27,12 @@ class SquadXWSImportViewModel : ObservableObject {
         self.pilotStateService = pilotStateService
     }
     
-    func loadSquad(jsonString: String) -> Squad {
+    func loadSquad(jsonString: inout String) -> Squad {
+        // replace janky yasb exported to remove '-' characters.
+        jsonString = jsonString
+            .replacingOccurrences(of: "force-power", with: "forcepower")
+            .replacingOccurrences(of: "tactical-relay", with: "tacticalrelay")
+        
         return Squad.serializeJSON(jsonString: jsonString) { errorString in
             self.alertText = errorString
             self.showAlert = true
@@ -110,7 +115,7 @@ struct SquadXWSImportView : View {
                 .environmentObject(textViewObserver)
             
             Button(action: {
-                let squad = self.viewModel.loadSquad(jsonString: self.xws)
+                let squad = self.viewModel.loadSquad(jsonString: &self.xws)
                 
                 if squad.name != Squad.emptySquad.name {
                     // Save the squad JSON to CoreData
