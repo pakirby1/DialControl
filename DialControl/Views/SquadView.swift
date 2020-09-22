@@ -345,21 +345,25 @@ struct PilotCardView: View {
 
             VStack {
                 HStack {
-                    Text("\(shipPilot.ship.pilots[0].initiative)")
-                        .font(.title)
-                        .bold()
-                        .foregroundColor(Color.orange)
+//                    Text("\(shipPilot.ship.pilots[0].initiative)")
+//                        .font(.title)
+//                        .bold()
+//                        .foregroundColor(Color.orange)
+                    
+                    initiative
                     
                     Spacer()
                 
-                    VStack {
-                        Text("\(shipPilot.pilot.name)")
-                            .font(.body)
+//                    VStack {
+//                        Text("\(shipPilot.pilot.name)")
+//                            .font(.body)
+//
+//                        Text("\(shipPilot.ship.name)")
+//                            .font(.caption)
+//                            .foregroundColor(Color.white)
+//                    }
                     
-                        Text("\(shipPilot.ship.name)")
-                            .font(.caption)
-                            .foregroundColor(Color.white)
-                    }
+                    pilotShipNames
 
                     Spacer()
                     
@@ -419,6 +423,24 @@ struct PilotCardView: View {
         }
         
         return Text("").padding(5).foregroundColor(Color.white)
+    }
+    
+    var initiative: some View {
+        Text("\(shipPilot.ship.pilots[0].initiative)")
+            .font(.title)
+            .bold()
+            .foregroundColor(Color.orange)
+    }
+    
+    var pilotShipNames: some View {
+        VStack {
+            Text("\(shipPilot.pilot.name)")
+                .font(.body)
+        
+            Text("\(shipPilot.ship.name)")
+                .font(.caption)
+                .foregroundColor(Color.white)
+        }
     }
 }
 

@@ -31,6 +31,12 @@ struct UpgradesView: View {
             }
         }
     }
+    
+    func displayUpgrade(imageOverlayUrl: String, imageOverlayUrlBack: String) {
+        self.showImageOverlay = true
+        self.imageOverlayUrl = imageOverlayUrl
+        self.imageOverlayUrlBack = imageOverlayUrlBack
+    }
 }
 
 // MARK:- UpgradeView

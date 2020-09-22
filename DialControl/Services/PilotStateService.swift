@@ -41,7 +41,19 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
         {
 
 //            allUpgrades.reduce(0, { $0.})
-            return ship.pilotForce(pilotId: squadPilot.id)
+            let forceUpgrades = allUpgrades.filter{ upgrade in
+                if let _ = upgrade.sides[0].force {
+                    return true
+                }
+                
+                return false
+            }
+            
+            let forceValues = forceUpgrades.reduce(0, {
+                return $0 + (($1.sides[0].force?.value) ?? 0)
+            })
+            
+            return ship.pilotForce(pilotId: squadPilot.id) + forceValues
         }
         
         func buildPilotStateData(squad: Squad,

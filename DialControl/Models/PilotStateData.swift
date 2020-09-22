@@ -15,6 +15,7 @@ struct UpgradeStateData : Codable, CustomStringConvertible {
     var charge_active : Int?
     var charge_inactive : Int?
     var selected_side : Int
+    // var name: String (upgrade.json.xws property)
     
     var description: String {
         var arr: [String] = []
@@ -60,7 +61,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var charge_inactive : Int
     var selected_maneuver: String
     var shipID: String
-    var upgradeStates : [UpgradeStateData]?
+    var upgradeStates : [UpgradeStateData]? // nil if no upgrades present
     var dial_revealed: Bool
     
     var id = UUID()

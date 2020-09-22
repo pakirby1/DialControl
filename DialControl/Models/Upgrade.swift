@@ -437,6 +437,7 @@ struct Side: Codable {
     var slots: [String] { return _slots ?? [] }
     var type: String { return _type ?? "" }
     var grants: [Grant] { return _grants ?? [] }
+    var force: Force? { return _force ?? nil }
     
     private var _ffg: Int?
     private var _title: String?
@@ -446,7 +447,8 @@ struct Side: Codable {
     private var _slots: [String]?
     private var _type: String?
     private var _grants: [Grant]?
-    
+    private var _force: Force?
+
     enum CodingKeys: String, CodingKey {
         case _text = "text"
         case _image = "image"
@@ -456,6 +458,7 @@ struct Side: Codable {
         case _artwork = "artwork"
         case _slots = "slots"
         case _type = "type"
+        case _force = "force"
     }
 }
 
@@ -468,6 +471,16 @@ struct Cost: Codable {
         case _value = "value"
     }
 }
+
+//struct Force: Codable {
+//    var value: Int { return _value ?? 0 }
+//    
+//    private var _value: Int?
+//    
+//    enum CodingKeys: String, CodingKey {
+//        case _value = "value"
+//    }
+//}
 
 struct Upgrade: Codable, Identifiable {
     let id = UUID()
