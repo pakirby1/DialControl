@@ -56,6 +56,76 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
             return ship.pilotForce(pilotId: squadPilot.id) + forceValues
         }
         
+        //
+        func calculateActiveHull(ship: Ship,
+                                 squadPilot: SquadPilot,
+                                 allUpgrades: [Upgrade]) -> Int
+        {
+            var adj = 0
+            
+            let hullUpgrade = allUpgrades.filter{ upgrade in
+                upgrade.xws == "hullupgrade"
+            }
+            
+            if hullUpgrade.count == 1 {
+                adj += 1
+            }
+            
+            let soullessoneUpgrade = allUpgrades.filter{ upgrade in
+                upgrade.xws == "soullessone"
+            }
+            
+            if soullessoneUpgrade.count == 1 {
+                adj += 2
+            }
+            
+            return ship.hullStats + adj
+        }
+        
+        func calculateActiveShields(ship: Ship,
+                                 squadPilot: SquadPilot,
+                                 allUpgrades: [Upgrade]) -> Int
+        {
+            var adj = 0
+            
+            let shieldUpgrade = allUpgrades.filter{ upgrade in
+                upgrade.xws == "shieldupgrade"
+            }
+            
+            if shieldUpgrade.count == 1 {
+                adj += 1
+            }
+            
+            let viragoUpgrade = allUpgrades.filter{ upgrade in
+                upgrade.xws == "virago"
+            }
+            
+            if viragoUpgrade.count == 1 {
+                adj += 1
+            }
+            
+            return ship.shieldStats + adj
+        }
+        
+        func buildUpgradeStates(allUpgrades : [Upgrade]) -> [UpgradeStateData] {
+            var ret:[UpgradeStateData] = []
+            
+            // for every upgrade with sides[].item[0].charges.value > 1
+            allUpgrades.forEach{ upgrade in
+                if let charge = upgrade.sides[0].charges?.value {
+                    // create an UpgradeStateData
+                    ret.append(UpgradeStateData(force_active: nil,
+                                                force_inactive: nil,
+                                                charge_active: charge,
+                                                charge_inactive: 0,
+                                                selected_side: 0,
+                                                xws: upgrade.xws))
+                }
+            }
+                
+            return ret
+        }
+        
         func buildPilotStateData(squad: Squad,
                                  squadPilot: SquadPilot,
                                  pilotIndex: Int) -> String
@@ -81,9 +151,9 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                 pilot_index: pilotIndex,
                 adjusted_attack: arc,
                 adjusted_defense: agility,
-                hull_active: ship.hullStats,
+                hull_active: calculateActiveHull(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
                 hull_inactive: 0,
-                shield_active: ship.shieldStats,
+                shield_active: calculateActiveShields(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
                 shield_inactive: 0,
                 force_active: calculate_force_active(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
                 force_inactive: 0,
@@ -91,7 +161,7 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                 charge_inactive: 0,
                 selected_maneuver: "",
                 shipID: "",
-                upgradeStates: [],
+                upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
                 dial_revealed: false
             )
             

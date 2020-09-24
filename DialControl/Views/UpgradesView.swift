@@ -17,25 +17,22 @@ struct UpgradesView: View {
     @Binding var showImageOverlay: Bool
     @Binding var imageOverlayUrl: String
     @Binding var imageOverlayUrlBack: String
+    @Binding var selectedUpgrade: UpgradeView.UpgradeViewModel?
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(upgrades) {
-                    UpgradeView(viewModel: UpgradeView.UpgradeViewModel(upgrade: $0),
-                                showImageOverlay: self.$showImageOverlay,
-                                imageOverlayUrl: self.$imageOverlayUrl,
-                                imageOverlayUrlBack: self.$imageOverlayUrlBack)
-//                        .environmentObject(self.viewModel)
+                    UpgradeView(viewModel: UpgradeView.UpgradeViewModel(upgrade: $0))
+                    { upgradeViewModel in
+                        self.showImageOverlay = true
+                        self.imageOverlayUrl = upgradeViewModel.imageUrl
+                        self.imageOverlayUrlBack = upgradeViewModel.imageUrlBack
+                        self.selectedUpgrade = upgradeViewModel
+                    }
                 }
             }
         }
-    }
-    
-    func displayUpgrade(imageOverlayUrl: String, imageOverlayUrlBack: String) {
-        self.showImageOverlay = true
-        self.imageOverlayUrl = imageOverlayUrl
-        self.imageOverlayUrlBack = imageOverlayUrlBack
     }
 }
 
@@ -101,10 +98,8 @@ struct UpgradeView: View {
     }
     
     let viewModel: UpgradeViewModel
-    @Binding var showImageOverlay: Bool
-    @Binding var imageOverlayUrl: String
-    @Binding var imageOverlayUrlBack: String
     @EnvironmentObject var shipViewModel: ShipViewModel
+    var callback: (UpgradeViewModel) -> ()
     
     var body: some View {
         Text("\(self.viewModel.upgrade.name)")
@@ -117,10 +112,8 @@ struct UpgradeView: View {
             )
             .onTapGesture {
                 print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")
-                self.showImageOverlay = true
                 self.shipViewModel.displayImageOverlay = true
-                self.imageOverlayUrl = self.viewModel.imageUrl
-                self.imageOverlayUrlBack = self.viewModel.imageUrlBack
+                self.callback(self.viewModel)
             }
     }
 }

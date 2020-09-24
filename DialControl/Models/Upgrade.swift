@@ -427,6 +427,30 @@ struct Grant: Codable {
  
  Talent
  file://deadeyeshot
+ 
+ "sides" : [
+ {
+   "title" : "Bomblet Generator",
+   "type" : "Device",
+   "ability" : "Bomb During the System Phase, you may spend 1 [Charge] to drop a Bomblet with the [1 [Straight]] template. At the start of the Activation Phase, you may spend 1 shield to recover 2 [Charge].",
+   "slots" : [
+     "Device",
+     "Device"
+   ],
+   "charges" : {
+     "value" : 2,
+     "recovers" : 0
+   },
+   "device" : {
+     "name" : "Bomblet",
+     "type" : "Bomb",
+     "effect" : "At the end of the Activation Phase, this device detonates. When this device detonates, each ship at range 0-1 rolls 2 attack dice. Each ship suffers 1 [Hit] damage for each [Hit]/[Critical Hit] result."
+   },
+   "image" : "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_63.png",
+   "artwork" : "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_U_63.jpg",
+   "ffg" : 392
+ }
+
  */
 struct Side: Codable {
     var ffg: Int { return _ffg ?? 0 }
@@ -438,6 +462,7 @@ struct Side: Codable {
     var type: String { return _type ?? "" }
     var grants: [Grant] { return _grants ?? [] }
     var force: Force? { return _force ?? nil }
+    var charges: Charges? { return _charges ?? nil }
     
     private var _ffg: Int?
     private var _title: String?
@@ -448,6 +473,7 @@ struct Side: Codable {
     private var _type: String?
     private var _grants: [Grant]?
     private var _force: Force?
+    private var _charges: Charges?
 
     enum CodingKeys: String, CodingKey {
         case _text = "text"
@@ -459,6 +485,7 @@ struct Side: Codable {
         case _slots = "slots"
         case _type = "type"
         case _force = "force"
+        case _charges = "charges"
     }
 }
 

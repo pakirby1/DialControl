@@ -271,6 +271,12 @@ enum PilotStatePropertyType {
 
 // MARK:- ShipView
 struct ShipView: View {
+    struct SelectedUpgrade {
+        let upgrade: Upgrade
+        let imageOverlayUrl: String
+        let imageOverlayUrlBack: String
+    }
+    
     struct TextOverlay: View {
         @Binding var isShowing : Bool
     
@@ -294,6 +300,7 @@ struct ShipView: View {
     @ObservedObject var viewModel: ShipViewModel
     let theme: Theme = WestworldUITheme()
     let printer = DeallocPrinter("ShipView")
+    @State var selectedUpgrade: UpgradeView.UpgradeViewModel? = nil
     
     init(viewModel: ShipViewModel) {
         self.viewModel = viewModel
@@ -437,7 +444,8 @@ struct ShipView: View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,
                      showImageOverlay: $showImageOverlay,
                      imageOverlayUrl: $imageOverlayUrl,
-                     imageOverlayUrlBack: $imageOverlayUrlBack)
+                     imageOverlayUrlBack: $imageOverlayUrlBack,
+                     selectedUpgrade: $selectedUpgrade)
             .environmentObject(viewModel)
     }
     
@@ -478,7 +486,49 @@ struct ShipView: View {
              UpgradeCardFlipView(frontURL, backURL)
              */
             upgradeCardImage
+            
+            LinkedView(type: StatButtonType.charge,
+                       active: 1,
+                       inactive: 1)
+            { (active, inactive) in
+//                           self.viewModel.update(type: PilotStatePropertyType.charge,
+//                                                 active: active,
+//                                                 inactive: inactive)
+            }.offset(x:0, y:250)
         }
+    }
+    
+    func getUpgradeStateData(upgrade: Upgrade) -> UpgradeStateData? {
+        // do we have any upgrade states?
+            // no, return nil
+            guard let upgradeStates = viewModel.pilotStateData.upgradeStates else { return nil }
+            
+            // yes, return the upgrade state with matching name/xws
+            return upgradeStates.filter{ upgradeState in upgradeState.xws == upgrade.xws }[0]
+    }
+    
+    var linkedView: AnyView {
+        let emptyView = AnyView(EmptyView())
+        
+        // Do we hava a selectedUpgrade?
+            // no, return
+            guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
+        
+            // yes
+                // do we have an upgradeState for this upgrade?
+            guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
+        
+            guard let charge_active = upgradeState.charge_active else { return emptyView }
+            guard let charge_inactive = upgradeState.charge_active else { return emptyView }
+        
+            return AnyView(LinkedView(type: StatButtonType.charge,
+                                      active: charge_active,
+                                      inactive: charge_inactive)
+            { (active, inactive) in
+                self.viewModel.update(type: PilotStatePropertyType.charge,
+                                      active: active,
+                                      inactive: inactive)
+            }.offset(x:0, y:250))
     }
     
     var upgradeCardImage: AnyView {

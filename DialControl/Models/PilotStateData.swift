@@ -12,10 +12,10 @@ import Foundation
 struct UpgradeStateData : Codable, CustomStringConvertible {
     var force_active : Int?
     var force_inactive : Int?
-    var charge_active : Int?
+    var charge_active : Int?    // sides[].item[0].charges.value
     var charge_inactive : Int?
     var selected_side : Int
-    // var name: String (upgrade.json.xws property)
+    var xws: String
     
     var description: String {
         var arr: [String] = []
