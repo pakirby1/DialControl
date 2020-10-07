@@ -16,6 +16,7 @@ protocol JSONSerialization {
 extension JSONSerialization {
     /// JSON -> T
     static func deserialize<T: Decodable>(jsonString: String) -> T {
+        print(jsonString)
         let jsonData = jsonString.data(using: .utf8)!
         let decoder = JSONDecoder()
         var ret: T? = nil   // FIXME: How do I NOT use optionals???

@@ -48,7 +48,7 @@
         "ffg": 266
       }
     ],
-    "cost": { "value": 5 },
+    "cost": { "value": 4 },
     "hyperspace": false
   },
   {
@@ -126,7 +126,7 @@
         "ffg": 269
       }
     ],
-    "cost": { "value": 4 },
+    "cost": { "value": 3 },
     "hyperspace": true
   },
   {
@@ -152,7 +152,7 @@
         "ffg": 270
       }
     ],
-    "cost": { "value": 7 },
+    "cost": { "value": 6 },
     "hyperspace": false
   },
   {
@@ -239,7 +239,7 @@
       }
     ],
     "cost": { "value": 6 },
-    "hyperspace": false
+    "hyperspace": true
   },
   {
     "name": "Mag-Pulse Warheads",
@@ -249,6 +249,14 @@
     "sides": [
       {
         "ability": "Attack ([Lock]): Spend 1 [Charge]. If this attack hits, the defender suffers 1 [Critical Hit] damage and gains 1 deplete and 1 jam token. Then cancel all [Hit]/[Critical Hit] results.",
+        "attack": {
+          "arc": "Front Arc",
+          "maxrange": 3,
+          "minrange": 1,
+          "ordnance": true,
+          "value": 3
+        },
+        "charges": { "value": 2, "recovers": 0 },
         "title": "Mag-Pulse Warheads",
         "type": "Missile",
         "slots": ["Missile"],
@@ -263,17 +271,18 @@
     "name": "Multi-Missile Pods",
     "limited": 0,
     "xws": "multimissilepods",
-    "hyperspace": false,
+    "hyperspace": true,
     "sides": [
       {
-        "ability": "Attack ([Calculate] or [Lock]): Spend 1 [Charge]. If the defender is in your [Front Arc], you may spend 1 [Charge] to roll 1 additional attack die. If the defender is in your [Bullseye Arc], you map spend up to 2 [Charge] to roll that many additional attack dice instead.",
+        "ability": "Attack ([Calculate] or [Lock]): Spend 1 [Charge]. If the defender is in your [Front Arc], you may spend 1 [Charge] to roll 1 additional attack die. If the defender is in your [Bullseye Arc], you may spend up to 2 [Charge] to roll that many additional attack dice instead.",
         "title": "Multi-Missile Pods",
         "type": "Missile",
         "slots": ["Missile", "Missile"],
-        "ffg": 0,
-        "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/71140b3339226017653867076e19310f.jpg",
-        "image": "https://pakirby1.github.io/images/D0954E4D-8B7E-40EC-BF5E-FEE6457D0A77.png"
+        "ffg": 673,
+        "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/af81354b305251139da023c343c9f70f.jpg",
+        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/5abef5ee3d6e4acf94cd77280375aa72.png"
       }
-    ]
+    ],
+    "cost": { "value": 8 }
   }
 ]

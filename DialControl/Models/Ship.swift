@@ -227,7 +227,7 @@ struct Pilot: Codable {
     var text: String { return _text ?? "" }
     let image: String
     var shipAbility: ShipAbility? { return _shipAbility ?? nil }
-    let slots: [Slot]
+    var slots: [Slot]? { return _slots ?? [] }
     let artwork: String
     let ffg: Int
     let hyperspace: Bool
@@ -238,6 +238,7 @@ struct Pilot: Codable {
     private var _force: Force?
     private var _charges: Charges?
     private var _shipAbility: ShipAbility?
+    private var _slots: [Slot]?
     
     enum CodingKeys: String, CodingKey {
         case _text = "text"
@@ -248,7 +249,7 @@ struct Pilot: Codable {
         case xws
         case image
         case _shipAbility = "shipAbility"
-        case slots
+        case _slots = "slots"
         case artwork
         case ffg
         case hyperspace
@@ -262,8 +263,8 @@ struct Ship: Codable, JSONSerialization {
     var xws: String { return _xws ?? "" }
     var ffg: Int { return _ffg ?? 0 }
     var size: String { return _size ?? "" }
-    var dial: [String]
-    let dialCodes: [String]
+    var dial: [String] { return _dial ?? [] }
+    var dialCodes: [String] { return _dialCodes ?? [] }
     let faction: String
     let stats: [Stat]
     let actions: [Action]
@@ -273,15 +274,16 @@ struct Ship: Codable, JSONSerialization {
     private var _xws: String?
     private var _ffg: Int?
     private var _size: String?
-//    private var _dial: [String]?
+    private var _dial: [String]?
+    private var _dialCodes: [String]?
     
     enum CodingKeys: String, CodingKey {
         case name = "name"
         case _xws = "xws"
         case _ffg = "ffg"
         case _size = "size"
-        case dial = "dial"
-        case dialCodes = "dialCodes"
+        case _dial = "dial"
+        case _dialCodes = "dialCodes"
         case faction = "faction"
         case stats = "stats"
         case actions = "actions"
