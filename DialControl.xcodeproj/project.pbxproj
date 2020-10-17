@@ -158,6 +158,7 @@
 		AEBDCDAD25020A2E0004415F /* LAATProxy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LAATProxy.json; sourceTree = "<group>"; };
 		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AEC125E32513468600021096 /* UpgradeUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeUtility.swift; sourceTree = "<group>"; };
+		AECF88C8253AB6AD00AAA23B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
@@ -280,6 +281,7 @@
 		AE4D58B623F8087B00C66136 = {
 			isa = PBXGroup;
 			children = (
+				AECF88C7253AB68800AAA23B /* Documentation */,
 				AE0E38BF24E37BEB00A3A824 /* Test */,
 				AE3539532430C64700AC023A /* WedgeView.swift */,
 				AE4D58C123F8087C00C66136 /* DialControl */,
@@ -372,6 +374,14 @@
 				AEEB546B24F11FE50050913C /* PilotStateService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		AECF88C7253AB68800AAA23B /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				AECF88C8253AB6AD00AAA23B /* README.md */,
+			);
+			path = Documentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
