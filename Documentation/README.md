@@ -8,3 +8,12 @@ SquadManager is an iOS iPad application that allows users to manage their X-Wing
 The architecture is a mix of Elm with the addition of view models.  Instead of the view communicating with the Elm store directly, the view sends commands to the view model that forwards commands to the Elm store.  Once the state in the store has been updated, the view model will observe any changes to the state and update the publishers that the view model exposes to the view.
 
 ![Redux Architecture](https://pakirby1.github.io/images/Redux_Architecture.png)
+
+In general, the order of operations are:
+
+1. User performs an action
+2. The action is sent to the view model for pre-processing.  The user action is translated into a store Action.  This Action is usually represented as an enum with associated values.
+3. The reducer mutates the State based on the Action and service calls
+4. The store emits an event that contains the updated state
+5. The view model performs any post-processing operations on the event and stores the result in a publisher
+6. The view updates its state based on the events published by the view model.
