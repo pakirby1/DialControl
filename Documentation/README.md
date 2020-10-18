@@ -17,3 +17,14 @@ In general, the order of operations are:
 4. The store emits an event that contains the updated state
 5. The view model performs any post-processing operations on the event and stores the result in a publisher
 6. The view updates its state based on the events published by the view model.
+
+> Usually an app will have a single Store with a single State.  Alternatively, an app could have a single Store with multiple states, or multiple Stores each with one or more States.
+
+## Views
+There are multiple views within the app, but the main views are:
+
+* Squad View: Displays a single squad
+* Squad Import View: Imports XWS from a squad builder
+* Squad List View: Displays a list of all imported squads
+* Ship View: Displays a single pilot/ship combination
+
