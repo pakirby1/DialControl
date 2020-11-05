@@ -487,24 +487,27 @@ struct ShipView: View {
              */
             upgradeCardImage
             
-            LinkedView(type: StatButtonType.charge,
-                       active: 1,
-                       inactive: 1)
-            { (active, inactive) in
-//                           self.viewModel.update(type: PilotStatePropertyType.charge,
-//                                                 active: active,
-//                                                 inactive: inactive)
-            }.offset(x:0, y:250)
+            linkedView
+            
+//            LinkedView(type: StatButtonType.charge,
+//                       active: 1,
+//                       inactive: 1)
+//            { (active, inactive) in
+////                           self.viewModel.update(type: PilotStatePropertyType.charge,
+////                                                 active: active,
+////                                                 inactive: inactive)
+//            }.offset(x:0, y:250)
         }
     }
     
     func getUpgradeStateData(upgrade: Upgrade) -> UpgradeStateData? {
         // do we have any upgrade states?
-            // no, return nil
-            guard let upgradeStates = viewModel.pilotStateData.upgradeStates else { return nil }
-            
-            // yes, return the upgrade state with matching name/xws
-            return upgradeStates.filter{ upgradeState in upgradeState.xws == upgrade.xws }[0]
+        guard let upgradeStates = viewModel.pilotStateData.upgradeStates else { return nil }
+        
+        let upgradeStateData: [UpgradeStateData] = upgradeStates.filter({ upgradeState in upgradeState.xws == upgrade.xws })
+    
+        // yes, return the upgrade state with matching name/xws or nil
+        return (upgradeStateData.count > 0 ? upgradeStateData[0] : nil)
     }
     
     var linkedView: AnyView {
