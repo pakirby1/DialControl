@@ -108,29 +108,6 @@ class ShipViewModel: ObservableObject {
         return (ship, foundPilots)
     }
     
-    func loadPilotStateFromCoreData() {
-        do {
-            let fetchRequest = PilotState.fetchRequest()
-            let pilotStates = try self.moc.fetch(fetchRequest) as! [PilotState]
-            
-            if pilotStates.count > 0 {
-                _ = pilotStates.map{ print("\(String(describing: $0.id)) shipPilot.pilotStateId \(shipPilot.pilotState.id)") }
-                
-                let filtered = pilotStates.filter{ $0.id == shipPilot.pilotState.id }
-                
-                if filtered.count == 1 {
-                    guard let state: PilotState = filtered.first else { return }
-                    guard let json = state.json else { return }
-                    let data: PilotStateData = PilotStateData.deserialize(jsonString: json)
-                    self.pilotStateData = data
-                    self.pilotState = state
-                }
-            }
-        } catch {
-            print(error)
-        }
-    }
-    
     // Load values from pilotShipState, becuase shipPilot ontains the initial values
     // Not the updated values
     var force: Int {
