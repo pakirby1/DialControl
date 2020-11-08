@@ -118,25 +118,28 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
 }
 
 extension PilotStateData {
-    func update(type: PilotStatePropertyType, active: Int, inactive: Int) -> PilotStateData {
-        
+    typealias UpdateHandler = (inout PilotStateData) -> ()
+    
+    func update(type: PilotStatePropertyType_New) -> PilotStateData {
         switch(type) {
-        case .hull:
+        case .hull(let active, let inactive):
             return change{ $0.updateHull(active: active, inactive: inactive) }
-        case .shield:
+        case .shield(let active, let inactive):
             return change{ $0.updateShield(active: active, inactive: inactive) }
-        case .force:
+        case .force(let active, let inactive):
             return change{ $0.updateForce(active: active, inactive: inactive) }
-        case .charge:
+        case .charge(let active, let inactive):
             return change{ $0.updateCharge(active: active, inactive: inactive) }
         case .shipIDMarker(let id):
             return change{ $0.updateShipID(shipID: id) }
         case .selectedManeuver(let maneuver):
             return change{ $0.updateManeuver(maneuver: maneuver) }
+        case .revealAllDials(let revealed):
+            return change{ $0.updateDialRevealed(revealed: revealed)}
         }
     }
     
-    private func change(update: (inout PilotStateData) -> ()) -> PilotStateData {
+    private func change(update: UpdateHandler) -> PilotStateData {
         var newState = self
         update(&newState)
         return newState
@@ -215,4 +218,8 @@ extension PilotStateData {
         
         return false
     }
+}
+
+protocol PilotStateDataProtocol {
+    
 }

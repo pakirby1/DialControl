@@ -145,20 +145,42 @@ class ShipViewModel: ObservableObject {
     }
     
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
-        switch(type) {
-        case .hull:
-            updateHull(active: active, inactive: inactive)
-        case .shield:
-            updateShield(active: active, inactive: inactive)
-        case .force:
-            updateForce(active: active, inactive: inactive)
-        case .charge:
-            updateCharge(active: active, inactive: inactive)
-        case .shipIDMarker(let id):
-            updateShipIDMarker(marker: id)
-        case .selectedManeuver(let maneuver):
-            updateSelectedManeuver(maneuver: maneuver)
+        func old() {
+            switch(type) {
+            case .hull:
+                updateHull(active: active, inactive: inactive)
+            case .shield:
+                updateShield(active: active, inactive: inactive)
+            case .force:
+                updateForce(active: active, inactive: inactive)
+            case .charge:
+                updateCharge(active: active, inactive: inactive)
+            case .shipIDMarker(let id):
+                updateShipIDMarker(marker: id)
+            case .selectedManeuver(let maneuver):
+                updateSelectedManeuver(maneuver: maneuver)
+            }
         }
+        
+        func new() {
+            switch(type) {
+            case .hull:
+                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.hull(active, inactive)))
+            case .shield:
+                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.shield(active, inactive)))
+            case .force:
+                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.force(active, inactive)))
+            case .charge:
+                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.charge(active, inactive)))
+            case .shipIDMarker(let id):
+                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.shipIDMarker(id)))
+            case .selectedManeuver(let maneuver):
+                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.selectedManeuver(maneuver)))
+            }
+        }
+        
+        old()
+//        new()
     }
     
     func updateHull(active: Int, inactive: Int) {
@@ -244,6 +266,16 @@ enum PilotStatePropertyType {
     case force
     case shipIDMarker(String)
     case selectedManeuver(String)
+}
+
+enum PilotStatePropertyType_New {
+    case hull(Int, Int)
+    case shield(Int, Int)
+    case charge(Int, Int)
+    case force(Int, Int)
+    case shipIDMarker(String)
+    case selectedManeuver(String)
+    case revealAllDials(Bool)
 }
 
 // MARK:- ShipView
