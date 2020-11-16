@@ -203,7 +203,8 @@ class ShipViewModel: ObservableObject {
                         self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
                     }
                 }
-//                self.updateState(newData: $0)
+                
+                self.updateState(newData: self.pilotStateData)
             })
     }
     
