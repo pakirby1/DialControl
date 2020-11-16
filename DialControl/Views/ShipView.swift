@@ -159,6 +159,9 @@ class ShipViewModel: ObservableObject {
                 updateShipIDMarker(marker: id)
             case .selectedManeuver(let maneuver):
                 updateSelectedManeuver(maneuver: maneuver)
+            case .upgradeCharge(var upgrade):
+//                upgrade.updateCharge(active: active, inactive: inactive)
+                updateUpgradeCharge(upgrade: upgrade, active: active, inactive: inactive)
             }
         }
         
@@ -176,11 +179,32 @@ class ShipViewModel: ObservableObject {
                 updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.shipIDMarker(id)))
             case .selectedManeuver(let maneuver):
                 updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.selectedManeuver(maneuver)))
+            case .upgradeCharge(var upgrade):
+                upgrade.updateCharge(active: active, inactive: inactive)
             }
         }
         
+        /// Switch (PilotStateData_Change)
         old()
 //        new()
+    }
+    
+    func updateUpgradeCharge(upgrade: UpgradeStateData, active: Int, inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+            upgrade.change(update: { newUpgrade in
+                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
+                newUpgrade.updateCharge(active: active, inactive: inactive)
+                
+                // the old upgrade state is in the pilotStateData, so we need
+                // to replace the old upgrade state with the new upgrade state
+                // in $0
+                if let upgrades = self.pilotStateData.upgradeStates {
+                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
+                        self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
+                    }
+                }
+//                self.updateState(newData: $0)
+            })
     }
     
     func updateHull(active: Int, inactive: Int) {
@@ -266,6 +290,7 @@ enum PilotStatePropertyType {
     case force
     case shipIDMarker(String)
     case selectedManeuver(String)
+    case upgradeCharge(UpgradeStateData)
 }
 
 enum PilotStatePropertyType_New {
@@ -531,15 +556,22 @@ struct ShipView: View {
             guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
         
             guard let charge_active = upgradeState.charge_active else { return emptyView }
-            guard let charge_inactive = upgradeState.charge_active else { return emptyView }
+            guard let charge_inactive = upgradeState.charge_inactive else { return emptyView }
         
             return AnyView(LinkedView(type: StatButtonType.charge,
                                       active: charge_active,
                                       inactive: charge_inactive)
             { (active, inactive) in
-                self.viewModel.update(type: PilotStatePropertyType.charge,
-                                      active: active,
-                                      inactive: inactive)
+                // update the values for upgradeState
+                /*
+                 self.viewModel.update(type: PilotStatePropertyType.charge,
+                 active: active,
+                 inactive: inactive)
+                 */
+                self.viewModel.update(
+                    type: PilotStatePropertyType.upgradeCharge(upgradeState),
+                    active: active,
+                    inactive: inactive)
             }.offset(x:0, y:250))
     }
     

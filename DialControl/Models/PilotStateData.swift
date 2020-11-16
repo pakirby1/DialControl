@@ -32,6 +32,11 @@ struct UpgradeStateData : Codable, CustomStringConvertible {
 }
 
 extension UpgradeStateData {
+    func change(update: (inout UpgradeStateData) -> ()) {
+        var newState = self
+        update(&newState)
+    }
+    
     mutating func updateForce(active: Int, inactive: Int) {
         force_active = active
         force_inactive = inactive

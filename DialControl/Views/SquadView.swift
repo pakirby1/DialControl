@@ -213,6 +213,7 @@ struct SquadCardView: View {
     
     func updateAllDials() {
         sortedShipPilots.forEach{ shipPilot in
+            /// Switch (PilotStateData_Change)
             if var data = shipPilot.pilotStateData {
                 data.change(update: {
                     print("PAK_\(#function) pilotStateData.id: \($0)")
@@ -479,6 +480,7 @@ class PilotDetailsViewModel: ObservableObject {
         self.dialFlipped.toggle()
         print("\(#function) self.dialFlipped=\(self.dialFlipped)")
         
+        /// Switch (PilotStateData_Change)
         if var data = self.shipPilot.pilotStateData {
             data.change(update: {
                 print("PAK_\(#function) pilotStateData.id: \($0)")
