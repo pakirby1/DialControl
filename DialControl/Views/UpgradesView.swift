@@ -112,7 +112,6 @@ struct UpgradeView: View {
             )
             .onTapGesture {
                 print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")
-                self.shipViewModel.displayImageOverlay = true
                 self.callback(self.viewModel)
             }
     }

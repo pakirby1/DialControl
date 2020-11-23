@@ -78,16 +78,7 @@ class ShipViewModel: ObservableObject {
             })
             .store(in: &cancellableSet)
     }
-    
-    var displayImageOverlay: Bool {
-        get {
-            return _displayImageOverlay
-        }
-        set {
-            _displayImageOverlay = newValue
-        }
-    }
-    
+
     lazy var shipImageURL: String = {
         loadShipFromJSON(shipName: shipPilot.shipName,
                        pilotName: shipPilot.pilotName).1.image
@@ -331,7 +322,6 @@ struct ShipView: View {
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
     @State var imageOverlayUrlBack: String = ""
-    @State var displayOverlay: Bool = false
     @ObservedObject var viewModel: ShipViewModel
     let theme: Theme = WestworldUITheme()
     let printer = DeallocPrinter("ShipView")
@@ -513,7 +503,6 @@ struct ShipView: View {
                 .opacity(0.5)
                 .onTapGesture{
                     self.showImageOverlay = false
-                    self.viewModel.displayImageOverlay = false
                 }
             
             // If the upgrade has two sides...
@@ -594,9 +583,8 @@ struct ShipView: View {
         let defaultView = AnyView(clearView)
         
         print("UpgradeView var imageOverlayView self.showImageOverlay=\(self.showImageOverlay)")
-        print("UpgradeView var imageOverlayView self.viewModel.displayImageOverlay=\(self.viewModel.displayImageOverlay)")
-        
-        if (self.viewModel.displayImageOverlay == true) {
+
+        if (self.showImageOverlay == true) {
             return AnyView(upgradeImageOverlay)
         } else {
             return defaultView
