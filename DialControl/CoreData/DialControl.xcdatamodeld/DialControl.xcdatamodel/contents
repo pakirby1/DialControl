@@ -21,15 +21,10 @@
         <attribute name="json" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <relationship name="pilotState" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PilotState" inverseName="squadData" inverseEntity="PilotState"/>
-        <uniquenessConstraints>
-            <uniquenessConstraint>
-                <constraint value="name"/>
-            </uniquenessConstraint>
-        </uniquenessConstraints>
     </entity>
     <elements>
         <element name="ImageData" positionX="-73.85546875" positionY="-216.55078125" width="128" height="73"/>
         <element name="PilotState" positionX="-537.515625" positionY="-220.50390625" width="128" height="103"/>
-        <element name="SquadData" positionX="-332.50390625" positionY="-190.171875" width="128" height="118"/>
+        <element name="SquadData" positionX="-332.50390625" positionY="-190.171875" width="128" height="28"/>
     </elements>
 </model>

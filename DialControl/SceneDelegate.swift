@@ -22,6 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Get the managed object context from the shared persistent container.
         let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        // Used only if we have a unique constraint on our CoreData entity?
         moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         
         // Create the SwiftUI view and set the context as the value for the managedObjectContext environment keyPath.
