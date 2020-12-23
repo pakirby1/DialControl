@@ -22,9 +22,7 @@
     "4FW",
     "4KR"
   ],
-  "dialCodes": [
-    "YT24"
-  ],
+  "dialCodes": ["YT24"],
   "faction": "Rebel Alliance",
   "stats": [
     { "arc": "Double Turret Arc", "type": "attack", "value": 4 },
@@ -38,14 +36,14 @@
     { "difficulty": "Red", "type": "Barrel Roll" },
     { "difficulty": "White", "type": "Rotate Arc" }
   ],
-  "icon": "https://sb-cdn.fantasyflightgames.com/ship_types/I_YT-2400.png",
+  "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_YT-2400.png",
   "pilots": [
     {
       "name": "\"Leebo\"",
       "caption": "Dry-Witted Droid",
       "initiative": 3,
       "limited": 1,
-      "cost": 81,
+      "cost": 76,
       "xws": "leebo",
       "ability": "After you defend or perform an attack, if you spent a calculate token, gain 1 calculate token.",
       "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_78.png",
@@ -59,8 +57,15 @@
         "name": "Sensor Blindspot",
         "text": "While you perform a primary attack at attack range 0-1, do not apply the range 0-1 bonus and roll 1 fewer attack die."
       },
-      "slots": ["Missile", "Illicit", "Modification", "Title", "Gunner"],
-      "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_78.jpg",
+      "slots": [
+        "Talent",
+        "Missile",
+        "Gunner",
+        "Illicit",
+        "Modification",
+        "Title"
+      ],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_78.jpg",
       "ffg": 78,
       "hyperspace": false
     },
@@ -69,7 +74,7 @@
       "caption": "Hotshot Mercenary",
       "initiative": 5,
       "limited": 1,
-      "cost": 91,
+      "cost": 85,
       "xws": "dashrendar",
       "ability": "While you move, you ignore obstacles.",
       "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_77.png",
@@ -86,7 +91,7 @@
         "Title",
         "Gunner"
       ],
-      "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_77.jpg",
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_77.jpg",
       "ffg": 77,
       "hyperspace": false
     },
@@ -94,7 +99,7 @@
       "name": "Wild Space Fringer",
       "initiative": 1,
       "limited": 0,
-      "cost": 77,
+      "cost": 72,
       "xws": "wildspacefringer",
       "text": "Although stock YT-2400 light freighters have plenty of room for cargo, that space is often annexed to support modified weapon systems and oversized engines.",
       "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_79.png",
@@ -110,7 +115,7 @@
         "Title",
         "Gunner"
       ],
-      "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_79.jpg",
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_79.jpg",
       "ffg": 79,
       "hyperspace": false
     }

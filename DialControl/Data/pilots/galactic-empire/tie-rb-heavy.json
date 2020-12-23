@@ -2,6 +2,7 @@
   "name": "TIE/rb Heavy",
   "xws": "tierbheavy",
   "size": "Medium",
+  "ffg": 72,
   "dial": [
     "1TR",
     "1BW",
@@ -41,17 +42,101 @@
   ],
   "pilots": [
     {
-      "name": "Lyttan Dree",
-      "caption": "Onyx 2",
-      "initiative": 3,
-      "limited": 1,
-      "xws": "lyttandree",
-      "ability": "While a friendly ship at range 0-2 performs an attack, if you are in the defender's [] or [], the attacker may reroll 1 attack die.",
+      "name": "Carida Academy Cadet",
+      "cost": 34,
+      "initiative": 1,
+      "slots": [
+        "Cannon",
+        "Cannon",
+        "Modification",
+        "Modification",
+        "Configuration"
+      ],
+      "xws": "caridaacademycadet",
       "shipAbility": {
         "name": "Rotating Cannons",
         "text": "You can rotate your [Single Turret Arc] indicator only to your [Front Arc] or [Rear Arc]. You must treat the [Front Arc] requirement of your equipped [Cannon] upgrades as [Single Turret Arc]."
       },
-      "hyperspace": false
+      "hyperspace": true,
+      "text": "At Carida Academy, Imperial Navy cadets are taught to be ruthless and loyal, prioritizing victory over the lives of their comrades.",
+      "ffg": 696,
+      "limited": 0,
+      "image": "https://images-cdn.fantasyflightgames.com/filer_public/43/2d/432db246-0a8d-42de-9711-a893c825b9b3/swz67_carida-cadet.png",
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/89c60dc2a00750df2606c5b6e24f60c3.jpg"
+    },
+    {
+      "name": "Onyx Squadron Sentry",
+      "cost": 36,
+      "initiative": 3,
+      "slots": [
+        "Talent",
+        "Cannon",
+        "Cannon",
+        "Modification",
+        "Modification",
+        "Configuration"
+      ],
+      "xws": "onyxsquadronsentry",
+      "shipAbility": {
+        "name": "Rotating Cannons",
+        "text": "You can rotate your [Single Turret Arc] indicator only to your [Front Arc] or [Rear Arc]. You must treat the [Front Arc] requirement of your equipped [Cannon] upgrades as [Single Turret Arc]."
+      },
+      "hyperspace": true,
+      "text": "The TIE/rb heavy, sometimes called the \"brute,\" is designed for operational flexibility. Its heavy armor and capacity to house an integrated MGK-300 droid co-pilot make it an excellent patrol craft.",
+      "ffg": 695,
+      "limited": 0,
+      "image": "https://images-cdn.fantasyflightgames.com/filer_public/3d/7c/3d7ca1c1-9e57-4085-a9a6-e82a3d92c6df/swz67_onyx-sentry.png",
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/9431b36aeec89d1dbf988375a3ce8a5b.jpg"
+    },
+    {
+      "name": "\"Rampage\"",
+      "caption": "Implacable Pursuer",
+      "cost": 39,
+      "initiative": 4,
+      "limited": 1,
+      "slots": [
+        "Talent",
+        "Cannon",
+        "Cannon",
+        "Modification",
+        "Modification",
+        "Configuration"
+      ],
+      "xws": "rampage",
+      "ability": "After you execute a speed 3-4 maneuver, you may choose a ship in your [Single Turret Arc] at range 0-1. That ship gains 1 strain token, or 2 strain tokens if you are damaged.",
+      "shipAbility": {
+        "name": "Rotating Cannons",
+        "text": "You can rotate your [Single Turret Arc] indicator only to your [Front Arc] or [Rear Arc]. You must treat the [Front Arc] requirement of your equipped [Cannon] upgrades as [Single Turret Arc]."
+      },
+      "hyperspace": false,
+      "ffg": 693,
+      "image": "https://images-cdn.fantasyflightgames.com/filer_public/ee/88/ee888bad-fa08-42e2-a558-cbf9a6f2da62/swz67_rampage.png",
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/af083fe92dc1b51c2602dad42301d033.jpg"
+    },
+    {
+      "name": "Lyttan Dree",
+      "caption": "Onyx 2",
+      "cost": 37,
+      "initiative": 3,
+      "limited": 1,
+      "slots": [
+        "Cannon",
+        "Cannon",
+        "Modification",
+        "Modification",
+        "Configuration"
+      ],
+      "xws": "lyttandree",
+      "ability": "While a friendly ship at range 0-2 performs an attack, if you are in the defender's [Left Arc] or [Right Arc], the attacker may reroll 1 attack die.",
+      "shipAbility": {
+        "name": "Rotating Cannons",
+        "text": "You can rotate your [Single Turret Arc] indicator only to your [Front Arc] or [Rear Arc]. You must treat the [Front Arc] requirement of your equipped [Cannon] upgrades as [Single Turret Arc]."
+      },
+      "hyperspace": false,
+      "ffg": 694,
+      "image": "https://images-cdn.fantasyflightgames.com/filer_public/6f/37/6f375dcd-61b2-407d-bb3f-0c01cf9491ae/swz67_lyttan-dree.png",
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/d8bce1a532475fe05a10f9d219a67969.jpg"
     }
-  ]
+  ],
+  "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_TIE_Brute.png"
 }
