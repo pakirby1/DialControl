@@ -20,7 +20,7 @@ class ShipViewModel: ObservableObject {
     @Published var upgradeImage: UIImage = UIImage()
     private var _displayImageOverlay: Bool = false
     private var cancellableSet = Set<AnyCancellable>()
-    var pilotStateData: PilotStateData
+    @Published var pilotStateData: PilotStateData
     let pilotStateService: PilotStateServiceProtocol
     var pilotState: PilotState? = nil
     @Published var currentManeuver: String = ""
@@ -204,12 +204,13 @@ class ShipViewModel: ObservableObject {
     }
     
     func reset() {
-        print("\(Date()) PAK_\(#function)")
-            self.pilotStateData.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.reset()
-                self.updateState(newData: $0)
-            })
+        print("\(Date()) PAK_(#function): \(self.pilotStateData.description)")
+    
+        self.pilotStateData.change(update: {
+            $0.reset()
+            self.updateState(newData: $0)
+            print("\(Date()) PAK_(#function): \(self.pilotStateData.description)")
+        })
     }
     
     func updateHull(active: Int, inactive: Int) {

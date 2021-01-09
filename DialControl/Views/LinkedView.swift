@@ -54,25 +54,29 @@ enum StatButtonState {
 }
 
 struct LinkedView: View {
-    @State private var activeCount: Int
-    @State private var inactiveCount: Int
+    let id = UUID()
+    var deallocPrinter: DeallocPrinter
+    var activeCount: Int
+    var inactiveCount: Int
     let maxCount: Int
     let type: StatButtonType
     let symbolSize: CGFloat = 72
     let callback: (Int, Int) -> ()
     
     init(maxCount: Int, type: StatButtonType, callback: @escaping (Int, Int) -> ()) {
+        deallocPrinter = DeallocPrinter("LinkedView \(id): \(type) maxCount:\(maxCount)")
         self.maxCount = maxCount
-        _activeCount = State(initialValue: maxCount)
-        _inactiveCount = State(initialValue: 0)
+        activeCount = maxCount
+        inactiveCount = 0
         self.callback = callback
         self.type = type
     }
     
     init(type: StatButtonType, active: Int, inactive: Int, callback: @escaping (Int, Int) -> ()) {
+        deallocPrinter = DeallocPrinter("LinkedView \(id): \(type) active: \(active) inactive: \(inactive)")
         self.maxCount = active + inactive
-        _activeCount = State(initialValue: active)
-        _inactiveCount = State(initialValue: inactive)
+        self.activeCount = active
+        self.inactiveCount = inactive
         self.callback = callback
         self.type = type
     }
@@ -184,11 +188,14 @@ struct LinkedView: View {
     }
     
     func setState(active: Int, inactive: Int) {
-        self.activeCount = active < 0 ? 0 : active
-        self.inactiveCount = inactive < 0 ? 0 : inactive
+//        self.activeCount = active < 0 ? 0 : active
+//        self.inactiveCount = inactive < 0 ? 0 : inactive
+        let activeCount = active < 0 ? 0 : active
+        let inactiveCount = inactive < 0 ? 0 : inactive
         
         // Update the PilotStateData
-        self.callback(self.activeCount, self.inactiveCount)
+//        self.callback(self.activeCount, self.inactiveCount)
+        self.callback(activeCount, inactiveCount)
     }
 }
 

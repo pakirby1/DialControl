@@ -50,6 +50,13 @@ extension UpgradeStateData {
         charge_active = active
         charge_inactive = inactive
     }
+    
+    mutating func reset() {
+        if let active = charge_active, let inactive = charge_inactive {
+            charge_active = active + inactive
+            charge_inactive = 0
+        }
+    }
 }
 
 struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
@@ -170,6 +177,14 @@ extension PilotStateData {
         reset(activeKeyPath: \.shield_active, inactiveKeyPath: \.shield_inactive)
         reset(activeKeyPath: \.force_active, inactiveKeyPath: \.force_inactive)
         reset(activeKeyPath: \.charge_active, inactiveKeyPath: \.charge_inactive)
+        
+        if let _ = self.upgradeStates {
+            upgradeStates?.forEach { upgrade in
+                upgrade.change{ upgrade in
+                    upgrade.reset()
+                }
+            }
+        }
     }
     
     mutating func updateHull(active: Int, inactive: Int) {
