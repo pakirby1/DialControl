@@ -155,6 +155,23 @@ extension PilotStateData {
         update(&newState)
     }
     
+    private mutating func reset(activeKeyPath: WritableKeyPath<PilotStateData, Int>,
+                     inactiveKeyPath: WritableKeyPath<PilotStateData, Int>)
+    {
+        let currentActive = self[keyPath: activeKeyPath]
+        let currentInactive = self[keyPath: inactiveKeyPath]
+        
+        self[keyPath: activeKeyPath] = currentActive + currentInactive
+        self[keyPath: inactiveKeyPath] = 0
+    }
+    
+    mutating func reset() {
+        reset(activeKeyPath: \.hull_active, inactiveKeyPath: \.hull_inactive)
+        reset(activeKeyPath: \.shield_active, inactiveKeyPath: \.shield_inactive)
+        reset(activeKeyPath: \.force_active, inactiveKeyPath: \.force_inactive)
+        reset(activeKeyPath: \.charge_active, inactiveKeyPath: \.charge_inactive)
+    }
+    
     mutating func updateHull(active: Int, inactive: Int) {
         hull_active = active
         hull_inactive = inactive

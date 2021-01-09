@@ -153,6 +153,8 @@ class ShipViewModel: ObservableObject {
             case .upgradeCharge(var upgrade):
 //                upgrade.updateCharge(active: active, inactive: inactive)
                 updateUpgradeCharge(upgrade: upgrade, active: active, inactive: inactive)
+            case .reset:
+                reset()
             }
         }
         
@@ -172,6 +174,8 @@ class ShipViewModel: ObservableObject {
                 updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.selectedManeuver(maneuver)))
             case .upgradeCharge(var upgrade):
                 upgrade.updateCharge(active: active, inactive: inactive)
+            case .reset:
+                reset()
             }
         }
         
@@ -196,6 +200,15 @@ class ShipViewModel: ObservableObject {
                 }
                 
                 self.updateState(newData: self.pilotStateData)
+            })
+    }
+    
+    func reset() {
+        print("\(Date()) PAK_\(#function)")
+            self.pilotStateData.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
+                $0.reset()
+                self.updateState(newData: $0)
             })
     }
     
@@ -283,6 +296,7 @@ enum PilotStatePropertyType {
     case shipIDMarker(String)
     case selectedManeuver(String)
     case upgradeCharge(UpgradeStateData)
+    case reset
 }
 
 enum PilotStatePropertyType_New {
@@ -366,20 +380,24 @@ struct ShipView: View {
                 .padding(2)
             //                .border(Color.green, width: 2)
             
-            HStack {
-                Text("Reset")
-                //            Image(uiImage: UIImage(named: "repeat_new", in: nil, with: regularMediumSymbolConfig)!.withRenderingMode(.alwaysTemplate))
-                //                .foregroundColor(.accentColor)
-                            
-//                Image(systemName: "arrow.clockwise.circle.fill")
-                Image(systemName: "repeat")
-                    .font(.largeTitle)
-                    .foregroundColor(.accentColor)
-            }.padding(15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.white, lineWidth: 1)
-            )
+            Button(action: { self.viewModel.update(type: .reset, active: 0, inactive: 0)})
+            {
+                HStack {
+                    
+                    Text("Reset")
+                    //            Image(uiImage: UIImage(named: "repeat_new", in: nil, with: regularMediumSymbolConfig)!.withRenderingMode(.alwaysTemplate))
+                    //                .foregroundColor(.accentColor)
+                                
+    //                Image(systemName: "arrow.clockwise.circle.fill")
+                    Image(systemName: "repeat")
+                        .font(.largeTitle)
+                        .foregroundColor(.accentColor)
+                }.padding(15)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.white, lineWidth: 1)
+                )
+            }
         }
     }
     
