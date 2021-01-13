@@ -28,3 +28,129 @@ There are multiple views within the app, but the main views are:
 * Squad List View: Displays a list of all imported squads
 * Ship View: Displays a single pilot/ship combination
 
+## `FactionSquadList.swift`
+A list of operations/actions that can occur on the `Store`
+
+### `FactionSquadListViewModel`
+
+#### `FactionSquadListViewModel.ViewProperties`
+```
+@Published var squadNames : [String] = []
+@Published var numSquads: Int = 0
+@Published var squadDataList: [SquadData] = []
+```
+
+|Operation|Action|
+|------|-----------|
+|`loadSquadsList()`|`.loadSquadsList`|
+|`deleteSquad(SquadData)`|`.deleteSquad(SquadData)`|
+|`updateSquad(SquadData)`|`.updateSquad(SquadData)`|
+|`refreshSquadsList()`|`.refreshSquadsList`|
+|`updateFavorites(Bool)`|`.updateFavorites(Bool)`|
+
+### `FactionSquadCardViewModel`
+
+#### `FactionSquadCardViewModel.ViewProperties`
+```
+let points: Int = 150
+let theme: Theme = WestworldUITheme()
+let squadData: SquadData
+let deleteCallback: (SquadData) -> ()
+let updateCallback: (SquadData) -> ()
+var buttonBackground: Color
+var textForeground: Color
+var border: Color
+var json: String
+var squad: Squad
+```
+
+## `SquadView.swift`
+
+### `SquadViewModel.ViewProperties`
+```
+@Published var alertText: String = ""
+@Published var showAlert: Bool = false
+var squad: Squad
+var squadData: SquadData
+@Published var displayAsList: Bool = true
+```
+
+### `SquadCardView.ViewProperties`
+```
+let squad: Squad
+let squadData: SquadData
+let displayAsList: Bool
+let theme: Theme = WestworldUITheme()
+@State var shipPilots: [ShipPilot] = []
+@State var activationOrder: Bool = true
+@State private var revealAllDials: Bool = false
+var chunkedShips : [[ShipPilot]]
+var sortedShipPilots: [ShipPilot]
+var damagedPoints: Int
+```
+
+### `PilotCardView.ViewProperties`
+```
+let theme: Theme = WestworldUITheme()
+let shipPilot: ShipPilot
+let dialRevealed: Bool
+```
+
+### `PilotDetailsView.ViewProperties`
+```
+let displayUpgrades: Bool
+let displayHeaders: Bool
+let displayDial: Bool
+let theme: Theme = WestworldUITheme()
+@State var currentManeuver: String = ""
+```
+
+### Squad Actions
+|Operation|Action|
+|------|-----------|
+|`loadSquadsList()`|`.loadSquadsList`|
+|`deleteSquad(SquadData)`|`.deleteSquad(SquadData)`|
+|`updateSquad(SquadData)`|`.updateSquad(SquadData)`|
+|`refreshSquadsList()`|`.refreshSquadsList`|
+|`updateFavorites(Bool)`|`.updateFavorites(Bool)`|
+|`loadSquad(String)`|`.loadSquad(String)`|
+|`getShips(Squad, SquadData)`|`.getShips(Squad, SquadData)`|
+|`updateAllDials(Bool)`|`.updateAllDials(Bool)`|
+|`flipDial()`|`.flipDial`|
+
+### Squad State
+```
+struct SquadState {
+	// collection properties
+	var squadDataList: [SquadData]
+	var numSquads: Int
+	var squadNames : [String]
+	
+	// selected squad
+	let points: Int
+	let squadData: SquadData
+	var json: String
+	var squad: Squad
+	@Published var displayAsList: Bool = true
+	@State var shipPilots: [ShipPilot] = []
+	@State private var revealAllDials: Bool = false
+	var chunkedShips : [[ShipPilot]]
+	var sortedShipPilots: [ShipPilot]
+	var damagedPoints: Int
+	
+	// selected ship
+	let shipPilot: ShipPilot
+	let dialRevealed: Bool
+	@State var currentManeuver: String = ""
+}
+```
+
+### UI State
+``` 
+struct UIState {
+	let theme: Theme = WestworldUITheme()
+	var buttonBackground: Color
+	var textForeground: Color
+	var border: Color
+}
+```
