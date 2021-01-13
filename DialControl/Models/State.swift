@@ -120,30 +120,19 @@ struct UpdateSquadsListAction: ActionProtocol {
     }
 }
 
-func reducer_new(state: inout AppState, action: AppAction, environment: AppEnvironment) -> AnyPublisher<AppAction, Error>
+func reducer_new(state: inout AppState, action: AppAction, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
 {
     switch(action) {
         case .loadSquadsList:
-            return environment
-                .squadsService
-                .loadSquadsListFromCoreData()
-                .eraseToAnyPublisher()
+            return LoadSquadsList()
+                .execute(state: &state, environment: environment)
         
         case .updateSquadsList(let squads):
-            state.squadState.squadDataList.removeAll()
-            
-            squads.forEach{ squad in
-                state.squadState.squadDataList.append(squad)
-            }
-            
-            state.squadState.numSquads = squads.count
-            state.squadState.squadNames = squads.compactMap{ $0.name }
+            return UpdateSquadsListAction(squads: squads).execute(state: &state, environment: environment)
         
         default:
             return Empty().eraseToAnyPublisher()
     }
-    
-    return Empty().eraseToAnyPublisher()
 }
 
 
