@@ -120,6 +120,12 @@ struct UpdateSquadsListAction: ActionProtocol {
     }
 }
 
+/*
+ This logic should live in Store.send(action: ActionProtocol) { action.execute(&state,environment).sink....
+}
+ The caller of Store.send() creates the action object...
+ Then the reduce function is no longer needed...
+*/
 func reducer_new(state: inout AppState, action: AppAction, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
 {
     switch(action) {
