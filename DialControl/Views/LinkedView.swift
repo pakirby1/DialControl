@@ -229,3 +229,29 @@ struct CountBannerView: View {
         }
     }
 }
+
+class LinkedViewModel : ObservableObject {
+    let store: Store
+    let pilotId: String
+    
+    init(store: Store, pilotId: String) {
+        self.store = store
+        self.pilotId = pilotId
+    }
+    
+    func spend(type: StatButtonType) {
+        // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
+        // to the Store
+        let action = ChargeAction(pilotId: pilotId, type: .spend(type))
+        store.send(action: action)
+    }
+    
+    func recover(type: StatButtonType) {
+        // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
+        // to the Store
+        let action = ChargeAction(pilotId: pilotId, type: .recover(type))
+        store.send(action: action)
+    }
+}
+
+

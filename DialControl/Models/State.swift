@@ -89,36 +89,6 @@ func reducer(state: inout AppState, action: AppAction, environment: AppEnvironme
     return Empty().eraseToAnyPublisher()
 }
 
-protocol ActionProtocol {
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
-}
-
-struct LoadSquadsList : ActionProtocol {
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
-    {
-        return environment
-            .squadsService
-            .loadSquadsListFromCoreData()
-            .eraseToAnyPublisher()
-    }
-}
-
-struct UpdateSquadsListAction: ActionProtocol {
-    let squads: [SquadData]
-    
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
-    {
-        state.squadState.squadDataList.removeAll()
-        squads.forEach{ squad in
-            state.squadState.squadDataList.append(squad)
-        }
-        
-        state.squadState.numSquads = squads.count
-        state.squadState.squadNames = squads.compactMap{ $0.name }
-        
-        return Empty().eraseToAnyPublisher()
-    }
-}
 
 /*
  This logic should live in Store.send(action: ActionProtocol) { action.execute(&state,environment).sink....
