@@ -81,6 +81,7 @@ enum ManeuverDifficulty: String {
     case R
     case W
     case B
+    case P
     
     var color : Color {
         switch(self) {
@@ -90,6 +91,8 @@ enum ManeuverDifficulty: String {
             return Color.white
         case .B:
             return Color.blue
+        case .P:
+            return Color.purple
         }
     }
 }
