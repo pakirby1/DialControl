@@ -170,6 +170,33 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
 }
 
 extension PilotStateData {
+    func getActive(type: StatButtonType) -> Int {
+        switch(type) {
+            case .hull:
+                return hull.active
+            case .force:
+                return force.active
+            case .charge:
+                return charge.active
+            case .shield:
+                return shield.active
+        }
+    }
+    
+    func getInactive(type: StatButtonType) -> Int {
+        switch(type) {
+            case .hull:
+                return hull.inactive
+            case .force:
+                return force.inactive
+            case .charge:
+                return charge.inactive
+            case .shield:
+                return shield.inactive
+        }
+    }
+}
+extension PilotStateData {
     typealias UpdateHandler = (inout PilotStateData) -> ()
     
     func update(type: PilotStatePropertyType_New) -> PilotStateData {

@@ -9,6 +9,7 @@
 
 import Foundation
 import SwiftUI
+import Combine
 
 enum StatButtonType {
     case force
@@ -232,26 +233,52 @@ struct CountBannerView: View {
 
 class LinkedViewModel : ObservableObject {
     let store: Store
-    let pilotId: String
+    let pilotIndex: Int
+    var viewProperties = ViewProperties(active: 0, inactive: 0, pilotIndex: 0)
+    let type: StatButtonType
+    var cancellable: AnyCancellable?
     
-    init(store: Store, pilotId: String) {
+    // pilotIndex = ShipViewModel.shipPilot.pilotState.pilotIndex
+    init(store: Store, pilotIndex: Int, type: StatButtonType) {
         self.store = store
-        self.pilotId = pilotId
+        self.pilotIndex = pilotIndex
+        self.type = type
+        self.cancellable = configureViewProperties()
     }
     
     func spend(type: StatButtonType) {
         // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
         // to the Store
-        let action = ChargeAction(pilotId: pilotId, type: .spend(type))
+        let action = ChargeAction(pilotIndex: pilotIndex, type: .spend(type))
         store.send(action: action)
     }
     
     func recover(type: StatButtonType) {
         // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
         // to the Store
-        let action = ChargeAction(pilotId: pilotId, type: .recover(type))
+        let action = ChargeAction(pilotIndex: pilotIndex, type: .recover(type))
         store.send(action: action)
     }
 }
 
+extension LinkedViewModel {
+    struct ViewProperties {
+        let active: Int
+        let inactive: Int
+        let pilotIndex: Int
+    }
+}
+extension LinkedViewModel : ViewPropertyGenerating {
+    func buildViewProperties(state: AppState) -> LinkedViewModel.ViewProperties {
+        guard let psd = state.squadState.shipPilot.pilotStateData else {
+            return ViewProperties(active: 0, inactive: 0, pilotIndex: 0)
+        }
+        
+        let active: Int = psd.getActive(type: type)
+        let inactive: Int = psd.getInactive(type: type)
+        let pilotIndex = psd.pilot_index
+        
+        return ViewProperties(active: active, inactive: inactive, pilotIndex: pilotIndex)
+    }
+}
 

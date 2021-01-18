@@ -41,7 +41,7 @@ struct UpdateSquadsListAction: ActionProtocol {
 }
 
 struct ChargeAction : ActionProtocol {
-    let pilotId: String
+    let pilotIndex: Int
 
     enum ChargeActionType {
         case spend(StatButtonType)
@@ -53,6 +53,20 @@ struct ChargeAction : ActionProtocol {
 
     func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
     {
+//        func updateState(newData: PilotStateData) {
+//            print("\(Date()) PAK_updateState: \(newData.description)")
+//
+//            let json = PilotStateData.serialize(type: newData)
+//            /// where do we get a PilotState instance????
+//            guard let state = self.pilotState else { return }
+//
+//            self.pilotStateService.updatePilotState(pilotState: state,
+//                                                    state: json,
+//                                                    pilotIndex: newData.pilot_index)
+//
+//            self.pilotStateData = newData
+//        }
+        
         func spend(pilotStateData: PilotStateData,
                    statButtonType: StatButtonType)
         {
@@ -84,11 +98,11 @@ struct ChargeAction : ActionProtocol {
                     newPilotStateData = pilotStateData.charge.increment()
             }
 
-            // call pilotStateService to save the new state
+            // call updateState(newPilotStateData)
             environment.squadsService
         }
 
-        let shipPilot = state.squadState.shipPilots[0]
+        let shipPilot = state.squadState.shipPilots[pilotIndex]
 
         if let pilotStateData = shipPilot.pilotStateData {
             switch(type) {
@@ -102,5 +116,21 @@ struct ChargeAction : ActionProtocol {
         }
         
         return Empty().eraseToAnyPublisher()
+    }
+}
+
+protocol ViewPropertyGenerating: class {
+    associatedtype Properties
+    var viewProperties: Properties { get set }
+    var store: Store { get }
+    
+    func buildViewProperties(state: AppState) -> Properties
+}
+
+extension ViewPropertyGenerating {
+    func configureViewProperties() -> AnyCancellable {
+        return store.$state.sink { state in
+            self.viewProperties = self.buildViewProperties(state: state)
+        }
     }
 }
