@@ -402,52 +402,50 @@ struct ShipView: View {
         }
     }
     
-    @ViewBuilder
     func buildLinkedView(max: Int,
                          type: StatButtonType,
                          active: Int,
                          inActive: Int,
-                         updateType: PilotStatePropertyType) -> some View
+                         updateType: PilotStatePropertyType) -> AnyView
     {
         if (max > 0) {
-            return LinkedView(type: type,
+            return AnyView(LinkedView(type: type,
                        active: active,
                        inactive: inActive)
             { (active, inactive) in
                 self.viewModel.update(type: updateType,
                                       active: active,
                                       inactive: inactive)
-            }
+            })
         }
         
-        return EmptyView()
+        return AnyView(EmptyView())
     }
     
-    @ViewBuilder
-    func buildLinkedView_New(max: Int,
-                         type: StatButtonType,
-                         active: Int,
-                         inActive: Int,
-                         updateType: PilotStatePropertyType) -> some View
-    {
-        if (max > 0) {
-            let viewModel = LinkedViewModel(store: Store<AppState>(state: AppState(), environment: AppEnvironment()),
-                                            pilotIndex: self.viewModel.shipPilot.pilotState.pilotIndex,
-                                            type: type)
-            
-            
-            return LinkedView(type: type,
-                       active: active,
-                       inactive: inActive)
-            { (active, inactive) in
-                self.viewModel.update(type: updateType,
-                                      active: active,
-                                      inactive: inactive)
-            }
-        }
-        
-        return EmptyView()
-    }
+//    func buildLinkedView_New(max: Int,
+//                         type: StatButtonType,
+//                         active: Int,
+//                         inActive: Int,
+//                         updateType: PilotStatePropertyType) -> AnyView
+//    {
+//        if (max > 0) {
+//            let viewModel = LinkedViewModel(store: Store(state: AppState(), environment: AppEnvironment()),
+//                                            pilotIndex: self.viewModel.shipPilot.pilotState.pilotIndex,
+//                                            type: type)
+//
+//
+//            return AnyView(LinkedView(type: type,
+//                       active: active,
+//                       inactive: inActive)
+//            { (active, inactive) in
+//                self.viewModel.update(type: updateType,
+//                                      active: active,
+//                                      inactive: inactive)
+//            })
+//        }
+//
+//        return AnyView(EmptyView())
+//    }
     
     var bodyContent: some View {
         HStack(alignment: .top) {
@@ -471,7 +469,7 @@ struct ShipView: View {
                                         updateType: PilotStatePropertyType.hull)
                         
                         // Shield
-                        buildLinkedView(max: 0,
+                        buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
                                         type: StatButtonType.shield,
                                         active: viewModel.shieldsActive,
                                         inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
