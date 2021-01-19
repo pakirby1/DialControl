@@ -245,27 +245,27 @@
 		AE1FBE5724166422005C54F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AE1FBE5824166443005C54F5 /* DialView.swift */,
-				AE1FBE5F24166798005C54F5 /* Rotated.swift */,
-				AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */,
-				AEBA6360241B58D9008B00DB /* UpArrowView.swift */,
-				AE2D80EF242784D400248CA4 /* SquadView.swift */,
-				AE2D80F52428D3E800248CA4 /* NavigationStack.swift */,
-				AE2D80F7242B76AF00248CA4 /* ShipView.swift */,
-				AEF3B4632439B9B200A49717 /* InnerCircle.swift */,
-				AE4E08DD243B547800E7899A /* LinkedView.swift */,
-				AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */,
-				AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */,
-				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
-				AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */,
-				AE7EC214245DA13400E92704 /* PopoverView.swift */,
-				AE7EC216245EE95B00E92704 /* FactionFilterView.swift */,
-				AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */,
-				AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */,
-				AE1DF8EE24B5D80E00B84D38 /* ImageView.swift */,
 				AE1DF8F024B5E0CD00B84D38 /* CardView.swift */,
 				AE4D58C923F8087C00C66136 /* ContentView.swift */,
+				AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */,
+				AE1FBE5824166443005C54F5 /* DialView.swift */,
+				AE7EC216245EE95B00E92704 /* FactionFilterView.swift */,
+				AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */,
+				AE1DF8EE24B5D80E00B84D38 /* ImageView.swift */,
+				AEF3B4632439B9B200A49717 /* InnerCircle.swift */,
+				AE4E08DD243B547800E7899A /* LinkedView.swift */,
 				AEA192D325B6FF180033ACBD /* LinkedViewNew.swift */,
+				AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */,
+				AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */,
+				AE2D80F52428D3E800248CA4 /* NavigationStack.swift */,
+				AE7EC214245DA13400E92704 /* PopoverView.swift */,
+				AE1FBE5F24166798005C54F5 /* Rotated.swift */,
+				AE2D80F7242B76AF00248CA4 /* ShipView.swift */,
+				AE2D80EF242784D400248CA4 /* SquadView.swift */,
+				AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */,
+				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
+				AEBA6360241B58D9008B00DB /* UpArrowView.swift */,
+				AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -293,13 +293,13 @@
 		AE4D58B623F8087B00C66136 = {
 			isa = PBXGroup;
 			children = (
-				AECF88C7253AB68800AAA23B /* Documentation */,
-				AE0E38BF24E37BEB00A3A824 /* Test */,
-				AE3539532430C64700AC023A /* WedgeView.swift */,
 				AE4D58C123F8087C00C66136 /* DialControl */,
 				AE4D58DB23F8087E00C66136 /* DialControlTests */,
 				AE4D58E623F8087E00C66136 /* DialControlUITests */,
+				AECF88C7253AB68800AAA23B /* Documentation */,
 				AE4D58C023F8087C00C66136 /* Products */,
+				AE0E38BF24E37BEB00A3A824 /* Test */,
+				AE3539532430C64700AC023A /* WedgeView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -316,27 +316,27 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
-				AE1DF8F224B5E32800B84D38 /* Shapes */,
-				AEC1242E24A32CC500C0599A /* Services */,
+				AE4D58C223F8087C00C66136 /* AppDelegate.swift */,
+				AE4D58CB23F8087D00C66136 /* Assets.xcassets */,
 				AE028C5C24A2C6B700DF689B /* CoreData */,
 				AE15E78C241D01A20002F696 /* Data */,
-				AE1FBE5A2416657D005C54F5 /* Models */,
-				AE1FBE5724166422005C54F5 /* Views */,
-				AEAD19F32404F32C0020FABC /* Fonts */,
-				AE4D58C223F8087C00C66136 /* AppDelegate.swift */,
-				AE4D58C423F8087C00C66136 /* SceneDelegate.swift */,
-				AE4D58CB23F8087D00C66136 /* Assets.xcassets */,
-				AE4D58D023F8087D00C66136 /* LaunchScreen.storyboard */,
-				AE4D58D323F8087D00C66136 /* Info.plist */,
-				AE4D58CD23F8087D00C66136 /* Preview Content */,
-				AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */,
-				AEE98B4D24B5D45900E60128 /* Globals.swift */,
 				AE1FBE5D24166675005C54F5 /* Extensions.swift */,
-				AE2D80F32428C74700248CA4 /* Theme.swift */,
 				AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */,
+				AEAD19F32404F32C0020FABC /* Fonts */,
+				AEE98B4D24B5D45900E60128 /* Globals.swift */,
+				AE4D58D323F8087D00C66136 /* Info.plist */,
+				AE4D58D023F8087D00C66136 /* LaunchScreen.storyboard */,
 				AE028C5A249F82AF00DF689B /* Logging.swift */,
+				AE1FBE5A2416657D005C54F5 /* Models */,
 				AEDAFCF724B095DD0073C60E /* Notes.txt */,
+				AE4D58CD23F8087D00C66136 /* Preview Content */,
+				AE4D58C423F8087C00C66136 /* SceneDelegate.swift */,
+				AEC1242E24A32CC500C0599A /* Services */,
+				AE1DF8F224B5E32800B84D38 /* Shapes */,
+				AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */,
+				AE2D80F32428C74700248CA4 /* Theme.swift */,
 				AEC125E32513468600021096 /* UpgradeUtility.swift */,
+				AE1FBE5724166422005C54F5 /* Views */,
 			);
 			path = DialControl;
 			sourceTree = "<group>";

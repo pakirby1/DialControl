@@ -12,21 +12,13 @@ import Combine
 struct LinkedViewNew: View {
     let id = UUID()
     var deallocPrinter: DeallocPrinter
-    var activeCount: Int
-    var inactiveCount: Int
-    let maxCount: Int
     let type: StatButtonType
     let symbolSize: CGFloat = 72
-    let callback: (Int, Int) -> ()
     var viewModel: LinkedViewModel
     
     init(viewModel: LinkedViewModel, type: StatButtonType) {
         deallocPrinter = DeallocPrinter("LinkedView \(id): \(type) viewModel: \(viewModel)")
         self.viewModel = viewModel
-        activeCount = -1
-        inactiveCount = -1
-        self.maxCount = -1
-        self.callback = { x, y in }
         self.type = type
     }
     
@@ -117,12 +109,14 @@ class LinkedViewModel : ObservableObject {
     @Published var viewProperties = ViewProperties(active: 0, inactive: 0)
     let type: StatButtonType
     var cancellable: AnyCancellable?
+    let shipPilot: ShipPilot
     
     // pilotIndex = ShipViewModel.shipPilot.pilotState.pilotIndex
-    init(store: Store, pilotIndex: Int, type: StatButtonType) {
+    init(store: Store, pilotIndex: Int, type: StatButtonType, shipPilot: ShipPilot) {
         self.store = store
         self.pilotIndex = pilotIndex
         self.type = type
+        self.shipPilot = shipPilot
         self.cancellable = configureViewProperties()
     }
     
@@ -151,7 +145,7 @@ extension LinkedViewModel {
 extension LinkedViewModel : ViewPropertyGenerating {
     func buildViewProperties(state: AppState) -> LinkedViewModel.ViewProperties {
         // get the psd from the store by pilotIndex & squadIndex
-        guard let psd = state.squadState.shipPilot.pilotStateData else {
+        guard let psd = state.squadState.shipPilots[pilotIndex].pilotStateData else {
             return ViewProperties(active: 0, inactive: 0)
         }
         
@@ -161,5 +155,3 @@ extension LinkedViewModel : ViewPropertyGenerating {
         return ViewProperties(active: active, inactive: inactive)
     }
 }
-
-
