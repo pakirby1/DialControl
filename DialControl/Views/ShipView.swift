@@ -402,6 +402,53 @@ struct ShipView: View {
         }
     }
     
+    @ViewBuilder
+    func buildLinkedView(max: Int,
+                         type: StatButtonType,
+                         active: Int,
+                         inActive: Int,
+                         updateType: PilotStatePropertyType) -> some View
+    {
+        if (max > 0) {
+            return LinkedView(type: type,
+                       active: active,
+                       inactive: inActive)
+            { (active, inactive) in
+                self.viewModel.update(type: updateType,
+                                      active: active,
+                                      inactive: inactive)
+            }
+        }
+        
+        return EmptyView()
+    }
+    
+    @ViewBuilder
+    func buildLinkedView_New(max: Int,
+                         type: StatButtonType,
+                         active: Int,
+                         inActive: Int,
+                         updateType: PilotStatePropertyType) -> some View
+    {
+        if (max > 0) {
+            let viewModel = LinkedViewModel(store: Store<AppState>(state: AppState(), environment: AppEnvironment()),
+                                            pilotIndex: self.viewModel.shipPilot.pilotState.pilotIndex,
+                                            type: type)
+            
+            
+            return LinkedView(type: type,
+                       active: active,
+                       inactive: inActive)
+            { (active, inactive) in
+                self.viewModel.update(type: updateType,
+                                      active: active,
+                                      inactive: inactive)
+            }
+        }
+        
+        return EmptyView()
+    }
+    
     var bodyContent: some View {
         HStack(alignment: .top) {
                 /// Call .equatable() to prevent refreshing the static image
@@ -417,52 +464,32 @@ struct ShipView: View {
             
                     VStack(spacing: 20) {
                         // Hull
-                        if (viewModel.pilotStateData.hullMax > 0) {
-                            LinkedView(type: StatButtonType.hull,
-                                       active: viewModel.hullActive,
-                                       inactive: viewModel.pilotStateData.hullMax - viewModel.hullActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.hull,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
-                        }
+                        buildLinkedView(max: viewModel.pilotStateData.hullMax,
+                                        type: StatButtonType.hull,
+                                        active: viewModel.hullActive,
+                                        inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
+                                        updateType: PilotStatePropertyType.hull)
                         
                         // Shield
-                        if (viewModel.pilotStateData.shieldsMax > 0) {
-                            LinkedView(type: StatButtonType.shield,
-                                       active: viewModel.shieldsActive,
-                                       inactive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.shield,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
-                        }
-                        
+                        buildLinkedView(max: 0,
+                                        type: StatButtonType.shield,
+                                        active: viewModel.shieldsActive,
+                                        inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
+                                        updateType: PilotStatePropertyType.shield)
+
                         // Force
-                        if (viewModel.pilotStateData.forceMax > 0) {
-                            LinkedView(type: StatButtonType.force,
-                                       active: viewModel.forceActive,
-                                       inactive: viewModel.pilotStateData.forceMax - viewModel.forceActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.force,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
-                        }
-                        
+                        buildLinkedView(max: viewModel.pilotStateData.forceMax,
+                                        type: StatButtonType.force,
+                                        active: viewModel.forceActive,
+                                        inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
+                                        updateType: PilotStatePropertyType.force)
+
                         // Charge
-                        if (viewModel.pilotStateData.chargeMax > 0) {
-                            LinkedView(type: StatButtonType.charge,
-                                       active: viewModel.chargeActive,
-                                       inactive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.charge,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
-                        }
+                        buildLinkedView(max: viewModel.pilotStateData.chargeMax,
+                                        type: StatButtonType.charge,
+                                        active: viewModel.chargeActive,
+                                        inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
+                                        updateType: PilotStatePropertyType.charge)
                     }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 
