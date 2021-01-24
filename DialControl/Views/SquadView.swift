@@ -199,16 +199,19 @@ struct SquadCardView: View {
     }
     
     func buildPilotCardView(shipPilot: ShipPilot, dialRevealed: Bool) -> some View {
+        
         print("PAK_Hide self.revealAllDials = \(self.revealAllDials)")
         
+        // Get the dial status from the pilot state
         if let data = shipPilot.pilotStateData {
-            print("PAK_Hide shipPilot.pilotStateData.dial_revealed = \(data.dial_revealed)")
+            print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
             return PilotCardView(shipPilot: shipPilot,
-                                 dialRevealed: data.dial_revealed)
+                                 dialStatus: data.dial_status)
         }
         
+        // FIXME: Why do we need this?
         return PilotCardView(shipPilot: shipPilot,
-                      dialRevealed: dialRevealed)
+                             dialStatus: dialRevealed ? .hidden : .revealed)
     }
     
     func updateAllDials() {
@@ -217,13 +220,17 @@ struct SquadCardView: View {
             if var data = shipPilot.pilotStateData {
                 data.change(update: {
                     print("PAK_\(#function) pilotStateData.id: \($0)")
-                    $0.dial_revealed = self.revealAllDials
+                    $0.dial_status = self.dialStatus
                     self.pilotStateService.updateState(newData: $0,
                                                        state: shipPilot.pilotState)
                     print("PAK_Hide updateAllDials $0.dial_revealed = \(self.revealAllDials)")
                 })
             }
         }
+    }
+    
+    var dialStatus: DialStatus {
+        return (self.revealAllDials ? .revealed : .hidden)
     }
     
     var content: some View {
@@ -337,7 +344,7 @@ struct PilotCardView: View {
 //    @EnvironmentObject var pilotStateService: PilotStateService
     @EnvironmentObject var viewFactory: ViewFactory
 //    @State var dialRevealed: Bool
-    let dialRevealed: Bool
+    @State var dialStatus: DialStatus
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -392,13 +399,13 @@ struct PilotCardView: View {
     }
     
     func buildPilotDetailsView() -> some View {
-        print("PAK_Hide buildPilotDetailsView() self.dialRevealed = \(dialRevealed)")
+        print("PAK_Hide buildPilotDetailsView() self.dialStatus = \(dialStatus)")
         
         let viewModel = PilotDetailsViewModel(shipPilot: self.shipPilot,
                                               pilotStateService: self.viewFactory.diContainer.pilotStateService as PilotStateServiceProtocol,
-                                              dialFlipped: self.dialRevealed)
+                                              dialStatus: self.dialStatus)
         
-        print("PAK_Hide buildPilotDetailsView().viewModel.dialFlipped = \(dialRevealed)")
+        print("PAK_Hide buildPilotDetailsView().viewModel.dialStatus = \(dialStatus)")
         
         return PilotDetailsView(viewModel: viewModel,
             displayUpgrades: true,
@@ -461,30 +468,33 @@ struct IndicatorView: View {
 }
 
 class PilotDetailsViewModel: ObservableObject {
-    @Published var dialFlipped: Bool
+    @Published var dialStatus: DialStatus
     let shipPilot: ShipPilot
     let pilotStateService: PilotStateServiceProtocol
     
     init(shipPilot: ShipPilot,
          pilotStateService: PilotStateServiceProtocol,
-         dialFlipped: Bool)
+         dialStatus: DialStatus)
     {
         self.shipPilot = shipPilot
         self.pilotStateService = pilotStateService
-        self.dialFlipped = dialFlipped
+        self.dialStatus = dialStatus
+        
 //        self.dialFlipped = self.shipPilot.pilotStateData?.dial_revealed ?? false
-        print("PAK_Hide PilotDetailsViewModel.dialFlipped = \(self.dialFlipped)")
+        print("PAK_Hide PilotDetailsViewModel.dialFlipped = \(self.dialStatus)")
     }
     
     func flipDial() {
-        self.dialFlipped.toggle()
-        print("\(#function) self.dialFlipped=\(self.dialFlipped)")
+        // calc new status based on .dialTapped event.
+        self.dialStatus.handleEvent(event: .dialTapped)
+        
+        print("\(#function) self.dialStatus=\(self.dialStatus)")
         
         /// Switch (PilotStateData_Change)
         if var data = self.shipPilot.pilotStateData {
             data.change(update: {
                 print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.dial_revealed = self.dialFlipped
+                $0.dial_status = self.dialStatus
                 self.pilotStateService.updateState(newData: $0,
                                                    state: self.shipPilot.pilotState)
             })
@@ -545,9 +555,11 @@ struct PilotDetailsView: View {
     }
     
     var dialViewNew: some View {
-        buildManeuverView(isFlipped: self.viewModel.dialFlipped)
+        let isFlipped: Bool = self.viewModel.dialStatus.isFlipped
+        
+        return buildManeuverView(isFlipped: isFlipped)
             .padding(10)
-            .rotation3DEffect(self.viewModel.dialFlipped ? Angle(degrees: 360): Angle(degrees: 0),
+            .rotation3DEffect(isFlipped ? Angle(degrees: 360): Angle(degrees: 0),
                           axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
             .animation(.default) // implicitly applying animation
             .onTapGesture {
@@ -559,14 +571,16 @@ struct PilotDetailsView: View {
     }
     
     var dialView: some View {
-        IndicatorView(label:"99", bgColor: Color.black, fgColor: Color.blue)
-            .rotation3DEffect(self.viewModel.dialFlipped ? Angle(degrees: 180): Angle(degrees: 0),
+        var isFlipped: Bool = self.viewModel.dialStatus.isFlipped
+        
+        return IndicatorView(label:"99", bgColor: Color.black, fgColor: Color.blue)
+            .rotation3DEffect(isFlipped ? Angle(degrees: 180): Angle(degrees: 0),
                           axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
             .animation(.default) // implicitly applying animation
             .onTapGesture {
                 // explicitly apply animation on toggle (choose either or)
                 //withAnimation {
-                self.viewModel.dialFlipped.toggle()
+                isFlipped.toggle()
                 //}
             }
     }
@@ -650,14 +664,6 @@ struct SimpleFlipper : View {
                   Spacer()
             }
       }
-}
-
-func buildPilotDetailsViewModel(shipPilot: ShipPilot, pilotStateService: PilotStateService,
-                                dialFlipped: Bool) -> PilotDetailsViewModel
-{
-    return PilotDetailsViewModel(shipPilot: shipPilot,
-                                 pilotStateService: pilotStateService,
-                                 dialFlipped: dialFlipped)
 }
 
 //struct ShipGridView : View {

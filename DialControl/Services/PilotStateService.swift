@@ -162,7 +162,7 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                 selected_maneuver: "",
                 shipID: "",
                 upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
-                dial_revealed: false
+                dial_status: DialStatus.hidden
             )
             
             let json = PilotStateData.serialize(type: pilotStateData)

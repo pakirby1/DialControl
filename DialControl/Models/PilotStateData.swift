@@ -74,7 +74,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var selected_maneuver: String
     var shipID: String
     var upgradeStates : [UpgradeStateData]? // nil if no upgrades present
-    var dial_revealed: Bool
+    var dial_status: DialStatus
     
     var id = UUID()
     
@@ -100,7 +100,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
             arr.append("upgadeStates: \(upgradeStates.description)")
         }
         
-        arr.append("dial_revealed: \(dial_revealed)")
+        arr.append("dial_status: \(dial_status)")
         return arr.joined(separator: "\n")
     }
     
@@ -124,7 +124,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
         case selected_maneuver
         case shipID
         case upgradeStates
-        case dial_revealed
+        case dial_status
     }
     
 }
@@ -216,7 +216,7 @@ extension PilotStateData {
     }
     
     mutating func updateDialRevealed(revealed: Bool) {
-        self.dial_revealed = revealed
+        self.dial_status = (revealed ? .revealed : .hidden)
     }
     
     var health: Int {
@@ -259,4 +259,69 @@ extension PilotStateData {
 
 protocol PilotStateDataProtocol {
     
+}
+
+enum DialStatus: Codable {
+    case hidden
+    case revealed
+    case set
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        
+        switch try container.decode(String.self) {
+            case "hidden": self = .hidden
+            case "revealed": self = .revealed
+            case "set": self = .set
+            default: fatalError()
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+            case .hidden: try container.encode("hidden")
+            case .revealed: try container.encode("revealed")
+            case .set: try container.encode("set")
+        }
+    }
+}
+
+extension DialStatus {
+    mutating func handleEvent(event: DialStatusEvent) {
+        switch(self, event) {
+            // Ship View
+            case (.hidden, .setDial) : self = .set
+            case (.set, .unsetDial) : self = .hidden
+    
+            // Squad View
+            case (.set, .dialTapped) : self = .revealed
+            case (.set, .revealAll) : self = .revealed
+            case (.set, .hideAll) : self = .hidden
+            case (.revealed, .dialTapped) : self = .hidden
+            case (.revealed, .hideAll) : self = .hidden
+            case (.hidden, .dialTapped) : self = .revealed
+            case (.hidden, .revealAll) : self = .revealed
+            default: self = .hidden
+        }
+    }
+    
+    var isFlipped: Bool {
+        switch(self) {
+            case .hidden: return false
+            case .revealed: return true
+            case .set: return true
+        }
+    }
+}
+
+enum DialStatusEvent {
+    // Ship View
+    case setDial
+    case unsetDial
+    
+    // Squad View
+    case dialTapped
+    case revealAll
+    case hideAll
 }
