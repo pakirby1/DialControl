@@ -211,6 +211,10 @@ extension PilotStateData {
         selected_maneuver = maneuver
     }
     
+    mutating func updateDialStatus(status: DialStatus) {
+        dial_status = status
+    }
+    
     mutating func updateShipID(shipID: String) {
         self.shipID = shipID
     }
@@ -292,6 +296,7 @@ extension DialStatus {
         switch(self, event) {
             // Ship View
             case (.hidden, .setDial) : self = .set
+            case (.revealed, .setDial) : self = .set
             case (.set, .unsetDial) : self = .hidden
     
             // Squad View
@@ -311,6 +316,16 @@ extension DialStatus {
             case .hidden: return false
             case .revealed: return true
             case .set: return true
+        }
+    }
+}
+
+extension DialStatus : CustomStringConvertible {
+    var description: String {
+        switch(self) {
+            case .hidden: return "Hidden"
+            case .revealed: return "Revealad"
+            case .set: return "Set"
         }
     }
 }

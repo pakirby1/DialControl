@@ -554,13 +554,56 @@ struct PilotDetailsView: View {
         })
     }
     
+    func buildManeuverView(dialStatus: DialStatus) -> AnyView {
+        var strokeColor: Color {
+            let ret: Color
+            
+            switch(dialStatus) {
+                case .set:
+                    ret = Color.white
+                default:
+                    ret = Color.clear
+            }
+            
+            return ret
+        }
+        
+        let x = self.viewModel.shipPilot.selectedManeuver
+        var view: AnyView = AnyView(EmptyView())
+        
+        switch(dialStatus) {
+            case .hidden:
+                view = AnyView(Text("").padding(15))
+            case .revealed, .set:
+                if x.count > 0 {
+                    let m = Maneuver.buildManeuver(maneuver: x)
+                    view = m.view
+                }
+        }
+    
+        return AnyView(ZStack {
+            Circle()
+//                .stroke(strokeColor, lineWidth: 3)
+                .frame(width: 75, height: 75, alignment: .center)
+                .foregroundColor(.black)
+
+            Circle()
+                .stroke(strokeColor, lineWidth: 3)
+                .frame(width: 75, height: 75, alignment: .center)
+//                .foregroundColor(.black)
+
+            view
+        })
+    }
+    
     var dialViewNew: some View {
         let isFlipped: Bool = self.viewModel.dialStatus.isFlipped
+        let dialStatus = self.viewModel.dialStatus
         
-        return buildManeuverView(isFlipped: isFlipped)
+        return buildManeuverView(dialStatus: dialStatus)
             .padding(10)
-            .rotation3DEffect(isFlipped ? Angle(degrees: 360): Angle(degrees: 0),
-                          axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
+//            .rotation3DEffect(isFlipped ? Angle(degrees: 360): Angle(degrees: 0),
+//                          axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
             .animation(.default) // implicitly applying animation
             .onTapGesture {
                 // explicitly apply animation on toggle (choose either or)

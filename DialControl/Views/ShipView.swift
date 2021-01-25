@@ -68,6 +68,7 @@ class ShipViewModel: ObservableObject {
             .store(in: &cancellableSet)
         
         self.$currentManeuver
+            .dropFirst()
             .removeDuplicates()
             .debounce(for: 1.0, scheduler: DispatchQueue.main)
             .print("Hello")
@@ -75,6 +76,7 @@ class ShipViewModel: ObservableObject {
             .lane("currentManeuver")
             .sink(receiveValue: {
                 self.updateSelectedManeuver(maneuver: $0)
+                self.updateDialStatus(status: .set)
             })
             .store(in: &cancellableSet)
     }
@@ -265,6 +267,14 @@ class ShipViewModel: ObservableObject {
         })
     }
     
+    func updateDialStatus(status: DialStatus) {
+        print("\(Date()) \(#function) : \(status)")
+        self.pilotStateData.change(update: {
+            $0.updateDialStatus(status: status)
+            self.updateState(newData: $0)
+        })
+    }
+    
     func updateState(newData: PilotStateData) {
         print("\(Date()) PAK_updateState: \(newData.description)")
         
@@ -415,55 +425,57 @@ struct ShipView: View {
                 .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 .environmentObject(viewModel)
             
-                    VStack(spacing: 20) {
-                        // Hull
-                        if (viewModel.pilotStateData.hullMax > 0) {
-                            LinkedView(type: StatButtonType.hull,
-                                       active: viewModel.hullActive,
-                                       inactive: viewModel.pilotStateData.hullMax - viewModel.hullActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.hull,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
+                VStack(spacing: 20) {
+                    // Hull
+                    if (viewModel.pilotStateData.hullMax > 0) {
+                        LinkedView(type: StatButtonType.hull,
+                                   active: viewModel.hullActive,
+                                   inactive: viewModel.pilotStateData.hullMax - viewModel.hullActive)
+                        { (active, inactive) in
+                            self.viewModel.update(type: PilotStatePropertyType.hull,
+                                                  active: active,
+                                                  inactive: inactive)
                         }
-                        
-                        // Shield
-                        if (viewModel.pilotStateData.shieldsMax > 0) {
-                            LinkedView(type: StatButtonType.shield,
-                                       active: viewModel.shieldsActive,
-                                       inactive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.shield,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
+                    }
+                    
+                    // Shield
+                    if (viewModel.pilotStateData.shieldsMax > 0) {
+                        LinkedView(type: StatButtonType.shield,
+                                   active: viewModel.shieldsActive,
+                                   inactive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive)
+                        { (active, inactive) in
+                            self.viewModel.update(type: PilotStatePropertyType.shield,
+                                                  active: active,
+                                                  inactive: inactive)
                         }
-                        
-                        // Force
-                        if (viewModel.pilotStateData.forceMax > 0) {
-                            LinkedView(type: StatButtonType.force,
-                                       active: viewModel.forceActive,
-                                       inactive: viewModel.pilotStateData.forceMax - viewModel.forceActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.force,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
+                    }
+                    
+                    // Force
+                    if (viewModel.pilotStateData.forceMax > 0) {
+                        LinkedView(type: StatButtonType.force,
+                                   active: viewModel.forceActive,
+                                   inactive: viewModel.pilotStateData.forceMax - viewModel.forceActive)
+                        { (active, inactive) in
+                            self.viewModel.update(type: PilotStatePropertyType.force,
+                                                  active: active,
+                                                  inactive: inactive)
                         }
-                        
-                        // Charge
-                        if (viewModel.pilotStateData.chargeMax > 0) {
-                            LinkedView(type: StatButtonType.charge,
-                                       active: viewModel.chargeActive,
-                                       inactive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive)
-                            { (active, inactive) in
-                                self.viewModel.update(type: PilotStatePropertyType.charge,
-                                                      active: active,
-                                                      inactive: inactive)
-                            }
+                    }
+                    
+                    // Charge
+                    if (viewModel.pilotStateData.chargeMax > 0) {
+                        LinkedView(type: StatButtonType.charge,
+                                   active: viewModel.chargeActive,
+                                   inactive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive)
+                        { (active, inactive) in
+                            self.viewModel.update(type: PilotStatePropertyType.charge,
+                                                  active: active,
+                                                  inactive: inactive)
                         }
-                    }.padding(.top, 20)
+                    }
+                                        
+                    Text("Dial Status: \(self.viewModel.pilotStateData.dial_status.description) ")
+                }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 
                 DialView(temperature: 100,
