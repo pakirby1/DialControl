@@ -86,9 +86,13 @@ struct SquadCardViewModel {
         
         _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
         
-        return zipped.map{
+        let ret = zipped.map{
             getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
+        
+        ret.printAll(tag: "PAK_DialStatus getShips()")
+        
+        return ret
     }
 }
 
@@ -114,6 +118,14 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
     // UpgradeCardEnum cases and calling getUpgrade
     if let upgrades = squadPilot.upgrades {
         allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+    }
+    
+    var pilotStateData: PilotStateData? {
+        if let json = pilotState.json {
+            return PilotStateData.deserialize(jsonString: json)
+        }
+
+        return nil
     }
     
     return ShipPilot(ship: ship,
@@ -182,36 +194,30 @@ struct SquadCardView: View {
                 .padding(.trailing, 20)
             }
         }
-        
-//        Section {
-//
-//        }
     }
     
+    func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
+                // Get the dial status from the pilot state
+                if let data = shipPilot.pilotStateData {
+                    print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
+                    return AnyView(PilotCardView(shipPilot: shipPilot,
+                                        dialStatus: data.dial_status))
+                }
+
+                return AnyView(EmptyView())
+                // FIXME: Why do we need this?
+    //            return PilotCardView(shipPilot: shipPilot,
+    //                                 dialStatus: dialRevealed ? .hidden : .revealed)
+            }
+    
     func buildShipButton(shipPilot: ShipPilot) -> some View {
+        
+        
         return Button(action: {
             self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
         }) {
-            self.buildPilotCardView(shipPilot: shipPilot,
-                                    dialRevealed: self.revealAllDials)
-        //                        .environmentObject(self.pilotStateService)
+            buildPilotCardView(shipPilot: shipPilot)
         }
-    }
-    
-    func buildPilotCardView(shipPilot: ShipPilot, dialRevealed: Bool) -> some View {
-        
-        print("PAK_Hide self.revealAllDials = \(self.revealAllDials)")
-        
-        // Get the dial status from the pilot state
-        if let data = shipPilot.pilotStateData {
-            print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
-            return PilotCardView(shipPilot: shipPilot,
-                                 dialStatus: data.dial_status)
-        }
-        
-        // FIXME: Why do we need this?
-        return PilotCardView(shipPilot: shipPilot,
-                             dialStatus: dialRevealed ? .hidden : .revealed)
     }
     
     func updateAllDials() {
@@ -219,21 +225,22 @@ struct SquadCardView: View {
             /// Switch (PilotStateData_Change)
             if var data = shipPilot.pilotStateData {
                 data.change(update: {
-                    print("PAK_\(#function) pilotStateData.id: \($0)")
-                    $0.dial_status = self.dialStatus
+                    print("PAK_DialStatus pilotStateData.id: \($0)")
+                    let revealAllDialsStatus: DialStatus = self.revealAllDials ? .revealed : .hidden
+                    $0.dial_status = revealAllDialsStatus
                     self.pilotStateService.updateState(newData: $0,
                                                        state: shipPilot.pilotState)
-                    print("PAK_Hide updateAllDials $0.dial_revealed = \(self.revealAllDials)")
+                    print("PAK_DialStatus updateAllDials $0.dial_status = \(revealAllDialsStatus)")
+                    print("PAK_DialStatus updateAllDials $0.dial_revealed = \(self.revealAllDials)")
                 })
             }
         }
+        
+        // reload ships
+        loadShips()
     }
     
-    var dialStatus: DialStatus {
-        return (self.revealAllDials ? .revealed : .hidden)
-    }
-    
-    var content: some View {
+    var body: some View {
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
             .foregroundColor(theme.TEXT_FOREGROUND)
@@ -255,7 +262,7 @@ struct SquadCardView: View {
         let hide = Button(action: {
             self.revealAllDials.toggle()
             
-            print("PAK_Hide Button: \(self.revealAllDials)")
+            print("PAK_DialStatus_New Button: \(self.revealAllDials)")
             
             self.updateAllDials()
         }) {
@@ -270,9 +277,6 @@ struct SquadCardView: View {
             .clipShape(Circle())
         
         return ZStack {
-//            RoundedRectangle(cornerRadius: 25, style: .continuous)
-//                .fill(theme.BORDER_INACTIVE)
-            
             VStack(alignment: .leading) {
                 // Header
                 HStack {
@@ -296,29 +300,32 @@ struct SquadCardView: View {
                 }.padding(20)
 
                 // Body
-//                List {
-                    if shipPilots.isEmpty {
-                        emptySection
-                    } else {
-                        shipsView
-                    }
-//                }
-//                .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
+                if shipPilots.isEmpty {
+                    emptySection
+                } else {
+                    shipsView
+                }
                 
-//                Spacer()
             }
-//            .padding(20)
             .multilineTextAlignment(.center)
         }
-        .onAppear(perform: { self.shipPilots = SquadCardViewModel.getShips(
-            squad: self.squad,
-            squadData: self.squadData)
+        .onAppear(perform: {
+            print("PAK_DialStatus SquadCardView.onAppear()")
+            self.loadShips()
         })
-//        .frame(width: 1000, height: 600)
     }
     
-    var body: some View {
-        content
+    func loadShips() {
+        print("PAK_DialStatus SquadCardView.loadShips()")
+        self.shipPilots = SquadCardViewModel.getShips(
+            squad: self.squad,
+            squadData: self.squadData)
+        
+        self.shipPilots.printAll(tag: "PAK_DialStatus self.shipPilots")
+        
+        self.shipPilots.forEach{ shipPilot in
+            print("PAK_DialStatus SquadCardView.loadShips() \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
+        }
     }
     
     var damagedPoints: Int {
@@ -399,13 +406,12 @@ struct PilotCardView: View {
     }
     
     func buildPilotDetailsView() -> some View {
-        print("PAK_Hide buildPilotDetailsView() self.dialStatus = \(dialStatus)")
+        print("PAK_DialStatus buildPilotDetailsView() self.dialStatus = \(dialStatus)")
         
         let viewModel = PilotDetailsViewModel(shipPilot: self.shipPilot,
-                                              pilotStateService: self.viewFactory.diContainer.pilotStateService as PilotStateServiceProtocol,
-                                              dialStatus: self.dialStatus)
+                                              pilotStateService: self.viewFactory.diContainer.pilotStateService as PilotStateServiceProtocol)
         
-        print("PAK_Hide buildPilotDetailsView().viewModel.dialStatus = \(dialStatus)")
+        print("PAK_DialStatus buildPilotDetailsView().viewModel.dialStatus = \(dialStatus)")
         
         return PilotDetailsView(viewModel: viewModel,
             displayUpgrades: true,
@@ -468,36 +474,41 @@ struct IndicatorView: View {
 }
 
 class PilotDetailsViewModel: ObservableObject {
-    @Published var dialStatus: DialStatus
-    let shipPilot: ShipPilot
+    @Published var shipPilot: ShipPilot
     let pilotStateService: PilotStateServiceProtocol
     
     init(shipPilot: ShipPilot,
-         pilotStateService: PilotStateServiceProtocol,
-         dialStatus: DialStatus)
+         pilotStateService: PilotStateServiceProtocol)
     {
         self.shipPilot = shipPilot
         self.pilotStateService = pilotStateService
-        self.dialStatus = dialStatus
-        
-//        self.dialFlipped = self.shipPilot.pilotStateData?.dial_revealed ?? false
-        print("PAK_Hide PilotDetailsViewModel.dialFlipped = \(self.dialStatus)")
     }
     
     func flipDial() {
-        // calc new status based on .dialTapped event.
-        self.dialStatus.handleEvent(event: .dialTapped)
-        
-        print("\(#function) self.dialStatus=\(self.dialStatus)")
-        
         /// Switch (PilotStateData_Change)
         if var data = self.shipPilot.pilotStateData {
+            let old = self.shipPilot
+            
             data.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.dial_status = self.dialStatus
-                self.pilotStateService.updateState(newData: $0,
+                var newPSD = $0
+                
+                print("\(Date()) PAK_\(#function) before pilotStateData id: \(self.shipPilot.id) dial_status: \(newPSD.dial_status)")
+                newPSD.dial_status.handleEvent(event: .dialTapped)
+                
+                // Update CoreData
+                self.pilotStateService.updateState(newData: newPSD,
                                                    state: self.shipPilot.pilotState)
+                print("\(Date()) PAK_\(#function) after pilotStateData id: \(self.shipPilot.id) dial_status: \(newPSD.dial_status)")
+                
+                // self.shipPilot.pilotState.json was updated but
+                // the self.shipPilot was NOT updated so no refesh taken
+                // Hack to force refresh of view
+                self.shipPilot = old
             })
+        }
+        
+        if let _ = self.shipPilot.pilotStateData {
+            print("\(Date()) PAK_\(#function) pilotStateData id: \(self.shipPilot.id) dial_status: \(self.shipPilot.pilotStateData?.dial_status)")
         }
     }
 }
@@ -555,6 +566,8 @@ struct PilotDetailsView: View {
     }
     
     func buildManeuverView(dialStatus: DialStatus) -> AnyView {
+        print("\(Date()) PAK_DialStatus buildManeuverView() \(self.viewModel.shipPilot.id) \(dialStatus)")
+        
         var strokeColor: Color {
             let ret: Color
             
@@ -597,10 +610,9 @@ struct PilotDetailsView: View {
     }
     
     var dialViewNew: some View {
-        let isFlipped: Bool = self.viewModel.dialStatus.isFlipped
-        let dialStatus = self.viewModel.dialStatus
+        let status = self.viewModel.shipPilot.pilotStateData!.dial_status
         
-        return buildManeuverView(dialStatus: dialStatus)
+        return buildManeuverView(dialStatus: status)
             .padding(10)
 //            .rotation3DEffect(isFlipped ? Angle(degrees: 360): Angle(degrees: 0),
 //                          axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
@@ -609,21 +621,6 @@ struct PilotDetailsView: View {
                 // explicitly apply animation on toggle (choose either or)
                 //withAnimation {
                 self.viewModel.flipDial()
-                //}
-            }
-    }
-    
-    var dialView: some View {
-        var isFlipped: Bool = self.viewModel.dialStatus.isFlipped
-        
-        return IndicatorView(label:"99", bgColor: Color.black, fgColor: Color.blue)
-            .rotation3DEffect(isFlipped ? Angle(degrees: 180): Angle(degrees: 0),
-                          axis: (x: CGFloat(0), y: CGFloat(10), z: CGFloat(0)))
-            .animation(.default) // implicitly applying animation
-            .onTapGesture {
-                // explicitly apply animation on toggle (choose either or)
-                //withAnimation {
-                isFlipped.toggle()
                 //}
             }
     }
@@ -675,7 +672,14 @@ struct PilotDetailsView: View {
             if (displayDial) {
                 dialViewNew
             }
-        }.padding(15)
+        }
+        .padding(15)
+        .onReceive(viewModel.$shipPilot, perform: { shipPilot in
+            print("\(Date()) PilotDetailsView.body.onReceive \(shipPilot)")
+        })
+        .onAppear() {
+            print("\(Date()) PilotDetailsView.body.onAppear")
+        }
     }
 }
 
@@ -730,4 +734,10 @@ struct SimpleFlipper : View {
 //    }
 //}
 
-
+extension Array where Element == ShipPilot {
+    func printAll(tag: String) {
+        self.forEach{ shipPilot in
+            print("\(tag) \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
+        }
+    }
+}

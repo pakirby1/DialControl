@@ -376,7 +376,8 @@ struct ShipPilot: Identifiable, Equatable {
     let upgrades: [Upgrade]
     let points: Int
     let pilotState: PilotState
-
+//    var pilotStateData: PilotStateData?
+    
     static func ==(lhs: ShipPilot, rhs: ShipPilot) -> Bool {
         return true
     }
@@ -395,7 +396,7 @@ extension ShipPilot {
         if let json = self.pilotState.json {
             return PilotStateData.deserialize(jsonString: json)
         }
-        
+
         return nil
     }
     

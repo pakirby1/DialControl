@@ -18,4 +18,8 @@ extension IPrintLog {
     func printLog(_ message: String) {
         print("\(Date()) \(classFuncString) : \(message)")
     }
+    
+    func printLog(_ tag: String, _ message: String) {
+        printLog("\(tag) \(message)")
+    }
 }

@@ -383,7 +383,7 @@ struct ShipView: View {
             .frame(width: 150, height: 50, alignment: .leading)
             //            .border(Color.blue, width: 2)
             
-            PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService, dialStatus: .revealed),
+            PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService),
                      displayUpgrades: true,
                      displayHeaders: false,
                      displayDial: false)

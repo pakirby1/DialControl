@@ -324,7 +324,7 @@ extension DialStatus : CustomStringConvertible {
     var description: String {
         switch(self) {
             case .hidden: return "Hidden"
-            case .revealed: return "Revealad"
+            case .revealed: return "Revealed"
             case .set: return "Set"
         }
     }
