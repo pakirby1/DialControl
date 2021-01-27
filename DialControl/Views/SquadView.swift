@@ -487,7 +487,10 @@ class PilotDetailsViewModel: ObservableObject {
     func flipDial() {
         /// Switch (PilotStateData_Change)
         if var data = self.shipPilot.pilotStateData {
-            let old = self.shipPilot
+            guard !data.isDestroyed else {
+                // Do not flip if destroyed
+                return
+            }
             
             data.change(update: {
                 var newPSD = $0
@@ -501,9 +504,9 @@ class PilotDetailsViewModel: ObservableObject {
                 print("\(Date()) PAK_\(#function) after pilotStateData id: \(self.shipPilot.id) dial_status: \(newPSD.dial_status)")
                 
                 // self.shipPilot.pilotState.json was updated but
-                // the self.shipPilot was NOT updated so no refesh taken
+                // the self.shipPilot property was NOT updated so no refesh taken
                 // Hack to force refresh of view
-                self.shipPilot = old
+                self.objectWillChange.send()
             })
         }
         
@@ -567,6 +570,20 @@ struct PilotDetailsView: View {
     
     func buildManeuverView(dialStatus: DialStatus) -> AnyView {
         print("\(Date()) PAK_DialStatus buildManeuverView() \(self.viewModel.shipPilot.id) \(dialStatus)")
+        let ionManeuver = "1FW"
+        
+        var foregroundColor: Color {
+            let ret: Color
+            
+            switch(dialStatus) {
+                case .destroyed:
+                    ret = Color.red
+                default:
+                    ret = Color.black
+            }
+            
+            return ret
+        }
         
         var strokeColor: Color {
             let ret: Color
@@ -574,6 +591,8 @@ struct PilotDetailsView: View {
             switch(dialStatus) {
                 case .set:
                     ret = Color.white
+                case .ionized:
+                    ret = Color.red
                 default:
                     ret = Color.clear
             }
@@ -585,8 +604,10 @@ struct PilotDetailsView: View {
         var view: AnyView = AnyView(EmptyView())
         
         switch(dialStatus) {
-            case .hidden:
+            case .hidden, .destroyed:
                 view = AnyView(Text("").padding(15))
+            case .ionized:
+                view = Maneuver.buildManeuver(maneuver: ionManeuver).view
             case .revealed, .set:
                 if x.count > 0 {
                     let m = Maneuver.buildManeuver(maneuver: x)
@@ -596,14 +617,12 @@ struct PilotDetailsView: View {
     
         return AnyView(ZStack {
             Circle()
-//                .stroke(strokeColor, lineWidth: 3)
                 .frame(width: 75, height: 75, alignment: .center)
-                .foregroundColor(.black)
+                .foregroundColor(foregroundColor)
 
             Circle()
                 .stroke(strokeColor, lineWidth: 3)
                 .frame(width: 75, height: 75, alignment: .center)
-//                .foregroundColor(.black)
 
             view
         })

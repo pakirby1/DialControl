@@ -137,6 +137,14 @@ class ShipViewModel: ObservableObject {
         return ship.dial
     }
     
+    func handleDestroyed() {
+        if pilotStateData.isDestroyed {
+            updateDialStatus(status: .destroyed)
+        } else {
+            updateDialStatus(status: .set)
+        }
+    }
+    
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
         func old() {
             switch(type) {
@@ -412,6 +420,12 @@ struct ShipView: View {
         }
     }
     
+    var dialStatusText: String {
+
+        
+        return "\(self.viewModel.pilotStateData.dial_status.description)"
+    }
+    
     var bodyContent: some View {
         HStack(alignment: .top) {
                 /// Call .equatable() to prevent refreshing the static image
@@ -435,6 +449,7 @@ struct ShipView: View {
                             self.viewModel.update(type: PilotStatePropertyType.hull,
                                                   active: active,
                                                   inactive: inactive)
+                            self.viewModel.handleDestroyed()
                         }
                     }
                     
@@ -447,6 +462,7 @@ struct ShipView: View {
                             self.viewModel.update(type: PilotStatePropertyType.shield,
                                                   active: active,
                                                   inactive: inactive)
+                            self.viewModel.handleDestroyed()
                         }
                     }
                     
@@ -474,7 +490,7 @@ struct ShipView: View {
                         }
                     }
                                         
-                    Text("Dial Status: \(self.viewModel.pilotStateData.dial_status.description) ")
+                    Text("Dial Status: \(dialStatusText)")
                 }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 

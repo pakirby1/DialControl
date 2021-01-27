@@ -269,6 +269,8 @@ enum DialStatus: Codable {
     case hidden
     case revealed
     case set
+    case destroyed   // Ship Destroyed
+    case ionized
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -277,6 +279,8 @@ enum DialStatus: Codable {
             case "hidden": self = .hidden
             case "revealed": self = .revealed
             case "set": self = .set
+            case "destroyed": self = .destroyed
+            case "ionized": self = .ionized
             default: fatalError()
         }
     }
@@ -287,6 +291,8 @@ enum DialStatus: Codable {
             case .hidden: try container.encode("hidden")
             case .revealed: try container.encode("revealed")
             case .set: try container.encode("set")
+            case .destroyed: try container.encode("destroyed")
+            case .ionized: try container.encode("ionized")
         }
     }
 }
@@ -316,6 +322,8 @@ extension DialStatus {
             case .hidden: return false
             case .revealed: return true
             case .set: return true
+            case .destroyed: return false
+            case .ionized: return true
         }
     }
 }
@@ -326,6 +334,8 @@ extension DialStatus : CustomStringConvertible {
             case .hidden: return "Hidden"
             case .revealed: return "Revealed"
             case .set: return "Set"
+            case .destroyed: return "Destroyed"
+            case .ionized: return "Ionized"
         }
     }
 }
