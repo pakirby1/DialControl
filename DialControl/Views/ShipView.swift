@@ -421,8 +421,6 @@ struct ShipView: View {
     }
     
     var dialStatusText: String {
-
-        
         return "\(self.viewModel.pilotStateData.dial_status.description)"
     }
     
@@ -430,7 +428,8 @@ struct ShipView: View {
                              type: StatButtonType,
                              active: Int,
                              inActive: Int,
-                             updateType: PilotStatePropertyType) -> AnyView
+                             updateType: PilotStatePropertyType,
+                             handleDestroyed: Bool = false) -> AnyView
         {
             if (max > 0) {
                 return AnyView(LinkedView(type: type,
@@ -440,6 +439,10 @@ struct ShipView: View {
                     self.viewModel.update(type: updateType,
                                           active: active,
                                           inactive: inactive)
+                    
+                    if (handleDestroyed) {
+                        self.viewModel.handleDestroyed()
+                    }
                 })
             }
             
@@ -490,14 +493,16 @@ struct ShipView: View {
                                         type: StatButtonType.hull,
                                         active: viewModel.hullActive,
                                         inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
-                                        updateType: PilotStatePropertyType.hull)
+                                        updateType: PilotStatePropertyType.hull,
+                                        handleDestroyed: true)
                         
                         // Shield
                         buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
                                         type: StatButtonType.shield,
                                         active: viewModel.shieldsActive,
                                         inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
-                                        updateType: PilotStatePropertyType.shield)
+                                        updateType: PilotStatePropertyType.shield,
+                                        handleDestroyed: true)
 
                         // Force
                         buildLinkedView(max: viewModel.pilotStateData.forceMax,
@@ -512,6 +517,8 @@ struct ShipView: View {
                                         active: viewModel.chargeActive,
                                         inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
                                         updateType: PilotStatePropertyType.charge)
+                        
+                        Text("Dial Status: \(dialStatusText)")
                     }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 
