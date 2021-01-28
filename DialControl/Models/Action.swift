@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 
+/// AppState & AppEnvironment should be generic
 protocol ActionProtocol {
     func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
 }
