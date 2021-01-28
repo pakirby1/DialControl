@@ -121,36 +121,80 @@ let theme: Theme = WestworldUITheme()
 ### Squad State
 ```
 struct SquadState {
-	// collection properties
-	var squadDataList: [SquadData]
-	var numSquads: Int
-	var squadNames : [String]
-	
-	// selected squad
-	let points: Int
-	let squadData: SquadData
-	var json: String
-	var squad: Squad
-	@Published var displayAsList: Bool = true
-	@State var shipPilots: [ShipPilot] = []
-	@State private var revealAllDials: Bool = false
-	var chunkedShips : [[ShipPilot]]
-	var sortedShipPilots: [ShipPilot]
-	var damagedPoints: Int
-	
-	// selected ship
-	let shipPilot: ShipPilot
-	let dialRevealed: Bool
-	@State var currentManeuver: String = ""
+    // collection properties
+    var squadDataList: [SquadData]
+    var numSquads: Int
+    var squadNames : [String]
+    
+    // selected squad
+    let points: Int
+    let squadData: SquadData
+    var json: String
+    var squad: Squad
+    @Published var displayAsList: Bool = true
+    @State var shipPilots: [ShipPilot] = []
+    @State private var revealAllDials: Bool = false
+    var chunkedShips : [[ShipPilot]]
+    var sortedShipPilots: [ShipPilot]
+    var damagedPoints: Int
+    
+    // selected ship
+    let shipPilot: ShipPilot
+    let dialRevealed: Bool
+    @State var currentManeuver: String = ""
 }
 ```
 
 ### UI State
 ``` 
 struct UIState {
-	let theme: Theme = WestworldUITheme()
-	var buttonBackground: Color
-	var textForeground: Color
-	var border: Color
+    let theme: Theme = WestworldUITheme()
+    var buttonBackground: Color
+    var textForeground: Color
+    var border: Color
 }
 ```
+
+### LinkedView
+To get updates from the charge buttons within a `LinkedView`, the view will need to reference the `viewProperties` stream on the view model.  
+
+![Linked View Model Diagram](https://pakirby1.github.io/images/LinkedViewModel.001.png)
+
+#### LinkedView
+The view will read the view properties on the view model and use the properties to render the view.
+
+```
+struct LinkedView : View {
+
+}
+```
+
+#### LinkedViewModel
+The view model will observe changes to the store and build view properties based on the observed changes.
+
+``` 
+class LinkedViewModel : ObservableObject {
+
+}
+```
+
+#### Store
+The store exposes the state via an `@Published` property wrapper
+
+```
+class Store : ObservableObject {
+
+}
+```
+
+#### PilotState
+The pilot state or `PilotStateData` object exposes each type of charge (hull, force, shield, charge) as a computed property of type `ChargeType`.  This type stores the active & inactive values as well as an update closure that is excuted by the `increment()` & `decrement()` functions
+
+```
+struct ChargeType {
+    let active: Int
+    let inactive: Int
+    let update: (Int, Int) -> PilotStateData
+}
+```
+

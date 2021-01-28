@@ -58,6 +58,9 @@
 		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
 		AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */; };
 		AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDE2452A8EA0017AEE8 /* TextView.swift */; };
+		AEA192DA25C2DEF80033ACBD /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA192D925C2DEF80033ACBD /* State.swift */; };
+		AEA192DC25C2DFC30033ACBD /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA192DB25C2DFC30033ACBD /* Action.swift */; };
+		AEA192DE25C2E2E20033ACBD /* LinkedViewNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA192DD25C2E2E20033ACBD /* LinkedViewNew.swift */; };
 		AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */; };
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
 		AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrowView.swift */; };
@@ -153,6 +156,9 @@
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
 		AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextView.swift; sourceTree = "<group>"; };
 		AE93ADDE2452A8EA0017AEE8 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		AEA192D925C2DEF80033ACBD /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		AEA192DB25C2DFC30033ACBD /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
+		AEA192DD25C2E2E20033ACBD /* LinkedViewNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedViewNew.swift; sourceTree = "<group>"; };
 		AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSquadList.swift; sourceTree = "<group>"; };
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrowView.swift; sourceTree = "<group>"; };
@@ -259,6 +265,7 @@
 				AE1DF8EE24B5D80E00B84D38 /* ImageView.swift */,
 				AE1DF8F024B5E0CD00B84D38 /* CardView.swift */,
 				AE4D58C923F8087C00C66136 /* ContentView.swift */,
+				AEA192DD25C2E2E20033ACBD /* LinkedViewNew.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -277,6 +284,8 @@
 				AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */,
 				AE1DF8F524B73D1900B84D38 /* JSONSerialization.swift */,
 				AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */,
+				AEA192D925C2DEF80033ACBD /* State.swift */,
+				AEA192DB25C2DFC30033ACBD /* Action.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -540,6 +549,7 @@
 				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
 				AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */,
 				AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */,
+				AEA192DA25C2DEF80033ACBD /* State.swift in Sources */,
 				AE028C57249F81B200DF689B /* Store.swift in Sources */,
 				AEEB546A24F11F3C0050913C /* SquadService.swift in Sources */,
 				AE1DF8F424B5E34500B84D38 /* UpArrowShape.swift in Sources */,
@@ -557,6 +567,7 @@
 				AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */,
 				AE1DF8F124B5E0CD00B84D38 /* CardView.swift in Sources */,
 				AE028C59249F825100DF689B /* NetworkCache.swift in Sources */,
+				AEA192DC25C2DFC30033ACBD /* Action.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
 				AEEB546824F11EB40050913C /* DIContainer.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
@@ -583,6 +594,7 @@
 				AEC125E42513468600021096 /* UpgradeUtility.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE028C5B249F82AF00DF689B /* Logging.swift in Sources */,
+				AEA192DE25C2E2E20033ACBD /* LinkedViewNew.swift in Sources */,
 				AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */,
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
 				AE1FBE6024166798005C54F5 /* Rotated.swift in Sources */,

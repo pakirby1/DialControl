@@ -426,6 +426,51 @@ struct ShipView: View {
         return "\(self.viewModel.pilotStateData.dial_status.description)"
     }
     
+    func buildLinkedView(max: Int,
+                             type: StatButtonType,
+                             active: Int,
+                             inActive: Int,
+                             updateType: PilotStatePropertyType) -> AnyView
+        {
+            if (max > 0) {
+                return AnyView(LinkedView(type: type,
+                           active: active,
+                           inactive: inActive)
+                { (active, inactive) in
+                    self.viewModel.update(type: updateType,
+                                          active: active,
+                                          inactive: inactive)
+                })
+            }
+            
+            return AnyView(EmptyView())
+        }
+        
+    //    func buildLinkedView_New(max: Int,
+    //                         type: StatButtonType,
+    //                         active: Int,
+    //                         inActive: Int,
+    //                         updateType: PilotStatePropertyType) -> AnyView
+    //    {
+    //        if (max > 0) {
+    //            let viewModel = LinkedViewModel(store: Store(state: AppState(), environment: AppEnvironment()),
+    //                                            pilotIndex: self.viewModel.shipPilot.pilotState.pilotIndex,
+    //                                            type: type)
+    //
+    //
+    //            return AnyView(LinkedView(type: type,
+    //                       active: active,
+    //                       inactive: inActive)
+    //            { (active, inactive) in
+    //                self.viewModel.update(type: updateType,
+    //                                      active: active,
+    //                                      inactive: inactive)
+    //            })
+    //        }
+    //
+    //        return AnyView(EmptyView())
+    //    }
+    
     var bodyContent: some View {
         HStack(alignment: .top) {
                 /// Call .equatable() to prevent refreshing the static image
@@ -439,59 +484,35 @@ struct ShipView: View {
                 .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                 .environmentObject(viewModel)
             
-                VStack(spacing: 20) {
-                    // Hull
-                    if (viewModel.pilotStateData.hullMax > 0) {
-                        LinkedView(type: StatButtonType.hull,
-                                   active: viewModel.hullActive,
-                                   inactive: viewModel.pilotStateData.hullMax - viewModel.hullActive)
-                        { (active, inactive) in
-                            self.viewModel.update(type: PilotStatePropertyType.hull,
-                                                  active: active,
-                                                  inactive: inactive)
-                            self.viewModel.handleDestroyed()
-                        }
-                    }
-                    
-                    // Shield
-                    if (viewModel.pilotStateData.shieldsMax > 0) {
-                        LinkedView(type: StatButtonType.shield,
-                                   active: viewModel.shieldsActive,
-                                   inactive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive)
-                        { (active, inactive) in
-                            self.viewModel.update(type: PilotStatePropertyType.shield,
-                                                  active: active,
-                                                  inactive: inactive)
-                            self.viewModel.handleDestroyed()
-                        }
-                    }
-                    
-                    // Force
-                    if (viewModel.pilotStateData.forceMax > 0) {
-                        LinkedView(type: StatButtonType.force,
-                                   active: viewModel.forceActive,
-                                   inactive: viewModel.pilotStateData.forceMax - viewModel.forceActive)
-                        { (active, inactive) in
-                            self.viewModel.update(type: PilotStatePropertyType.force,
-                                                  active: active,
-                                                  inactive: inactive)
-                        }
-                    }
-                    
-                    // Charge
-                    if (viewModel.pilotStateData.chargeMax > 0) {
-                        LinkedView(type: StatButtonType.charge,
-                                   active: viewModel.chargeActive,
-                                   inactive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive)
-                        { (active, inactive) in
-                            self.viewModel.update(type: PilotStatePropertyType.charge,
-                                                  active: active,
-                                                  inactive: inactive)
-                        }
-                    }
-                                        
-                    Text("Dial Status: \(dialStatusText)")
-                }.padding(.top, 20)
+                    VStack(spacing: 20) {
+                        // Hull
+                        buildLinkedView(max: viewModel.pilotStateData.hullMax,
+                                        type: StatButtonType.hull,
+                                        active: viewModel.hullActive,
+                                        inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
+                                        updateType: PilotStatePropertyType.hull)
+                        
+                        // Shield
+                        buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
+                                        type: StatButtonType.shield,
+                                        active: viewModel.shieldsActive,
+                                        inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
+                                        updateType: PilotStatePropertyType.shield)
+
+                        // Force
+                        buildLinkedView(max: viewModel.pilotStateData.forceMax,
+                                        type: StatButtonType.force,
+                                        active: viewModel.forceActive,
+                                        inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
+                                        updateType: PilotStatePropertyType.force)
+
+                        // Charge
+                        buildLinkedView(max: viewModel.pilotStateData.chargeMax,
+                                        type: StatButtonType.charge,
+                                        active: viewModel.chargeActive,
+                                        inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
+                                        updateType: PilotStatePropertyType.charge)
+                    }.padding(.top, 20)
 //                .border(Color.green, width: 2)
 
                 DialView(temperature: 100,
