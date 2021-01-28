@@ -8,6 +8,47 @@
 
 import Foundation
 
+struct ChargeData<T> {
+    let active: Int
+    let inactive: Int
+    let update: (_ active: Int, _ inactive: Int) -> T
+    
+    var min: Int {
+        get { return 0 }
+    }
+    
+    var max: Int {
+        get { return active + inactive }
+    }
+    
+    private func validate(value: Int) -> Int {
+        if value >= max { return max }
+        if value <= min { return min }
+        
+        return value
+    }
+    
+    private func validate(newActive: Int, newInactive: Int) -> (Int, Int) {
+        return (validate(value: newActive), validate(value: newInactive))
+    }
+    
+    func decrement() -> T {
+        let newActive = active - 1
+        let newInactive = inactive + 1
+        
+        let x = validate(newActive: newActive, newInactive: newInactive)
+        return update(x.0, x.1)
+    }
+    
+    func increment() -> T {
+        let newActive = active + 1
+        let newInactive = inactive - 1
+        
+        let x = validate(newActive: newActive, newInactive: newInactive)
+        return update(x.0, x.1)
+    }
+}
+
 
 struct UpgradeStateData : Codable, CustomStringConvertible {
     var force_active : Int?
@@ -128,6 +169,35 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     }
     
 }
+
+extension PilotStateData {
+    func getActive(type: StatButtonType) -> Int {
+        switch(type) {
+            case .hull:
+                return hull.active
+            case .force:
+                return force.active
+            case .charge:
+                return charge.active
+            case .shield:
+                return shield.active
+        }
+    }
+    
+    func getInactive(type: StatButtonType) -> Int {
+        switch(type) {
+            case .hull:
+                return hull.inactive
+            case .force:
+                return force.inactive
+            case .charge:
+                return charge.inactive
+            case .shield:
+                return shield.inactive
+        }
+    }
+}
+
 
 extension PilotStateData {
     typealias UpdateHandler = (inout PilotStateData) -> ()
@@ -259,6 +329,71 @@ extension PilotStateData {
         
         return false
     }
+}
+
+extension PilotStateData {
+    /// Use key paths to return a closure that updates the properties on self.
+    // let update = buildUpdate(activeKeyPath: \.shield_active,
+    //    inactiveKeyPath: \.shield_inactive)
+    func buildUpdate(activeKeyPath: WritableKeyPath<PilotStateData, Int>,
+                     inactiveKeyPath: WritableKeyPath<PilotStateData, Int>) -> (Int, Int) -> Self
+    {
+        let ret: (Int, Int) -> Self = { (active: Int, inactive: Int) -> Self in
+            return self.change() { psd in
+                psd[keyPath: activeKeyPath] = active
+                psd[keyPath: inactiveKeyPath] = inactive
+            }
+        }
+        
+        return ret
+    }
+    
+    typealias PilotStateDataCharge = ChargeData<PilotStateData>
+    
+    var hull: PilotStateDataCharge {
+        get {
+            let update = buildUpdate(activeKeyPath: \.hull_active,
+                                     inactiveKeyPath: \.hull_inactive)
+            
+            return PilotStateDataCharge(active: self.hull_active,
+                                               inactive: self.hull_inactive,
+                                               update: update)
+        }
+    }
+    
+    var shield: PilotStateDataCharge {
+        get {
+            let update = buildUpdate(activeKeyPath: \.shield_active,
+                                     inactiveKeyPath: \.shield_inactive)
+            
+            return PilotStateDataCharge(active: self.shield_active,
+                                               inactive: self.shield_inactive,
+                                               update: update)
+        }
+    }
+    
+    var force: PilotStateDataCharge {
+        get {
+            let update = buildUpdate(activeKeyPath: \.force_active,
+                                     inactiveKeyPath: \.force_inactive)
+            
+            return PilotStateDataCharge(active: self.force_active,
+                                               inactive: self.force_inactive,
+                                               update: update)
+        }
+    }
+    
+    var charge: PilotStateDataCharge {
+        get {
+            let update = buildUpdate(activeKeyPath: \.charge_active,
+                                     inactiveKeyPath: \.charge_inactive)
+            
+            return PilotStateDataCharge(active: self.charge_active,
+                                               inactive: self.charge_inactive,
+                                               update: update)
+        }
+    }
+    
 }
 
 protocol PilotStateDataProtocol {
