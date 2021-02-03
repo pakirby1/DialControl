@@ -12,6 +12,20 @@ import Combine
 
 var shipLookupTable: [String:Array<PilotFileUrl>] = [:]
 
+struct ImageUrlTemplates {
+    static func buildPilotUrl(xws: String) -> String {
+        return "https://pakirby1.github.io/images/XWing/pilots/\(xws).png"
+    }
+    
+    static func buildPilotUpgradeFront(xws: String) -> String {
+        return "https://pakirby1.github.io/images/XWing/upgrades/\(xws).png"
+    }
+    
+    static func buildPilotUpgradeBack(xws: String) -> String {
+        return "https://pakirby1.github.io/images/XWing/upgrades/\(xws)-sideb.png"
+    }
+}
+
 func loadJSON(fileName: String, directoryPath: String) -> String {
     if let path = Bundle.main.path(forResource: fileName,
                                    ofType: "",

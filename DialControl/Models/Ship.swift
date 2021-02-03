@@ -225,7 +225,7 @@ struct Pilot: Codable {
     let cost: Int
     let xws: String
     var text: String { return _text ?? "" }
-    let image: String
+    var image: String
     var shipAbility: ShipAbility? { return _shipAbility ?? nil }
     var slots: [Slot]? { return _slots ?? [] }
     let artwork: String

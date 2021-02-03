@@ -61,7 +61,11 @@ struct UpgradeView: View {
                 let sides = matches[0].sides
                 
                 if (sides.count > 0) {
-                    imageUrl = sides[0].image
+                    if FeaturesManager.shared.isFeatureEnabled("UpdateImageUrls") {
+                        imageUrl = ImageUrlTemplates.buildPilotUpgradeFront(xws: upgrade.xws)
+                    } else {
+                        imageUrl = sides[0].image
+                    }
                 }
             }
             
@@ -88,7 +92,11 @@ struct UpgradeView: View {
                     let sides = matches[0].sides
                     
                     if (sides.count > 1) {
-                        imageUrl = sides[1].image
+                        if FeaturesManager.shared.isFeatureEnabled("UpdateImageUrls") {
+                            imageUrl = ImageUrlTemplates.buildPilotUpgradeBack(xws: upgrade.xws)
+                        } else {
+                            imageUrl = sides[1].image
+                        }
                     }
                 }
             }
