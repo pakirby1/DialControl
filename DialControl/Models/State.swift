@@ -62,6 +62,7 @@ enum AppAction {
 
 struct AppEnvironment {
     let squadsService = SquadsService(moc: NSManagedObjectContext())
+    let pilotStateService = PilotStateService(moc: NSManagedObjectContext())
 }
 
 func reducer(state: inout AppState, action: AppAction, environment: AppEnvironment) -> AnyPublisher<AppAction, Error>
@@ -114,6 +115,18 @@ func reducer_new(state: inout AppState, action: AppAction, environment: AppEnvir
 
 struct SquadsService {
     let moc: NSManagedObjectContext
+    
+    func saveSquad(jsonString: String, name: String) -> AnyPublisher<SquadData, Error>
+    {
+        let squadService = SquadService(moc: self.moc)
+        
+        let ret = Future<SquadData, Error> { promise in
+            let squadData = squadService.saveSquad(jsonString: jsonString, name: name)
+            return promise(.success(squadData))
+        }
+        
+        return ret.eraseToAnyPublisher()
+    }
     
     func loadSquadsListFromCoreData() -> AnyPublisher<AppAction, Error> {
         let ret = Future<AppAction, Error> { promise in
