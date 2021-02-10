@@ -11,23 +11,25 @@ import Combine
 
 /// AppState & AppEnvironment should be generic
 protocol ActionProtocol {
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
+    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Never>
 }
 
 struct LoadSquadsList : ActionProtocol {
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
+    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Never>
     {
-        return environment
-            .squadsService
-            .loadSquadsListFromCoreData()
-            .eraseToAnyPublisher()
+//        return environment
+//            .squadsService
+//            .loadSquadsListFromCoreData()
+//            .eraseToAnyPublisher()
+        
+        return Empty().eraseToAnyPublisher()
     }
 }
 
 struct UpdateSquadsListAction: ActionProtocol {
     let squads: [SquadData]
     
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
+    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Never>
     {
         state.squadState.squadDataList.removeAll()
         squads.forEach{ squad in
@@ -41,6 +43,7 @@ struct UpdateSquadsListAction: ActionProtocol {
     }
 }
 
+
 struct ChargeAction : ActionProtocol {
     let pilotIndex: Int
 
@@ -52,7 +55,7 @@ struct ChargeAction : ActionProtocol {
 
     let type: ChargeActionType
 
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
+    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Never>
     {
 //        func updateState(newData: PilotStateData) {
 //            print("\(Date()) PAK_updateState: \(newData.description)")

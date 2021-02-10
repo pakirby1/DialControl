@@ -22,18 +22,21 @@ class Store : ObservableObject {
     }
     
     func send(action: ActionProtocol) {
-        action.execute(state: &state, environment: environment).sink(
-            receiveCompletion: { completion in
-                switch(completion) {
-                    case .finished:
-                        print("finished")
-                    case .failure:
-                        print("failure")
-                }
-            },
-            receiveValue: { nextAction in
-                self.send(action: nextAction)
-            }).store(in: &cancellables)
+        action
+            .execute(state: &state, environment: environment)
+            .sink(
+                receiveCompletion: { completion in
+                    switch(completion) {
+                        case .finished:
+                            print("finished")
+                        case .failure:
+                            print("failure")
+                    }
+                },
+                receiveValue: { nextAction in
+                    self.send(action: nextAction)
+                })
+            .store(in: &cancellables)
     }
 }
 

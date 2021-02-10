@@ -53,6 +53,7 @@
 		AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */; };
 		AE741B7424EE92E700B0531D /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */; };
 		AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */; };
+		AE7C428A25D3A43F00E582D7 /* SquadXWSImportAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7C428925D3A43F00E582D7 /* SquadXWSImportAction.swift */; };
 		AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC214245DA13400E92704 /* PopoverView.swift */; };
 		AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7EC216245EE95B00E92704 /* FactionFilterView.swift */; };
 		AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */; };
@@ -151,6 +152,7 @@
 		AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures.ttf"; sourceTree = "<group>"; };
 		AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		AE7C428925D3A43F00E582D7 /* SquadXWSImportAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportAction.swift; sourceTree = "<group>"; };
 		AE7EC214245DA13400E92704 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		AE7EC216245EE95B00E92704 /* FactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionFilterView.swift; sourceTree = "<group>"; };
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 				AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */,
 				AEA192D925C2DEF80033ACBD /* State.swift */,
 				AEA192DB25C2DFC30033ACBD /* Action.swift */,
+				AE7C428925D3A43F00E582D7 /* SquadXWSImportAction.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -594,6 +597,7 @@
 				AEC125E42513468600021096 /* UpgradeUtility.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
 				AE028C5B249F82AF00DF689B /* Logging.swift in Sources */,
+				AE7C428A25D3A43F00E582D7 /* SquadXWSImportAction.swift in Sources */,
 				AEA192DE25C2E2E20033ACBD /* LinkedViewNew.swift in Sources */,
 				AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */,
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,

@@ -11,6 +11,58 @@ import SwiftUI
 import CoreData
 import Combine
 
+public struct SquadXWSImportViewState {
+    var showAlert: Bool
+    var alertText: String
+}
+
+public enum SquadXWSImportViewAction: Equatable {
+    case importXWS(String)
+    case serializationFailed
+    case serializationSucceeded
+    case saveSquad
+    case saveFailed
+    case saveSucceeded
+    case createPilotState
+    case alertDismissed
+    case noAction
+}
+
+/*
+ case .loginButtonTapped:
+ state.isLoginRequestInFlight = true
+ return environment.authenticationClient
+   .login(LoginRequest(email: state.email, password: state.password))
+   .receive(on: environment.mainQueue)
+   .catchToEffect()
+   .map(LoginAction.loginResponse)
+ */
+
+//public let squadXWSImportReducer = Reducer<SquadXWSImportViewState, SquadXWSImportViewAction, AppEnvironment> { state, action, environment in
+//  switch action {
+//  case let .cellTapped(row, column):
+//    guard
+//      state.board[row][column] == nil,
+//      !state.board.hasWinner
+//    else { return .none }
+//
+//    state.board[row][column] = state.currentPlayer
+//
+//    if !state.board.hasWinner {
+//      state.currentPlayer.toggle()
+//    }
+//
+//    return .none
+//
+//  case .playAgainButtonTapped:
+//    state = GameState(oPlayerName: state.oPlayerName, xPlayerName: state.xPlayerName)
+//    return .none
+//
+//  case .quitButtonTapped:
+//    return .none
+//  }
+//}
+
 class SquadXWSImportViewModel : ObservableObject {
     @Published var alertText: String = ""
     @Published var showAlert: Bool = false
@@ -264,75 +316,3 @@ struct SquadXWSImportView_New : View {
     }
 }
 
-struct ImportSquadAction : ActionProtocol {
-    let json: String
-    
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
-    {
-        return loadSquad(jsonString: json)
-            .map{ squad -> ActionProtocol in
-                let name = squad.name ?? ""
-                return SaveSquadAction(json: self.json, squad: squad)
-            }
-            .tryCatch { error -> AnyPublisher<ActionProtocol, Error> in
-                throw XWSImportError.serializationError("loadSquad")
-            }
-            .eraseToAnyPublisher()
-    }
-    
-    private func loadSquad(jsonString: String) -> AnyPublisher<Squad, Error>
-    {
-        return Future<Squad, Error>{ promise in
-            // replace janky yasb exported to remove '-' characters.
-            let jsonStringNew = jsonString
-                .replacingOccurrences(of: "force-power", with: "forcepower")
-                .replacingOccurrences(of: "tactical-relay", with: "tacticalrelay")
-            
-            let squad = Squad.serializeJSON(jsonString: jsonStringNew) { errorString in
-                return promise(.failure(XWSImportError.serializationError(errorString)))
-            }
-            
-            return promise(.success(squad))
-        }.eraseToAnyPublisher()
-    }
-}
-
-enum XWSImportError: Error {
-    case serializationError(String)
-}
-
-struct SaveSquadAction: ActionProtocol {
-    let json: String
-    let squad: Squad
-    
-    var squadName: String {
-        return squad.name ?? ""
-    }
-    
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error> {
-        return environment.squadsService.saveSquad(jsonString: self.json, name: self.squadName)
-            .map{ squadData -> ActionProtocol in
-                let action = CreatePilotStateAction(json: self.json,
-                                                    squadName: self.squadName,
-                                                    squad: self.squad,
-                                                    squadData: squadData)
-                
-                return action
-            }.eraseToAnyPublisher()
-        
-        return Empty().eraseToAnyPublisher()
-    }
-}
-
-struct CreatePilotStateAction: ActionProtocol {
-    let json: String
-    let squadName: String
-    let squad: Squad
-    let squadData: SquadData
-    
-    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error> {
-        environment.pilotStateService.createPilotState(squad: squad, squadData: squadData)
-        
-        return Empty().eraseToAnyPublisher()
-    }
-}

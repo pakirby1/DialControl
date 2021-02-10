@@ -14,6 +14,7 @@ import Combine
 struct AppState {
     var uiState: UIState
     var squadState: SquadState
+    var xwsImportSquadState: XWSImportSquadState
 }
 
 struct UIState {
@@ -23,6 +24,22 @@ struct UIState {
     var border: Color
 }
 
+struct XWSImportSquadState {
+    var showAlert: Bool
+    var alertText: String
+}
+
+struct FactionSquadListState {
+    var squads: [Squad]
+    var displayFavoritesOnly: Bool
+}
+
+enum FactionSquadListAction {
+    case favoritesTapped
+    case deleteSquad(UUID)
+    case favoriteSquad(UUID)
+}
+    
 struct SquadState {
     // collection properties
     var squadDataList: [SquadData]
@@ -97,7 +114,7 @@ func reducer(state: inout AppState, action: AppAction, environment: AppEnvironme
  The caller of Store.send() creates the action object...
  Then the reduce function is no longer needed...
 */
-func reducer_new(state: inout AppState, action: AppAction, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
+func reducer_new(state: inout AppState, action: AppAction, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Never>
 {
     switch(action) {
         case .loadSquadsList:
