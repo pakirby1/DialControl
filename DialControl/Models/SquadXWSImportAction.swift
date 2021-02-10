@@ -13,6 +13,16 @@ func noAction() -> AnyPublisher<ActionProtocol, Never> {
     return Empty().eraseToAnyPublisher()
 }
 
+struct AlertDismissedAction: ActionProtocol {
+    func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Never>
+    {
+        state.xwsImportSquadState.showAlert = false
+        state.xwsImportSquadState.alertText = ""
+        
+        return noAction()
+    }
+}
+
 struct SerializationErrorAction : ActionProtocol {
     let message: String
     
@@ -28,22 +38,11 @@ struct SerializationErrorAction : ActionProtocol {
 struct ImportSquadAction : ActionProtocol {
     let json: String
     
-    /*
-     .catch { (error: AnimalServiceError) -> Just<AppAction> in
-         switch(error) {
-         case .unknown:
-             return Just(AppAction.animal(action: .fetchError(error: AnimalMiddlewareError.unknown)))
-         case .networkError:
-             return Just(AppAction.animal(action: .fetchError(error: AnimalMiddlewareError.networkError)))
-         }
-     }
-     */
     func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Never>
     {
         return loadSquad(jsonString: json)
             .subscribe(on: DispatchQueue.main)
             .map{ squad -> ActionProtocol in
-                let name = squad.name ?? ""
                 return SaveSquadAction(json: self.json, squad: squad)
             }
             .catch{ (error: XWSImportError) -> Just<ActionProtocol> in
@@ -75,7 +74,6 @@ struct ImportSquadAction : ActionProtocol {
 enum XWSImportError: Error {
     case serializationError(String)
 }
-
 
 struct SaveSquadAction: ActionProtocol {
     let json: String

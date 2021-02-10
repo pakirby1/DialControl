@@ -216,6 +216,9 @@ class SquadXWSImportViewModel_New : ObservableObject {
         store.send(action: ImportSquadAction(json: jsonString))
     }
     
+    func dismissAlert() {
+        store.send(action: AlertDismissedAction())
+    }
     
     
     
@@ -309,9 +312,16 @@ struct SquadXWSImportView_New : View {
             }
         }.padding(10)
             .alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Error"),
-                  message: Text(viewModel.alertText),
-                  dismissButton: .default(Text("OK")))
+                Alert(title: Text("Error"),
+                    message: Text(viewModel.alertText),
+                    dismissButton: Alert.Button.default(
+                        Text("OK"), action: { self.viewModel.dismissAlert() }
+                    )
+                )
+//
+//            Alert(title: Text("Error"),
+//                  message: Text(viewModel.alertText),
+//                  dismissButton: .default(Text("OK")))
         }
     }
 }
