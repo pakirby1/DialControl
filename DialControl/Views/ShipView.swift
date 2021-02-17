@@ -399,6 +399,7 @@ struct ShipView: View {
         VStack(alignment: .leading) {
             headerView
             CustomDivider()
+//            bodyContent
             bodyContent
             CustomDivider()
             footer
@@ -498,72 +499,6 @@ struct ShipView: View {
     //
     //        return AnyView(EmptyView())
     //    }
-    
-    var bodyContent: some View {
-        HStack(alignment: .top) {
-                /// Call .equatable() to prevent refreshing the static image
-                /// https://swiftui-lab.com/equatableview/
-                ImageView(url: viewModel.shipImageURL,
-                         shipViewModel: self.viewModel,
-                         label: "ship")
-                .equatable()
-                .frame(width: 350.0, height:500)
-                .onTapGesture { self.showCardOverlay.toggle() }
-                .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
-                .environmentObject(viewModel)
-            
-                    VStack(spacing: 20) {
-                        // Hull
-                        buildLinkedView(max: viewModel.pilotStateData.hullMax,
-                                        type: StatButtonType.hull,
-                                        active: viewModel.hullActive,
-                                        inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
-                                        updateType: PilotStatePropertyType.hull,
-                                        handleDestroyed: true)
-                        
-                        // Shield
-                        buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
-                                        type: StatButtonType.shield,
-                                        active: viewModel.shieldsActive,
-                                        inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
-                                        updateType: PilotStatePropertyType.shield,
-                                        handleDestroyed: true)
-
-                        // Force
-                        buildLinkedView(max: viewModel.pilotStateData.forceMax,
-                                        type: StatButtonType.force,
-                                        active: viewModel.forceActive,
-                                        inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
-                                        updateType: PilotStatePropertyType.force)
-
-                        // Charge
-                        buildLinkedView(max: viewModel.pilotStateData.chargeMax,
-                                        type: StatButtonType.charge,
-                                        active: viewModel.chargeActive,
-                                        inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
-                                        updateType: PilotStatePropertyType.charge)
-                        
-                        Text("Dial Status: \(dialStatusText)")
-                    }.padding(.top, 20)
-//                .border(Color.green, width: 2)
-
-                DialView(temperature: 100,
-                     diameter: 400,
-                     currentManeuver: self.$viewModel.currentManeuver,
-//                    currentManeuver: $currentManeuver.onUpdate{ (maneuver) in
-//                        self.viewModel.updateSelectedManeuver(maneuver: maneuver)
-//                    //                            self.viewModel.currentManeuver = maneuver
-//                    },
-                     dial: self.viewModel.shipPilot.ship.dial,
-                     displayAngleRanges: false) { (maneuver) in
-                        self.viewModel.updateSelectedManeuver(maneuver: maneuver)
-                    }
-                .frame(width: 400.0,height:400)
-//                    .border(theme.BORDER_ACTIVE, width: 2)
-            }
-    }
-    
-
     
     var footer: some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,
@@ -692,5 +627,77 @@ struct ShipView: View {
     }
 }
 
+extension ShipView {
+    var bodyContent: some View {
+            HStack(alignment: .top) {
+                    /// Call .equatable() to prevent refreshing the static image
+                    /// https://swiftui-lab.com/equatableview/
+                    ImageView(url: viewModel.shipImageURL,
+                             shipViewModel: self.viewModel,
+                             label: "ship")
+                    .equatable()
+                    .frame(width: 350.0, height:500)
+                    .onTapGesture { self.showCardOverlay.toggle() }
+                    .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
+                    .environmentObject(viewModel)
+                
+                        VStack(spacing: 20) {
+                            // Hull
+                            buildLinkedView(max: viewModel.pilotStateData.hullMax,
+                                            type: StatButtonType.hull,
+                                            active: viewModel.hullActive,
+                                            inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
+                                            updateType: PilotStatePropertyType.hull,
+                                            handleDestroyed: true)
+                            
+                            // Shield
+                            buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
+                                            type: StatButtonType.shield,
+                                            active: viewModel.shieldsActive,
+                                            inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
+                                            updateType: PilotStatePropertyType.shield,
+                                            handleDestroyed: true)
 
+                            // Force
+                            buildLinkedView(max: viewModel.pilotStateData.forceMax,
+                                            type: StatButtonType.force,
+                                            active: viewModel.forceActive,
+                                            inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
+                                            updateType: PilotStatePropertyType.force)
+
+                            // Charge
+                            buildLinkedView(max: viewModel.pilotStateData.chargeMax,
+                                            type: StatButtonType.charge,
+                                            active: viewModel.chargeActive,
+                                            inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
+                                            updateType: PilotStatePropertyType.charge)
+                            
+                            Text("Dial Status: \(dialStatusText)")
+                        }.padding(.top, 20)
+    //                .border(Color.green, width: 2)
+
+                    VStack {
+                        DialView(temperature: 100,
+                                             diameter: 400,
+                                             currentManeuver: self.$viewModel.currentManeuver,
+                                             dial: self.viewModel.shipPilot.ship.dial,
+                                             displayAngleRanges: false)
+                        { (maneuver) in
+                            self.viewModel.updateSelectedManeuver(maneuver: maneuver)
+                        }
+                        .frame(width: 400.0,height:400)
+                        
+                        Button(action: {
+                            if self.viewModel.pilotStateData.isDestroyed {
+                                self.viewModel.updateDialStatus(status: .destroyed)
+                            } else {
+                                self.viewModel.updateDialStatus(status: .set)
+                            }
+                        }) {
+                            Text("Set").font(.largeTitle)
+                        }
+                    }
+                }
+        }
+}
 
