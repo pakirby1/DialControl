@@ -16,6 +16,12 @@ struct AppState {
     var squadState: SquadState
 }
 
+struct SwiftXWSImportState {}
+
+struct FactionSquadListState {}
+
+struct ShipState {}
+
 struct UIState {
     let theme: Theme = WestworldUITheme()
     var buttonBackground: Color
@@ -58,6 +64,11 @@ enum AppAction {
     case getShips(Squad, SquadData)
     case updateAllDials(Bool)
     case flipDial
+    
+    case importXWS(action: SquadXWSImportAction)
+    case squadsList(action: FactionSquadListAction)
+    case squad(action: SquadAction)
+    case ship(action: ShipAction)
 }
 
 struct AppEnvironment {

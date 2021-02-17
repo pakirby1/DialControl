@@ -163,10 +163,14 @@ class ShipViewModel: ObservableObject {
     }
     
     func handleDestroyed() {
+        // save the current state
+        let current = self.pilotStateData.dial_status
+        
         if pilotStateData.isDestroyed {
             updateDialStatus(status: .destroyed)
-        } else {
-            updateDialStatus(status: .set)
+        }
+        else {
+            updateDialStatus(status: .hidden)
         }
     }
     

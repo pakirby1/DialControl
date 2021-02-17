@@ -104,7 +104,7 @@ struct TokenView: View {
 }
 
 class LinkedViewModel : ObservableObject {
-    let store: Store
+    let store: Store<AppState, AppAction>
     let pilotIndex: Int
     @Published var viewProperties = ViewProperties(active: 0, inactive: 0)
     let type: StatButtonType
@@ -112,7 +112,8 @@ class LinkedViewModel : ObservableObject {
     let shipPilot: ShipPilot
     
     // pilotIndex = ShipViewModel.shipPilot.pilotState.pilotIndex
-    init(store: Store, pilotIndex: Int, type: StatButtonType, shipPilot: ShipPilot) {
+    init(store: Store<AppState, AppAction>, pilotIndex: Int, type: StatButtonType, shipPilot: ShipPilot)
+    {
         self.store = store
         self.pilotIndex = pilotIndex
         self.type = type
@@ -124,14 +125,14 @@ class LinkedViewModel : ObservableObject {
         // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
         // to the Store
         let action = ChargeAction(pilotIndex: pilotIndex, type: .spend(type))
-        store.send(action: action)
+//        store.send(action: action)
     }
     
     func recover(type: StatButtonType) {
         // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
         // to the Store
         let action = ChargeAction(pilotIndex: pilotIndex, type: .recover(type))
-        store.send(action: action)
+//        store.send(action: action)
     }
 }
 

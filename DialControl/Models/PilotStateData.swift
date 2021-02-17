@@ -255,6 +255,8 @@ extension PilotStateData {
                 }
             }
         }
+        
+        updateDialStatus(status: .hidden)
     }
     
     mutating func updateHull(active: Int, inactive: Int) {
