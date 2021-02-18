@@ -76,7 +76,10 @@ class ShipViewModel: ObservableObject {
             .lane("currentManeuver")
             .sink(receiveValue: {
                 self.updateSelectedManeuver(maneuver: $0)
-                self.updateDialStatus(status: .set)
+                
+                if !self.pilotStateData.isDestroyed {
+                    self.updateDialStatus(status: .set)
+                }
             })
             .store(in: &cancellableSet)
     }
@@ -163,10 +166,12 @@ class ShipViewModel: ObservableObject {
     }
     
     func handleDestroyed() {
+        let current = pilotStateData.dial_status
+        
         if pilotStateData.isDestroyed {
             updateDialStatus(status: .destroyed)
         } else {
-            updateDialStatus(status: .set)
+            updateDialStatus(status: current)
         }
     }
     
@@ -628,6 +633,24 @@ struct ShipView: View {
 }
 
 extension ShipView {
+    var setDialButton: some View {
+        Text("Set")
+            .foregroundColor(.white)
+            .font(.largeTitle)
+            .padding(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.white, lineWidth: 1)
+            )
+            .onTapGesture {
+                if self.viewModel.pilotStateData.isDestroyed {
+                    self.viewModel.updateDialStatus(status: .destroyed)
+                } else {
+                    self.viewModel.updateDialStatus(status: .set)
+                }
+            }
+    }
+    
     var bodyContent: some View {
             HStack(alignment: .top) {
                     /// Call .equatable() to prevent refreshing the static image
@@ -687,15 +710,7 @@ extension ShipView {
                         }
                         .frame(width: 400.0,height:400)
                         
-                        Button(action: {
-                            if self.viewModel.pilotStateData.isDestroyed {
-                                self.viewModel.updateDialStatus(status: .destroyed)
-                            } else {
-                                self.viewModel.updateDialStatus(status: .set)
-                            }
-                        }) {
-                            Text("Set").font(.largeTitle)
-                        }
+                        setDialButton
                     }
                 }
         }
