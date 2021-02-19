@@ -134,7 +134,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
                      pilotState: pilotState)
 }
 
-struct SquadCardView: View {
+struct SquadCardView: View, DamagedSquadRepresenting {
     let squad: Squad
     let squadData: SquadData
     let displayAsList: Bool
@@ -326,21 +326,6 @@ struct SquadCardView: View {
         self.shipPilots.forEach{ shipPilot in
             print("PAK_DialStatus SquadCardView.loadShips() \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
         }
-    }
-    
-    var damagedPoints: Int {
-        let points: [Int] = self.shipPilots.map { shipPilot in
-            switch(shipPilot.healthStatus) {
-            case .destroyed(let value):
-                return value
-            case .half(let value):
-                return value
-            default:
-                return 0
-            }
-        }
-        
-        return points.reduce(0, +)
     }
 }
 

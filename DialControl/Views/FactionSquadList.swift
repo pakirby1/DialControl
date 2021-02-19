@@ -98,19 +98,15 @@ struct FactionSquadList: View {
             headerView
                 .padding(5)
             
-//            squadList
-            squadList_New
+            squadList
             
             deleteAllButton
                 .padding(10)
-            
-//            Spacer()
         }
     }
     
     var deleteAllButton: some View {
         Button(action: {
-            //            self.viewModel.deleteCallback(self.viewModel.squadData)
                 if self.viewModel.squadDataList.count > 0 {
                     self.displayDeleteAllConfirmation = true
                 }
@@ -159,18 +155,6 @@ struct FactionSquadList: View {
         }
     }
     
-//    var squadList: some View {
-//        VStack {
-//            ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
-//                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData)).environmentObject(self.viewFactory)
-//            }
-//        }
-//        .padding(10)
-//        .onAppear {
-//            self.viewModel.loadSquadsList()
-//        }
-//    }
-    
     var emptySection: some View {
         Section {
             Text("No squads found")
@@ -185,7 +169,7 @@ struct FactionSquadList: View {
         }
     }
     
-    var squadList_New: some View {
+    var squadList: some View {
         List {
             if self.viewModel.squadDataList.isEmpty {
                 emptySection
@@ -210,12 +194,14 @@ struct FactionSquadList: View {
     }
 }
 
-class FactionSquadCardViewModel : ObservableObject {
+class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
+{
     let points: Int = 150
     let theme: Theme = WestworldUITheme()
     let squadData: SquadData
     let deleteCallback: (SquadData) -> ()
     let updateCallback: (SquadData) -> ()
+    @Published var shipPilots: [ShipPilot] = []
     
     init(squadData: SquadData,
          deleteCallback: @escaping (SquadData) -> (),
@@ -254,14 +240,23 @@ class FactionSquadCardViewModel : ObservableObject {
         return Squad.emptySquad
     }
     
-    
+    func loadShips() {
+        self.shipPilots = SquadCardViewModel.getShips(
+            squad: self.squad,
+            squadData: self.squadData)
+        
+        if self.shipPilots.count == 0 {
+            print("No Ships in Squad")
+        }
+    }
 }
 
 struct FactionSquadCard: View {
     @EnvironmentObject var viewFactory: ViewFactory
-    let viewModel: FactionSquadCardViewModel
+    @ObservedObject var viewModel: FactionSquadCardViewModel
     let symbolSize: CGFloat = 36.0
     @State var displayDeleteConfirmation: Bool = false
+    @State var refreshView: Bool = false
     
     init(viewModel: FactionSquadCardViewModel) {
         self.viewModel = viewModel
@@ -283,6 +278,21 @@ struct FactionSquadCard: View {
             .clipShape(Circle())
     }
     
+    var damagedPointsView: some View {
+        Text("\(viewModel.damagedPoints)")
+            .font(.title)
+            .foregroundColor(viewModel.textForeground)
+            .padding()
+            .background(Color.red)
+            .clipShape(Circle())
+    }
+    
+    /*
+     For the common case of text-only labels, you can use the convenience initializer that takes a title string (or localized string key) as its first parameter, instead of a trailing closure:
+
+
+     Button("Sign In", action: signIn)
+     */
     var vendorView: some View {
         Button("\(viewModel.squad.vendor?.description ?? "")") {
             UIApplication.shared.open(URL(string: self.viewModel.squad.vendor?.link ?? "")!)
@@ -305,8 +315,12 @@ struct FactionSquadCard: View {
         let x: Faction? = Faction.buildFaction(jsonFaction: self.viewModel.squad.faction)
         let characterCode = x?.characterCode
         
-        return Text(characterCode ?? "")
-            .font(.custom("xwing-miniatures", size: self.symbolSize))
+        return Button(action: {
+            UIApplication.shared.open(URL(string: self.viewModel.squad.vendor?.link ?? "")!)
+        }) {
+            Text(characterCode ?? "")
+                .font(.custom("xwing-miniatures", size: self.symbolSize))
+        }
     }
     
     var nameView: some View {
@@ -346,7 +360,8 @@ struct FactionSquadCard: View {
                 background
                 factionSymbol.offset(x: -370, y: 0)
                 pointsView.offset(x: -310, y: 0)
-                vendorView.offset(x: -250, y: 0)
+                damagedPointsView.offset(x: -230, y: 0)
+//                vendorView.offset(x: -190, y: 0)
                 favoriteView.offset(x: 300, y: 0)
                 nameView
                 deleteButton.offset(x: 350, y: 0)
@@ -369,6 +384,13 @@ struct FactionSquadCard: View {
                     print("Cancelled Delete")
                 })
             )
+        }
+        .onAppear() {
+            // The view body has been previously executed so the
+            // view body needs to be recreated after onAppear
+            // This can be done by updating an @State property, or
+            // observing an @Published property.
+            self.viewModel.loadShips()
         }
     }
 }

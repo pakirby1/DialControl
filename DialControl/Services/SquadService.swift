@@ -71,3 +71,24 @@ extension SquadServiceProtocol {
         }
     }
 }
+
+protocol DamagedSquadRepresenting {
+    var shipPilots: [ShipPilot] { get set }
+}
+
+extension DamagedSquadRepresenting {
+    var damagedPoints: Int {
+        let points: [Int] = self.shipPilots.map { shipPilot in
+            switch(shipPilot.healthStatus) {
+            case .destroyed(let value):
+                return value
+            case .half(let value):
+                return value
+            default:
+                return 0
+            }
+        }
+        
+        return points.reduce(0, +)
+    }
+}

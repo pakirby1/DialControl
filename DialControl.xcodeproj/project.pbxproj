@@ -79,6 +79,7 @@
 		AEEB546C24F11FE50050913C /* PilotStateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEEB546B24F11FE50050913C /* PilotStateService.swift */; };
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
+		AEF5677025DFCD17006DCD4C /* ShipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF5676F25DFCD17006DCD4C /* ShipService.swift */; };
 		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
 /* End PBXBuildFile section */
 
@@ -178,6 +179,7 @@
 		AEEB546B24F11FE50050913C /* PilotStateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotStateService.swift; sourceTree = "<group>"; };
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
+		AEF5676F25DFCD17006DCD4C /* ShipService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipService.swift; sourceTree = "<group>"; };
 		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -384,6 +386,7 @@
 				AEEB546724F11EB40050913C /* DIContainer.swift */,
 				AEEB546924F11F3C0050913C /* SquadService.swift */,
 				AEEB546B24F11FE50050913C /* PilotStateService.swift */,
+				AEF5676F25DFCD17006DCD4C /* ShipService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -573,6 +576,7 @@
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
+				AEF5677025DFCD17006DCD4C /* ShipService.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
