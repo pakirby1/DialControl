@@ -80,6 +80,7 @@
 		AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4612439B83100A49717 /* SelectionIndicator.swift */; };
 		AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF3B4632439B9B200A49717 /* InnerCircle.swift */; };
 		AEF5677025DFCD17006DCD4C /* ShipService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF5676F25DFCD17006DCD4C /* ShipService.swift */; };
+		AEF5677225DFE0AD006DCD4C /* ResetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF5677125DFE0AD006DCD4C /* ResetButton.swift */; };
 		AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF65F182445D3B4009D6BDC /* Upgrade.swift */; };
 /* End PBXBuildFile section */
 
@@ -180,6 +181,7 @@
 		AEF3B4612439B83100A49717 /* SelectionIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionIndicator.swift; sourceTree = "<group>"; };
 		AEF3B4632439B9B200A49717 /* InnerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InnerCircle.swift; sourceTree = "<group>"; };
 		AEF5676F25DFCD17006DCD4C /* ShipService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipService.swift; sourceTree = "<group>"; };
+		AEF5677125DFE0AD006DCD4C /* ResetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetButton.swift; sourceTree = "<group>"; };
 		AEF65F182445D3B4009D6BDC /* Upgrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Upgrade.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -268,6 +270,7 @@
 				AE1DF8F024B5E0CD00B84D38 /* CardView.swift */,
 				AE4D58C923F8087C00C66136 /* ContentView.swift */,
 				AEA192DD25C2E2E20033ACBD /* LinkedViewNew.swift */,
+				AEF5677125DFE0AD006DCD4C /* ResetButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -580,6 +583,7 @@
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
+				AEF5677225DFE0AD006DCD4C /* ResetButton.swift in Sources */,
 				AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */,
 				AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */,
 				AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */,

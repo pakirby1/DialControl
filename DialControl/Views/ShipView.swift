@@ -430,23 +430,10 @@ struct ShipView: View {
                 .padding(2)
             //                .border(Color.green, width: 2)
             
-            Button(action: { self.viewModel.update(type: .reset, active: 0, inactive: 0)})
-            {
-                HStack {
-                    
-                    Text("Reset")
-                    //            Image(uiImage: UIImage(named: "repeat_new", in: nil, with: regularMediumSymbolConfig)!.withRenderingMode(.alwaysTemplate))
-                    //                .foregroundColor(.accentColor)
-                                
-    //                Image(systemName: "arrow.clockwise.circle.fill")
-                    Image(systemName: "repeat")
-                        .font(.largeTitle)
-                        .foregroundColor(.accentColor)
-                }.padding(15)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.white, lineWidth: 1)
-                )
+            ResetButton{
+                self.viewModel.update(type: .reset,
+                                      active: 0,
+                                      inactive: 0)
             }
         }
     }
