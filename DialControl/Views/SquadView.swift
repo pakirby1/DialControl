@@ -224,15 +224,17 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         sortedShipPilots.forEach{ shipPilot in
             /// Switch (PilotStateData_Change)
             if var data = shipPilot.pilotStateData {
-                data.change(update: {
-                    print("PAK_DialStatus pilotStateData.id: \($0)")
-                    let revealAllDialsStatus: DialStatus = self.revealAllDials ? .revealed : .hidden
-                    $0.dial_status = revealAllDialsStatus
-                    self.pilotStateService.updateState(newData: $0,
-                                                       state: shipPilot.pilotState)
-                    print("PAK_DialStatus updateAllDials $0.dial_status = \(revealAllDialsStatus)")
-                    print("PAK_DialStatus updateAllDials $0.dial_revealed = \(self.revealAllDials)")
-                })
+                if data.dial_status != .destroyed {
+                    data.change(update: {
+                        print("PAK_DialStatus pilotStateData.id: \($0)")
+                        let revealAllDialsStatus: DialStatus = self.revealAllDials ? .revealed : .hidden
+                        $0.dial_status = revealAllDialsStatus
+                        self.pilotStateService.updateState(newData: $0,
+                                                           state: shipPilot.pilotState)
+                        print("PAK_DialStatus updateAllDials $0.dial_status = \(revealAllDialsStatus)")
+                        print("PAK_DialStatus updateAllDials $0.dial_revealed = \(self.revealAllDials)")
+                    })
+                }
             }
         }
         
