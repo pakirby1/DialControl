@@ -437,7 +437,8 @@ struct PilotCardView: View {
         VStack {
             Text("\(shipPilot.pilot.name)")
                 .font(.body)
-        
+                .foregroundColor(Color.white)
+            
             Text("\(shipPilot.ship.name)")
                 .font(.caption)
                 .foregroundColor(Color.white)
