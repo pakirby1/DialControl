@@ -261,6 +261,7 @@ extension PilotStateData {
             }
             
             self.upgradeStates = updatedUpgradeStates
+            self.updateDialStatus(status: .hidden)
         }
     }
     
