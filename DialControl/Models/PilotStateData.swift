@@ -57,11 +57,13 @@ struct UpgradeStateData : Codable, CustomStringConvertible {
     var charge_inactive : Int?
     var selected_side : Int
     var xws: String
+    let id = UUID()
     
     var description: String {
         var arr: [String] = []
     
         // -1 = not valid
+        arr.append("id: \(id)")
         arr.append("force_active: \(force_active ?? -1)")
         arr.append("force_inactive: \(force_inactive ?? -1)")
         arr.append("charge_active: \(charge_active ?? -1)")
@@ -248,12 +250,17 @@ extension PilotStateData {
         reset(activeKeyPath: \.force_active, inactiveKeyPath: \.force_inactive)
         reset(activeKeyPath: \.charge_active, inactiveKeyPath: \.charge_inactive)
         
+        var updatedUpgradeStates: [UpgradeStateData] = []
+        
         if let _ = self.upgradeStates {
             upgradeStates?.forEach { upgrade in
-                upgrade.change{ upgrade in
+                upgrade.change { upgrade in
                     upgrade.reset()
+                    updatedUpgradeStates.append(upgrade)
                 }
             }
+            
+            self.upgradeStates = updatedUpgradeStates
         }
     }
     
