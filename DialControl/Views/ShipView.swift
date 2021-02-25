@@ -365,23 +365,9 @@ struct ShipView: View {
         let imageOverlayUrl: String
         let imageOverlayUrlBack: String
     }
-    
-    struct TextOverlay: View {
-        @Binding var isShowing : Bool
-    
-        var body: some View {
-            Text("Charge")
-                .frame(width: 100, height: 100)
-                .background(Color.yellow)
-                .cornerRadius(20)
-                .opacity(self.isShowing ? 1 : 0)
-        }
-    }
 
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
-    
-    @State var showCardOverlay: Bool = false
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
     @State var imageOverlayUrlBack: String = ""
@@ -647,8 +633,6 @@ extension ShipView {
                              label: "ship")
                     .equatable()
                     .frame(width: 350.0, height:500)
-                    .onTapGesture { self.showCardOverlay.toggle() }
-                    .overlay( TextOverlay(isShowing: self.$showCardOverlay) )
                     .environmentObject(viewModel)
                 
                         VStack(spacing: 20) {

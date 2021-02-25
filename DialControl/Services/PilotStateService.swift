@@ -82,60 +82,53 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
             return ship.hullStats + adj
         }
         
-        func calculateActiveShields(ship: Ship,
-        squadPilot: SquadPilot,
-        allUpgrades: [Upgrade]) -> Int
+        enum AdjustmentType {
+            case hull
+            case shields
+        }
+        
+        func calculateActive(type: AdjustmentType,
+                                    ship: Ship,
+                                 squadPilot: SquadPilot,
+                                 allUpgrades: [Upgrade]) -> Int
         {
-            func calculateActiveShields_Old(ship: Ship,
-                                     squadPilot: SquadPilot,
-                                     allUpgrades: [Upgrade]) -> Int
-            {
-                var adj = 0
-                
-                let shieldUpgrade = allUpgrades.filter{ upgrade in
-                    upgrade.xws == "shieldupgrade"
-                }
-                
-                if shieldUpgrade.count == 1 {
-                    adj += 1
-                }
-                
-                let viragoUpgrade = allUpgrades.filter{ upgrade in
-                    upgrade.xws == "virago"
-                }
-                
-                if viragoUpgrade.count == 1 {
-                    adj += 1
-                }
-                
-                return ship.shieldStats + adj
-            }
+            var adj = 0
             
-            func calculateActiveShields_New(ship: Ship,
-                                     squadPilot: SquadPilot,
-                                     allUpgrades: [Upgrade]) -> Int
-            {
-                var adj = 0
+            let sides: [Side] = allUpgrades.flatMap{ $0.sides }
+            let grants: [GrantElement] = sides.flatMap{ $0.grants }
+            let stats: [GrantElement] = grants.filter{ grant in
+                switch(grant) {
+                    case .stat(_):
+                        return true
+                    default:
+                        return false
+                }
+            }
+        
+            func adjustment(type: AdjustmentType) -> Int {
+                var value: String = ""
+                var amount: Int = 0
                 
-                let sides: [Side] = allUpgrades.flatMap{ $0.sides }
-                let grants: [Grant] = sides.flatMap{ $0.grants }
-                let stats: [Grant] = grants.filter{ $0.type == "stat" }
+                if case .hull = type {
+                    value = "hull"
+                    amount = ship.hullStats
+                } else if case .shields = type {
+                    value = "shields"
+                    amount = ship.shieldStats
+                }
                 
                 for stat in stats {
-                    if let value = stat.value {
-                        if value.type == "shield" {
-                            adj += 1
+                    if case .stat(let statGrant) = stat {
+                        if statGrant.value == value {
+                            adj += statGrant.amount
                         }
                     }
                 }
                 
-                return adj
+                return amount + adj
             }
             
-            return calculateActiveShields_Old(
-                ship:ship,
-                squadPilot:squadPilot,
-                allUpgrades:allUpgrades)
+            return adjustment(type: type)
         }
         
         func buildUpgradeStates(allUpgrades : [Upgrade]) -> [UpgradeStateData] {
@@ -182,9 +175,9 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                 pilot_index: pilotIndex,
                 adjusted_attack: arc,
                 adjusted_defense: agility,
-                hull_active: calculateActiveHull(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                hull_active: calculateActive(type: .hull,ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
                 hull_inactive: 0,
-                shield_active: calculateActiveShields(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                shield_active: calculateActive(type: .shields, ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
                 shield_inactive: 0,
                 force_active: calculate_force_active(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
                 force_inactive: 0,

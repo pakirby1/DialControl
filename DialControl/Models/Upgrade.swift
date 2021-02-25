@@ -490,6 +490,105 @@ struct Grant: Codable {
     }
 }
 
+enum GrantElement : Codable {
+    case action(ActionGrant)
+    case slot(SlotGrant)
+    case stat(StatGrant)
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let x = try? container.decode(ActionGrant.self) {
+            self = .action(x)
+            return
+        }
+        
+        if let x = try? container.decode(StatGrant.self) {
+            self = .stat(x)
+            return
+        }
+        
+        if let x = try? container.decode(SlotGrant.self) {
+            if x.type == "stat" {
+                self = .stat(StatGrant(type: x.type,
+                                       value: x.value,
+                                       amount: x.amount,
+                                       arc: ""))
+            } else {
+                self = .slot(x)
+            }
+            
+            return
+        }
+    
+        throw DecodingError.typeMismatch(GrantElement.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for ConfigDatumElement"))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .action(let x):
+            try container.encode(x)
+        case .slot(let x):
+            try container.encode(x)
+        case .stat(let x):
+            try container.encode(x)
+        }
+    }
+}
+
+extension GrantElement: CustomStringConvertible {
+    var description: String {
+        switch(self) {
+            case .action(let actionGrant):
+                return actionGrant.description
+            case .slot(let slotGrant) :
+                return slotGrant.description
+            case .stat(let statGrant) :
+                return statGrant.description
+        }
+    }
+}
+
+// MARK:- ActionGrant
+struct ActionGrant : Codable {
+    let type: String
+    let value: GrantValue
+}
+
+extension ActionGrant: CustomStringConvertible {
+    var description: String {
+        return "type: \(type) value: { \(value) }"
+    }
+}
+
+// MARK:- SlotGrant
+struct SlotGrant : Codable {
+    let type: String
+    let value: String
+    let amount: Int
+}
+
+extension SlotGrant : CustomStringConvertible {
+    var description: String {
+        return "type: \(type) value: \(value) amount: \(amount)"
+    }
+}
+
+// MARK:- StatGrant
+struct StatGrant : Codable {
+    let type: String
+    let value: String
+    let amount: Int
+    let arc: String
+}
+
+extension StatGrant : CustomStringConvertible {
+    var description: String {
+        return "type: \(type) value: \(value) amount: \(amount) arc: \(arc)\n"
+    }
+}
+
+
 /*
  Crew Upgrades
  "file://aaylasecura\n",
@@ -546,7 +645,7 @@ struct Side: Codable {
     var text: String { return _text ?? "" }
     var slots: [String] { return _slots ?? [] }
     var type: String { return _type ?? "" }
-    var grants: [Grant] { return _grants ?? [] }
+    var grants: [GrantElement] { return _grants ?? [] }
     var force: Force? { return _force ?? nil }
     var charges: Charges? { return _charges ?? nil }
     
@@ -557,7 +656,7 @@ struct Side: Codable {
     private var _text: String?
     private var _slots: [String]?
     private var _type: String?
-    private var _grants: [Grant]?
+    private var _grants: [GrantElement]?
     private var _force: Force?
     private var _charges: Charges?
 
