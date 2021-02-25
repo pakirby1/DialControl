@@ -55,33 +55,7 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
             
             return ship.pilotForce(pilotId: squadPilot.id) + forceValues
         }
-        
-        //
-        func calculateActiveHull(ship: Ship,
-                                 squadPilot: SquadPilot,
-                                 allUpgrades: [Upgrade]) -> Int
-        {
-            var adj = 0
-            
-            let hullUpgrade = allUpgrades.filter{ upgrade in
-                upgrade.xws == "hullupgrade"
-            }
-            
-            if hullUpgrade.count == 1 {
-                adj += 1
-            }
-            
-            let soullessoneUpgrade = allUpgrades.filter{ upgrade in
-                upgrade.xws == "soullessone"
-            }
-            
-            if soullessoneUpgrade.count == 1 {
-                adj += 2
-            }
-            
-            return ship.hullStats + adj
-        }
-        
+    
         enum AdjustmentType {
             case hull
             case shields
