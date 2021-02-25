@@ -209,12 +209,14 @@ enum CountBannerType {
 struct CountBannerView: View {
     let count: Int
     let type: CountBannerType
+    let width:CGFloat  = 40
+    let height:CGFloat = 40
     
     var body: some View {
         ZStack {
             Circle()
                 .fill(type.color)
-                .frame(width: 40, height: 40)
+                .frame(width: width, height: height)
             
             Text("\(count)")
                 .font(.system(size: 24.0, weight: .bold))

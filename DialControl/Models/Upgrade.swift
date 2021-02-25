@@ -378,6 +378,44 @@ let modificationsUpgradesJSON = """
 ]
 """
 
+let testUpgradeJSON = """
+[
+    {
+    "name" : "Delta-7B",
+    "limited" : 0,
+    "xws" : "delta7b",
+    "sides" : [
+      {
+        "title" : "Delta-7B",
+        "type" : "Configuration",
+        "slots" : [
+          "Configuration"
+        ],
+        "grants" : [
+          {
+            "type" : "stat",
+            "value" : "agility",
+            "amount" : -1
+          },
+          {
+            "type" : "stat",
+            "value" : "shields",
+            "amount" : 2
+          },
+          {
+            "type" : "stat",
+            "value" : "attack",
+            "arc" : "Front Arc",
+            "amount" : 1
+          }
+        ],
+        "ffg" : 548,
+        "image" : "https://sb-cdn.fantasyflightgames.com/card_images/en/515903e04a0d06a9200860698326896d.png",
+        "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/6530f18639b7efff5a5a659589e5d65c.jpg",
+        "text" : "The Delta-7B was designed as a heavier variant of the Delta-7 Aethersprite-class Interceptor, identifiable by the repositioned astromech slot. Many Jedi Generals favor this craft's greater firepower and durability."
+      }
+]
+"""
 /*
 "stats": [
   { "arc": "Front Arc",
@@ -391,7 +429,54 @@ struct GrantValue: Codable {
     let type: String
     let difficulty: String
 }
-
+/*
+ struct ActionGrant {
+    let type: String
+    let value: GrantValue
+ }
+ 
+ "grants": [
+   {
+     "type": "action",
+     "value": { "type": "Rotate Arc", "difficulty": "White" }
+   }
+ ]
+ 
+ struct SlotGrant {
+    let type: String
+    let value: String
+    let amount: In
+ }
+ 
+ "grants" : [
+   {
+     "type" : "slot",
+     "value" : "Torpedo",
+     "amount" : 1
+   }
+ ]
+ 
+ struct StatGrant {
+    let type: String
+    let value: String
+    let arc: String?
+    let amount: Int
+ }
+ 
+ "grants" : [
+ {
+   "type" : "stat",
+   "value" : "shields",
+   "amount" : 2
+ },
+ {
+   "type" : "stat",
+   "value" : "attack",
+   "arc" : "Front Arc",
+   "amount" : 1
+ }
+ ]
+ */
 struct Grant: Codable {
     var type: String { return _type ?? ""}
     var value: GrantValue?
@@ -451,6 +536,7 @@ struct Grant: Codable {
    "ffg" : 392
  }
 
+ upgrades.sides.grants.amount
  */
 struct Side: Codable {
     var ffg: Int { return _ffg ?? 0 }

@@ -18,14 +18,7 @@ struct ResetButton: View {
         })
         {
             HStack {
-                Text("Reset")
-                    .foregroundColor(.white)
-                
                 Image(uiImage: UIImage(named: "Reset") ?? UIImage())
-                
-//                Image(systemName: "repeat")
-//                    .font(.largeTitle)
-//                    .foregroundColor(.accentColor)
             }
             .padding(15)
             .overlay(

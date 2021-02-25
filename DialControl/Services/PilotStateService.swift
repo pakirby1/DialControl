@@ -83,28 +83,59 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
         }
         
         func calculateActiveShields(ship: Ship,
-                                 squadPilot: SquadPilot,
-                                 allUpgrades: [Upgrade]) -> Int
+        squadPilot: SquadPilot,
+        allUpgrades: [Upgrade]) -> Int
         {
-            var adj = 0
-            
-            let shieldUpgrade = allUpgrades.filter{ upgrade in
-                upgrade.xws == "shieldupgrade"
+            func calculateActiveShields_Old(ship: Ship,
+                                     squadPilot: SquadPilot,
+                                     allUpgrades: [Upgrade]) -> Int
+            {
+                var adj = 0
+                
+                let shieldUpgrade = allUpgrades.filter{ upgrade in
+                    upgrade.xws == "shieldupgrade"
+                }
+                
+                if shieldUpgrade.count == 1 {
+                    adj += 1
+                }
+                
+                let viragoUpgrade = allUpgrades.filter{ upgrade in
+                    upgrade.xws == "virago"
+                }
+                
+                if viragoUpgrade.count == 1 {
+                    adj += 1
+                }
+                
+                return ship.shieldStats + adj
             }
             
-            if shieldUpgrade.count == 1 {
-                adj += 1
+            func calculateActiveShields_New(ship: Ship,
+                                     squadPilot: SquadPilot,
+                                     allUpgrades: [Upgrade]) -> Int
+            {
+                var adj = 0
+                
+                let sides: [Side] = allUpgrades.flatMap{ $0.sides }
+                let grants: [Grant] = sides.flatMap{ $0.grants }
+                let stats: [Grant] = grants.filter{ $0.type == "stat" }
+                
+                for stat in stats {
+                    if let value = stat.value {
+                        if value.type == "shield" {
+                            adj += 1
+                        }
+                    }
+                }
+                
+                return adj
             }
             
-            let viragoUpgrade = allUpgrades.filter{ upgrade in
-                upgrade.xws == "virago"
-            }
-            
-            if viragoUpgrade.count == 1 {
-                adj += 1
-            }
-            
-            return ship.shieldStats + adj
+            return calculateActiveShields_Old(
+                ship:ship,
+                squadPilot:squadPilot,
+                allUpgrades:allUpgrades)
         }
         
         func buildUpgradeStates(allUpgrades : [Upgrade]) -> [UpgradeStateData] {

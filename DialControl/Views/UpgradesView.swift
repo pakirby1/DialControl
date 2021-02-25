@@ -115,8 +115,15 @@ struct UpgradeView: View {
             .font(.largeTitle)
             .padding(15)
             .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.white, lineWidth: 1)
+                ZStack {
+//                    HStack {
+//                        CountBannerView(count: 0, type: .active, width: 30)
+//                        CountBannerView(count: 0, type: .inactive)
+//                    }.offset(x: 70, y: -20)
+                    
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.white, lineWidth: 1)
+                }
             )
             .onTapGesture {
                 print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")

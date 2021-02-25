@@ -127,6 +127,25 @@
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_122.jpg",
       "ffg": 122,
       "hyperspace": false
+    },
+    {
+      "name": "Darth Vader",
+      "caption": "Dark Lord of the Sith",
+      "initiative": 6,
+      "limited": 1,
+      "cost": 100,
+      "xws": "darthvader-tieddefender",
+      "ability": "You may not spend force charges except when attacking. While you perform an attack, you may spend 1 force charge to turn a blank result into a hit.",
+      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_122.png",
+      "force": { "value": 3, "recovers": 1, "side": ["dark"] },
+      "shipAbility": {
+        "name": "Full Throttle",
+        "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
+      },
+      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Force Power"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_122.jpg",
+      "ffg": 122,
+      "hyperspace": false
     }
   ]
 }
