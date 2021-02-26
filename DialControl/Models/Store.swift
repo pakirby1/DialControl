@@ -130,12 +130,27 @@ struct RemoteStore : IRemoteStore {
         printer = DeallocPrinter("RemoteStore \(id)")
     }
     
+    /*
+     let remoteDataPublisher = URLSession.shared.dataTaskPublisher(for: myURL!)
+     .tryMap { data, response -> Data in
+                 guard let httpResponse = response as? HTTPURLResponse,
+                     httpResponse.statusCode == 200 else {
+                         throw TestFailureCondition.invalidServerResponse
+                 }
+                 return data
+     }
+     */
     func loadData(url: String) -> Future<Data, Error> {
         let future = Future<Data, Error> { promise in
             let u = URL(string: url)!
             
             URLSession.shared.dataTask(with: u) { data, response, err in
                 do {
+                    guard let httpResponse = response as? HTTPURLResponse,
+                        httpResponse.statusCode == 200 else {
+                            throw StoreError.remoteMiss("Invalid HTTP response code: \(String(describing: (response as? HTTPURLResponse)?.statusCode))")
+                    }
+                    
                     if let error = err {
                         throw StoreError.remoteMiss("\(error)")
                     }

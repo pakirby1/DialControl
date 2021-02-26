@@ -37,6 +37,16 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
     /// else if data is not in local cache
     ///     if data is found remote, return data
     ///     else if data in not in remote, return StoreError.remoteMiss
+    // Urls are case-sensitive so,
+    // https://pakirby1.github.io/images/XWing/pilots/cienaree.PNG
+    // https://pakirby1.github.io/images/XWing/pilots/cienaree.png
+    // are two different URLs.
+    // the url passed in here is
+    // https://pakirby1.github.io/images/XWing/pilots/cienaree.png
+    // if the server document is
+    // https://pakirby1.github.io/images/XWing/pilots/cienaree.PNG
+    // localStore.loadData will return an HTML page with 404 instead
+    // of an image and consequently the image will not render.
     func loadData(url: String) -> AnyPublisher<Data, Error> {
         self.classFuncString = "\(self).\(#function)"
         var localData: Bool = false
@@ -53,6 +63,8 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
             .catch { error in
                 /// If an error was encountered reading from the local store, eat the error and attempt to read from the remote store
                 /// we will return a new publisher (Future<Data, Error>) that contains either the data or a remote error
+                /// what if we get a 404 Not Found response, it will think it succeeded and will return
+                /// the html as the data, so we need to catch the 404 error
                 self.remoteStore.loadData(url: url)
             }
             .print()

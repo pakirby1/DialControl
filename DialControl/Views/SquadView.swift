@@ -242,6 +242,28 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         loadShips()
     }
     
+    func resetAllShips() {
+        sortedShipPilots.forEach{ shipPilot in
+            /// Switch (PilotStateData_Change)
+            if var data = shipPilot.pilotStateData {
+                data.change(update: {
+                    $0.reset()
+                    
+                    self.pilotStateService.updateState(
+                        newData: $0,
+                        state: shipPilot.pilotState)
+                })
+            }
+        }
+        
+        // Not sure why, but this forces a refresh of the ship status (Half, Destroyed)
+        // It updatee the @State shipPilots
+        self.shipPilots = []
+        
+        // reload ships
+        loadShips()
+    }
+    
     var body: some View {
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
@@ -269,6 +291,14 @@ struct SquadCardView: View, DamagedSquadRepresenting {
             self.updateAllDials()
         }) {
             Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
+        }
+        
+        let reset = Button(action: {
+            self.resetAllShips()
+        }) {
+            Text("Reset All")
+                .font(.title)
+                .foregroundColor(Color.red)
         }
         
         let damaged = Text("\(damagedPoints)")
@@ -308,6 +338,13 @@ struct SquadCardView: View, DamagedSquadRepresenting {
                     shipsView
                 }
                 
+                // Footer
+                Divider()
+                HStack {
+                    Spacer()
+                    reset
+                    Spacer()
+                }
             }
             .multilineTextAlignment(.center)
         }

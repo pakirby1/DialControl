@@ -164,7 +164,11 @@ struct FactionSquadList: View {
     var shipsSection: some View {
         Section {
             ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
-                FactionSquadCard(viewModel: FactionSquadCardViewModel(squadData: squadData, deleteCallback: self.viewModel.deleteSquad, updateCallback: self.viewModel.updateSquad)).environmentObject(self.viewFactory)
+                FactionSquadCard(viewModel: FactionSquadCardViewModel(
+                    squadData: squadData,
+                    deleteCallback: self.viewModel.deleteSquad,
+                    updateCallback: self.viewModel.updateSquad)
+                ).environmentObject(self.viewFactory)
             }
         }
     }
@@ -249,6 +253,15 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
             print("No Ships in Squad")
         }
     }
+    
+    func favoriteTapped() {
+        squadData.favorite.toggle()
+        updateCallback(squadData)
+    }
+    
+    func deleteSquad() {
+        deleteCallback(squadData)
+    }
 }
 
 struct FactionSquadCard: View {
@@ -301,8 +314,7 @@ struct FactionSquadCard: View {
     
     var favoriteView: some View {
         Button(action: {
-            self.viewModel.squadData.favorite.toggle()
-            self.viewModel.updateCallback(self.viewModel.squadData)
+            self.viewModel.favoriteTapped()
         }) {
             Image(systemName: self.viewModel.squadData.favorite ? "star.fill" :
             "star")
@@ -378,7 +390,7 @@ struct FactionSquadCard: View {
             Alert(title: Text("Delete"),
                   message: Text("\(self.viewModel.squadData.name ?? "Squad")"),
                 primaryButton: Alert.Button.default(Text("Delete"), action: {
-                    self.viewModel.deleteCallback(self.viewModel.squadData)
+                    self.viewModel.deleteSquad()
                 }),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
                     print("Cancelled Delete")
