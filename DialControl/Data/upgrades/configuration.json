@@ -754,5 +754,26 @@
     "cost" : {
       "value" : 3
     }
+  },
+  {
+    "name" : "Sensitive Controls",
+    "limited" : 0,
+    "xws" : "sensitivecontrols",
+    "hyperspace" : true,
+    "sides" : [
+      {
+        "ability" : "Replace your Autothrusters ship ability with the following: During the System Phase you may perform a red barrel roll or red boost action.",
+        "title" : "Sensitive Controls",
+        "type" : "Configuration",
+        "slots" : [
+          "Configuration"
+        ],
+        "ffg" : 723,
+        "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/954401c2bc0cc705693553362d078536.jpg"
+      }
+    ],
+    "cost" : {
+      "value" : 3
+    }
   }
 ]
