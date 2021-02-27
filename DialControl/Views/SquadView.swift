@@ -38,6 +38,7 @@ struct SquadView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @ObservedObject var viewModel: SquadViewModel
     @EnvironmentObject var pilotStateService: PilotStateService
+    @State var isFirstPlayer: Bool = false
     
     init(viewModel: SquadViewModel) {
         self.viewModel = viewModel
@@ -51,7 +52,10 @@ struct SquadView: View {
                 Text("< Faction Squad List")
             }
             
-            Spacer()
+            Toggle(isOn: self.$isFirstPlayer) {
+                Text("First Player")
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
         }.padding(10)
     }
     
@@ -62,7 +66,7 @@ struct SquadView: View {
             header
             SquadCardView(squad: viewModel.squad,
                           squadData: viewModel.squadData,
-                          displayAsList: self.viewModel.displayAsList)
+                          displayAsList: self.viewModel.displayAsList, isFirstPlayer: $isFirstPlayer)
                 .environmentObject(viewFactory)
                 .environmentObject(self.pilotStateService)
                 .onAppear() {
@@ -144,6 +148,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     @State var shipPilots: [ShipPilot] = []
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
+    @Binding var isFirstPlayer: Bool
     
     var emptySection: some View {
         Section {
@@ -308,6 +313,14 @@ struct SquadCardView: View, DamagedSquadRepresenting {
             .background(Color.red)
             .clipShape(Circle())
         
+        var firstPlayer: some View {
+            if isFirstPlayer == true {
+                return AnyView(firstPlayerSymbol)
+            }
+            
+            return AnyView(EmptyView())
+        }
+        
         return ZStack {
             VStack(alignment: .leading) {
                 // Header
@@ -321,6 +334,8 @@ struct SquadCardView: View, DamagedSquadRepresenting {
                     Spacer()
                     
                     title
+                    
+                    firstPlayer
                     
                     Spacer()
                     

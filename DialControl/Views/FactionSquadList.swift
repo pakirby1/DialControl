@@ -373,8 +373,8 @@ struct FactionSquadCard: View {
                 factionSymbol.offset(x: -370, y: 0)
                 pointsView.offset(x: -310, y: 0)
                 damagedPointsView.offset(x: -230, y: 0)
-//                vendorView.offset(x: -190, y: 0)
                 favoriteView.offset(x: 300, y: 0)
+//                firstPlayerSymbol.offset(x: 260, y: 0)
                 nameView
                 deleteButton.offset(x: 350, y: 0)
             }

@@ -10,6 +10,10 @@ import Foundation
 import SwiftUI
 import Combine
 
+var firstPlayerSymbol: some View {
+    Image(uiImage: UIImage(named: "FirstPlayer") ?? UIImage())
+}
+
 var shipLookupTable: [String:Array<PilotFileUrl>] = [:]
 
 struct ImageUrlTemplates {
