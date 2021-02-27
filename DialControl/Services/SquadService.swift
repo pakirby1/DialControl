@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class SquadService: SquadServiceProtocol {
+class SquadService: SquadServiceProtocol, ObservableObject {
     var alertText: String = ""
     
     let moc: NSManagedObjectContext

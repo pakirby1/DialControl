@@ -10,7 +10,8 @@ import Foundation
 import CoreData
 
 class DIContainer {
-    var squadService: SquadServiceProtocol!
+    // Have to be concrete types if used with @EnvironmentObject 
+    var squadService: SquadService!
     var pilotStateService: PilotStateService!
     
     func registerServices(moc: NSManagedObjectContext) {

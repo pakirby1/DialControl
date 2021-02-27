@@ -21,6 +21,9 @@ extension SquadData {
     @NSManaged public var json: String?
     @NSManaged public var name: String?
     @NSManaged public var favorite: Bool
+    @NSManaged public var engaged: Bool
+    @NSManaged public var revealed: Bool
+    @NSManaged public var firstPlayer: Bool
     
     /// way easier to use:
 //    @NSManaged public var pilotState: Set<PilotState>

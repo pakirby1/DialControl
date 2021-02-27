@@ -362,7 +362,14 @@ struct FactionSquadCard: View {
         }
     }
     
-    
+    @ViewBuilder
+    private var firstPlayerView: some View {
+        if self.viewModel.squadData.firstPlayer == true {
+            firstPlayerSymbol
+        } else {
+            EmptyView()
+        }
+    }
     
     var squadButton: some View {
         Button(action: {
@@ -374,7 +381,7 @@ struct FactionSquadCard: View {
                 pointsView.offset(x: -310, y: 0)
                 damagedPointsView.offset(x: -230, y: 0)
                 favoriteView.offset(x: 300, y: 0)
-//                firstPlayerSymbol.offset(x: 260, y: 0)
+                firstPlayerView.offset(x: 260, y: 0)
                 nameView
                 deleteButton.offset(x: 350, y: 0)
             }

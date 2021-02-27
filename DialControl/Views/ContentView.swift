@@ -79,6 +79,7 @@ class ViewFactory: ObservableObject {
             return AnyView(SquadView(viewModel: viewModel)
                 .environmentObject(self)
                 .environmentObject(self.diContainer.pilotStateService)
+                .environmentObject(self.diContainer.squadService)
                 )
             
         case .shipViewNew(let shipPilot, let squad):

@@ -18,7 +18,7 @@ class SquadViewModel : ObservableObject {
     var squad: Squad
     var squadData: SquadData
     @Published var displayAsList: Bool = true
-    
+
     init(squad: Squad,
          squadData: SquadData)
     {
@@ -38,10 +38,13 @@ struct SquadView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @ObservedObject var viewModel: SquadViewModel
     @EnvironmentObject var pilotStateService: PilotStateService
+    @EnvironmentObject var squadService: SquadService
     @State var isFirstPlayer: Bool = false
     
     init(viewModel: SquadViewModel) {
         self.viewModel = viewModel
+        
+        
     }
     
     var header: some View {
@@ -52,10 +55,22 @@ struct SquadView: View {
                 Text("< Faction Squad List")
             }
             
-            Toggle(isOn: self.$isFirstPlayer) {
+//            Toggle(isOn: self.$isFirstPlayer) {
+//                Text("First Player")
+//                    .frame(maxWidth: .infinity, alignment: .trailing)
+//            }
+            
+            Toggle(isOn: self.$isFirstPlayer.didSet{
+                // Hack because swift thinks I don't want to perform
+                // an assignment (=) vs. a boolean check (==)
+                let x = $0
+                self.viewModel.squadData.firstPlayer = x
+                self.squadService.updateSquad(squadData: self.viewModel.squadData)
+            }){
                 Text("First Player")
                     .frame(maxWidth: .infinity, alignment: .trailing)
             }
+            
         }.padding(10)
     }
     
@@ -77,6 +92,9 @@ struct SquadView: View {
             Alert(title: Text("Error"),
                   message: Text(viewModel.alertText),
                   dismissButton: .default(Text("OK")))
+        }.onAppear() {
+            self.isFirstPlayer = self.viewModel.squadData.firstPlayer
+//            _isFirstPlayer = State(initialValue: self.viewModel.squadData.firstPlayer)
         }
     }
 }

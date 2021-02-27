@@ -20,7 +20,7 @@ struct ResetButton: View {
             HStack {
                 Image(uiImage: UIImage(named: "Reset") ?? UIImage())
             }
-            .padding(15)
+            .padding(5)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.white, lineWidth: 1)

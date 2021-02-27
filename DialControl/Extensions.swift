@@ -16,7 +16,7 @@ extension Binding {
     /// Example:
     ///
     ///     Slider(value: $amount.didSet { print($0) }, in: 0...10)
-    func didSet(execute: @escaping (Value) ->Void) -> Binding {
+    func didSet(execute: @escaping (Value) -> Void) -> Binding {
         return Binding(
             get: {
                 return self.wrappedValue
