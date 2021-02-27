@@ -43,8 +43,6 @@ struct SquadView: View {
     
     init(viewModel: SquadViewModel) {
         self.viewModel = viewModel
-        
-        
     }
     
     var header: some View {
@@ -84,6 +82,7 @@ struct SquadView: View {
                           displayAsList: self.viewModel.displayAsList, isFirstPlayer: $isFirstPlayer)
                 .environmentObject(viewFactory)
                 .environmentObject(self.pilotStateService)
+                .environmentObject(self.squadService)
                 .onAppear() {
                     print("SquadView.onAppear")
                 }
@@ -94,7 +93,6 @@ struct SquadView: View {
                   dismissButton: .default(Text("OK")))
         }.onAppear() {
             self.isFirstPlayer = self.viewModel.squadData.firstPlayer
-//            _isFirstPlayer = State(initialValue: self.viewModel.squadData.firstPlayer)
         }
     }
 }
@@ -163,6 +161,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     let theme: Theme = WestworldUITheme()
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var pilotStateService: PilotStateService
+    @EnvironmentObject var squadService: SquadService
     @State var shipPilots: [ShipPilot] = []
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
@@ -297,6 +296,8 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         
         let engage = Button(action: {
             self.activationOrder.toggle()
+            self.squadData.engaged = self.activationOrder
+            self.squadService.updateSquad(squadData: self.squadData)
         }) {
             Text(self.activationOrder ? "Engage" : "Activate").foregroundColor(Color.white)
         }
@@ -310,7 +311,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
             self.revealAllDials.toggle()
             
             print("PAK_DialStatus_New Button: \(self.revealAllDials)")
-            
+        
             self.updateAllDials()
         }) {
             Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
@@ -384,6 +385,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         .onAppear(perform: {
             print("PAK_DialStatus SquadCardView.onAppear()")
             self.loadShips()
+            self.activationOrder = self.squadData.engaged
         })
     }
     
