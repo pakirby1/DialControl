@@ -193,6 +193,8 @@ class ShipViewModel: ObservableObject {
             case .upgradeCharge(var upgrade):
 //                upgrade.updateCharge(active: active, inactive: inactive)
                 updateUpgradeCharge(upgrade: upgrade, active: active, inactive: inactive)
+            case .selectedSide(var upgrade, let side):
+                updateUpgradeSelectedSide(upgrade: upgrade, selectedSide: side)
             case .reset:
                 reset()
             }
@@ -214,6 +216,8 @@ class ShipViewModel: ObservableObject {
                 updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.selectedManeuver(maneuver)))
             case .upgradeCharge(var upgrade):
                 upgrade.updateCharge(active: active, inactive: inactive)
+            case .selectedSide(let side):
+                reset()
             case .reset:
                 reset()
             }
@@ -229,6 +233,27 @@ class ShipViewModel: ObservableObject {
             upgrade.change(update: { newUpgrade in
                 print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
                 newUpgrade.updateCharge(active: active, inactive: inactive)
+                
+                // the old upgrade state is in the pilotStateData, so we need
+                // to replace the old upgrade state with the new upgrade state
+                // in $0
+                if let upgrades = self.pilotStateData.upgradeStates {
+                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
+                        self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
+                    }
+                }
+                
+                self.updateState(newData: self.pilotStateData)
+            })
+    }
+    
+    func updateUpgradeSelectedSide(upgrade: UpgradeStateData,
+                                   selectedSide: Bool)
+    {
+        print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
+            upgrade.change(update: { newUpgrade in
+                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
+                newUpgrade.updateSelectedSide(side: selectedSide ? 1 : 0)
                 
                 // the old upgrade state is in the pilotStateData, so we need
                 // to replace the old upgrade state with the new upgrade state
@@ -346,6 +371,7 @@ enum PilotStatePropertyType {
     case selectedManeuver(String)
     case upgradeCharge(UpgradeStateData)
     case reset
+    case selectedSide(UpgradeStateData, Bool)
 }
 
 enum PilotStatePropertyType_New {
@@ -579,6 +605,8 @@ struct ShipView: View {
     }
     
     var upgradeCardImage: AnyView {
+        let emptyView = AnyView(EmptyView())
+        
         var ret = AnyView(ImageView(url: self.imageOverlayUrl,
               shipViewModel: self.viewModel,
               label: "upgrade")
@@ -586,7 +614,21 @@ struct ShipView: View {
         .environmentObject(viewModel))
         
         if (self.imageOverlayUrlBack != "") {
-            ret = AnyView(UpgradeCardFlipView(frontUrl: self.imageOverlayUrl, backUrl: self.imageOverlayUrlBack, shipViewModel: self.viewModel))
+            guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
+            
+            guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
+            
+            ret =
+                UpgradeCardFlipView(
+                    side: (upgradeState.selected_side == 0) ? false : true,
+                    frontUrl: self.imageOverlayUrl,
+                    backUrl: self.imageOverlayUrlBack,
+                    viewModel: self.viewModel) { side in
+                        self.viewModel.update(
+                            type: PilotStatePropertyType.selectedSide(upgradeState,
+                                                                      side), active: -1, inactive: -1
+                        )
+                }.eraseToAnyView()
         }
         
         return ret
@@ -619,6 +661,7 @@ extension ShipView {
                 if self.viewModel.pilotStateData.isDestroyed {
                     self.viewModel.updateDialStatus(status: .destroyed)
                 } else {
+//                    self.viewModel.updateSelectedManeuver(maneuver: "")
                     self.viewModel.updateDialStatus(status: .set)
                 }
             }
@@ -681,7 +724,9 @@ extension ShipView {
                         }
                         .frame(width: 400.0,height:400)
                         
-                        setDialButton
+                        if (self.viewModel.currentManeuver != "") {
+                            setDialButton
+                        }
                     }
                 }
         }

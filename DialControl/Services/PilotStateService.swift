@@ -110,15 +110,15 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
             
             // for every upgrade with sides[].item[0].charges.value > 1
             allUpgrades.forEach{ upgrade in
-                if let charge = upgrade.sides[0].charges?.value {
-                    // create an UpgradeStateData
-                    ret.append(UpgradeStateData(force_active: nil,
-                                                force_inactive: nil,
-                                                charge_active: charge,
-                                                charge_inactive: 0,
-                                                selected_side: 0,
-                                                xws: upgrade.xws))
-                }
+                let charge_active : Int? = upgrade.sides[0].charges?.value
+                
+                // create an UpgradeStateData
+                ret.append(UpgradeStateData(force_active: nil,
+                                            force_inactive: nil,
+                                            charge_active: charge_active,
+                                            charge_inactive: 0,
+                                            selected_side: 0,
+                                            xws: upgrade.xws))
             }
                 
             return ret

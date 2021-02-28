@@ -10,6 +10,12 @@ import Foundation
 import SwiftUI
 import Combine
 
+extension View {
+    func eraseToAnyView() -> AnyView {
+        AnyView(self)
+    }
+}
+
 extension Binding {
     /// Execute block when value is changed.
     ///

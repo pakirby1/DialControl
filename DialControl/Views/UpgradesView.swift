@@ -136,11 +136,26 @@ struct UpgradeCardFlipView : View {
     @State var flipped = false
     let frontUrl: String
     let backUrl: String
-    let shipViewModel: ShipViewModel
+    let viewModel: ShipViewModel
+    let update: (Bool) -> Void
+    
+    /// side: true (front), false (back)
+    init(side: Bool,
+         frontUrl: String,
+         backUrl: String,
+         viewModel: ShipViewModel,
+         update: @escaping (Bool) -> Void)
+    {
+        _flipped = State(initialValue: side)
+        self.frontUrl = frontUrl
+        self.backUrl = backUrl
+        self.viewModel = viewModel
+        self.update = update
+    }
     
     var body: some View {
         ImageView(url: self.flipped ? self.frontUrl : self.backUrl,
-              shipViewModel: self.shipViewModel,
+              shipViewModel: self.viewModel,
               label: "upgrade")
             .rotation3DEffect(self.flipped ? Angle(degrees: 360): Angle(degrees:
                 0),
@@ -148,8 +163,9 @@ struct UpgradeCardFlipView : View {
             .animation(.default) // implicitly applying animation
             .onTapGesture {
                 self.flipped.toggle()
+                self.update(self.flipped)
             }
             .frame(width: 500.0, height:350)
-            .environmentObject(self.shipViewModel)
+            .environmentObject(self.viewModel)
     }
 }

@@ -691,6 +691,8 @@ struct PilotDetailsView: View {
     var dialViewNew: some View {
         let status = self.viewModel.shipPilot.pilotStateData!.dial_status
         
+        print("\(Date()) PAK_DialStatus dialViewNew \(self.viewModel.shipPilot.id) \(self.viewModel.shipPilot.pilotName) \(status)")
+        
         return buildManeuverView(dialStatus: status)
             .padding(10)
 //            .rotation3DEffect(isFlipped ? Angle(degrees: 360): Angle(degrees: 0),
