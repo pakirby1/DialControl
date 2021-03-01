@@ -10,6 +10,13 @@ import Foundation
 import SwiftUI
 import Combine
 
+var settingsSymbol: some View {
+    return Image(systemName: "gear")
+        .font(.system(size: 30.0, weight: .bold))
+        .foregroundColor(Color.white)
+        .eraseToAnyView()
+}
+
 var firstPlayerSymbol: some View {
     Image(uiImage: UIImage(named: "FirstPlayer") ?? UIImage())
 }

@@ -257,6 +257,7 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
     func favoriteTapped() {
         squadData.favorite.toggle()
         updateCallback(squadData)
+        loadShips()
     }
     
     func deleteSquad() {
