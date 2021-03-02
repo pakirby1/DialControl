@@ -214,6 +214,9 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
         self.squadData = squadData
         self.deleteCallback = deleteCallback
         self.updateCallback = updateCallback
+        
+        // Hack to fix damagedPoints being 0 after favorite tapped on squad
+        self.loadShips()
     }
     
     private func loadSquad(jsonString: String) -> Squad {
@@ -245,6 +248,7 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
     }
     
     func loadShips() {
+        logMessage("damagedPoints FactionSquadCardViewModel.loadShips() ")
         self.shipPilots = SquadCardViewModel.getShips(
             squad: self.squad,
             squadData: self.squadData)
@@ -255,6 +259,7 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
     }
     
     func favoriteTapped() {
+        logMessage("damagedPoints FactionSquadCardViewModel.favoriteTapped()")
         squadData.favorite.toggle()
         updateCallback(squadData)
         loadShips()
@@ -271,9 +276,11 @@ struct FactionSquadCard: View {
     let symbolSize: CGFloat = 36.0
     @State var displayDeleteConfirmation: Bool = false
     @State var refreshView: Bool = false
+    let printer: DeallocPrinter
     
     init(viewModel: FactionSquadCardViewModel) {
         self.viewModel = viewModel
+        self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
     }
     
     var background: some View {
@@ -315,6 +322,7 @@ struct FactionSquadCard: View {
     
     var favoriteView: some View {
         Button(action: {
+            logMessage("damagedPoints favoriteTapped")
             self.viewModel.favoriteTapped()
         }) {
             Image(systemName: self.viewModel.squadData.favorite ? "star.fill" :
@@ -410,6 +418,7 @@ struct FactionSquadCard: View {
             // view body needs to be recreated after onAppear
             // This can be done by updating an @State property, or
             // observing an @Published property.
+            print("\(Date()) damagedPoints FactionSquadCard.onAppear()")
             self.viewModel.loadShips()
         }
     }

@@ -10,6 +10,10 @@ import Foundation
 import SwiftUI
 import Combine
 
+func logMessage(_ message: String) {
+    print("\(Date()) \(message)")
+}
+
 var settingsSymbol: some View {
     return Image(systemName: "gear")
         .font(.system(size: 30.0, weight: .bold))

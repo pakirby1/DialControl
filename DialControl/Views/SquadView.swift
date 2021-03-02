@@ -390,6 +390,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     }
     
     func loadShips() {
+        logMessage("damagedPoints SquadCardView.loadShips")
         print("PAK_DialStatus SquadCardView.loadShips()")
         self.shipPilots = SquadCardViewModel.getShips(
             squad: self.squad,
