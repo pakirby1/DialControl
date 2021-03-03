@@ -88,9 +88,11 @@ struct FactionSquadList: View {
     @ObservedObject var viewModel: FactionSquadListViewModel
     @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-
+    let printer: DeallocPrinter
+    
     init(viewModel: FactionSquadListViewModel) {
         self.viewModel = viewModel
+        self.printer = DeallocPrinter("damagedPoints FactionSquadList")
     }
     
     var body: some View {

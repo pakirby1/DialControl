@@ -40,10 +40,13 @@ struct SquadView: View {
     @EnvironmentObject var pilotStateService: PilotStateService
     @EnvironmentObject var squadService: SquadService
     @State var isFirstPlayer: Bool = false
+    @State private var displayResetAllConfirmation: Bool = false
     
     init(viewModel: SquadViewModel) {
         self.viewModel = viewModel
     }
+    
+    
     
     var header: some View {
         HStack {
@@ -52,12 +55,7 @@ struct SquadView: View {
             }) {
                 Text("< Faction Squad List")
             }
-            
-//            Toggle(isOn: self.$isFirstPlayer) {
-//                Text("First Player")
-//                    .frame(maxWidth: .infinity, alignment: .trailing)
-//            }
-            
+           
             Toggle(isOn: self.$isFirstPlayer.didSet{
                 // Hack because swift thinks I don't want to perform
                 // an assignment (=) vs. a boolean check (==)
@@ -75,7 +73,7 @@ struct SquadView: View {
     /// Don't pass in the SquadViewModel directly to SquadCardView since we don't need
     /// the alertText, etc. from the view model for use in the SquadCardView
     var body: some View {
-        VStack {
+        return VStack {
             header
             SquadCardView(squad: viewModel.squad,
                           squadData: viewModel.squadData,
@@ -86,12 +84,10 @@ struct SquadView: View {
                 .onAppear() {
                     print("SquadView.onAppear")
                 }
-//            Spacer()
-        }.alert(isPresented: $viewModel.showAlert) {
-            Alert(title: Text("Error"),
-                  message: Text(viewModel.alertText),
-                  dismissButton: .default(Text("OK")))
-        }.onAppear() {
+            
+            
+        }
+        .onAppear() {
             self.isFirstPlayer = self.viewModel.squadData.firstPlayer
         }
     }
@@ -166,6 +162,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
     @Binding var isFirstPlayer: Bool
+    @State private var displayResetAllConfirmation: Bool = false
     
     var emptySection: some View {
         Section {
@@ -318,11 +315,18 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         }
         
         let reset = Button(action: {
-            self.resetAllShips()
+            self.displayResetAllConfirmation = true
         }) {
             Text("Reset All")
                 .font(.title)
                 .foregroundColor(Color.red)
+        }.alert(isPresented: $displayResetAllConfirmation) {
+            Alert(
+                title: Text("Reset All"),
+                message: Text("Reset All Squads"),
+                primaryButton: Alert.Button.default(Text("Reset"), action: { self.resetAllShips() }),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
+            )
         }
         
         let damaged = Text("\(damagedPoints)")
@@ -345,23 +349,23 @@ struct SquadCardView: View, DamagedSquadRepresenting {
                 // Header
                 HStack {
                     points
-                    
+
                     Spacer()
-                    
+
                     engage
-                    
+
                     Spacer()
-                    
+
                     title
-                    
+
                     firstPlayer
-                    
+
                     Spacer()
-                    
+
                     hide
-                    
+
                     Spacer()
-                    
+
                     damaged
                 }.padding(20)
 
@@ -373,7 +377,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
                 }
                 
                 // Footer
-                Divider()
+                CustomDivider()
                 HStack {
                     Spacer()
                     reset
@@ -382,11 +386,11 @@ struct SquadCardView: View, DamagedSquadRepresenting {
             }
             .multilineTextAlignment(.center)
         }
-        .onAppear(perform: {
+        .onAppear{
             print("PAK_DialStatus SquadCardView.onAppear()")
             self.loadShips()
             self.activationOrder = self.squadData.engaged
-        })
+        }
     }
     
     func loadShips() {

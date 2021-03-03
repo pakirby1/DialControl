@@ -10,6 +10,92 @@ import Foundation
 import SwiftUI
 import Combine
 
+public extension View {
+    func myAlert(isPresented: Binding<Bool>,
+               title: String,
+               message: String? = nil,
+               dismissButton: Alert.Button? = nil) -> some View
+    {
+
+        alert(isPresented: isPresented) {
+            Alert(title: Text(title),
+                  message: {
+                    if let message = message { return Text(message) }
+                    else { return nil } }(),
+                  dismissButton: dismissButton)
+        }
+    }
+}
+
+/*
+ .alert(isPresented: $displayDeleteAllConfirmation) {
+     Alert(title: Text("Delete"),
+           message: Text("All Squads?"),
+         primaryButton: Alert.Button.default(Text("Delete"), action: {
+             _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squadData: $0) }
+         }),
+         secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
+             print("Cancelled Delete")
+         })
+     )
+ }
+ */
+struct LongPressAlertModifier: ViewModifier {
+//    @State var showAlert = false
+    @Binding var isPresented: Bool
+    let message: String
+
+    func body(content: Content) -> some View {
+        content
+//            .onLongPressGesture {
+//                self.showAlert = true
+//            }
+            .alert(isPresented: $isPresented) {
+                Alert(title: Text("Alert"), message: Text(message), dismissButton: .default(Text("OK!")))
+            }
+    }
+}
+
+extension View {
+    func addLongPressAlert(_ isPresented: Binding<Bool>, _ message: String) -> some View {
+        self.modifier(LongPressAlertModifier(isPresented: isPresented, message: message))
+    }
+}
+
+struct AlertModifier: ViewModifier {
+    struct Properties {
+        let message: String
+        let title: String
+        let primaryButtonLabel: String
+        let primaryButtonAction: () -> Void
+        let secondaryButtonLabel: String
+        let secondaryButtonAction: () -> Void
+    }
+    
+    @Binding var showAlert: Bool
+    let properties: Properties
+    
+    func body(content: Content) -> some View {
+        content
+            .alert(isPresented: $showAlert) {
+                Alert(title: Text(properties.title),
+                      message: Text(properties.message),
+                      primaryButton: Alert.Button.default(Text(properties.primaryButtonLabel),
+                                                          action: properties.primaryButtonAction),
+                      secondaryButton: Alert.Button.default(Text(properties.secondaryButtonLabel),
+                                                            action: properties.secondaryButtonAction)
+                    )
+            }
+    }
+}
+
+extension View {
+    func addAlert(_ showAlert: Binding<Bool>, properties: AlertModifier.Properties) -> some View {
+        self.modifier(AlertModifier(showAlert: showAlert,
+                                    properties: properties))
+    }
+}
+
 func logMessage(_ message: String) {
     print("\(Date()) \(message)")
 }
