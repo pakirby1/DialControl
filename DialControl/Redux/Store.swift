@@ -21,7 +21,7 @@ enum MyAppAction {
 }
 
 // MARK: - Redux Store
-func pakAppReducer(
+func myAppReducer(
     state: inout MyAppState,
     action: MyAppAction,
     environment: World
@@ -51,15 +51,15 @@ typealias Reducer<State, Action, Environment> =
 class Store<State, Action, Environment> : ObservableObject {
     @Published private(set) var state: State
     private let environment: Environment
-//    private let reducer: Reducer<State, Action, Environment>
+    private let reducer: Reducer<State, Action, Environment>
     private var cancellables = Set<AnyCancellable>()
     
     init(state: State,
-//         reducer: @escaping Reducer<State, Action, Environment>,
+         reducer: @escaping Reducer<State, Action, Environment>,
          environment: Environment)
     {
         self.state = state
-//        self.reducer = reducer
+        self.reducer = reducer
         self.environment = environment
     }
 }
@@ -82,12 +82,12 @@ extension Store {
 }
 
 extension Store {
-//    func send(_ action: Action) {
-//        let nextAction = reducer(&state, action, environment)
-//
-//        nextAction
-//            .receive(on: DispatchQueue.main)
-//            .sink(receiveValue: send)
-//            .store(in: &cancellables)
-//    }
+    func send(_ action: Action) {
+        let nextAction = reducer(&state, action, environment)
+
+        nextAction
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: send)
+            .store(in: &cancellables)
+    }
 }

@@ -37,6 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
          */
         let store: Store<MyAppState, MyAppAction, World> = MyAppStore(
             state: MyAppState.init(),
+            reducer: myAppReducer,
             environment: World(service: diContainer.squadService)
         )
         
