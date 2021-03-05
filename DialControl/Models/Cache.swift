@@ -5,37 +5,9 @@
 //  Created by Phil Kirby on 6/21/20.
 //  Copyright © 2020 SoftDesk. All rights reserved.
 //
-
 import Foundation
-import Combine
 import CoreData
-
-// MARK: - Redux Store
-class Store : ObservableObject {
-    @Published private(set) var state: AppState
-    let environment: AppEnvironment
-    var cancellables = Set<AnyCancellable>()
-    
-    init(state: AppState, environment: AppEnvironment) {
-        self.state = state
-        self.environment = environment
-    }
-    
-    func send(action: ActionProtocol) {
-        action.execute(state: &state, environment: environment).sink(
-            receiveCompletion: { completion in
-                switch(completion) {
-                    case .finished:
-                        print("finished")
-                    case .failure:
-                        print("failure")
-                }
-            },
-            receiveValue: { nextAction in
-                self.send(action: nextAction)
-            }).store(in: &cancellables)
-    }
-}
+import Combine
 
 // MARK: - Local Store
 protocol ILocalStore {

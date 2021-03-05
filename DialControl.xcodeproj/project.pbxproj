@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AE028C57249F81B200DF689B /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C56249F81B200DF689B /* Store.swift */; };
+		AE028C57249F81B200DF689B /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C56249F81B200DF689B /* Cache.swift */; };
 		AE028C59249F825100DF689B /* NetworkCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C58249F825100DF689B /* NetworkCache.swift */; };
 		AE028C5B249F82AF00DF689B /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C5A249F82AF00DF689B /* Logging.swift */; };
 		AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AE028C5D24A2C6D300DF689B /* DialControl.xcdatamodeld */; };
@@ -61,6 +61,7 @@
 		AEA192DA25C2DEF80033ACBD /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA192D925C2DEF80033ACBD /* State.swift */; };
 		AEA192DC25C2DFC30033ACBD /* Action.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA192DB25C2DFC30033ACBD /* Action.swift */; };
 		AEA192DE25C2E2E20033ACBD /* LinkedViewNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA192DD25C2E2E20033ACBD /* LinkedViewNew.swift */; };
+		AEA35D5025F251D4007A2D36 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA35D4F25F251D3007A2D36 /* Store.swift */; };
 		AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */; };
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
 		AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrowView.swift */; };
@@ -102,7 +103,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		AE028C56249F81B200DF689B /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		AE028C56249F81B200DF689B /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		AE028C58249F825100DF689B /* NetworkCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCache.swift; sourceTree = "<group>"; };
 		AE028C5A249F82AF00DF689B /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		AE028C5E24A2C6D300DF689B /* DialControl.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DialControl.xcdatamodel; sourceTree = "<group>"; };
@@ -161,6 +162,7 @@
 		AEA192D925C2DEF80033ACBD /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		AEA192DB25C2DFC30033ACBD /* Action.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Action.swift; sourceTree = "<group>"; };
 		AEA192DD25C2E2E20033ACBD /* LinkedViewNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedViewNew.swift; sourceTree = "<group>"; };
+		AEA35D4F25F251D3007A2D36 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSquadList.swift; sourceTree = "<group>"; };
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrowView.swift; sourceTree = "<group>"; };
@@ -284,7 +286,7 @@
 				AE15E78A241D00120002F696 /* Ship.swift */,
 				AE2D80ED242780FC00248CA4 /* squad.swift */,
 				AEF65F182445D3B4009D6BDC /* Upgrade.swift */,
-				AE028C56249F81B200DF689B /* Store.swift */,
+				AE028C56249F81B200DF689B /* Cache.swift */,
 				AE028C58249F825100DF689B /* NetworkCache.swift */,
 				AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */,
 				AE1DF8F524B73D1900B84D38 /* JSONSerialization.swift */,
@@ -321,6 +323,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AEA35D4E25F251BB007A2D36 /* Redux */,
 				AE1DF8F224B5E32800B84D38 /* Shapes */,
 				AEC1242E24A32CC500C0599A /* Services */,
 				AE028C5C24A2C6B700DF689B /* CoreData */,
@@ -370,6 +373,14 @@
 				AE4D58E923F8087E00C66136 /* Info.plist */,
 			);
 			path = DialControlUITests;
+			sourceTree = "<group>";
+		};
+		AEA35D4E25F251BB007A2D36 /* Redux */ = {
+			isa = PBXGroup;
+			children = (
+				AEA35D4F25F251D3007A2D36 /* Store.swift */,
+			);
+			path = Redux;
 			sourceTree = "<group>";
 		};
 		AEAD19F32404F32C0020FABC /* Fonts */ = {
@@ -556,7 +567,7 @@
 				AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */,
 				AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */,
 				AEA192DA25C2DEF80033ACBD /* State.swift in Sources */,
-				AE028C57249F81B200DF689B /* Store.swift in Sources */,
+				AE028C57249F81B200DF689B /* Cache.swift in Sources */,
 				AEEB546A24F11F3C0050913C /* SquadService.swift in Sources */,
 				AE1DF8F424B5E34500B84D38 /* UpArrowShape.swift in Sources */,
 				AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */,
@@ -582,6 +593,7 @@
 				AEF5677025DFCD17006DCD4C /* ShipService.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
+				AEA35D5025F251D4007A2D36 /* Store.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
 				AEF5677225DFE0AD006DCD4C /* ResetButton.swift in Sources */,
 				AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */,

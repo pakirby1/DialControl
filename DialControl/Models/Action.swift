@@ -120,18 +120,18 @@ struct ChargeAction : ActionProtocol {
     }
 }
 
-protocol ViewPropertyGenerating: class {
-    associatedtype Properties
-    var viewProperties: Properties { get set }
-    var store: Store { get }
-    
-    func buildViewProperties(state: AppState) -> Properties
-}
-
-extension ViewPropertyGenerating {
-    func configureViewProperties() -> AnyCancellable {
-        return store.$state.sink { state in
-            self.viewProperties = self.buildViewProperties(state: state)
-        }
-    }
-}
+//protocol ViewPropertyGenerating: class {
+//    associatedtype Properties
+//    var viewProperties: Properties { get set }
+////    var store: Store<AppState, Reducer<AppState, AppAction>, World> { get }
+//    
+//    func buildViewProperties(state: AppState) -> Properties
+//}
+//
+//extension ViewPropertyGenerating {
+//    func configureViewProperties() -> AnyCancellable {
+//        return store.$state.sink { state in
+//            self.viewProperties = self.buildViewProperties(state: state)
+//        }
+//    }
+//}

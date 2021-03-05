@@ -31,10 +31,20 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let diContainer = DIContainer()
         diContainer.registerServices(moc: moc)
         
+        // Redux Store
+        /*
+         Cannot convert value of type 'Reducer<MyAppState, MyAppAction, World>' (aka '(inout MyAppState, MyAppAction, World) -> AnyPublisher<MyAppAction, Never>') to expected argument type '(inout _, _, _) -> AnyPublisher<_, Never>'
+         */
+        let store: Store<MyAppState, MyAppAction, World> = MyAppStore(
+            state: MyAppState.init(),
+            environment: World(service: diContainer.squadService)
+        )
+        
         let viewFactory = ViewFactory(moc: moc, diContainer: diContainer)
         let contentView = ContentView()
             .environment(\.managedObjectContext, moc)
             .environmentObject(viewFactory)
+            .environmentObject(store)
 
         shipLookupTable = ShipLookupBuilder.buildShipLookupTable()
         print(shipLookupTable)

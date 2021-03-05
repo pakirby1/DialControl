@@ -104,7 +104,7 @@ struct TokenView: View {
 }
 
 class LinkedViewModel : ObservableObject {
-    let store: Store
+//    let store: Store
     let pilotIndex: Int
     @Published var viewProperties = ViewProperties(active: 0, inactive: 0)
     let type: StatButtonType
@@ -112,26 +112,26 @@ class LinkedViewModel : ObservableObject {
     let shipPilot: ShipPilot
     
     // pilotIndex = ShipViewModel.shipPilot.pilotState.pilotIndex
-    init(store: Store, pilotIndex: Int, type: StatButtonType, shipPilot: ShipPilot) {
-        self.store = store
+    init(pilotIndex: Int, type: StatButtonType, shipPilot: ShipPilot) {
+//        self.store = store
         self.pilotIndex = pilotIndex
         self.type = type
         self.shipPilot = shipPilot
-        self.cancellable = configureViewProperties()
+//        self.cancellable = configureViewProperties()
     }
     
     func spend(type: StatButtonType) {
         // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
         // to the Store
         let action = ChargeAction(pilotIndex: pilotIndex, type: .spend(type))
-        store.send(action: action)
+//        store.send(action: action)
     }
     
     func recover(type: StatButtonType) {
         // send a ChargeAction(type: ChargeActionType.spend(StatButtonType)
         // to the Store
         let action = ChargeAction(pilotIndex: pilotIndex, type: .recover(type))
-        store.send(action: action)
+//        store.send(action: action)
     }
 }
 
@@ -142,16 +142,16 @@ extension LinkedViewModel {
     }
 }
 
-extension LinkedViewModel : ViewPropertyGenerating {
-    func buildViewProperties(state: AppState) -> LinkedViewModel.ViewProperties {
-        // get the psd from the store by pilotIndex & squadIndex
-        guard let psd = state.squadState.shipPilots[pilotIndex].pilotStateData else {
-            return ViewProperties(active: 0, inactive: 0)
-        }
-        
-        let active: Int = psd.getActive(type: type)
-        let inactive: Int = psd.getInactive(type: type)
-        
-        return ViewProperties(active: active, inactive: inactive)
-    }
-}
+//extension LinkedViewModel : ViewPropertyGenerating {
+//    func buildViewProperties(state: AppState) -> LinkedViewModel.ViewProperties {
+//        // get the psd from the store by pilotIndex & squadIndex
+//        guard let psd = state.squadState.shipPilots[pilotIndex].pilotStateData else {
+//            return ViewProperties(active: 0, inactive: 0)
+//        }
+//
+//        let active: Int = psd.getActive(type: type)
+//        let inactive: Int = psd.getInactive(type: type)
+//
+//        return ViewProperties(active: active, inactive: inactive)
+//    }
+//}
