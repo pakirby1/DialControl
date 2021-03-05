@@ -12,7 +12,7 @@ import CoreData
 
 // MARK:- MyAppState
 struct MyAppState {
-    let squadList: [SquadData] = []
+    var squadList: [SquadData] = []
 }
 
 // MARK:- MyAppAction
@@ -27,7 +27,9 @@ func myAppReducer(
     environment: World
 ) -> AnyPublisher<MyAppAction, Never>
 {
-//    switch action {
+    switch action {
+        case let .test:
+            state.squadList = []
 //    case let .setSearchResults(repos):
 //        state.searchResult = repos
 //    case let .search(query):
@@ -36,7 +38,7 @@ func myAppReducer(
 //            .replaceError(with: [])
 //            .map { AppAction.setSearchResults(repos: $0) }
 //            .eraseToAnyPublisher()
-//    }
+    }
     return Empty().eraseToAnyPublisher()
 }
 
