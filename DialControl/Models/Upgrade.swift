@@ -490,13 +490,88 @@ struct Grant: Codable {
     }
 }
 
+// MARK:- LinkedGrantValue
+/*
+ "value": {
+   "type": "Focus",
+   "difficulty": "White",
+   "linked": { "type": "Coordinate", "difficulty": "Purple" }
+ }
+ */
+struct LinkedGrantValue: Codable {
+    let type: String
+    let difficulty: String
+    let linked: GrantValue
+}
+
+// MARK:- LinkedActionGrant
+/*
+ {
+   "type": "action",
+   "value": {
+     "type": "Focus",
+     "difficulty": "White",
+     "linked": { "type": "Coordinate", "difficulty": "Purple" }
+   }
+ }
+ */
+struct LinkedActionGrant : Codable {
+    let type: String
+    let value: LinkedGrantValue
+}
+
+extension LinkedActionGrant: CustomStringConvertible {
+    var description: String {
+        return "type: \(type) value: { \(value) }"
+    }
+}
+
+// MARK:- ForceGrant
+/*
+ {
+   "type": "force",
+   "value": { "side": ["dark"] },
+   "amount": 1
+ }
+ */
+struct ForceGrant : Codable {
+    let type: String
+    let value: ForceValue
+    let amount: Int
+}
+
+struct ForceValue : Codable {
+    let side: [String]
+}
+
+extension ForceValue : CustomStringConvertible {
+    var description: String {
+        return "side: \(side)\n"
+    }
+}
+
+extension ForceGrant : CustomStringConvertible {
+    var description: String {
+        return "type: \(type) value: \(value) amount: \(amount)\n"
+    }
+}
+
+// MARK:- GrantElement
 enum GrantElement : Codable {
     case action(ActionGrant)
     case slot(SlotGrant)
     case stat(StatGrant)
+    case force(ForceGrant)
+    case linkedAction(LinkedActionGrant)
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        
+        if let x = try? container.decode(LinkedActionGrant.self) {
+            self = .linkedAction(x)
+            return
+        }
+        
         if let x = try? container.decode(ActionGrant.self) {
             self = .action(x)
             return
@@ -504,6 +579,11 @@ enum GrantElement : Codable {
         
         if let x = try? container.decode(StatGrant.self) {
             self = .stat(x)
+            return
+        }
+        
+        if let x = try? container.decode(ForceGrant.self) {
+            self = .force(x)
             return
         }
         
@@ -532,6 +612,10 @@ enum GrantElement : Codable {
             try container.encode(x)
         case .stat(let x):
             try container.encode(x)
+        case .force(let x):
+            try container.encode(x)
+        case .linkedAction(let x):
+            try container.encode(x)
         }
     }
 }
@@ -545,6 +629,10 @@ extension GrantElement: CustomStringConvertible {
                 return slotGrant.description
             case .stat(let statGrant) :
                 return statGrant.description
+            case .force(let forceGrant) :
+                return forceGrant.description
+            case .linkedAction(let linkedActionGrant) :
+                return linkedActionGrant.description
         }
     }
 }
