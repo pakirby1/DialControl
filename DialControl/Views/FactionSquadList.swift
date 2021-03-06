@@ -28,35 +28,8 @@ class FactionSquadListViewModel : ObservableObject {
         self.squadService = squadService
     }
     
-    func loadSquadsList() {
-        func initWithDummyNames() {
-            self.squadNames = ["Worlds Champion 2019",
-                               "SaiDuchessTurr3Academies",
-                               "VaderSoontirEcho",
-                               "VagabondMaarekFifthBrotherTurr"]
-        }
-        
-        func loadSquadsListFromCoreData() {
-            do {
-                let fetchRequest = SquadData.fetchRequest()
-                let fetchedObjects = try self.moc.fetch(fetchRequest) as! [SquadData]
-                
-                self.squadDataList.removeAll()
-                
-                fetchedObjects.forEach{ squad in
-                    self.squadDataList.append(squad)
-                }
-                
-                self.numSquads = self.squadDataList.count
-            } catch {
-                print(error)
-            }
-        }
-        
-//        initWithDummyNames()
-        loadSquadsListFromCoreData()
-    }
     
+
     func deleteSquad(squadData: SquadData) {
         self.squadService.deleteSquad(squadData: squadData)
         refreshSquadsList()
@@ -70,7 +43,15 @@ class FactionSquadListViewModel : ObservableObject {
     func refreshSquadsList() {
         let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
         
-        self.loadSquadsList()
+        self.squadService.loadSquadsList() { squads in
+            self.squadDataList.removeAll()
+
+            squads.forEach{ squad in
+                self.squadDataList.append(squad)
+            }
+
+            self.numSquads = self.squadDataList.count
+        }
         
         if showFavoritesOnly {
             self.squadDataList = self.squadDataList.filter{ $0.favorite == true }
@@ -89,6 +70,7 @@ struct FactionSquadList: View {
     @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
     let printer: DeallocPrinter
+    @EnvironmentObject var store: MyAppStore
     
     init(viewModel: FactionSquadListViewModel) {
         self.viewModel = viewModel
@@ -185,6 +167,7 @@ struct FactionSquadList: View {
         }
         .padding(10)
         .onAppear {
+            self.store.send(.loadSquads)
             self.viewModel.refreshSquadsList()
         }.alert(isPresented: $displayDeleteAllConfirmation) {
             Alert(title: Text("Delete"),

@@ -35,10 +35,15 @@ class ViewFactory: ObservableObject {
     private var navigation = Navigation()
     var moc: NSManagedObjectContext
     var diContainer: DIContainer
+    var store: MyAppStore
     
-    init(moc: NSManagedObjectContext, diContainer: DIContainer) {
+    init(moc: NSManagedObjectContext,
+         diContainer: DIContainer,
+         store: MyAppStore)
+    {
         self.moc = moc
         self.diContainer = diContainer
+        self.store = store
         self.navigation.push(type: .factionSquadList(.none))
     }
     
@@ -101,7 +106,8 @@ class ViewFactory: ObservableObject {
         
         case .factionSquadList(let faction):
             return AnyView(FactionSquadList(viewModel: FactionSquadListViewModel(faction: faction.rawValue, moc: self.moc, squadService: self.diContainer.squadService))
-                .environmentObject(self))
+                .environmentObject(self)
+                .environmentObject(store))
             
         case .factionFilterView(let faction):
             return AnyView(FactionFilterView(faction: faction)

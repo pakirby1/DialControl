@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import Combine
 
 class SquadService: SquadServiceProtocol, ObservableObject {
     var alertText: String = ""
@@ -26,6 +27,8 @@ protocol SquadServiceProtocol : class {
     func saveSquad(jsonString: String, name: String, isFavorite: Bool) -> SquadData
     func updateSquad(squadData: SquadData)
     func deleteSquad(squadData: SquadData)
+    func loadSquadsList(callback: ([SquadData]) -> Void)
+    func loadSquadsListRx() -> AnyPublisher<[SquadData], Error>
 }
     
 extension SquadServiceProtocol {
@@ -69,6 +72,33 @@ extension SquadServiceProtocol {
         } catch {
             print(error)
         }
+    }
+    
+    func loadSquadsList(callback: ([SquadData]) -> Void) {
+        do {
+            let fetchRequest = SquadData.fetchRequest()
+            let fetchedObjects = try self.moc.fetch(fetchRequest) as! [SquadData]
+            callback(fetchedObjects)
+        } catch {
+            print(error)
+        }
+    }
+    
+    func loadSquadsListRx() -> AnyPublisher<[SquadData], Error> {
+        let ret = Future<[SquadData], Error> { promise in
+            do {
+                let fetchRequest = SquadData.fetchRequest()
+                let fetchedObjects = try self.moc.fetch(fetchRequest) as! [SquadData]
+            
+                return promise(.success(fetchedObjects))
+            } catch {
+                print(error)
+                return promise(.failure(error))
+            }
+        }
+        
+        return ret
+            .eraseToAnyPublisher()
     }
 }
 

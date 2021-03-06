@@ -17,7 +17,12 @@ struct MyAppState {
 
 // MARK:- MyAppAction
 enum MyAppAction {
-    case test
+    case loadSquads
+    case setSquads(squads: [SquadData])
+}
+
+struct World {
+    var service: SquadService
 }
 
 // MARK: - Redux Store
@@ -28,10 +33,15 @@ func myAppReducer(
 ) -> AnyPublisher<MyAppAction, Never>
 {
     switch action {
-        case let .test:
-            state.squadList = []
-//    case let .setSearchResults(repos):
-//        state.searchResult = repos
+        case .loadSquads:
+            return environment.service
+                .loadSquadsListRx()
+                .replaceError(with: [])
+                .map { MyAppAction.setSquads(squads: $0) }
+                .eraseToAnyPublisher()
+    
+        case let .setSquads(squads):
+            state.squadList = squads
 //    case let .search(query):
 //        return environment.service
 //            .searchPublisher(matching: query)
@@ -40,10 +50,6 @@ func myAppReducer(
 //            .eraseToAnyPublisher()
     }
     return Empty().eraseToAnyPublisher()
-}
-
-struct World {
-    var service: SquadService
 }
 
 typealias MyAppStore = Store<MyAppState, MyAppAction, World>
