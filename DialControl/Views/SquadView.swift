@@ -635,7 +635,7 @@ struct PilotDetailsView: View {
     
     func buildManeuverView(dialStatus: DialStatus) -> AnyView {
         print("\(Date()) PAK_DialStatus buildManeuverView() \(self.viewModel.shipPilot.id) \(dialStatus)")
-        let ionManeuver = "1FW"
+        let ionManeuver = "1FB"
         
         var foregroundColor: Color {
             let ret: Color

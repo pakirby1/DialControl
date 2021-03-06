@@ -667,6 +667,25 @@ extension ShipView {
             }
     }
     
+    var setIonManeuverButton: some View {
+        Text("Ion")
+            .foregroundColor(.red)
+            .font(.largeTitle)
+            .padding(15)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.white, lineWidth: 1)
+        )
+        .onTapGesture {
+            if self.viewModel.pilotStateData.isDestroyed {
+                self.viewModel.updateDialStatus(status: .destroyed)
+            } else {
+                self.viewModel.updateSelectedManeuver(maneuver: "1FB")
+                self.viewModel.updateDialStatus(status: .set)
+            }
+        }
+    }
+    
     var bodyContent: some View {
             HStack(alignment: .top) {
                     /// Call .equatable() to prevent refreshing the static image
@@ -725,7 +744,10 @@ extension ShipView {
                         .frame(width: 400.0,height:400)
                         
                         if (self.viewModel.currentManeuver != "") {
-                            setDialButton
+                            HStack {
+                                setDialButton
+                                setIonManeuverButton
+                            }
                         }
                     }
                 }
