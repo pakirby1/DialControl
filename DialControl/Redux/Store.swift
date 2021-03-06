@@ -13,12 +13,15 @@ import CoreData
 // MARK:- MyAppState
 struct MyAppState {
     var squadList: [SquadData] = []
+    var displayDeleteAllSquadsConfirmation: Bool = false
 }
 
 // MARK:- MyAppAction
 enum MyAppAction {
     case loadSquads
     case setSquads(squads: [SquadData])
+    case displayDeleteAllSquadsAlert
+    case deleteAllSquads
 }
 
 struct World {
@@ -42,13 +45,16 @@ func myAppReducer(
     
         case let .setSquads(squads):
             state.squadList = squads
-//    case let .search(query):
-//        return environment.service
-//            .searchPublisher(matching: query)
-//            .replaceError(with: [])
-//            .map { AppAction.setSearchResults(repos: $0) }
-//            .eraseToAnyPublisher()
+        
+        case .displayDeleteAllSquadsAlert:
+            state.displayDeleteAllSquadsConfirmation = true
+        
+        case .deleteAllSquads:
+            state.squadList.forEach {
+                environment.service.deleteSquad(squadData: $0)
+            }
     }
+    
     return Empty().eraseToAnyPublisher()
 }
 
