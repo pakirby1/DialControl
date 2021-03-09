@@ -157,6 +157,43 @@ struct FactionSquadList: View {
         }
     }
     
+    var primaryButtonAction: () -> Void {
+        get {
+            func old() {
+                _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squadData: $0)
+                }
+            }
+            
+            func new() {
+                self.store.send(.faction(action: .deleteAllSquads))
+            }
+            
+            return {
+                if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+                {
+                    new()
+                } else {
+                    old()
+                }
+            }
+        }
+    }
+    
+    var secondaryButtonAction: () -> Void {
+        get {
+            return self.cancelAction(title: "Delete") {
+                self.displayDeleteAllConfirmation = false
+            }
+        }
+    }
+    
+    func cancelAction(title: String, callback: @escaping () -> Void) -> () -> Void {
+        return {
+            print("Cancelled \(title)")
+            callback()
+        }
+    }
+    
     var squadList: some View {
         List {
             if self.viewModel.squadDataList.isEmpty {
@@ -165,19 +202,19 @@ struct FactionSquadList: View {
                 shipsSection
             }
         }
+        .onReceive(self.store.$state) { state in
+            self.displayDeleteAllConfirmation = state.faction.displayDeleteAllSquadsConfirmation
+        }
         .padding(10)
         .onAppear {
-            self.store.send(.loadSquads)
+            self.store.send(.faction(action: .loadSquads))
             self.viewModel.refreshSquadsList()
-        }.alert(isPresented: $displayDeleteAllConfirmation) {
+        }
+        .alert(isPresented: $displayDeleteAllConfirmation) {
             Alert(title: Text("Delete"),
                   message: Text("All Squads?"),
-                primaryButton: Alert.Button.default(Text("Delete"), action: {
-                    _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squadData: $0) }
-                }),
-                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
-                    print("Cancelled Delete")
-                })
+                primaryButton: Alert.Button.default(Text("Delete"), action: primaryButtonAction),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: secondaryButtonAction)
             )
         }
     }

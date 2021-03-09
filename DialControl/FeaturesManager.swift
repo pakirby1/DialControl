@@ -38,7 +38,8 @@ class FeaturesManager {
         add(DefaultFeature(name: "DialTest", enabled: true))
         add(DefaultFeature(name: "PilotStateData_Change", enabled: true))
         add(DefaultFeature(name: "UpdateImageUrls", enabled: true))
-        add(DefaultFeature(name: "Redux", enabled: true))
+        add(DefaultFeature(name: "Redux", enabled: false))
+        add(DefaultFeature(name: "MyRedux", enabled: true))
     }
 }
 

@@ -12,16 +12,26 @@ import CoreData
 
 // MARK:- MyAppState
 struct MyAppState {
+    var faction: FactionSquadListState
+}
+
+struct FactionSquadListState {
     var squadList: [SquadData] = []
     var displayDeleteAllSquadsConfirmation: Bool = false
 }
 
 // MARK:- MyAppAction
 enum MyAppAction {
+    case faction(action: MyFactionSquadListAction)
+}
+
+enum MyFactionSquadListAction {
     case loadSquads
     case setSquads(squads: [SquadData])
     case displayDeleteAllSquadsAlert
     case deleteAllSquads
+    case deleteSquad(SquadData)
+    case favorite(Bool, SquadData)
 }
 
 struct World {
@@ -36,13 +46,27 @@ func myAppReducer(
 ) -> AnyPublisher<MyAppAction, Never>
 {
     switch action {
+        case .faction(let action):
+            return factionReducer(state: &state.faction,
+                           action: action,
+                           environment: environment)
+    }
+    
+//    return Empty().eraseToAnyPublisher()
+}
+
+func factionReducer(state: inout FactionSquadListState,
+                    action: MyFactionSquadListAction,
+                    environment: World) -> AnyPublisher<MyAppAction, Never>
+{
+    switch(action) {
         case .loadSquads:
             return environment.service
                 .loadSquadsListRx()
                 .replaceError(with: [])
-                .map { MyAppAction.setSquads(squads: $0) }
+                .map { .faction(action: .setSquads(squads: $0)) }
                 .eraseToAnyPublisher()
-    
+        
         case let .setSquads(squads):
             state.squadList = squads
         
@@ -52,7 +76,15 @@ func myAppReducer(
         case .deleteAllSquads:
             state.squadList.forEach {
                 environment.service.deleteSquad(squadData: $0)
-            }
+        }
+        
+        case let .deleteSquad(squad):
+            environment.service.deleteSquad(squadData: squad)
+        
+        case let .favorite(isFavorite, squad):
+            let x = squad
+            x.favorite = isFavorite
+            environment.service.updateSquad(squadData: x)
     }
     
     return Empty().eraseToAnyPublisher()
