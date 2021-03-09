@@ -202,9 +202,9 @@ struct FactionSquadList: View {
                 shipsSection
             }
         }
-        .onReceive(self.store.$state) { state in
-            self.displayDeleteAllConfirmation = state.faction.displayDeleteAllSquadsConfirmation
-        }
+//        .onReceive(self.store.$state) { state in
+//            self.displayDeleteAllConfirmation = state.faction.displayDeleteAllSquadsConfirmation
+//        }
         .padding(10)
         .onAppear {
             self.store.send(.faction(action: .loadSquads))
@@ -299,6 +299,7 @@ struct FactionSquadCard: View {
     @State var displayDeleteConfirmation: Bool = false
     @State var refreshView: Bool = false
     let printer: DeallocPrinter
+    @EnvironmentObject var store: MyAppStore
     
     init(viewModel: FactionSquadCardViewModel) {
         self.viewModel = viewModel
@@ -346,6 +347,8 @@ struct FactionSquadCard: View {
         Button(action: {
             logMessage("damagedPoints favoriteTapped")
             self.viewModel.favoriteTapped()
+            
+            self.store.send(.faction(action: .deleteSquad(self.viewModel.squadData)))
         }) {
             Image(systemName: self.viewModel.squadData.favorite ? "star.fill" :
             "star")
@@ -419,6 +422,43 @@ struct FactionSquadCard: View {
         }
     }
     
+    var primaryButtonAction: () -> Void {
+        get {
+            func old() {
+                self.viewModel.deleteSquad()
+            }
+            
+            func new() {
+//                self.store.send(.faction(action: .deleteAllSquads))
+                self.store.send(.faction(action: .deleteAllSquads))
+            }
+            
+            return {
+                if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+                {
+                    new()
+                } else {
+                    old()
+                }
+            }
+        }
+    }
+    
+    var secondaryButtonAction: () -> Void {
+        get {
+            return self.cancelAction(title: "Delete") {
+                self.displayDeleteConfirmation = false
+            }
+        }
+    }
+    
+    func cancelAction(title: String, callback: @escaping () -> Void) -> () -> Void {
+        return {
+            print("Cancelled \(title)")
+            callback()
+        }
+    }
+    
     var body: some View {
         HStack {
             Spacer()
@@ -427,12 +467,8 @@ struct FactionSquadCard: View {
         }.alert(isPresented: $displayDeleteConfirmation) {
             Alert(title: Text("Delete"),
                   message: Text("\(self.viewModel.squadData.name ?? "Squad")"),
-                primaryButton: Alert.Button.default(Text("Delete"), action: {
-                    self.viewModel.deleteSquad()
-                }),
-                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
-                    print("Cancelled Delete")
-                })
+                primaryButton: Alert.Button.default(Text("Delete"), action: primaryButtonAction),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: secondaryButtonAction)
             )
         }
         .onAppear() {

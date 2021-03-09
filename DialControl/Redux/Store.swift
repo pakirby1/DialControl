@@ -28,7 +28,6 @@ enum MyAppAction {
 enum MyFactionSquadListAction {
     case loadSquads
     case setSquads(squads: [SquadData])
-    case displayDeleteAllSquadsAlert
     case deleteAllSquads
     case deleteSquad(SquadData)
     case favorite(Bool, SquadData)
@@ -69,9 +68,6 @@ func factionReducer(state: inout FactionSquadListState,
         
         case let .setSquads(squads):
             state.squadList = squads
-        
-        case .displayDeleteAllSquadsAlert:
-            state.displayDeleteAllSquadsConfirmation = true
         
         case .deleteAllSquads:
             state.squadList.forEach {
