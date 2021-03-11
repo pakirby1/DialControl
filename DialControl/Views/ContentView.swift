@@ -68,13 +68,66 @@ class ViewFactory: ObservableObject {
     
     func buildView() -> AnyView {
         if let type = navigation.current() {
-            return buildView(type: type)
+            if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+            {
+                return Redux_buildView(type: type)
+            } else {
+                return buildView(type: type)
+            }
         }
         
         return AnyView(Text("\(#function) : Invalid current view"))
     }
     
-    private func buildView(type: ViewType) -> AnyView {
+    func Redux_buildView(type: ViewType) -> AnyView {
+        switch(type) {
+        case .squadViewPAK(let squad, let squadData):
+            let viewModel = SquadViewModel(squad: squad,
+                                           squadData: squadData)
+            
+            return AnyView(SquadView(viewModel: viewModel)
+                .environmentObject(self)
+                .environmentObject(self.diContainer.pilotStateService)
+                .environmentObject(self.diContainer.squadService)
+                )
+            
+        case .shipViewNew(let shipPilot, let squad):
+            let viewModel = ShipViewModel(moc: self.moc,
+                                          shipPilot: shipPilot,
+                                          squad: squad,
+                                          pilotStateService: self.diContainer.pilotStateService)
+            
+            return AnyView(ShipView(viewModel: viewModel)
+                .environmentObject(self))
+            
+        case .squadImportView:
+            return AnyView(SquadXWSImportView(viewModel: SquadXWSImportViewModel(moc: self.moc, squadService: self.diContainer.squadService, pilotStateService: self.diContainer.pilotStateService))
+                .environmentObject(self)
+                )
+            
+        case .multiLineTextView:
+            return AnyView(MultilineTextView_ContentView())
+        
+        case .factionSquadList(let faction):
+            return AnyView(Redux_FactionSquadList(faction: faction.rawValue)
+                .environmentObject(self)
+                .environmentObject(store))
+            
+        case .factionFilterView(let faction):
+            return AnyView(FactionFilterView(faction: faction)
+                .environmentObject(self))
+            
+        case .back:
+            self.navigation.back()
+            if let current = self.navigation.current() {
+                return buildView(type: current)
+            } else {
+                return AnyView(Text("Invalid back view on stack"))
+            }
+        }
+    }
+    
+    func buildView(type: ViewType) -> AnyView {
         
         switch(type) {
         case .squadViewPAK(let squad, let squadData):

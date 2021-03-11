@@ -16,8 +16,12 @@ struct MyAppState {
 }
 
 struct FactionSquadListState {
-    var squadList: [SquadData] = []
+    var squadDataList: [SquadData] = []
     var displayDeleteAllSquadsConfirmation: Bool = false
+    var faction: String = ""
+    var numSquads: Int {
+        return squadDataList.count
+    }
 }
 
 // MARK:- MyAppAction
@@ -30,7 +34,9 @@ enum MyFactionSquadListAction {
     case setSquads(squads: [SquadData])
     case deleteAllSquads
     case deleteSquad(SquadData)
+    case updateSquad(SquadData)
     case favorite(Bool, SquadData)
+    case refreshSquads
 }
 
 struct World {
@@ -59,6 +65,21 @@ func factionReducer(state: inout FactionSquadListState,
                     environment: World) -> AnyPublisher<MyAppAction, Never>
 {
     switch(action) {
+        case .refreshSquads:
+            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+
+            environment.service.loadSquadsList() { squads in
+                state.squadDataList.removeAll()
+
+                squads.forEach{ squad in
+                    state.squadDataList.append(squad)
+                }
+            }
+
+            if showFavoritesOnly {
+                state.squadDataList = state.squadDataList.filter{ $0.favorite == true }
+            }
+        
         case .loadSquads:
             return environment.service
                 .loadSquadsListRx()
@@ -67,15 +88,18 @@ func factionReducer(state: inout FactionSquadListState,
                 .eraseToAnyPublisher()
         
         case let .setSquads(squads):
-            state.squadList = squads
+            state.squadDataList = squads
         
         case .deleteAllSquads:
-            state.squadList.forEach {
+            state.squadDataList.forEach {
                 environment.service.deleteSquad(squadData: $0)
         }
         
         case let .deleteSquad(squad):
             environment.service.deleteSquad(squadData: squad)
+        
+        case let .updateSquad(squad):
+            environment.service.updateSquad(squadData: squad)
         
         case let .favorite(isFavorite, squad):
             let x = squad

@@ -64,6 +64,7 @@
 		AEA35D5025F251D4007A2D36 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA35D4F25F251D3007A2D36 /* Store.swift */; };
 		AEA8E83D24584B34009B8B6B /* FactionSquadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */; };
 		AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AEAD19F42404F48B0020FABC /* kimberley bl.ttf */; };
+		AEB3A82625FA3B8F00F3C68D /* Redux_FactionSquadList.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEB3A82525FA3B8F00F3C68D /* Redux_FactionSquadList.swift */; };
 		AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEBA6360241B58D9008B00DB /* UpArrowView.swift */; };
 		AEBA828A2593855F00BE4C0E /* Images in Resources */ = {isa = PBXBuildFile; fileRef = AEBA82892593855E00BE4C0E /* Images */; };
 		AEBDCDAE25020A2E0004415F /* LAATProxy.json in Resources */ = {isa = PBXBuildFile; fileRef = AEBDCDAD25020A2E0004415F /* LAATProxy.json */; };
@@ -165,6 +166,7 @@
 		AEA35D4F25F251D3007A2D36 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionSquadList.swift; sourceTree = "<group>"; };
 		AEAD19F42404F48B0020FABC /* kimberley bl.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "kimberley bl.ttf"; sourceTree = "<group>"; };
+		AEB3A82525FA3B8F00F3C68D /* Redux_FactionSquadList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_FactionSquadList.swift; sourceTree = "<group>"; };
 		AEBA6360241B58D9008B00DB /* UpArrowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpArrowView.swift; sourceTree = "<group>"; };
 		AEBA82892593855E00BE4C0E /* Images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images; sourceTree = "<group>"; };
 		AEBDCDAD25020A2E0004415F /* LAATProxy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LAATProxy.json; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 			isa = PBXGroup;
 			children = (
 				AEA35D4F25F251D3007A2D36 /* Store.swift */,
+				AEB3A82525FA3B8F00F3C68D /* Redux_FactionSquadList.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -589,6 +592,7 @@
 				AEEB546824F11EB40050913C /* DIContainer.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */,
+				AEB3A82625FA3B8F00F3C68D /* Redux_FactionSquadList.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AEF5677025DFCD17006DCD4C /* ShipService.swift in Sources */,
 				AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */,

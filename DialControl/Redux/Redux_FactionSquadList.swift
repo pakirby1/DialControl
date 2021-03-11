@@ -1,79 +1,25 @@
 //
-//  FactionSquadList.swift
+//  Redux_FactionSquadList.swift
 //  DialControl
 //
-//  Created by Phil Kirby on 4/28/20.
-//  Copyright © 2020 SoftDesk. All rights reserved.
+//  Created by Phil Kirby on 3/11/21.
+//  Copyright © 2021 SoftDesk. All rights reserved.
 //
 
 import Foundation
 import SwiftUI
 import CoreData
 
-class FactionSquadListViewModel : ObservableObject {
-    @Published var squadNames : [String] = []
-    @Published var numSquads: Int = 0
-    @Published var squadDataList: [SquadData] = []
-    
-    let faction: String
-    let moc: NSManagedObjectContext
-    let squadService: SquadServiceProtocol
-    
-    init(faction: String,
-         moc: NSManagedObjectContext,
-         squadService: SquadServiceProtocol)
-    {
-        self.faction = faction
-        self.moc = moc
-        self.squadService = squadService
-    }
-    
-    
-
-    func deleteSquad(squadData: SquadData) {
-        self.squadService.deleteSquad(squadData: squadData)
-        refreshSquadsList()
-    }
-    
-    func updateSquad(squadData: SquadData) {
-        self.squadService.updateSquad(squadData: squadData)
-        refreshSquadsList()
-    }
-    
-    func refreshSquadsList() {
-        let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-        
-        self.squadService.loadSquadsList() { squads in
-            self.squadDataList.removeAll()
-
-            squads.forEach{ squad in
-                self.squadDataList.append(squad)
-            }
-
-            self.numSquads = self.squadDataList.count
-        }
-        
-        if showFavoritesOnly {
-            self.squadDataList = self.squadDataList.filter{ $0.favorite == true }
-        }
-    }
-    
-    func updateFavorites(showFavoritesOnly: Bool) {
-        UserDefaults.standard.set(showFavoritesOnly, forKey: "displayFavoritesOnly")
-        refreshSquadsList()
-    }
-}
-
-struct FactionSquadList: View {
+struct Redux_FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
-    @ObservedObject var viewModel: FactionSquadListViewModel
     @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
     let printer: DeallocPrinter
     @EnvironmentObject var store: MyAppStore
+    let faction: String
     
-    init(viewModel: FactionSquadListViewModel) {
-        self.viewModel = viewModel
+    init(faction: String) {
+        self.faction = faction
         self.printer = DeallocPrinter("damagedPoints FactionSquadList")
     }
     
@@ -91,7 +37,7 @@ struct FactionSquadList: View {
     
     var deleteAllButton: some View {
         Button(action: {
-                if self.viewModel.squadDataList.count > 0 {
+            if self.store.state.faction.squadDataList.count > 0 {
                     self.displayDeleteAllConfirmation = true
                 }
             })
@@ -101,14 +47,14 @@ struct FactionSquadList: View {
     }
     
     var titleView: some View {
-        Text("\(self.viewModel.faction)")
+        Text("\(self.faction)")
             .font(.largeTitle)
     }
     
     var favoritesFilterView: some View {
         Button(action: {
             self.displayFavoritesOnly.toggle()
-            self.viewModel.updateFavorites(showFavoritesOnly: self.displayFavoritesOnly)
+            self.updateFavorites(showFavoritesOnly: self.displayFavoritesOnly)
         }) {
             if (self.displayFavoritesOnly) {
                 Text("Show All")
@@ -147,11 +93,11 @@ struct FactionSquadList: View {
     
     var shipsSection: some View {
         Section {
-            ForEach(self.viewModel.squadDataList, id:\.self) { squadData in
-                FactionSquadCard(viewModel: FactionSquadCardViewModel(
+            ForEach(self.store.state.faction.squadDataList, id:\.self) { squadData in
+                Redux_FactionSquadCard(viewModel: Redux_FactionSquadCardViewModel(
                     squadData: squadData,
-                    deleteCallback: self.viewModel.deleteSquad,
-                    updateCallback: self.viewModel.updateSquad)
+                    deleteCallback: self.deleteSquad,
+                    updateCallback: self.updateSquad)
                 ).environmentObject(self.viewFactory)
             }
         }
@@ -160,7 +106,7 @@ struct FactionSquadList: View {
     var primaryButtonAction: () -> Void {
         get {
             func old() {
-                _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squadData: $0)
+                _ = self.store.state.faction.squadDataList.map { self.deleteSquad(squadData: $0)
                 }
             }
             
@@ -196,19 +142,16 @@ struct FactionSquadList: View {
     
     var squadList: some View {
         List {
-            if self.viewModel.squadDataList.isEmpty {
+            if self.store.state.faction.squadDataList.isEmpty {
                 emptySection
             } else {
                 shipsSection
             }
         }
-//        .onReceive(self.store.$state) { state in
-//            self.displayDeleteAllConfirmation = state.faction.displayDeleteAllSquadsConfirmation
-//        }
         .padding(10)
         .onAppear {
             self.store.send(.faction(action: .loadSquads))
-            self.viewModel.refreshSquadsList()
+            self.refreshSquadsList()
         }
         .alert(isPresented: $displayDeleteAllConfirmation) {
             Alert(title: Text("Delete"),
@@ -220,7 +163,29 @@ struct FactionSquadList: View {
     }
 }
 
-class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
+extension Redux_FactionSquadList {
+    func deleteSquad(squadData: SquadData) {
+        self.store.send(.faction(action: .deleteSquad(squadData)))
+        refreshSquadsList()
+    }
+
+    func updateSquad(squadData: SquadData) {
+        self.store.send(.faction(action: .updateSquad(squadData)))
+        refreshSquadsList()
+    }
+
+    func refreshSquadsList() {
+        self.store.send(.faction(action: .refreshSquads))
+    }
+
+    func updateFavorites(showFavoritesOnly: Bool) {
+        UserDefaults.standard.set(showFavoritesOnly, forKey: "displayFavoritesOnly")
+        refreshSquadsList()
+    }
+
+}
+
+class Redux_FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
 {
     let points: Int = 150
     let theme: Theme = WestworldUITheme()
@@ -270,7 +235,7 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
     }
     
     func loadShips() {
-        logMessage("damagedPoints FactionSquadCardViewModel.loadShips() ")
+        logMessage("damagedPoints Redux_FactionSquadCardViewModel.loadShips() ")
         self.shipPilots = SquadCardViewModel.getShips(
             squad: self.squad,
             squadData: self.squadData)
@@ -281,7 +246,7 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
     }
     
     func favoriteTapped() {
-        logMessage("damagedPoints FactionSquadCardViewModel.favoriteTapped()")
+        logMessage("damagedPoints Redux_FactionSquadCardViewModel.favoriteTapped()")
         squadData.favorite.toggle()
         updateCallback(squadData)
         loadShips()
@@ -292,16 +257,16 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
     }
 }
 
-struct FactionSquadCard: View {
+struct Redux_FactionSquadCard: View {
     @EnvironmentObject var viewFactory: ViewFactory
-    @ObservedObject var viewModel: FactionSquadCardViewModel
+    @ObservedObject var viewModel: Redux_FactionSquadCardViewModel
     let symbolSize: CGFloat = 36.0
     @State var displayDeleteConfirmation: Bool = false
     @State var refreshView: Bool = false
     let printer: DeallocPrinter
     @EnvironmentObject var store: MyAppStore
     
-    init(viewModel: FactionSquadCardViewModel) {
+    init(viewModel: Redux_FactionSquadCardViewModel) {
         self.viewModel = viewModel
         self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
     }

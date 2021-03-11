@@ -182,6 +182,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     }
     
     var sortedShipPilots: [ShipPilot] {
+        // TODO: Switch & AppStore
         var copy = self.shipPilots
         
         if (activationOrder) {
@@ -258,6 +259,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         }
         
         // reload ships
+        // TODO: Switch & AppStore
         loadShips()
     }
     
@@ -277,9 +279,11 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         
         // Not sure why, but this forces a refresh of the ship status (Half, Destroyed)
         // It updatee the @State shipPilots
-        self.shipPilots = []
         
+        // TODO: Switch & AppStore
+        self.shipPilots = []
         // reload ships
+        // TODO: Switch & AppStore
         loadShips()
     }
     
@@ -370,6 +374,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
                 }.padding(20)
 
                 // Body
+                // TODO: Switch & AppStore
                 if shipPilots.isEmpty {
                     emptySection
                 } else {
@@ -388,20 +393,22 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         }
         .onAppear{
             print("PAK_DialStatus SquadCardView.onAppear()")
+            // TODO: Switch & AppStore
             self.loadShips()
             self.activationOrder = self.squadData.engaged
         }
     }
     
+    // TODO: Switch & AppStore
     func loadShips() {
         logMessage("damagedPoints SquadCardView.loadShips")
         print("PAK_DialStatus SquadCardView.loadShips()")
         self.shipPilots = SquadCardViewModel.getShips(
             squad: self.squad,
             squadData: self.squadData)
-        
+
         self.shipPilots.printAll(tag: "PAK_DialStatus self.shipPilots")
-        
+
         self.shipPilots.forEach{ shipPilot in
             print("PAK_DialStatus SquadCardView.loadShips() \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
         }
