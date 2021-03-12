@@ -175,11 +175,12 @@ extension Redux_FactionSquadList {
     }
 
     func refreshSquadsList() {
-        self.store.send(.faction(action: .refreshSquads))
+        self.store.send(.faction(action: .loadSquads))
     }
 
     func updateFavorites(showFavoritesOnly: Bool) {
-        UserDefaults.standard.set(showFavoritesOnly, forKey: "displayFavoritesOnly")
+        self.store.send(.faction(action: .updateFavorites(showFavoritesOnly)))
+        
         refreshSquadsList()
     }
 

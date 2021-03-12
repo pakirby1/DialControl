@@ -37,6 +37,7 @@ enum MyFactionSquadListAction {
     case updateSquad(SquadData)
     case favorite(Bool, SquadData)
     case refreshSquads
+    case updateFavorites(Bool)
 }
 
 struct World {
@@ -65,6 +66,9 @@ func factionReducer(state: inout FactionSquadListState,
                     environment: World) -> AnyPublisher<MyAppAction, Never>
 {
     switch(action) {
+        case .updateFavorites(let showFavorites):
+            UserDefaults.standard.set(showFavorites, forKey: "displayFavoritesOnly")
+        
         case .refreshSquads:
             let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
 
@@ -88,7 +92,13 @@ func factionReducer(state: inout FactionSquadListState,
                 .eraseToAnyPublisher()
         
         case let .setSquads(squads):
-            state.squadDataList = squads
+            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+            
+            if showFavoritesOnly {
+                state.squadDataList = state.squadDataList.filter{ $0.favorite == true }
+            } else {
+                state.squadDataList = squads
+            }
         
         case .deleteAllSquads:
             state.squadDataList.forEach {
