@@ -44,11 +44,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let viewFactory = ViewFactory(moc: moc,
                                       diContainer: diContainer,
                                       store: store)
+        
         let contentView = ContentView()
             .environment(\.managedObjectContext, moc)
             .environmentObject(viewFactory)
+            .environmentObject(store)
             
-
         shipLookupTable = ShipLookupBuilder.buildShipLookupTable()
         print(shipLookupTable)
         

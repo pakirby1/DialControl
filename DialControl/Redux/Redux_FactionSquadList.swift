@@ -104,6 +104,7 @@ struct Redux_FactionSquadList: View {
                                        deleteCallback: self.deleteSquad,
                                        updateCallback: self.updateSquad)
                 .environmentObject(self.viewFactory)
+                .environmentObject(self.store)
             }
         }
     }
@@ -231,7 +232,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
         self.updateCallback = updateCallback
         self.squadData = squadData
         self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
-        loadShips()
     }
     
     private func loadSquad(jsonString: String) -> Squad {
