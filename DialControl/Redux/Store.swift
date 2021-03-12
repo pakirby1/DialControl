@@ -113,6 +113,7 @@ func factionReducer(state: inout FactionSquadListState,
         
         case let .deleteSquad(squad):
             environment.service.deleteSquad(squadData: squad)
+            return Just<MyAppAction>(.faction(action: .loadSquads)).eraseToAnyPublisher()
         
         case let .updateSquad(squad):
             environment.service.updateSquad(squadData: squad)

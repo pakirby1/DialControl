@@ -370,6 +370,12 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             Image(systemName: "trash.fill")
                 .font(.title)
                 .foregroundColor(Color.white)
+        }.alert(isPresented: $displayDeleteConfirmation) {
+            Alert(title: Text("Delete"),
+                  message: Text("The \(self.squadData.name ?? "Squad")"),
+                primaryButton: Alert.Button.default(Text("Delete"), action: deleteAlertAction),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
+            )
         }
     }
     
@@ -406,7 +412,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             }
             
             func new() {
-                self.store.send(.faction(action: .deleteAllSquads))
+                self.store.send(.faction(action: .deleteSquad(self.squadData)))
             }
             
             return {
@@ -440,12 +446,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             Spacer()
             squadButton
             Spacer()
-        }.alert(isPresented: $displayDeleteConfirmation) {
-            Alert(title: Text("Delete"),
-                  message: Text("\(self.squadData.name ?? "Squad")"),
-                primaryButton: Alert.Button.default(Text("Delete"), action: deleteAlertAction),
-                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
-            )
         }
         .onAppear() {
             // The view body has been previously executed so the
