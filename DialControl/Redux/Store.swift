@@ -65,24 +65,22 @@ func factionReducer(state: inout FactionSquadListState,
                     action: MyFactionSquadListAction,
                     environment: World) -> AnyPublisher<MyAppAction, Never>
 {
+    func filterByFavorites(_ isFavorite: Bool = true) {
+        let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+        
+        state.squadDataList = state.squadDataList.filter{ $0.favorite == showFavoritesOnly }
+    }
+ 
+    func filterByFaction(faction: Faction) {
+//            state.squadDataList = state.squadDataList.filter{ $0.faction == faction }
+    }
+    
     switch(action) {
         case .updateFavorites(let showFavorites):
             UserDefaults.standard.set(showFavorites, forKey: "displayFavoritesOnly")
         
         case .refreshSquads:
-            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-
-            environment.service.loadSquadsList() { squads in
-                state.squadDataList.removeAll()
-
-                squads.forEach{ squad in
-                    state.squadDataList.append(squad)
-                }
-            }
-
-            if showFavoritesOnly {
-                state.squadDataList = state.squadDataList.filter{ $0.favorite == true }
-            }
+            filterByFavorites()
         
         case .loadSquads:
             return environment.service
@@ -95,7 +93,7 @@ func factionReducer(state: inout FactionSquadListState,
             let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
             
             if showFavoritesOnly {
-                state.squadDataList = state.squadDataList.filter{ $0.favorite == true }
+                filterByFavorites()
             } else {
                 state.squadDataList = squads
             }
@@ -103,7 +101,7 @@ func factionReducer(state: inout FactionSquadListState,
         case .deleteAllSquads:
             state.squadDataList.forEach {
                 environment.service.deleteSquad(squadData: $0)
-        }
+            }
         
         case let .deleteSquad(squad):
             environment.service.deleteSquad(squadData: squad)
@@ -115,6 +113,8 @@ func factionReducer(state: inout FactionSquadListState,
             let x = squad
             x.favorite = isFavorite
             environment.service.updateSquad(squadData: x)
+        
+        
     }
     
     return Empty().eraseToAnyPublisher()
