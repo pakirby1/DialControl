@@ -125,3 +125,23 @@ extension DamagedSquadRepresenting {
         return points.reduce(0, +)
     }
 }
+
+extension Array where Element == ShipPilot {
+    var damagedPoints: Int {
+        let count = self.count
+        logMessage("damagedPoints count: \(count)")
+        
+        let points: [Int] = self.map { shipPilot in
+            switch(shipPilot.healthStatus) {
+            case .destroyed(let value):
+                return value
+            case .half(let value):
+                return value
+            default:
+                return 0
+            }
+        }
+        
+        return points.reduce(0, +)
+    }
+}

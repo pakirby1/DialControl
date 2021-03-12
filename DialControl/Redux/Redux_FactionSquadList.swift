@@ -12,15 +12,25 @@ import CoreData
 
 struct Redux_FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
+    @EnvironmentObject var store: MyAppStore
+    
     @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-    let printer: DeallocPrinter
-    @EnvironmentObject var store: MyAppStore
+    
     let faction: String
+    
+    // Dealloc tracker
+    let printer: DeallocPrinter
     
     init(faction: String) {
         self.faction = faction
         self.printer = DeallocPrinter("damagedPoints FactionSquadList")
+    }
+    
+    var squadDataList : [SquadData] {
+        get {
+            return self.store.state.faction.squadDataList
+        }
     }
     
     var body: some View {
@@ -37,7 +47,7 @@ struct Redux_FactionSquadList: View {
     
     var deleteAllButton: some View {
         Button(action: {
-            if self.store.state.faction.squadDataList.count > 0 {
+            if self.squadDataList.count > 0 {
                     self.displayDeleteAllConfirmation = true
                 }
             })
@@ -56,11 +66,7 @@ struct Redux_FactionSquadList: View {
             self.displayFavoritesOnly.toggle()
             self.updateFavorites(showFavoritesOnly: self.displayFavoritesOnly)
         }) {
-            if (self.displayFavoritesOnly) {
-                Text("Show All")
-            } else {
-                Text("Favorites Only")
-            }
+            self.displayFavoritesOnly ? Text("Show All") : Text("Favorites Only")
         }
     }
     
@@ -93,20 +99,19 @@ struct Redux_FactionSquadList: View {
     
     var shipsSection: some View {
         Section {
-            ForEach(self.store.state.faction.squadDataList, id:\.self) { squadData in
-                Redux_FactionSquadCard(viewModel: Redux_FactionSquadCardViewModel(
-                    squadData: squadData,
-                    deleteCallback: self.deleteSquad,
-                    updateCallback: self.updateSquad)
-                ).environmentObject(self.viewFactory)
+            ForEach(squadDataList, id:\.self) { squadData in
+                Redux_FactionSquadCard(squadData: squadData,
+                                       deleteCallback: self.deleteSquad,
+                                       updateCallback: self.updateSquad)
+                .environmentObject(self.viewFactory)
             }
         }
     }
     
-    var primaryButtonAction: () -> Void {
+    var deleteAlertAction: () -> Void {
         get {
             func old() {
-                _ = self.store.state.faction.squadDataList.map { self.deleteSquad(squadData: $0)
+                _ = squadDataList.map { self.deleteSquad(squadData: $0)
                 }
             }
             
@@ -125,7 +130,7 @@ struct Redux_FactionSquadList: View {
         }
     }
     
-    var secondaryButtonAction: () -> Void {
+    var cancelAlertAction: () -> Void {
         get {
             return self.cancelAction(title: "Delete") {
                 self.displayDeleteAllConfirmation = false
@@ -142,7 +147,7 @@ struct Redux_FactionSquadList: View {
     
     var squadList: some View {
         List {
-            if self.store.state.faction.squadDataList.isEmpty {
+            if squadDataList.isEmpty {
                 emptySection
             } else {
                 shipsSection
@@ -150,14 +155,13 @@ struct Redux_FactionSquadList: View {
         }
         .padding(10)
         .onAppear {
-            self.store.send(.faction(action: .loadSquads))
             self.refreshSquadsList()
         }
         .alert(isPresented: $displayDeleteAllConfirmation) {
             Alert(title: Text("Delete"),
                   message: Text("All Squads?"),
-                primaryButton: Alert.Button.default(Text("Delete"), action: primaryButtonAction),
-                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: secondaryButtonAction)
+                primaryButton: Alert.Button.default(Text("Delete"), action: deleteAlertAction),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
             )
         }
     }
@@ -186,30 +190,11 @@ extension Redux_FactionSquadList {
 
 }
 
-class Redux_FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
+struct Redux_FactionSquadCardViewModel
 {
     let points: Int = 150
     let theme: Theme = WestworldUITheme()
-    let squadData: SquadData
-    let deleteCallback: (SquadData) -> ()
-    let updateCallback: (SquadData) -> ()
-    @Published var shipPilots: [ShipPilot] = []
-    
-    init(squadData: SquadData,
-         deleteCallback: @escaping (SquadData) -> (),
-         updateCallback: @escaping (SquadData) -> ())
-    {
-        self.squadData = squadData
-        self.deleteCallback = deleteCallback
-        self.updateCallback = updateCallback
-        
-        // Hack to fix damagedPoints being 0 after favorite tapped on squad
-        self.loadShips()
-    }
-    
-    private func loadSquad(jsonString: String) -> Squad {
-        return Squad.serializeJSON(jsonString: jsonString)
-    }
+    let symbolSize: CGFloat = 36.0
     
     var buttonBackground: Color {
         theme.BUTTONBACKGROUND
@@ -222,26 +207,47 @@ class Redux_FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenti
     var border: Color {
         theme.BORDER_INACTIVE
     }
+}
+
+struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
+    @EnvironmentObject var viewFactory: ViewFactory
+    @EnvironmentObject var store: MyAppStore
+    let viewModel: Redux_FactionSquadCardViewModel = Redux_FactionSquadCardViewModel()
     
-    var json: String {
-        squadData.json ?? ""
+    @State var displayDeleteConfirmation: Bool = false
+    @State var refreshView: Bool = false
+    
+    let printer: DeallocPrinter
+    
+    let deleteCallback: (SquadData) -> ()
+    let updateCallback: (SquadData) -> ()
+    let squadData: SquadData
+    
+    init(squadData: SquadData,
+         deleteCallback: @escaping (SquadData) -> (),
+         updateCallback: @escaping (SquadData) -> ())
+    {
+        self.deleteCallback = deleteCallback
+        self.updateCallback = updateCallback
+        self.squadData = squadData
+        self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
+        loadShips()
     }
     
-    var squad: Squad {
-        if let json = squadData.json {
-            return loadSquad(jsonString: json)
-        }
-        
-        return Squad.emptySquad
+    private func loadSquad(jsonString: String) -> Squad {
+        return Squad.serializeJSON(jsonString: jsonString)
     }
     
     func loadShips() {
         logMessage("damagedPoints Redux_FactionSquadCardViewModel.loadShips() ")
-        self.shipPilots = SquadCardViewModel.getShips(
-            squad: self.squad,
-            squadData: self.squadData)
         
-        if self.shipPilots.count == 0 {
+        /// I think that we should go to the store for the shipPilots by sending the store an action
+        /*
+         store.send(.faction(action: .getShips(Squad, SquadData)))
+         */
+        store.send(.faction(action: .getShips(self.squad, self.squadData)))
+        
+        if store.state.faction.shipPilots.count == 0 {
             print("No Ships in Squad")
         }
     }
@@ -256,20 +262,26 @@ class Redux_FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenti
     func deleteSquad() {
         deleteCallback(squadData)
     }
-}
-
-struct Redux_FactionSquadCard: View {
-    @EnvironmentObject var viewFactory: ViewFactory
-    @ObservedObject var viewModel: Redux_FactionSquadCardViewModel
-    let symbolSize: CGFloat = 36.0
-    @State var displayDeleteConfirmation: Bool = false
-    @State var refreshView: Bool = false
-    let printer: DeallocPrinter
-    @EnvironmentObject var store: MyAppStore
     
-    init(viewModel: Redux_FactionSquadCardViewModel) {
-        self.viewModel = viewModel
-        self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
+    var shipPilots: [ShipPilot] {
+        get {
+            return self.store.state.faction.shipPilots
+        }
+        set {
+            
+        }
+    }
+    
+    var json: String {
+        squadData.json ?? ""
+    }
+    
+    var squad: Squad {
+        if let json = squadData.json {
+            return loadSquad(jsonString: json)
+        }
+        
+        return Squad.emptySquad
     }
     
     var background: some View {
@@ -280,7 +292,7 @@ struct Redux_FactionSquadCard: View {
     }
     
     var pointsView: some View {
-        Text("\(viewModel.squad.points ?? 0)")
+        Text("\(squad.points ?? 0)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -289,7 +301,7 @@ struct Redux_FactionSquadCard: View {
     }
     
     var damagedPointsView: some View {
-        Text("\(viewModel.damagedPoints)")
+        Text("\(damagedPoints)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -300,23 +312,22 @@ struct Redux_FactionSquadCard: View {
     /*
      For the common case of text-only labels, you can use the convenience initializer that takes a title string (or localized string key) as its first parameter, instead of a trailing closure:
 
-
      Button("Sign In", action: signIn)
      */
     var vendorView: some View {
-        Button("\(viewModel.squad.vendor?.description ?? "")") {
-            UIApplication.shared.open(URL(string: self.viewModel.squad.vendor?.link ?? "")!)
+        Button("\(self.squad.vendor?.description ?? "")") {
+            UIApplication.shared.open(URL(string: self.squad.vendor?.link ?? "")!)
         }
     }
     
     var favoriteView: some View {
         Button(action: {
             logMessage("damagedPoints favoriteTapped")
-            self.viewModel.favoriteTapped()
+            self.favoriteTapped()
             
-            self.store.send(.faction(action: .deleteSquad(self.viewModel.squadData)))
+            self.store.send(.faction(action: .deleteSquad(self.squadData)))
         }) {
-            Image(systemName: self.viewModel.squadData.favorite ? "star.fill" :
+            Image(systemName: self.squadData.favorite ? "star.fill" :
             "star")
                 .font(.title)
                 .foregroundColor(Color.yellow)
@@ -324,20 +335,20 @@ struct Redux_FactionSquadCard: View {
     }
     
     var factionSymbol: some View {
-        let x: Faction? = Faction.buildFaction(jsonFaction: self.viewModel.squad.faction)
-        let characterCode = x?.characterCode
+        let faction: Faction? = Faction.buildFaction(jsonFaction: squad.faction)
+        let characterCode = faction?.characterCode
         
         return Button(action: {
-            UIApplication.shared.open(URL(string: self.viewModel.squad.vendor?.link ?? "")!)
+            UIApplication.shared.open(URL(string: self.squad.vendor?.link ?? "")!)
         }) {
             Text(characterCode ?? "")
-                .font(.custom("xwing-miniatures", size: self.symbolSize))
+                .font(.custom("xwing-miniatures", size: self.viewModel.symbolSize))
         }
     }
     
     var nameView: some View {
         HStack {
-            Text(viewModel.squad.name ?? "Unnamed")
+            Text(squad.name ?? "Unnamed")
                 .font(.title)
 //                .lineLimit(1)
                 .foregroundColor(viewModel.textForeground)
@@ -364,7 +375,7 @@ struct Redux_FactionSquadCard: View {
     
     @ViewBuilder
     private var firstPlayerView: some View {
-        if self.viewModel.squadData.firstPlayer == true {
+        if self.squadData.firstPlayer == true {
             firstPlayerSymbol
         } else {
             EmptyView()
@@ -373,7 +384,7 @@ struct Redux_FactionSquadCard: View {
     
     var squadButton: some View {
         Button(action: {
-            self.viewFactory.viewType = .squadViewPAK(self.viewModel.squad, self.viewModel.squadData)
+            self.viewFactory.viewType = .squadViewPAK(self.squad, self.squadData)
         }) {
             ZStack {
                 background
@@ -388,14 +399,13 @@ struct Redux_FactionSquadCard: View {
         }
     }
     
-    var primaryButtonAction: () -> Void {
+    var deleteAlertAction: () -> Void {
         get {
             func old() {
-                self.viewModel.deleteSquad()
+                self.deleteSquad()
             }
             
             func new() {
-//                self.store.send(.faction(action: .deleteAllSquads))
                 self.store.send(.faction(action: .deleteAllSquads))
             }
             
@@ -410,7 +420,7 @@ struct Redux_FactionSquadCard: View {
         }
     }
     
-    var secondaryButtonAction: () -> Void {
+    var cancelAlertAction: () -> Void {
         get {
             return self.cancelAction(title: "Delete") {
                 self.displayDeleteConfirmation = false
@@ -432,9 +442,9 @@ struct Redux_FactionSquadCard: View {
             Spacer()
         }.alert(isPresented: $displayDeleteConfirmation) {
             Alert(title: Text("Delete"),
-                  message: Text("\(self.viewModel.squadData.name ?? "Squad")"),
-                primaryButton: Alert.Button.default(Text("Delete"), action: primaryButtonAction),
-                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: secondaryButtonAction)
+                  message: Text("\(self.squadData.name ?? "Squad")"),
+                primaryButton: Alert.Button.default(Text("Delete"), action: deleteAlertAction),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
             )
         }
         .onAppear() {
@@ -443,7 +453,7 @@ struct Redux_FactionSquadCard: View {
             // This can be done by updating an @State property, or
             // observing an @Published property.
             print("\(Date()) damagedPoints FactionSquadCard.onAppear()")
-            self.viewModel.loadShips()
+            self.loadShips()
             
             // inject the AppStore into the view model here since
             // @EnvironmentObject isn't accessible in the init()

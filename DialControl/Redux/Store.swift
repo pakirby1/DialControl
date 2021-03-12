@@ -22,6 +22,8 @@ struct FactionSquadListState {
     var numSquads: Int {
         return squadDataList.count
     }
+    
+    var shipPilots: [ShipPilot] = []
 }
 
 // MARK:- MyAppAction
@@ -38,6 +40,7 @@ enum MyFactionSquadListAction {
     case favorite(Bool, SquadData)
     case refreshSquads
     case updateFavorites(Bool)
+    case getShips(Squad, SquadData)
 }
 
 struct World {
@@ -76,6 +79,11 @@ func factionReducer(state: inout FactionSquadListState,
     }
     
     switch(action) {
+        case let .getShips(squad, data):
+            state.shipPilots = SquadCardViewModel.getShips(
+                squad: squad,
+                squadData: data)
+        
         case .updateFavorites(let showFavorites):
             UserDefaults.standard.set(showFavorites, forKey: "displayFavoritesOnly")
         
