@@ -11,25 +11,6 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
-//
-//// MARK:- SquadView
-//class Redux_SquadViewModel : ObservableObject {
-//    @Published var alertText: String = ""
-//    @Published var showAlert: Bool = false
-//    
-//    @Published var displayAsList: Bool = true
-//
-//    init()
-//    {
-//    }
-//}
-//
-//struct Redux_SquadViewState {
-//  let activateInitiativeOrder: Bool = true
-//  let hideAllDials: Bool = true
-//}
-//
-
 struct Redux_SquadView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var store: MyAppStore
@@ -38,11 +19,6 @@ struct Redux_SquadView: View {
     @State var maneuver: String = ""
     let squad: Squad
     let squadData: SquadData
-    
-    // Remove
-//    @ObservedObject var viewModel: SquadViewModel
-//    @EnvironmentObject var pilotStateService: PilotStateService
-//    @EnvironmentObject var squadService: SquadService
     
     init(squad: Squad, squadData: SquadData) {
         self.squad = squad
