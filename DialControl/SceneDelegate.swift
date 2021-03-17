@@ -36,7 +36,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
          Cannot convert value of type 'Reducer<MyAppState, MyAppAction, World>' (aka '(inout MyAppState, MyAppAction, World) -> AnyPublisher<MyAppAction, Never>') to expected argument type '(inout _, _, _) -> AnyPublisher<_, Never>'
          */
         let store: MyAppStore = MyAppStore(
-            state: MyAppState.init(faction: FactionSquadListState()),
+            state: MyAppState.init(faction: FactionSquadListState(), squad: MySquadViewState()),
             reducer: myAppReducer,
             environment: World(service: diContainer.squadService)
         )

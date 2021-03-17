@@ -109,7 +109,7 @@ struct Redux_FactionSquadList: View {
         }
     }
     
-    var deleteAlertAction: () -> Void {
+    var deleteAllAlertAction: () -> Void {
         get {
             func old() {
                 _ = squadDataList.map { self.deleteSquad(squadData: $0)
@@ -161,7 +161,7 @@ struct Redux_FactionSquadList: View {
         .alert(isPresented: $displayDeleteAllConfirmation) {
             Alert(title: Text("Delete"),
                   message: Text("All Squads?"),
-                primaryButton: Alert.Button.default(Text("Delete"), action: deleteAlertAction),
+                primaryButton: Alert.Button.default(Text("Delete"), action: deleteAllAlertAction),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
             )
         }
@@ -185,10 +185,8 @@ extension Redux_FactionSquadList {
 
     func updateFavorites(showFavoritesOnly: Bool) {
         self.store.send(.faction(action: .updateFavorites(showFavoritesOnly)))
-        
         refreshSquadsList()
     }
-
 }
 
 struct Redux_FactionSquadCardViewModel
@@ -241,10 +239,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     func loadShips() {
         logMessage("damagedPoints Redux_FactionSquadCardViewModel.loadShips() ")
         
-        /// I think that we should go to the store for the shipPilots by sending the store an action
-        /*
-         store.send(.faction(action: .getShips(Squad, SquadData)))
-         */
         store.send(.faction(action: .getShips(self.squad, self.squadData)))
         
         if store.state.faction.shipPilots.count == 0 {
@@ -325,7 +319,8 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             logMessage("damagedPoints favoriteTapped")
             self.favoriteTapped()
             
-            self.store.send(.faction(action: .deleteSquad(self.squadData)))
+            let action: MyFactionSquadListAction = .favorite(self.squadData.favorite, self.squadData)
+            self.store.send(.faction(action: action))
         }) {
             Image(systemName: self.squadData.favorite ? "star.fill" :
             "star")
@@ -364,7 +359,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     var deleteButton: some View {
         Button(action: {
-//            self.viewModel.deleteCallback(self.viewModel.squadData)
             self.displayDeleteConfirmation = true
         }) {
             Image(systemName: "trash.fill")
@@ -372,7 +366,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
                 .foregroundColor(Color.white)
         }.alert(isPresented: $displayDeleteConfirmation) {
             Alert(title: Text("Delete"),
-                  message: Text("The \(self.squadData.name ?? "Squad")"),
+                  message: Text("\(self.squadData.name ?? "Squad")"),
                 primaryButton: Alert.Button.default(Text("Delete"), action: deleteAlertAction),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
             )
@@ -397,9 +391,9 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
                 factionSymbol.offset(x: -370, y: 0)
                 pointsView.offset(x: -310, y: 0)
                 damagedPointsView.offset(x: -230, y: 0)
-                favoriteView.offset(x: 300, y: 0)
-                firstPlayerView.offset(x: 260, y: 0)
                 nameView
+                firstPlayerView.offset(x: 260, y: 0)
+                favoriteView.offset(x: 300, y: 0)
                 deleteButton.offset(x: 350, y: 0)
             }
         }
@@ -453,6 +447,9 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // This can be done by updating an @State property, or
             // observing an @Published property.
             print("\(Date()) damagedPoints FactionSquadCard.onAppear()")
+            
+            // Have to call in .onAppear because the @EnvironmentObject store
+            // is not available until AFTER init() is called
             self.loadShips()
             
             // inject the AppStore into the view model here since

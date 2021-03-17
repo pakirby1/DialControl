@@ -82,14 +82,11 @@ class ViewFactory: ObservableObject {
     func Redux_buildView(type: ViewType) -> AnyView {
         switch(type) {
         case .squadViewPAK(let squad, let squadData):
-            let viewModel = SquadViewModel(squad: squad,
-                                           squadData: squadData)
-            
-            return AnyView(SquadView(viewModel: viewModel)
+            return AnyView(Redux_SquadView(squad: squad,
+                                     squadData: squadData)
                 .environmentObject(self)
-                .environmentObject(self.diContainer.pilotStateService)
-                .environmentObject(self.diContainer.squadService)
-                )
+                .environmentObject(store)
+            )
             
         case .shipViewNew(let shipPilot, let squad):
             let viewModel = ShipViewModel(moc: self.moc,

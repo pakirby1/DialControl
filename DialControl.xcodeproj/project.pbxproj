@@ -39,6 +39,7 @@
 		AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F52428D3E800248CA4 /* NavigationStack.swift */; };
 		AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F7242B76AF00248CA4 /* ShipView.swift */; };
 		AE3539542430C64700AC023A /* WedgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3539532430C64700AC023A /* WedgeView.swift */; };
+		AE3B2AF62602241A00451C9F /* Redux_SquadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */; };
 		AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
@@ -135,6 +136,7 @@
 		AE2D80F52428D3E800248CA4 /* NavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStack.swift; sourceTree = "<group>"; };
 		AE2D80F7242B76AF00248CA4 /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
 		AE3539532430C64700AC023A /* WedgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WedgeView.swift; sourceTree = "<group>"; };
+		AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadView.swift; sourceTree = "<group>"; };
 		AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesManager.swift; sourceTree = "<group>"; };
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58C223F8087C00C66136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -253,28 +255,28 @@
 		AE1FBE5724166422005C54F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				AE1FBE5824166443005C54F5 /* DialView.swift */,
-				AE1FBE5F24166798005C54F5 /* Rotated.swift */,
-				AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */,
-				AEBA6360241B58D9008B00DB /* UpArrowView.swift */,
-				AE2D80EF242784D400248CA4 /* SquadView.swift */,
-				AE2D80F52428D3E800248CA4 /* NavigationStack.swift */,
-				AE2D80F7242B76AF00248CA4 /* ShipView.swift */,
-				AEF3B4632439B9B200A49717 /* InnerCircle.swift */,
-				AE4E08DD243B547800E7899A /* LinkedView.swift */,
-				AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */,
-				AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */,
-				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
-				AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */,
-				AE7EC214245DA13400E92704 /* PopoverView.swift */,
-				AE7EC216245EE95B00E92704 /* FactionFilterView.swift */,
-				AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */,
-				AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */,
-				AE1DF8EE24B5D80E00B84D38 /* ImageView.swift */,
 				AE1DF8F024B5E0CD00B84D38 /* CardView.swift */,
 				AE4D58C923F8087C00C66136 /* ContentView.swift */,
+				AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */,
+				AE1FBE5824166443005C54F5 /* DialView.swift */,
+				AE7EC216245EE95B00E92704 /* FactionFilterView.swift */,
+				AEA8E83C24584B34009B8B6B /* FactionSquadList.swift */,
+				AE1DF8EE24B5D80E00B84D38 /* ImageView.swift */,
+				AEF3B4632439B9B200A49717 /* InnerCircle.swift */,
+				AE4E08DD243B547800E7899A /* LinkedView.swift */,
 				AEA192DD25C2E2E20033ACBD /* LinkedViewNew.swift */,
+				AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */,
+				AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */,
+				AE2D80F52428D3E800248CA4 /* NavigationStack.swift */,
+				AE7EC214245DA13400E92704 /* PopoverView.swift */,
 				AEF5677125DFE0AD006DCD4C /* ResetButton.swift */,
+				AE1FBE5F24166798005C54F5 /* Rotated.swift */,
+				AE2D80F7242B76AF00248CA4 /* ShipView.swift */,
+				AE2D80EF242784D400248CA4 /* SquadView.swift */,
+				AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */,
+				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
+				AEBA6360241B58D9008B00DB /* UpArrowView.swift */,
+				AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -382,6 +384,7 @@
 			children = (
 				AEA35D4F25F251D3007A2D36 /* Store.swift */,
 				AEB3A82525FA3B8F00F3C68D /* Redux_FactionSquadList.swift */,
+				AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -607,6 +610,7 @@
 				AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
+				AE3B2AF62602241A00451C9F /* Redux_SquadView.swift in Sources */,
 				AE1DF8F624B73D1900B84D38 /* JSONSerialization.swift in Sources */,
 				AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */,
 				AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */,

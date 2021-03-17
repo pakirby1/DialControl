@@ -13,6 +13,11 @@ import CoreData
 // MARK:- MyAppState
 struct MyAppState {
     var faction: FactionSquadListState
+    var squad: MySquadViewState
+}
+
+struct MySquadViewState {
+
 }
 
 struct FactionSquadListState {
@@ -29,6 +34,11 @@ struct FactionSquadListState {
 // MARK:- MyAppAction
 enum MyAppAction {
     case faction(action: MyFactionSquadListAction)
+    case squad(action: MySquadAction)
+}
+
+enum MySquadAction {
+    case updateSquad(SquadData)
 }
 
 enum MyFactionSquadListAction {
@@ -59,9 +69,25 @@ func myAppReducer(
             return factionReducer(state: &state.faction,
                            action: action,
                            environment: environment)
+        case .squad(let action):
+            return squadReducer(state: &state.squad,
+                                  action: action,
+                                  environment: environment)
     }
     
 //    return Empty().eraseToAnyPublisher()
+}
+
+func squadReducer(state: inout MySquadViewState,
+                    action: MySquadAction,
+                    environment: World) -> AnyPublisher<MyAppAction, Never>
+{
+    switch(action) {
+        case let .updateSquad(squad):
+            environment.service.updateSquad(squadData: squad)
+    }
+    
+    return Empty().eraseToAnyPublisher()
 }
 
 func factionReducer(state: inout FactionSquadListState,
@@ -78,6 +104,10 @@ func factionReducer(state: inout FactionSquadListState,
 //            state.squadDataList = state.squadDataList.filter{ $0.faction == faction }
     }
     
+    func loadAllSquads() -> AnyPublisher<MyAppAction, Never> {
+        return Just<MyAppAction>(.faction(action: .loadSquads)).eraseToAnyPublisher()
+    }
+    
     switch(action) {
         case let .getShips(squad, data):
             state.shipPilots = SquadCardViewModel.getShips(
@@ -86,6 +116,7 @@ func factionReducer(state: inout FactionSquadListState,
         
         case .updateFavorites(let showFavorites):
             UserDefaults.standard.set(showFavorites, forKey: "displayFavoritesOnly")
+            return loadAllSquads()
         
         case .refreshSquads:
             filterByFavorites()
@@ -110,20 +141,25 @@ func factionReducer(state: inout FactionSquadListState,
             state.squadDataList.forEach {
                 environment.service.deleteSquad(squadData: $0)
             }
+            
+            return loadAllSquads()
         
         case let .deleteSquad(squad):
             environment.service.deleteSquad(squadData: squad)
-            return Just<MyAppAction>(.faction(action: .loadSquads)).eraseToAnyPublisher()
+        
+            return loadAllSquads()
         
         case let .updateSquad(squad):
             environment.service.updateSquad(squadData: squad)
+            
+            return loadAllSquads()
         
         case let .favorite(isFavorite, squad):
             let x = squad
             x.favorite = isFavorite
             environment.service.updateSquad(squadData: x)
-        
-        
+            
+            return loadAllSquads()
     }
     
     return Empty().eraseToAnyPublisher()
