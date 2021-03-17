@@ -36,7 +36,6 @@ struct Redux_SquadView: View {
     @State var isFirstPlayer: Bool = false
     @State private var displayResetAllConfirmation: Bool = false
     @State var maneuver: String = ""
-    @State var displayAsList: Bool = true
     let squad: Squad
     let squadData: SquadData
     
@@ -79,7 +78,6 @@ struct Redux_SquadView: View {
             header
             Redux_SquadCardView(squad: self.squad,
                           squadData: self.squadData,
-                          displayAsList: self.displayAsList,
                           isFirstPlayer: $isFirstPlayer)
                 .environmentObject(viewFactory)
                 .onAppear() {
@@ -114,7 +112,6 @@ struct Redux_SquadView: View {
 struct Redux_SquadCardView: View, DamagedSquadRepresenting {
     let squad: Squad
     let squadData: SquadData
-    let displayAsList: Bool
     let theme: Theme = WestworldUITheme()
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var pilotStateService: PilotStateService
@@ -132,10 +129,7 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
     }
     
     private var shipsView: AnyView {
-        switch displayAsList {
-        case true: return AnyView(shipsGrid)
-        case false: return AnyView(shipsGrid)
-        }
+        return AnyView(shipsGrid)
     }
     
     var chunkedShips : [[ShipPilot]] {
