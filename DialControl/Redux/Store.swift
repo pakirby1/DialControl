@@ -39,6 +39,7 @@ enum MyAppAction {
 
 enum MySquadAction {
     case updateSquad(SquadData)
+    case updatePilotState(PilotStateData, PilotState)
 }
 
 enum MyFactionSquadListAction {
@@ -53,15 +54,16 @@ enum MyFactionSquadListAction {
     case getShips(Squad, SquadData)
 }
 
-struct World {
-    var service: SquadService
+struct MyEnvironment {
+    var squadService: SquadService
+    var pilotStateService: PilotStateService
 }
 
 // MARK: - Redux Store
 func myAppReducer(
     state: inout MyAppState,
     action: MyAppAction,
-    environment: World
+    environment: MyEnvironment
 ) -> AnyPublisher<MyAppAction, Never>
 {
     switch action {
@@ -80,11 +82,18 @@ func myAppReducer(
 
 func squadReducer(state: inout MySquadViewState,
                     action: MySquadAction,
-                    environment: World) -> AnyPublisher<MyAppAction, Never>
+                    environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
     switch(action) {
         case let .updateSquad(squad):
-            environment.service.updateSquad(squadData: squad)
+            environment
+                .squadService
+                .updateSquad(squadData: squad)
+        
+        case let .updatePilotState(pilotStateData, pilotState):
+            environment
+                .pilotStateService
+                .updateState(newData: pilotStateData, state: pilotState)
     }
     
     return Empty().eraseToAnyPublisher()
@@ -92,7 +101,7 @@ func squadReducer(state: inout MySquadViewState,
 
 func factionReducer(state: inout FactionSquadListState,
                     action: MyFactionSquadListAction,
-                    environment: World) -> AnyPublisher<MyAppAction, Never>
+                    environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
     func filterByFavorites(_ isFavorite: Bool = true) {
         let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
@@ -122,7 +131,8 @@ func factionReducer(state: inout FactionSquadListState,
             filterByFavorites()
         
         case .loadSquads:
-            return environment.service
+            return environment
+                .squadService
                 .loadSquadsListRx()
                 .replaceError(with: [])
                 .map { .faction(action: .setSquads(squads: $0)) }
@@ -139,25 +149,33 @@ func factionReducer(state: inout FactionSquadListState,
         
         case .deleteAllSquads:
             state.squadDataList.forEach {
-                environment.service.deleteSquad(squadData: $0)
+                environment
+                    .squadService
+                    .deleteSquad(squadData: $0)
             }
             
             return loadAllSquads()
         
         case let .deleteSquad(squad):
-            environment.service.deleteSquad(squadData: squad)
+            environment
+                .squadService
+                .deleteSquad(squadData: squad)
         
             return loadAllSquads()
         
         case let .updateSquad(squad):
-            environment.service.updateSquad(squadData: squad)
+            environment
+                .squadService
+                .updateSquad(squadData: squad)
             
             return loadAllSquads()
         
         case let .favorite(isFavorite, squad):
             let x = squad
             x.favorite = isFavorite
-            environment.service.updateSquad(squadData: x)
+            environment
+                .squadService
+                .updateSquad(squadData: x)
             
             return loadAllSquads()
     }
@@ -165,7 +183,7 @@ func factionReducer(state: inout FactionSquadListState,
     return Empty().eraseToAnyPublisher()
 }
 
-typealias MyAppStore = Store<MyAppState, MyAppAction, World>
+typealias MyAppStore = Store<MyAppState, MyAppAction, MyEnvironment>
 typealias Reducer<State, Action, Environment> =
 (inout State, Action, Environment) -> AnyPublisher<Action, Never>
 
