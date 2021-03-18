@@ -40,6 +40,7 @@
 		AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F7242B76AF00248CA4 /* ShipView.swift */; };
 		AE3539542430C64700AC023A /* WedgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3539532430C64700AC023A /* WedgeView.swift */; };
 		AE3B2AF62602241A00451C9F /* Redux_SquadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */; };
+		AE3B2AF82603851F00451C9F /* Redux_PilotCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */; };
 		AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
@@ -137,6 +138,7 @@
 		AE2D80F7242B76AF00248CA4 /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
 		AE3539532430C64700AC023A /* WedgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WedgeView.swift; sourceTree = "<group>"; };
 		AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadView.swift; sourceTree = "<group>"; };
+		AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_PilotCardView.swift; sourceTree = "<group>"; };
 		AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesManager.swift; sourceTree = "<group>"; };
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE4D58C223F8087C00C66136 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -385,6 +387,7 @@
 				AEA35D4F25F251D3007A2D36 /* Store.swift */,
 				AEB3A82525FA3B8F00F3C68D /* Redux_FactionSquadList.swift */,
 				AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */,
+				AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -621,6 +624,7 @@
 				AEEB546C24F11FE50050913C /* PilotStateService.swift in Sources */,
 				AEC125E42513468600021096 /* UpgradeUtility.swift in Sources */,
 				AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */,
+				AE3B2AF82603851F00451C9F /* Redux_PilotCardView.swift in Sources */,
 				AE028C5B249F82AF00DF689B /* Logging.swift in Sources */,
 				AEA192DE25C2E2E20033ACBD /* LinkedViewNew.swift in Sources */,
 				AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */,
