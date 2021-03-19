@@ -72,7 +72,8 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var store: MyAppStore
     
-    @State var shipPilots: [ShipPilot] = []
+    // REMOVE: Get pilots from the store
+//    @State var shipPilots: [ShipPilot] = []
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
     @State private var displayResetAllConfirmation: Bool = false
@@ -84,6 +85,10 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
     let squadData: SquadData
     let theme: Theme = WestworldUITheme()
 
+    var shipPilots: [ShipPilot] {
+        self.store.state.squad.shipPilots
+    }
+    
     var emptySection: some View {
         Section {
             Text("No ships found")
@@ -100,6 +105,8 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
     
     var sortedShipPilots: [ShipPilot] {
         // TODO: Switch & AppStore
+        
+        // should be self.store.shipPilots
         var copy = self.shipPilots
         
         if (activationOrder) {
@@ -280,12 +287,12 @@ extension Redux_SquadCardView {
     
     // TODO: Switch & AppStore
     private func loadShips() {
+        // Make request to store to build the store.shipPilots
+        
         logMessage("damagedPoints SquadCardView.loadShips")
         print("PAK_DialStatus SquadCardView.loadShips()")
-        self.shipPilots = SquadCardViewModel.getShips(
-            squad: self.squad,
-            squadData: self.squadData)
-
+        store.send(.squad(action: .getShips(self.squad, self.squadData)))
+        
         self.shipPilots.printAll(tag: "PAK_DialStatus self.shipPilots")
 
         self.shipPilots.forEach{ shipPilot in
@@ -310,7 +317,7 @@ extension Redux_SquadCardView {
         // It updatee the @State shipPilots
         
         // TODO: Switch & AppStore
-        self.shipPilots = []
+//        self.shipPilots = []
         // reload ships
         // TODO: Switch & AppStore
         loadShips()
@@ -325,6 +332,7 @@ extension Redux_SquadCardView {
                         print("PAK_DialStatus pilotStateData.id: \($0)")
                         let revealAllDialsStatus: DialStatus = self.revealAllDials ? .revealed : .hidden
                         $0.dial_status = revealAllDialsStatus
+                        
                         self.updatePilotState(pilotStateData: $0,
                                                            pilotState: shipPilot.pilotState)
                         print("PAK_DialStatus updateAllDials $0.dial_status = \(revealAllDialsStatus)")

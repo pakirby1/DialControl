@@ -103,7 +103,7 @@ extension SquadServiceProtocol {
 }
 
 protocol DamagedSquadRepresenting {
-    var shipPilots: [ShipPilot] { get set }
+    var shipPilots: [ShipPilot] { get }
 }
 
 extension DamagedSquadRepresenting {

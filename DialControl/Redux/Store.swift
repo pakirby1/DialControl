@@ -17,7 +17,7 @@ struct MyAppState {
 }
 
 struct MySquadViewState {
-
+    var shipPilots: [ShipPilot] = []
 }
 
 struct FactionSquadListState {
@@ -40,6 +40,7 @@ enum MyAppAction {
 enum MySquadAction {
     case updateSquad(SquadData)
     case updatePilotState(PilotStateData, PilotState)
+    case getShips(Squad, SquadData)
 }
 
 enum MyFactionSquadListAction {
@@ -94,6 +95,11 @@ func squadReducer(state: inout MySquadViewState,
             environment
                 .pilotStateService
                 .updateState(newData: pilotStateData, state: pilotState)
+        
+        case let .getShips(squad, data):
+            state.shipPilots = SquadCardViewModel.getShips(
+                squad: squad,
+                squadData: data)
     }
     
     return Empty().eraseToAnyPublisher()
