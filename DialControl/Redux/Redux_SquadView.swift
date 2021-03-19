@@ -60,6 +60,10 @@ struct Redux_SquadView: View {
         }
         .onAppear() {
             self.isFirstPlayer = self.squadData.firstPlayer
+            
+            // Have to do this in .onAppear since @EnvironmentObjects are
+            // not available in .init()
+            self.store.send(.squad(action: .getShips(self.squad, self.squadData)))
         }
     }
     

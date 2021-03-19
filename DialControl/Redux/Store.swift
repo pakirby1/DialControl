@@ -18,8 +18,8 @@ struct MyAppState {
 
 struct MySquadViewState {
     var shipPilots: [ShipPilot] = []
-    var squad: Squad!
-    var squadData: SquadData!
+    var squad: Squad?
+    var squadData: SquadData?
 }
 
 struct FactionSquadListState {
