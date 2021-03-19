@@ -73,7 +73,6 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
     @EnvironmentObject var store: MyAppStore
     
     // REMOVE: Get pilots from the store
-//    @State var shipPilots: [ShipPilot] = []
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
     @State private var displayResetAllConfirmation: Bool = false

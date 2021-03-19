@@ -112,29 +112,6 @@ struct Redux_PilotDetailsView: View {
     let theme: Theme = WestworldUITheme()
     @State var currentManeuver: String = ""
     
-    func buildPointsView(half: Bool = false) -> AnyView {
-        let points = half ? self.shipPilot.halfPoints : self.shipPilot.points
-        let color = half ? Color.red : Color.blue
-        let label = "\(points)"
-        
-        return AnyView(IndicatorView(label:label,
-                                     bgColor: color,
-                                     fgColor: theme.TEXT_FOREGROUND))
-    }
-    
-    /*
-     maneuverList
-     ▿ 7 : 3L
-       - speed : 3
-       - bearing : DialControl.ManeuverBearing.L
-       - difficulty : DialControl.ManeuverDifficulty.R
-     ▿ 8 : 3T
-       - speed : 3
-       - bearing : DialControl.ManeuverBearing.T
-       - difficulty : DialControl.ManeuverDifficulty.W
-     */
-    
-    
     var dialViewNew: some View {
         let status = self.shipPilot.pilotStateData!.dial_status
         
@@ -202,6 +179,16 @@ struct Redux_PilotDetailsView: View {
 }
 
 extension Redux_PilotDetailsView {
+    func buildPointsView(half: Bool = false) -> AnyView {
+        let points = half ? self.shipPilot.halfPoints : self.shipPilot.points
+        let color = half ? Color.red : Color.blue
+        let label = "\(points)"
+        
+        return AnyView(IndicatorView(label:label,
+                                     bgColor: color,
+                                     fgColor: theme.TEXT_FOREGROUND))
+    }
+    
     func buildManeuverView(isFlipped: Bool) -> AnyView {
         let x = self.shipPilot.selectedManeuver
         var view: AnyView = AnyView(EmptyView())

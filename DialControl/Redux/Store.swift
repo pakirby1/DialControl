@@ -18,6 +18,8 @@ struct MyAppState {
 
 struct MySquadViewState {
     var shipPilots: [ShipPilot] = []
+    var squad: Squad!
+    var squadData: SquadData!
 }
 
 struct FactionSquadListState {
@@ -97,6 +99,8 @@ func squadReducer(state: inout MySquadViewState,
                 .updateState(newData: pilotStateData, state: pilotState)
         
         case let .getShips(squad, data):
+            state.squad = squad
+            state.squadData = data
             state.shipPilots = SquadCardViewModel.getShips(
                 squad: squad,
                 squadData: data)
@@ -194,7 +198,7 @@ typealias Reducer<State, Action, Environment> =
 (inout State, Action, Environment) -> AnyPublisher<Action, Never>
 
 class Store<State, Action, Environment> : ObservableObject {
-    @Published private(set) var state: State
+    @Published var state: State
     private let environment: Environment
     private let reducer: Reducer<State, Action, Environment>
     private var cancellables = Set<AnyCancellable>()
