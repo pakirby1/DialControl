@@ -39,7 +39,7 @@
 		AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F52428D3E800248CA4 /* NavigationStack.swift */; };
 		AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F7242B76AF00248CA4 /* ShipView.swift */; };
 		AE3539542430C64700AC023A /* WedgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3539532430C64700AC023A /* WedgeView.swift */; };
-		AE3B2AF62602241A00451C9F /* Redux_SquadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */; };
+		AE3B2AF62602241A00451C9F /* Redux_SquadView_Old.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */; };
 		AE3B2AF82603851F00451C9F /* Redux_PilotCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */; };
 		AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
@@ -137,7 +137,7 @@
 		AE2D80F52428D3E800248CA4 /* NavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStack.swift; sourceTree = "<group>"; };
 		AE2D80F7242B76AF00248CA4 /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
 		AE3539532430C64700AC023A /* WedgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WedgeView.swift; sourceTree = "<group>"; };
-		AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadView.swift; sourceTree = "<group>"; };
+		AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadView_Old.swift; sourceTree = "<group>"; };
 		AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_PilotCardView.swift; sourceTree = "<group>"; };
 		AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesManager.swift; sourceTree = "<group>"; };
 		AE4D58BF23F8087C00C66136 /* DialControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DialControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -386,7 +386,7 @@
 			children = (
 				AEA35D4F25F251D3007A2D36 /* Store.swift */,
 				AEB3A82525FA3B8F00F3C68D /* Redux_FactionSquadList.swift */,
-				AE3B2AF52602241A00451C9F /* Redux_SquadView.swift */,
+				AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */,
 				AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */,
 			);
 			path = Redux;
@@ -613,7 +613,7 @@
 				AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */,
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
-				AE3B2AF62602241A00451C9F /* Redux_SquadView.swift in Sources */,
+				AE3B2AF62602241A00451C9F /* Redux_SquadView_Old.swift in Sources */,
 				AE1DF8F624B73D1900B84D38 /* JSONSerialization.swift in Sources */,
 				AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */,
 				AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */,

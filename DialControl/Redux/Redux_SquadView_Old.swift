@@ -11,95 +11,21 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
-struct Redux_SquadView: View {
-    @EnvironmentObject var viewFactory: ViewFactory
-    @EnvironmentObject var store: MyAppStore
-    @State var isFirstPlayer: Bool = false
-    let squad: Squad
-    let squadData: SquadData
-    
-    init(squad: Squad, squadData: SquadData) {
-        self.squad = squad
-        self.squadData = squadData
-    }
-    
-    var header: some View {
-        HStack {
-            Button(action: {
-                self.viewFactory.back()
-            }) {
-                Text("< Faction Squad List")
-            }
-           
-            Toggle(isOn: self.$isFirstPlayer.didSet{
-                // Hack because swift thinks I don't want to perform
-                // an assignment (=) vs. a boolean check (==)
-                let x = $0
-                self.squadData.firstPlayer = x
-                self.updateSquad(squadData: self.squadData)
-            }){
-                Text("First Player")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-            
-        }.padding(10)
-    }
-    
-    var body: some View {
-        return VStack {
-            header
-            Redux_SquadCardView(isFirstPlayer: $isFirstPlayer,
-                                updateSquadCallback: self.updateSquad,
-                                squad: self.squad,
-                                squadData: self.squadData)
-                .environmentObject(viewFactory)
-                .environmentObject(store)
-                .onAppear() {
-                    print("Redux_SquadCardView.onAppear")
-                }
-        }
-        .onAppear() {
-            self.isFirstPlayer = self.squadData.firstPlayer
-            
-            // Have to do this in .onAppear since @EnvironmentObjects are
-            // not available in .init()
-            self.store.send(.squad(action: .getShips(self.squad, self.squadData)))
-        }
-    }
-    
-    func updateSquad(squadData: SquadData) {
-        self.store.send(.squad(action: .updateSquad(squadData)))
-    }
-}
-
-struct Redux_SquadCardView: View, DamagedSquadRepresenting {
+struct Redux_SquadView: View, DamagedSquadRepresenting {
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var store: MyAppStore
     
-    // REMOVE: Get pilots from the store
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
     @State private var displayResetAllConfirmation: Bool = false
+    @State var isFirstPlayer: Bool = false
     
-    @Binding var isFirstPlayer: Bool
-    
-    let updateSquadCallback: (SquadData) -> ()
+    let theme: Theme = WestworldUITheme()
     let squad: Squad
     let squadData: SquadData
-    let theme: Theme = WestworldUITheme()
-
+    
     var shipPilots: [ShipPilot] {
         self.store.state.squad.shipPilots
-    }
-    
-    var emptySection: some View {
-        Section {
-            Text("No ships found")
-        }
-    }
-    
-    private var shipsView: AnyView {
-        return AnyView(shipsGrid)
     }
     
     var chunkedShips : [[ShipPilot]] {
@@ -119,6 +45,19 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
         }
         
         return copy
+    }
+}
+
+//MARK:- View
+extension Redux_SquadView {
+    var emptySection: some View {
+        Section {
+            Text("No ships found")
+        }
+    }
+    
+    private var shipsView: AnyView {
+        return AnyView(shipsGrid)
     }
     
     var shipsListSection: some View {
@@ -143,7 +82,29 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
         }
     }
     
-    var body: some View {
+    var header: some View {
+        HStack {
+            Button(action: {
+                self.viewFactory.back()
+            }) {
+                Text("< Faction Squad List")
+            }
+           
+            Toggle(isOn: self.$isFirstPlayer.didSet{
+                // Hack because swift thinks I don't want to perform
+                // an assignment (=) vs. a boolean check (==)
+                let x = $0
+                self.squadData.firstPlayer = x
+                self.updateSquad(squadData: self.squadData)
+            }){
+                Text("First Player")
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
+        }.padding(10)
+    }
+    
+    var content: some View {
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
             .foregroundColor(theme.TEXT_FOREGROUND)
@@ -252,9 +213,24 @@ struct Redux_SquadCardView: View, DamagedSquadRepresenting {
             self.activationOrder = self.squadData.engaged
         }
     }
+    
+    var body: some View {
+        return VStack {
+            header
+            content
+        }
+        .onAppear() {
+            self.isFirstPlayer = self.squadData.firstPlayer
+        }
+    }
 }
 
-extension Redux_SquadCardView {
+//MARK:- Behavior
+extension Redux_SquadView {
+    func updateSquad(squadData: SquadData) {
+        self.store.send(.squad(action: .updateSquad(squadData)))
+    }
+    
     private func buildShipButton(shipPilot: ShipPilot) -> some View {
         func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
             // Get the dial status from the pilot state
@@ -280,12 +256,14 @@ extension Redux_SquadCardView {
                                   pilotState: PilotState)
     {
         self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
+        
+        loadShips()
     }
     
     private func processEngage() {
         self.activationOrder.toggle()
         self.squadData.engaged = self.activationOrder
-        self.updateSquadCallback(self.squadData)
+        self.updateSquad(squadData: self.squadData)
     }
     
     // TODO: Switch & AppStore
@@ -315,15 +293,6 @@ extension Redux_SquadCardView {
                 })
             }
         }
-        
-        // Not sure why, but this forces a refresh of the ship status (Half, Destroyed)
-        // It updatee the @State shipPilots
-        
-        // TODO: Switch & AppStore
-//        self.shipPilots = []
-        // reload ships
-        // TODO: Switch & AppStore
-        loadShips()
     }
     
     private func updateAllDials() {
@@ -344,10 +313,6 @@ extension Redux_SquadCardView {
                 }
             }
         }
-        
-        // reload ships
-        // TODO: Switch & AppStore
-        loadShips()
     }
 }
 
