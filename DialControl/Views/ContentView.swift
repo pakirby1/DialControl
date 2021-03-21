@@ -82,6 +82,7 @@ class ViewFactory: ObservableObject {
     func Redux_buildView(type: ViewType) -> AnyView {
         switch(type) {
         case .squadViewPAK(let squad, let squadData):
+            
             return AnyView(Redux_SquadView(squad: squad,
                                      squadData: squadData)
                 .environmentObject(self)
