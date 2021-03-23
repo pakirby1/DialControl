@@ -327,7 +327,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         }.alert(isPresented: $displayResetAllConfirmation) {
             Alert(
                 title: Text("Reset All"),
-                message: Text("Reset All Squads"),
+                message: Text("Reset All Ships"),
                 primaryButton: Alert.Button.default(Text("Reset"), action: { self.resetAllShips() }),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
             )

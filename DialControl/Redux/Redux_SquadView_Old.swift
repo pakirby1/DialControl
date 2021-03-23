@@ -35,7 +35,6 @@ struct Redux_SquadView: View, DamagedSquadRepresenting {
     var sortedShipPilots: [ShipPilot] {
         // TODO: Switch & AppStore
         
-        // should be self.store.shipPilots
         var copy = self.shipPilots
         
         if (activationOrder) {
@@ -57,7 +56,7 @@ extension Redux_SquadView {
     }
     
     private var shipsView: AnyView {
-        return AnyView(shipsGrid)
+        return shipsGrid.eraseToAnyView()
     }
     
     var shipsListSection: some View {
@@ -232,17 +231,22 @@ extension Redux_SquadView {
     }
     
     private func buildShipButton(shipPilot: ShipPilot) -> some View {
-        func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
+        
+        @ViewBuilder
+        func buildPilotCardView(shipPilot: ShipPilot) -> some View {
             // Get the dial status from the pilot state
             if let data = shipPilot.pilotStateData {
                 print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
-                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
+                return Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
                                                    updatePilotStateCallback: self.updatePilotState)
-                    .environmentObject(self.viewFactory))
+                    .environmentObject(self.viewFactory)
+//                    .eraseToAnyView()
             }
             
-            return AnyView(EmptyView())
+            //FIXME:- return an error view
+            return EmptyView()
+//                .eraseToAnyView()
         }
         
         return Button(action: {

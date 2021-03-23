@@ -226,7 +226,7 @@ public struct PopView<Label, Tag>: View where Label: View, Tag: Hashable {
     @EnvironmentObject private var navViewModel: NavigationStack
     private let label: Label
     private let destination: PopDestination
-    private let tag: Tag?
+    internal let tag: Tag?
     @Binding private var isActive: Bool
     @Binding private var selection: Tag?
 
@@ -276,5 +276,50 @@ public extension PopView where Tag == Never {
     init(destination: PopDestination = .previous, isActive: Binding<Bool>, @ViewBuilder label: () -> Label) {
         self.init(destination: destination, isActive: isActive,
                   tag: nil, selection: Binding.constant(nil), label: label)
+    }
+}
+
+//extension PopView : NavigationViewExecutable {
+//    func execute() {
+//        self.navViewModel.pop(to: self.destination)
+//    }
+//}
+
+protocol NavigationViewExecutable {
+    associatedtype T
+    associatedtype Tag : Hashable
+    associatedtype Label : View
+    
+    var tag: Tag? { get }
+    var bodyNew: T { get }
+    func execute()
+    var selection: Binding<Tag?> { get set }
+    var isActive: Binding<Bool> { get set }
+    var label: Label { get set }
+}
+
+extension NavigationViewExecutable {
+    public var bodyNew: some View {
+        if let tag = tag {
+            
+            // Found a matching tag
+            if selection.wrappedValue == tag {
+                DispatchQueue.main.async {
+                    self.selection.wrappedValue = nil
+                    self.execute()
+                }
+            }
+        }
+        
+        if isActive.wrappedValue == true {
+            DispatchQueue.main.async {
+                self.isActive.wrappedValue = false
+                self.execute()
+            }
+        }
+        
+        return label.onTapGesture {
+            self.execute()
+        }
     }
 }
