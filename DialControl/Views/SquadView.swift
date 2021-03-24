@@ -323,7 +323,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         }.alert(isPresented: $displayResetAllConfirmation) {
             Alert(
                 title: Text("Reset All"),
-                message: Text("Reset All Squads"),
+                message: Text("Reset All Ships"),
                 primaryButton: Alert.Button.default(Text("Reset"), action: { self.resetAllShips() }),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
             )
@@ -424,29 +424,17 @@ struct PilotCardView: View {
 
             VStack {
                 HStack {
-//                    Text("\(shipPilot.ship.pilots[0].initiative)")
-//                        .font(.title)
-//                        .bold()
-//                        .foregroundColor(Color.orange)
-                    
                     initiative
                     
+                    halfStatus
+
                     Spacer()
-                
-//                    VStack {
-//                        Text("\(shipPilot.pilot.name)")
-//                            .font(.body)
-//
-//                        Text("\(shipPilot.ship.name)")
-//                            .font(.caption)
-//                            .foregroundColor(Color.white)
-//                    }
                     
                     pilotShipNames
 
                     Spacer()
                     
-                    halfStatus
+                    healthStatus
                 }
                 .padding(.leading, 5)
                 .background(Color.black)
@@ -489,6 +477,37 @@ struct PilotCardView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
         )
+    }
+    
+    var healthStatus: some View {
+        func buildStats(psd: PilotStateData) -> [HealthStat] {
+            var stats: [HealthStat] = []
+            
+            if psd.hullMax > 0 {
+                stats.append(HealthStat(type: .hull, value: psd.getActive(type: .hull)))
+            }
+            
+            if psd.shieldsMax > 0 {
+                stats.append(HealthStat(type: .shield, value: psd.getActive(type: .shield)))
+            }
+            
+            if psd.forceMax > 0 {
+                stats.append(HealthStat(type: .force, value: psd.getActive(type: .force)))
+            }
+            
+            if psd.chargeMax > 0 {
+                stats.append(HealthStat(type: .charge, value: psd.getActive(type: .charge)))
+            }
+            
+            return stats
+        }
+        
+        if let data = shipPilot.pilotStateData {
+            let stats: [HealthStat] = buildStats(psd: data)
+            return HealthStatsView(healthStats: stats)
+        }
+        
+        return HealthStatsView(healthStats: [])
     }
     
     var halfStatus: some View {
