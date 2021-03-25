@@ -681,7 +681,8 @@ extension ShipView {
                 self.viewModel.updateDialStatus(status: .destroyed)
             } else {
                 self.viewModel.updateSelectedManeuver(maneuver: "1FB")
-                self.viewModel.updateDialStatus(status: .set)
+//                self.viewModel.updateDialStatus(status: .set)
+                self.viewModel.updateDialStatus(status: .ionized)
             }
         }
     }

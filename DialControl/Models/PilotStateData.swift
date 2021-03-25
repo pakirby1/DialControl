@@ -456,6 +456,9 @@ extension DialStatus {
             case (.revealed, .hideAll) : self = .hidden
             case (.hidden, .dialTapped) : self = .revealed
             case (.hidden, .revealAll) : self = .revealed
+            case (.ionized, .dialTapped) : self = .revealed
+            case (.ionized, .revealAll) : self = .revealed
+            case (.ionized, .hideAll) : self = .hidden
             default: self = .hidden
         }
     }

@@ -708,6 +708,12 @@ struct PilotDetailsView: View {
                 .stroke(strokeColor, lineWidth: 3)
                 .frame(width: 75, height: 75, alignment: .center)
 
+            if dialStatus == .ionized {
+                Text("Ion")
+                .foregroundColor(Color.red)
+                .offset(x:0, y: 50)
+            }
+            
             view
         })
     }
