@@ -74,6 +74,8 @@
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
 		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
+		AEE65512260DE21A00AFAE6A /* HealthStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65511260DE21A00AFAE6A /* HealthStat.swift */; };
+		AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */; };
 		AEE98B4C24B5BD9F00E60128 /* CustomDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */; };
 		AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4D24B5D45900E60128 /* Globals.swift */; };
 		AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */; };
@@ -178,6 +180,8 @@
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
+		AEE65511260DE21A00AFAE6A /* HealthStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStat.swift; sourceTree = "<group>"; };
+		AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStatsView.swift; sourceTree = "<group>"; };
 		AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDivider.swift; sourceTree = "<group>"; };
 		AEE98B4D24B5D45900E60128 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipLookupBuilder.swift; sourceTree = "<group>"; };
@@ -254,6 +258,7 @@
 		AE1FBE5724166422005C54F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */,
 				AE1DF8F024B5E0CD00B84D38 /* CardView.swift */,
 				AE4D58C923F8087C00C66136 /* ContentView.swift */,
 				AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */,
@@ -283,6 +288,7 @@
 		AE1FBE5A2416657D005C54F5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AEE65511260DE21A00AFAE6A /* HealthStat.swift */,
 				AE1FBE5B24166623005C54F5 /* Maneuver.swift */,
 				AE1FBE6124166830005C54F5 /* PathNode.swift */,
 				AE1FBE65241668CF005C54F5 /* AngleRange.swift */,
@@ -610,9 +616,11 @@
 				AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */,
 				AE93ADDF2452A8EA0017AEE8 /* TextView.swift in Sources */,
 				AE3B2AF62602241A00451C9F /* Redux_SquadView_Old.swift in Sources */,
+				AEE65512260DE21A00AFAE6A /* HealthStat.swift in Sources */,
 				AE1DF8F624B73D1900B84D38 /* JSONSerialization.swift in Sources */,
 				AE7EC217245EE95B00E92704 /* FactionFilterView.swift in Sources */,
 				AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */,
+				AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
 				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,
