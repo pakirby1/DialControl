@@ -607,7 +607,7 @@ struct ShipView: View {
     }
     
     var upgradeCardImage: AnyView {
-        let x:MyTestView = MyTestView(viewModel: self.viewModel)
+        let x:MyTestView = MyTestView(viewModel: self.viewModel as! ShipViewModelProtocol)
         let emptyView = AnyView(EmptyView())
         
         var ret = AnyView(ImageView(url: self.imageOverlayUrl,
@@ -701,7 +701,7 @@ extension ShipView {
                     /// Call .equatable() to prevent refreshing the static image
                     /// https://swiftui-lab.com/equatableview/
                     ImageView(url: viewModel.shipImageURL,
-                             shipViewModel: self.viewModel,
+                              moc: self.viewModel.moc,
                              label: "ship")
                     .equatable()
                     .frame(width: 350.0, height:500)
