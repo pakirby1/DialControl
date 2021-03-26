@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import Combine
+import CoreData
 
 /// Conform to equatable to prevent refreshing the static image
 /// https://swiftui-lab.com/equatableview/
@@ -20,11 +21,11 @@ struct ImageView: View, Equatable {
     let url: String
     @ObservedObject var viewModel : NetworkCacheViewModel
     
-    init(url: String, shipViewModel: ShipViewModel, label: String = "") {
+    init(url: String, moc: NSManagedObjectContext, label: String = "") {
         printer = DeallocPrinter("PAKImageView \(id)")
         
         // Images Support
-        self.viewModel = NetworkCacheViewModel(moc: shipViewModel.moc)
+        self.viewModel = NetworkCacheViewModel(moc: moc)
         self.url = url
         print("PAKImageView.init(url: \(url)) id = \(id)")
         self.viewModel.loadImage(url: url)

@@ -132,18 +132,26 @@ struct UpgradeView: View {
     }
 }
 
+struct MyTestView : View {
+    let viewModel: ShipViewModelProtocol
+    
+    var body: some View {
+        Text("MyTestView")
+    }
+}
+
 struct UpgradeCardFlipView : View {
     @State var flipped = false
     let frontUrl: String
     let backUrl: String
-    let viewModel: ShipViewModel
+    let viewModel: ShipViewModelProtocol
     let update: (Bool) -> Void
     
     /// side: true (front), false (back)
     init(side: Bool,
          frontUrl: String,
          backUrl: String,
-         viewModel: ShipViewModel,
+         viewModel: ShipViewModelProtocol,
          update: @escaping (Bool) -> Void)
     {
         _flipped = State(initialValue: side)
@@ -155,7 +163,7 @@ struct UpgradeCardFlipView : View {
     
     var body: some View {
         ImageView(url: self.flipped ? self.frontUrl : self.backUrl,
-              shipViewModel: self.viewModel,
+                  moc: self.viewModel.moc,
               label: "upgrade")
             .rotation3DEffect(self.flipped ? Angle(degrees: 360): Angle(degrees:
                 0),
@@ -166,6 +174,5 @@ struct UpgradeCardFlipView : View {
                 self.update(self.flipped)
             }
             .frame(width: 500.0, height:350)
-            .environmentObject(self.viewModel)
     }
 }

@@ -76,6 +76,7 @@
 		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
 		AEE65512260DE21A00AFAE6A /* HealthStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65511260DE21A00AFAE6A /* HealthStat.swift */; };
 		AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */; };
+		AEE65516260DFBBF00AFAE6A /* Redux_ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */; };
 		AEE98B4C24B5BD9F00E60128 /* CustomDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */; };
 		AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4D24B5D45900E60128 /* Globals.swift */; };
 		AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */; };
@@ -182,6 +183,7 @@
 		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 		AEE65511260DE21A00AFAE6A /* HealthStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStat.swift; sourceTree = "<group>"; };
 		AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStatsView.swift; sourceTree = "<group>"; };
+		AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_ShipView.swift; sourceTree = "<group>"; };
 		AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDivider.swift; sourceTree = "<group>"; };
 		AEE98B4D24B5D45900E60128 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipLookupBuilder.swift; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 				AEB3A82525FA3B8F00F3C68D /* Redux_FactionSquadList.swift */,
 				AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */,
 				AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */,
+				AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -585,6 +588,7 @@
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
 				AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */,
+				AEE65516260DFBBF00AFAE6A /* Redux_ShipView.swift in Sources */,
 				AEE98B4C24B5BD9F00E60128 /* CustomDivider.swift in Sources */,
 				AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */,
 				AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */,

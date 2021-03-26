@@ -1,21 +1,26 @@
 //
-//  ShipView.swift
+//  Redux_ShipView.swift
 //  DialControl
 //
-//  Created by Phil Kirby on 3/25/20.
-//  Copyright © 2020 SoftDesk. All rights reserved.
+//  Created by Phil Kirby on 3/26/21.
+//  Copyright © 2021 SoftDesk. All rights reserved.
 //
-
 import Foundation
 import SwiftUI
 import Combine
 import TimelaneCombine
 import CoreData
 
+protocol ShipViewModelProtocol {
+    var moc: NSManagedObjectContext { get set }
+    func update(type: PilotStatePropertyType, active: Int, inactive: Int)
+}
 
+extension ShipViewModel : ShipViewModelProtocol {}
+extension Redux_ShipViewModel : ShipViewModelProtocol {}
 
 // MARK:- ShipViewModel
-class ShipViewModel: ObservableObject {
+class Redux_ShipViewModel: ObservableObject {
     var shipPilot: ShipPilot
     var squad: Squad
     @Published var shipImage: UIImage = UIImage()
@@ -66,7 +71,7 @@ class ShipViewModel: ObservableObject {
             .$fetchedObjects
             .print()
             .receive(on: DispatchQueue.main)
-            .assign(to: \ShipViewModel.images, on: self)
+            .assign(to: \.images, on: self)
             .store(in: &cancellableSet)
         
         self.$currentManeuver
@@ -364,7 +369,7 @@ class ShipViewModel: ObservableObject {
     }
 }
 
-enum PilotStatePropertyType {
+enum Redux_PilotStatePropertyType {
     case hull
     case shield
     case charge
@@ -376,7 +381,7 @@ enum PilotStatePropertyType {
     case selectedSide(UpgradeStateData, Bool)
 }
 
-enum PilotStatePropertyType_New {
+enum Redux_PilotStatePropertyType_New {
     case hull(Int, Int)
     case shield(Int, Int)
     case charge(Int, Int)
@@ -387,7 +392,7 @@ enum PilotStatePropertyType_New {
 }
 
 // MARK:- ShipView
-struct ShipView: View {
+struct Redux_ShipView: View {
     struct SelectedUpgrade {
         let upgrade: Upgrade
         let imageOverlayUrl: String
@@ -399,12 +404,12 @@ struct ShipView: View {
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
     @State var imageOverlayUrlBack: String = ""
-    @ObservedObject var viewModel: ShipViewModel
+    @ObservedObject var viewModel: Redux_ShipViewModel
     let theme: Theme = WestworldUITheme()
     let printer = DeallocPrinter("ShipView")
     @State var selectedUpgrade: UpgradeView.UpgradeViewModel? = nil
     
-    init(viewModel: ShipViewModel) {
+    init(viewModel: Redux_ShipViewModel) {
         self.viewModel = viewModel
         self.currentManeuver = ""
     }
@@ -418,7 +423,6 @@ struct ShipView: View {
         VStack(alignment: .leading) {
             headerView
             CustomDivider()
-//            bodyContent
             bodyContent
             CustomDivider()
             footer
@@ -455,57 +459,7 @@ struct ShipView: View {
     var dialStatusText: String {
         return "\(self.viewModel.pilotStateData.dial_status.description)"
     }
-    
-    func buildLinkedView(max: Int,
-                             type: StatButtonType,
-                             active: Int,
-                             inActive: Int,
-                             updateType: PilotStatePropertyType,
-                             handleDestroyed: Bool = false) -> AnyView
-        {
-            if (max > 0) {
-                return AnyView(LinkedView(type: type,
-                           active: active,
-                           inactive: inActive)
-                { (active, inactive) in
-                    self.viewModel.update(type: updateType,
-                                          active: active,
-                                          inactive: inactive)
-                    
-                    if (handleDestroyed) {
-                        self.viewModel.handleDestroyed()
-                    }
-                })
-            }
-            
-            return AnyView(EmptyView())
-        }
         
-    //    func buildLinkedView_New(max: Int,
-    //                         type: StatButtonType,
-    //                         active: Int,
-    //                         inActive: Int,
-    //                         updateType: PilotStatePropertyType) -> AnyView
-    //    {
-    //        if (max > 0) {
-    //            let viewModel = LinkedViewModel(store: Store(state: AppState(), environment: AppEnvironment()),
-    //                                            pilotIndex: self.viewModel.shipPilot.pilotState.pilotIndex,
-    //                                            type: type)
-    //
-    //
-    //            return AnyView(LinkedView(type: type,
-    //                       active: active,
-    //                       inactive: inActive)
-    //            { (active, inactive) in
-    //                self.viewModel.update(type: updateType,
-    //                                      active: active,
-    //                                      inactive: inactive)
-    //            })
-    //        }
-    //
-    //        return AnyView(EmptyView())
-    //    }
-    
     var footer: some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,
                      showImageOverlay: $showImageOverlay,
@@ -535,8 +489,6 @@ struct ShipView: View {
 //            .border(Color.red, width: 5)
     }
     
-    
-    
     var upgradeImageOverlay: some View {
         ZStack {
             Color
@@ -553,26 +505,7 @@ struct ShipView: View {
             upgradeCardImage
             
             linkedView
-            
-//            LinkedView(type: StatButtonType.charge,
-//                       active: 1,
-//                       inactive: 1)
-//            { (active, inactive) in
-////                           self.viewModel.update(type: PilotStatePropertyType.charge,
-////                                                 active: active,
-////                                                 inactive: inactive)
-//            }.offset(x:0, y:250)
         }
-    }
-    
-    func getUpgradeStateData(upgrade: Upgrade) -> UpgradeStateData? {
-        // do we have any upgrade states?
-        guard let upgradeStates = viewModel.pilotStateData.upgradeStates else { return nil }
-        
-        let upgradeStateData: [UpgradeStateData] = upgradeStates.filter({ upgradeState in upgradeState.xws == upgrade.xws })
-    
-        // yes, return the upgrade state with matching name/xws or nil
-        return (upgradeStateData.count > 0 ? upgradeStateData[0] : nil)
     }
     
     var linkedView: AnyView {
@@ -607,38 +540,30 @@ struct ShipView: View {
     }
     
     var upgradeCardImage: AnyView {
-        let x:MyTestView = MyTestView(viewModel: self.viewModel)
         let emptyView = AnyView(EmptyView())
         
         var ret = AnyView(ImageView(url: self.imageOverlayUrl,
                                     moc: self.viewModel.moc,
               label: "upgrade")
         .frame(width: 500.0, height:350)
-        .environmentObject(viewModel))
+        )
         
         if (self.imageOverlayUrlBack != "") {
             guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
             
             guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
-            let side = (upgradeState.selected_side == 0) ? false : true
             
-//            let flipView = UpgradeCardFlipView(
-//                side: side,
-//                frontUrl: self.imageOverlayUrl,
-//                backUrl: self.imageOverlayUrlBack,
-//                viewModel: self.viewModel,
-//                update: { side in
-//                    self.viewModel.update(
-//                        type: PilotStatePropertyType.selectedSide(upgradeState,
-//                                                                  side), active: -1, inactive: -1
-//                    )
-//                })
-            
-            
-//            ret = flipView
-//                .eraseToAnyView()
-            
-            ret = EmptyView().eraseToAnyView()
+            ret =
+                UpgradeCardFlipView(
+                    side: (upgradeState.selected_side == 0) ? false : true,
+                    frontUrl: self.imageOverlayUrl,
+                    backUrl: self.imageOverlayUrlBack,
+                    viewModel: self.viewModel as! ShipViewModelProtocol) { side in
+                        self.viewModel.update(
+                            type: PilotStatePropertyType.selectedSide(upgradeState,
+                                                                      side), active: -1, inactive: -1
+                        )
+                }.eraseToAnyView()
         }
         
         return ret
@@ -657,7 +582,42 @@ struct ShipView: View {
     }
 }
 
-extension ShipView {
+extension Redux_ShipView {
+    func getUpgradeStateData(upgrade: Upgrade) -> UpgradeStateData? {
+        // do we have any upgrade states?
+        guard let upgradeStates = viewModel.pilotStateData.upgradeStates else { return nil }
+        
+        let upgradeStateData: [UpgradeStateData] = upgradeStates.filter({ upgradeState in upgradeState.xws == upgrade.xws })
+    
+        // yes, return the upgrade state with matching name/xws or nil
+        return (upgradeStateData.count > 0 ? upgradeStateData[0] : nil)
+    }
+    
+    func buildLinkedView(max: Int,
+                             type: StatButtonType,
+                             active: Int,
+                             inActive: Int,
+                             updateType: PilotStatePropertyType,
+                             handleDestroyed: Bool = false) -> AnyView
+        {
+            if (max > 0) {
+                return AnyView(LinkedView(type: type,
+                           active: active,
+                           inactive: inActive)
+                { (active, inactive) in
+                    self.viewModel.update(type: updateType,
+                                          active: active,
+                                          inactive: inactive)
+                    
+                    if (handleDestroyed) {
+                        self.viewModel.handleDestroyed()
+                    }
+                })
+            }
+            
+            return AnyView(EmptyView())
+        }
+    
     var setDialButton: some View {
         Text("Set")
             .foregroundColor(.white)
@@ -700,46 +660,46 @@ extension ShipView {
             HStack(alignment: .top) {
                     /// Call .equatable() to prevent refreshing the static image
                     /// https://swiftui-lab.com/equatableview/
-                    ImageView(url: viewModel.shipImageURL,
-                             shipViewModel: self.viewModel,
-                             label: "ship")
-                    .equatable()
-                    .frame(width: 350.0, height:500)
-                    .environmentObject(viewModel)
+//                    ImageView(url: viewModel.shipImageURL,
+//                             shipViewModel: self.viewModel,
+//                             label: "ship")
+//                    .equatable()
+//                    .frame(width: 350.0, height:500)
+//                    .environmentObject(viewModel)
                 
-                        VStack(spacing: 20) {
-                            // Hull
-                            buildLinkedView(max: viewModel.pilotStateData.hullMax,
-                                            type: StatButtonType.hull,
-                                            active: viewModel.hullActive,
-                                            inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
-                                            updateType: PilotStatePropertyType.hull,
-                                            handleDestroyed: true)
-                            
-                            // Shield
-                            buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
-                                            type: StatButtonType.shield,
-                                            active: viewModel.shieldsActive,
-                                            inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
-                                            updateType: PilotStatePropertyType.shield,
-                                            handleDestroyed: true)
-
-                            // Force
-                            buildLinkedView(max: viewModel.pilotStateData.forceMax,
-                                            type: StatButtonType.force,
-                                            active: viewModel.forceActive,
-                                            inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
-                                            updateType: PilotStatePropertyType.force)
-
-                            // Charge
-                            buildLinkedView(max: viewModel.pilotStateData.chargeMax,
-                                            type: StatButtonType.charge,
-                                            active: viewModel.chargeActive,
-                                            inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
-                                            updateType: PilotStatePropertyType.charge)
-                            
-                            Text("Dial Status: \(dialStatusText)")
-                        }.padding(.top, 20)
+//                        VStack(spacing: 20) {
+//                            // Hull
+//                            buildLinkedView(max: viewModel.pilotStateData.hullMax,
+//                                            type: StatButtonType.hull,
+//                                            active: viewModel.hullActive,
+//                                            inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
+//                                            updateType: PilotStatePropertyType.hull,
+//                                            handleDestroyed: true)
+//
+//                            // Shield
+//                            buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
+//                                            type: StatButtonType.shield,
+//                                            active: viewModel.shieldsActive,
+//                                            inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
+//                                            updateType: PilotStatePropertyType.shield,
+//                                            handleDestroyed: true)
+//
+//                            // Force
+//                            buildLinkedView(max: viewModel.pilotStateData.forceMax,
+//                                            type: StatButtonType.force,
+//                                            active: viewModel.forceActive,
+//                                            inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
+//                                            updateType: PilotStatePropertyType.force)
+//
+//                            // Charge
+//                            buildLinkedView(max: viewModel.pilotStateData.chargeMax,
+//                                            type: StatButtonType.charge,
+//                                            active: viewModel.chargeActive,
+//                                            inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
+//                                            updateType: PilotStatePropertyType.charge)
+//
+//                            Text("Dial Status: \(dialStatusText)")
+//                        }.padding(.top, 20)
     //                .border(Color.green, width: 2)
 
                     VStack {
