@@ -1,0 +1,66 @@
+{
+  "name" : "SabaccCienaFifthGideon",
+  "description" : "",
+  "faction" : "galacticempire",
+  "points" : 200,
+  "version" : "2.6.2",
+  "pilots" : [
+    {
+      "id" : "puresabacc",
+      "ship" : "tieskstriker",
+      "points" : 49,
+      "upgrades" : {
+        "device" : [
+          "proximitymines"
+        ]
+      }
+    },
+    {
+      "id" : "cienaree",
+      "ship" : "tieininterceptor",
+      "points" : 57,
+      "upgrades" : {
+        "modification" : [
+          "targetingcomputer"
+        ],
+        "configuration" : [
+          "sensitivecontrols"
+        ]
+      }
+    },
+    {
+      "id" : "fifthbrother",
+      "ship" : "tieadvancedv1",
+      "points" : 47,
+      "upgrades" : {
+        "force-power" : [
+          "instinctiveaim"
+        ],
+        "missile" : [
+          "xx23sthreadtracers"
+        ],
+        "sensor" : [
+          "passivesensors"
+        ]
+      }
+    },
+    {
+      "id" : "gideonhask-tieininterceptor",
+      "ship" : "tieininterceptor",
+      "points" : 47,
+      "upgrades" : {
+        "modification" : [
+          "stealthdevice",
+          "targetingcomputer"
+        ]
+      }
+    }
+  ],
+  "vendor" : {
+    "lbn" : {
+      "builder" : "Launch Bay Next",
+      "builder_url" : "https://launchbaynext.app",
+      "link" : "https://launchbaynext.app/print?lbx='SabaccCienaFifthTurr'.496.2.0.l16.119.l12.395rr.l41.'cienaree'r.l25.632.l17.249r.l6.851r.l2.577rr.l41.'gideonhask-tieininterceptor'r"
+    }
+  }
+}

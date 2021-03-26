@@ -1,0 +1,52 @@
+{
+  "name" : "SabaccFifthVaderDefender",
+  "description" : "",
+  "faction" : "galacticempire",
+  "points" : 200,
+  "version" : "2.4.4",
+  "pilots" : [
+    {
+      "id" : "puresabacc",
+      "ship" : "tieskstriker",
+      "points" : 52,
+      "upgrades" : {
+        "device" : [
+          "proximitymines"
+        ],
+        "modification" : [
+          "targetingcomputer"
+        ]
+      }
+    },
+    {
+      "id" : "fifthbrother",
+      "ship" : "tieadvancedv1",
+      "points" : 49,
+      "upgrades" : {
+        "missile" : [
+          "xx23sthreadtracers"
+        ],
+        "sensor" : [
+          "firecontrolsystem"
+        ]
+      }
+    },
+    {
+      "id" : "darthvader-tieddefender",
+      "ship" : "tieddefender",
+      "points" : 99,
+      "upgrades" : {
+        "force-power" : [
+          "hate"
+        ]
+      }
+    }
+  ],
+  "vendor" : {
+    "lbn" : {
+      "builder" : "Launch Bay Next",
+      "builder_url" : "https://launchbaynext.app",
+      "link" : "https://launchbaynext.app/print?lbx='SabaccFifthVaderDefender'.301.2.0.l16.119.l12.395r.l14.619rr.l25.632.l17.489r.l6.851r.l2.254rr.l18.'darthvader-tieddefender'r"
+    }
+  }
+}
