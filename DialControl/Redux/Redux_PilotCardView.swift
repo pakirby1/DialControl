@@ -27,13 +27,15 @@ struct Redux_PilotCardView: View {
                 HStack {
                     initiative
                     
-                    Spacer()
+                    halfStatus
 
+                    Spacer()
+                    
                     pilotShipNames
 
                     Spacer()
                     
-                    halfStatus
+                    healthStatus
                 }
                 .padding(.leading, 5)
                 .background(Color.black)
@@ -57,6 +59,37 @@ struct Redux_PilotCardView: View {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
         )
+    }
+    
+    var healthStatus: some View {
+        func buildStats(psd: PilotStateData) -> [HealthStat] {
+            var stats: [HealthStat] = []
+            
+            if psd.hullMax > 0 {
+                stats.append(HealthStat(type: .hull, value: psd.getActive(type: .hull)))
+            }
+            
+            if psd.shieldsMax > 0 {
+                stats.append(HealthStat(type: .shield, value: psd.getActive(type: .shield)))
+            }
+            
+            if psd.forceMax > 0 {
+                stats.append(HealthStat(type: .force, value: psd.getActive(type: .force)))
+            }
+            
+            if psd.chargeMax > 0 {
+                stats.append(HealthStat(type: .charge, value: psd.getActive(type: .charge)))
+            }
+            
+            return stats
+        }
+        
+        if let data = shipPilot.pilotStateData {
+            let stats: [HealthStat] = buildStats(psd: data)
+            return HealthStatsView(healthStats: stats)
+        }
+        
+        return HealthStatsView(healthStats: [])
     }
     
     var halfStatus: some View {
