@@ -558,7 +558,7 @@ struct Redux_ShipView: View {
                     side: (upgradeState.selected_side == 0) ? false : true,
                     frontUrl: self.imageOverlayUrl,
                     backUrl: self.imageOverlayUrlBack,
-                    viewModel: self.viewModel as! ShipViewModelProtocol) { side in
+                    viewModel: self.viewModel as ShipViewModelProtocol) { side in
                         self.viewModel.update(
                             type: PilotStatePropertyType.selectedSide(upgradeState,
                                                                       side), active: -1, inactive: -1
