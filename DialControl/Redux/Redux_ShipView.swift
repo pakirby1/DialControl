@@ -416,58 +416,64 @@ struct Redux_ShipView: View {
 
     // MARK:- computed properties
     var body: some View {
-        content
+        var content: some View {
+            var headerView: some View {
+                HStack {
+                    HStack(alignment: .top) {
+                        backButtonView
+                    }
+                    .frame(width: 150, height: 50, alignment: .leading)
+                    //            .border(Color.blue, width: 2)
+                    
+                    PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService),
+                             displayUpgrades: true,
+                             displayHeaders: false,
+                             displayDial: false)
+                        
+                        .padding(2)
+                    //                .border(Color.green, width: 2)
+                    
+                    ResetButton{
+                        self.viewModel.update(type: .reset,
+                                              active: 0,
+                                              inactive: 0)
+                    }
+                }
+            }
+            
+            var footer: some View {
+                UpgradesView(upgrades: viewModel.shipPilot.upgrades,
+                             showImageOverlay: $showImageOverlay,
+                             imageOverlayUrl: $imageOverlayUrl,
+                             imageOverlayUrlBack: $imageOverlayUrlBack,
+                             selectedUpgrade: $selectedUpgrade)
+                    .environmentObject(viewModel)
+            }
+            
+            return VStack(alignment: .leading) {
+                headerView
+                CustomDivider()
+                bodyContent
+                CustomDivider()
+                footer
+            }
+            .padding()
+            .overlay(imageOverlayView)
+            .background(theme.BUTTONBACKGROUND)
+        }
+        
+        return content
     }
     
-    var content: some View {
-        VStack(alignment: .leading) {
-            headerView
-            CustomDivider()
-            bodyContent
-            CustomDivider()
-            footer
-        }
-        .padding()
-        .overlay(imageOverlayView)
-        .background(theme.BUTTONBACKGROUND)
-    }
     
-    var headerView: some View {
-        HStack {
-            HStack(alignment: .top) {
-                backButtonView
-            }
-            .frame(width: 150, height: 50, alignment: .leading)
-            //            .border(Color.blue, width: 2)
-            
-            PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService),
-                     displayUpgrades: true,
-                     displayHeaders: false,
-                     displayDial: false)
-                
-                .padding(2)
-            //                .border(Color.green, width: 2)
-            
-            ResetButton{
-                self.viewModel.update(type: .reset,
-                                      active: 0,
-                                      inactive: 0)
-            }
-        }
-    }
+    
+    
     
     var dialStatusText: String {
         return "\(self.viewModel.pilotStateData.dial_status.description)"
     }
         
-    var footer: some View {
-        UpgradesView(upgrades: viewModel.shipPilot.upgrades,
-                     showImageOverlay: $showImageOverlay,
-                     imageOverlayUrl: $imageOverlayUrl,
-                     imageOverlayUrlBack: $imageOverlayUrlBack,
-                     selectedUpgrade: $selectedUpgrade)
-            .environmentObject(viewModel)
-    }
+    
     
     var backButtonView: some View {
         Button(action: {
@@ -594,133 +600,142 @@ extension Redux_ShipView {
     }
     
     func buildLinkedView(max: Int,
-                             type: StatButtonType,
-                             active: Int,
-                             inActive: Int,
-                             updateType: PilotStatePropertyType,
-                             handleDestroyed: Bool = false) -> AnyView
-        {
-            if (max > 0) {
-                return AnyView(LinkedView(type: type,
-                           active: active,
-                           inactive: inActive)
-                { (active, inactive) in
-                    self.viewModel.update(type: updateType,
-                                          active: active,
-                                          inactive: inactive)
-                    
-                    if (handleDestroyed) {
-                        self.viewModel.handleDestroyed()
-                    }
-                })
-            }
-            
-            return AnyView(EmptyView())
-        }
-    
-    var setDialButton: some View {
-        Text("Set")
-            .foregroundColor(.white)
-            .font(.largeTitle)
-            .padding(15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.white, lineWidth: 1)
-            )
-            .onTapGesture {
-                if self.viewModel.pilotStateData.isDestroyed {
-                    self.viewModel.updateDialStatus(status: .destroyed)
-                } else {
-//                    self.viewModel.updateSelectedManeuver(maneuver: "")
-                    self.viewModel.updateDialStatus(status: .set)
+                         type: StatButtonType,
+                         active: Int,
+                         inActive: Int,
+                         updateType: PilotStatePropertyType,
+                         handleDestroyed: Bool = false) -> AnyView {
+        if (max > 0) {
+            return AnyView(LinkedView(type: type,
+                                      active: active,
+                                      inactive: inActive)
+            { (active, inactive) in
+                self.viewModel.update(type: updateType,
+                                      active: active,
+                                      inactive: inactive)
+                
+                if (handleDestroyed) {
+                    self.viewModel.handleDestroyed()
                 }
-            }
-    }
-    
-    var setIonManeuverButton: some View {
-        Text("Ion")
-            .foregroundColor(.red)
-            .font(.largeTitle)
-            .padding(15)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.white, lineWidth: 1)
-        )
-        .onTapGesture {
-            if self.viewModel.pilotStateData.isDestroyed {
-                self.viewModel.updateDialStatus(status: .destroyed)
-            } else {
-                self.viewModel.updateSelectedManeuver(maneuver: "1FB")
-                self.viewModel.updateDialStatus(status: .ionized)
-            }
+            })
         }
+        
+        return AnyView(EmptyView())
     }
     
     var bodyContent: some View {
-            HStack(alignment: .top) {
-                    /// Call .equatable() to prevent refreshing the static image
-                    /// https://swiftui-lab.com/equatableview/
-//                    ImageView(url: viewModel.shipImageURL,
-//                             shipViewModel: self.viewModel,
-//                             label: "ship")
-//                    .equatable()
-//                    .frame(width: 350.0, height:500)
-//                    .environmentObject(viewModel)
+        var shipImageView: some View {
+            /// Call .equatable() to prevent refreshing the static image
+            /// https://swiftui-lab.com/equatableview/
+            ImageView(url: viewModel.shipImageURL,
+                      moc: self.viewModel.moc,
+                     label: "ship")
+            .equatable()
+            .frame(width: 350.0, height:500)
+            .environmentObject(viewModel)
+        }
+        
+        var statusView: some View {
+            VStack(spacing: 20) {
+                // Hull
+                buildLinkedView(max: viewModel.pilotStateData.hullMax,
+                                type: StatButtonType.hull,
+                                active: viewModel.hullActive,
+                                inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
+                                updateType: PilotStatePropertyType.hull,
+                                handleDestroyed: true)
                 
-//                        VStack(spacing: 20) {
-//                            // Hull
-//                            buildLinkedView(max: viewModel.pilotStateData.hullMax,
-//                                            type: StatButtonType.hull,
-//                                            active: viewModel.hullActive,
-//                                            inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
-//                                            updateType: PilotStatePropertyType.hull,
-//                                            handleDestroyed: true)
-//
-//                            // Shield
-//                            buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
-//                                            type: StatButtonType.shield,
-//                                            active: viewModel.shieldsActive,
-//                                            inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
-//                                            updateType: PilotStatePropertyType.shield,
-//                                            handleDestroyed: true)
-//
-//                            // Force
-//                            buildLinkedView(max: viewModel.pilotStateData.forceMax,
-//                                            type: StatButtonType.force,
-//                                            active: viewModel.forceActive,
-//                                            inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
-//                                            updateType: PilotStatePropertyType.force)
-//
-//                            // Charge
-//                            buildLinkedView(max: viewModel.pilotStateData.chargeMax,
-//                                            type: StatButtonType.charge,
-//                                            active: viewModel.chargeActive,
-//                                            inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
-//                                            updateType: PilotStatePropertyType.charge)
-//
-//                            Text("Dial Status: \(dialStatusText)")
-//                        }.padding(.top, 20)
-    //                .border(Color.green, width: 2)
-
-                    VStack {
-                        DialView(temperature: 100,
-                                             diameter: 400,
-                                             currentManeuver: self.$viewModel.currentManeuver,
-                                             dial: self.viewModel.shipPilot.ship.dial,
-                                             displayAngleRanges: false)
-                        { (maneuver) in
-                            self.viewModel.updateSelectedManeuver(maneuver: maneuver)
-                        }
-                        .frame(width: 400.0,height:400)
-                        
-                        if (self.viewModel.currentManeuver != "") {
-                            HStack {
-                                setDialButton
-                                setIonManeuverButton
-                            }
-                        }
+                // Shield
+                buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
+                                type: StatButtonType.shield,
+                                active: viewModel.shieldsActive,
+                                inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
+                                updateType: PilotStatePropertyType.shield,
+                                handleDestroyed: true)
+                
+                // Force
+                buildLinkedView(max: viewModel.pilotStateData.forceMax,
+                                type: StatButtonType.force,
+                                active: viewModel.forceActive,
+                                inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
+                                updateType: PilotStatePropertyType.force)
+                
+                // Charge
+                buildLinkedView(max: viewModel.pilotStateData.chargeMax,
+                                type: StatButtonType.charge,
+                                active: viewModel.chargeActive,
+                                inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
+                                updateType: PilotStatePropertyType.charge)
+                
+                Text("Dial Status: \(dialStatusText)")
+            }.padding(.top, 20)
+            //                    .border(Color.green, width: 2)
+        }
+        
+        var dialView: some View {
+            var setIonManeuverButton: some View {
+                Text("Ion")
+                    .foregroundColor(.red)
+                    .font(.largeTitle)
+                    .padding(15)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.white, lineWidth: 1)
+                )
+                .onTapGesture {
+                    if self.viewModel.pilotStateData.isDestroyed {
+                        self.viewModel.updateDialStatus(status: .destroyed)
+                    } else {
+                        self.viewModel.updateSelectedManeuver(maneuver: "1FB")
+                        self.viewModel.updateDialStatus(status: .ionized)
                     }
                 }
+            }
+            
+            var setDialButton: some View {
+                    Text("Set")
+                        .foregroundColor(.white)
+                        .font(.largeTitle)
+                        .padding(15)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.white, lineWidth: 1)
+                        )
+                        .onTapGesture {
+                            if self.viewModel.pilotStateData.isDestroyed {
+                                self.viewModel.updateDialStatus(status: .destroyed)
+                            } else {
+            //                    self.viewModel.updateSelectedManeuver(maneuver: "")
+                                self.viewModel.updateDialStatus(status: .set)
+                            }
+                        }
+                }
+            
+            return VStack {
+                DialView(temperature: 100,
+                                     diameter: 400,
+                                     currentManeuver: self.$viewModel.currentManeuver,
+                                     dial: self.viewModel.shipPilot.ship.dial,
+                                     displayAngleRanges: false)
+                { (maneuver) in
+                    self.viewModel.updateSelectedManeuver(maneuver: maneuver)
+                }
+                .frame(width: 400.0,height:400)
+                
+                if (self.viewModel.currentManeuver != "") {
+                    HStack {
+                        setDialButton
+                        setIonManeuverButton
+                    }
+                }
+            }
         }
+        
+        return HStack(alignment: .top) {
+            shipImageView
+            statusView
+            dialView
+        }
+    }
 }
 
