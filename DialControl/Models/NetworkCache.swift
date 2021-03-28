@@ -98,30 +98,10 @@ extension NetworkCacheViewModel {
                 .sink(receiveCompletion: { [weak self] complete in
                     print("\(Date()) \(self).\(#function) received completion event")
                     
-                    switch complete {
-                    case .failure(let error):
-                        if let storeError = error as? StoreError {
-                            switch storeError {
-                            case .localMiss(let url):
-                                let message = "No Image in local cache for: \n \(url)"
-                                self?.message = message
-                                print("\(Date()) \(self).\(#function) \(message)")
-                            case .remoteMiss:
-                                let message = "No Image found in remote for: \(url)"
-                                self?.message = message
-                                print("\(Date()) \(self).\(#function) \(message)")
-                            }
-                        }
-                        
-                    case .finished:
-                        print("\(Date()) \(self).\(#function) finished")
-                    }
+                    processCompletion(complete: complete)
                 },
                       receiveValue: { [weak self] value in
-                          if let image = UIImage(data: value) {
-                            self?.image = image
-                            self?.message = url
-                          }
+                          processReceivedValue(value: value)
                       })
                 .store(in: &cancellables)
         }
