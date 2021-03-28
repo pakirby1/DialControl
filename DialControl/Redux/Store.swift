@@ -39,6 +39,20 @@ enum MyAppAction {
     case squad(action: MySquadAction)
 }
 
+enum MyShipAction {
+    case updateHull(ChargeData<Int>)
+    case updateShield(ChargeData<Int>)
+    case updateForce(ChargeData<Int>)
+    case updateCharge(ChargeData<Int>)
+    case updateUpgradeCharge(ChargeData<Int>)
+    case updateUpgradeSelectedSide(Bool)
+    case updateShipIDMarker
+    case reset
+    case updateSelectedManeuver(String)
+    case updateDialStatus(DialStatus)
+    case updateState(PilotStateData)
+}
+
 enum MySquadAction {
     case updateSquad(SquadData)
     case updatePilotState(PilotStateData, PilotState)

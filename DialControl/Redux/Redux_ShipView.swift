@@ -184,6 +184,90 @@ class Redux_ShipViewModel: ObservableObject {
     
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
         func old() {
+            func updateHull(active: Int, inactive: Int) {
+                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+                    self.pilotStateData.change(update: {
+                        print("PAK_\(#function) pilotStateData.id: \($0)")
+                        $0.updateHull(active: active, inactive: inactive)
+                        self.updateState(newData: $0)
+                    })
+            }
+            
+            func updateShield(active: Int, inactive: Int) {
+                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+                    self.pilotStateData.change(update: {
+                        print("PAK_\(#function) pilotStateData.id: \($0)")
+                        $0.updateShield(active: active, inactive: inactive)
+                        self.updateState(newData: $0)
+                    })
+            }
+            
+            func updateForce(active: Int, inactive: Int) {
+                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+                    self.pilotStateData.change(update: {
+                        print("PAK_\(#function) pilotStateData.id: \($0)")
+                        $0.updateForce(active: active, inactive: inactive)
+                        self.updateState(newData: $0)
+                    })
+            }
+            
+            func updateCharge(active: Int, inactive: Int) {
+                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+                    self.pilotStateData.change(update: {
+                        print("PAK_\(#function) pilotStateData.id: \($0)")
+                        $0.updateCharge(active: active, inactive: inactive)
+                        self.updateState(newData: $0)
+                    })
+            }
+            
+            func updateUpgradeCharge(upgrade: UpgradeStateData, active: Int, inactive: Int) {
+                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+                    upgrade.change(update: { newUpgrade in
+                        print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
+                        newUpgrade.updateCharge(active: active, inactive: inactive)
+                        
+                        // the old upgrade state is in the pilotStateData, so we need
+                        // to replace the old upgrade state with the new upgrade state
+                        // in $0
+                        if let upgrades = self.pilotStateData.upgradeStates {
+                            if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
+                                self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
+                            }
+                        }
+                        
+                        self.updateState(newData: self.pilotStateData)
+                    })
+            }
+            
+            func updateUpgradeSelectedSide(upgrade: UpgradeStateData,
+                                           selectedSide: Bool)
+            {
+                print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
+                    upgrade.change(update: { newUpgrade in
+                        print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
+                        newUpgrade.updateSelectedSide(side: selectedSide ? 1 : 0)
+                        
+                        // the old upgrade state is in the pilotStateData, so we need
+                        // to replace the old upgrade state with the new upgrade state
+                        // in $0
+                        if let upgrades = self.pilotStateData.upgradeStates {
+                            if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
+                                self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
+                            }
+                        }
+                        
+                        self.updateState(newData: self.pilotStateData)
+                    })
+            }
+            
+            func updateShipIDMarker(marker: String) {
+                print("\(Date()) \(#function) : \(marker)")
+                self.pilotStateData.change(update: {
+                    $0.updateShipID(shipID: marker)
+                    self.updateState(newData: $0)
+                })
+            }
+            
             switch(type) {
             case .hull:
                 updateHull(active: active, inactive: inactive)
@@ -208,6 +292,7 @@ class Redux_ShipViewModel: ObservableObject {
         }
         
         func new() {
+            
             switch(type) {
             case .hull:
                 updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.hull(active, inactive)))
@@ -235,46 +320,6 @@ class Redux_ShipViewModel: ObservableObject {
 //        new()
     }
     
-    func updateUpgradeCharge(upgrade: UpgradeStateData, active: Int, inactive: Int) {
-        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            upgrade.change(update: { newUpgrade in
-                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                newUpgrade.updateCharge(active: active, inactive: inactive)
-                
-                // the old upgrade state is in the pilotStateData, so we need
-                // to replace the old upgrade state with the new upgrade state
-                // in $0
-                if let upgrades = self.pilotStateData.upgradeStates {
-                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                        self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
-                    }
-                }
-                
-                self.updateState(newData: self.pilotStateData)
-            })
-    }
-    
-    func updateUpgradeSelectedSide(upgrade: UpgradeStateData,
-                                   selectedSide: Bool)
-    {
-        print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
-            upgrade.change(update: { newUpgrade in
-                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                newUpgrade.updateSelectedSide(side: selectedSide ? 1 : 0)
-                
-                // the old upgrade state is in the pilotStateData, so we need
-                // to replace the old upgrade state with the new upgrade state
-                // in $0
-                if let upgrades = self.pilotStateData.upgradeStates {
-                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                        self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
-                    }
-                }
-                
-                self.updateState(newData: self.pilotStateData)
-            })
-    }
-    
     func reset() {
         print("\(Date()) PAK_(#function): \(self.pilotStateData.description)")
     
@@ -285,50 +330,6 @@ class Redux_ShipViewModel: ObservableObject {
         })
     }
     
-    func updateHull(active: Int, inactive: Int) {
-        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateHull(active: active, inactive: inactive)
-                self.updateState(newData: $0)
-            })
-    }
-    
-    func updateShield(active: Int, inactive: Int) {
-        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateShield(active: active, inactive: inactive)
-                self.updateState(newData: $0)
-            })
-    }
-    
-    func updateForce(active: Int, inactive: Int) {
-        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateForce(active: active, inactive: inactive)
-                self.updateState(newData: $0)
-            })
-    }
-    
-    func updateCharge(active: Int, inactive: Int) {
-        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateCharge(active: active, inactive: inactive)
-                self.updateState(newData: $0)
-            })
-    }
-    
-    func updateShipIDMarker(marker: String) {
-        print("\(Date()) \(#function) : \(marker)")
-        self.pilotStateData.change(update: {
-            $0.updateShipID(shipID: marker)
-            self.updateState(newData: $0)
-        })
-    }
-    
     func updateSelectedManeuver(maneuver: String) {
         print("\(Date()) \(#function) : \(maneuver)")
         self.pilotStateData.change(update: {
@@ -336,7 +337,7 @@ class Redux_ShipViewModel: ObservableObject {
             self.updateState(newData: $0)
         })
     }
-    
+
     func updateDialStatus(status: DialStatus) {
         print("\(Date()) \(#function) : \(status)")
         self.pilotStateData.change(update: {
@@ -359,14 +360,14 @@ class Redux_ShipViewModel: ObservableObject {
         self.pilotStateData = newData
     }
     
-    func updateState_New(newData: PilotStateData) {
-        guard let state = self.pilotState else { return }
-        
-        self.pilotStateService.updateState(newData: newData,
-                                           state: state)
-        
-        self.pilotStateData = newData
-    }
+//    func updateState_New(newData: PilotStateData) {
+//        guard let state = self.pilotState else { return }
+//
+//        self.pilotStateService.updateState(newData: newData,
+//                                           state: state)
+//
+//        self.pilotStateData = newData
+//    }
 }
 
 enum Redux_PilotStatePropertyType {
@@ -393,11 +394,11 @@ enum Redux_PilotStatePropertyType_New {
 
 // MARK:- ShipView
 struct Redux_ShipView: View {
-    struct SelectedUpgrade {
-        let upgrade: Upgrade
-        let imageOverlayUrl: String
-        let imageOverlayUrlBack: String
-    }
+//    struct SelectedUpgrade {
+//        let upgrade: Upgrade
+//        let imageOverlayUrl: String
+//        let imageOverlayUrlBack: String
+//    }
 
     @EnvironmentObject var viewFactory: ViewFactory
     @State var currentManeuver: String = ""
@@ -418,7 +419,21 @@ struct Redux_ShipView: View {
     var body: some View {
         var content: some View {
             var headerView: some View {
-                HStack {
+                var backButtonView: some View {
+                    Button(action: {
+                        self.viewFactory.back()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 24, weight: .bold))
+                            
+                            Text("Back to Squad")
+                                .foregroundColor(theme.TEXT_FOREGROUND)
+                        }
+                    }.padding(5)
+                }
+                
+                return HStack {
                     HStack(alignment: .top) {
                         backButtonView
                     }
@@ -464,70 +479,22 @@ struct Redux_ShipView: View {
         
         return content
     }
-    
-    
-    
-    
-    
-    var dialStatusText: String {
-        return "\(self.viewModel.pilotStateData.dial_status.description)"
-    }
-        
-    
-    
-    var backButtonView: some View {
-        Button(action: {
-            self.viewFactory.back()
-        }) {
-            HStack {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 24, weight: .bold))
-                
-                Text("Back to Squad")
-                    .foregroundColor(theme.TEXT_FOREGROUND)
-            }
-        }.padding(5)
-    }
-    
-    var clearView: some View {
-        Color
-            .clear
-//            .border(Color.red, width: 5)
-    }
-    
-    var upgradeImageOverlay: some View {
-        ZStack {
-            Color
-                .gray
-                .opacity(0.5)
-                .onTapGesture{
-                    self.showImageOverlay = false
-                }
+
+    var imageOverlayView: AnyView {
+        var upgradeLinkedView: AnyView {
+            let emptyView = AnyView(EmptyView())
             
-            // If the upgrade has two sides...
-            /*
-             UpgradeCardFlipView(frontURL, backURL)
-             */
-            upgradeCardImage
-            
-            linkedView
-        }
-    }
-    
-    var linkedView: AnyView {
-        let emptyView = AnyView(EmptyView())
-        
-        // Do we hava a selectedUpgrade?
+            // Do we hava a selectedUpgrade?
             // no, return
             guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
-        
+            
             // yes
-                // do we have an upgradeState for this upgrade?
+            // do we have an upgradeState for this upgrade?
             guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
-        
+            
             guard let charge_active = upgradeState.charge_active else { return emptyView }
             guard let charge_inactive = upgradeState.charge_inactive else { return emptyView }
-        
+            
             return AnyView(LinkedView(type: StatButtonType.charge,
                                       active: charge_active,
                                       inactive: charge_inactive)
@@ -543,40 +510,58 @@ struct Redux_ShipView: View {
                     active: active,
                     inactive: inactive)
             }.offset(x:0, y:250))
-    }
-    
-    var upgradeCardImage: AnyView {
-        let emptyView = AnyView(EmptyView())
-        
-        var ret = AnyView(ImageView(url: self.imageOverlayUrl,
-                                    moc: self.viewModel.moc,
-              label: "upgrade")
-        .frame(width: 500.0, height:350)
-        )
-        
-        if (self.imageOverlayUrlBack != "") {
-            guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
-            
-            guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
-            
-            ret =
-                UpgradeCardFlipView(
-                    side: (upgradeState.selected_side == 0) ? false : true,
-                    frontUrl: self.imageOverlayUrl,
-                    backUrl: self.imageOverlayUrlBack,
-                    viewModel: self.viewModel as ShipViewModelProtocol) { side in
-                        self.viewModel.update(
-                            type: PilotStatePropertyType.selectedSide(upgradeState,
-                                                                      side), active: -1, inactive: -1
-                        )
-                }.eraseToAnyView()
         }
         
-        return ret
-    }
-    
-    var imageOverlayView: AnyView {
-        let defaultView = AnyView(clearView)
+        var upgradeCardImage: AnyView {
+            let emptyView = AnyView(EmptyView())
+            
+            var ret = AnyView(ImageView(url: self.imageOverlayUrl,
+                                        moc: self.viewModel.moc,
+                  label: "upgrade")
+            .frame(width: 500.0, height:350)
+            )
+            
+            if (self.imageOverlayUrlBack != "") {
+                guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
+                
+                guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
+                
+                ret =
+                    UpgradeCardFlipView(
+                        side: (upgradeState.selected_side == 0) ? false : true,
+                        frontUrl: self.imageOverlayUrl,
+                        backUrl: self.imageOverlayUrlBack,
+                        viewModel: self.viewModel as ShipViewModelProtocol) { side in
+                            self.viewModel.update(
+                                type: PilotStatePropertyType.selectedSide(upgradeState,
+                                                                          side), active: -1, inactive: -1
+                            )
+                    }.eraseToAnyView()
+            }
+            
+            return ret
+        }
+        
+        var upgradeImageOverlay: some View {
+            ZStack {
+                Color
+                    .gray
+                    .opacity(0.5)
+                    .onTapGesture{
+                        self.showImageOverlay = false
+                    }
+                
+                // If the upgrade has two sides...
+                /*
+                 UpgradeCardFlipView(frontURL, backURL)
+                 */
+                upgradeCardImage
+                
+                upgradeLinkedView
+            }
+        }
+        
+        let defaultView = AnyView(Color.clear)
         
         print("UpgradeView var imageOverlayView self.showImageOverlay=\(self.showImageOverlay)")
 
@@ -605,6 +590,7 @@ extension Redux_ShipView {
                          inActive: Int,
                          updateType: PilotStatePropertyType,
                          handleDestroyed: Bool = false) -> AnyView {
+        
         if (max > 0) {
             return AnyView(LinkedView(type: type,
                                       active: active,
@@ -636,7 +622,11 @@ extension Redux_ShipView {
         }
         
         var statusView: some View {
-            VStack(spacing: 20) {
+            var dialStatusText: String {
+                return "\(self.viewModel.pilotStateData.dial_status.description)"
+            }
+                
+            return VStack(spacing: 20) {
                 // Hull
                 buildLinkedView(max: viewModel.pilotStateData.hullMax,
                                 type: StatButtonType.hull,
