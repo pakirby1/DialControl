@@ -18,6 +18,7 @@ struct MyAppState {
 }
 
 struct MyShipViewState {
+    var pilotState: PilotState?
     var pilotStateData: PilotStateData?
 }
 
@@ -45,17 +46,17 @@ enum MyAppAction {
 }
 
 enum MyShipAction {
-    case updateHull(ChargeData<Int>)
-    case updateShield(ChargeData<Int>)
-    case updateForce(ChargeData<Int>)
-    case updateCharge(ChargeData<Int>)
-    case updateUpgradeCharge(ChargeData<Int>)
-    case updateUpgradeSelectedSide(Bool)
-    case updateShipIDMarker
+//    case updateHull(ChargeData<Int>)
+//    case updateShield(ChargeData<Int>)
+//    case updateForce(ChargeData<Int>)
+//    case updateCharge(ChargeData<Int>)
+//    case updateUpgradeCharge(ChargeData<Int>)
+//    case updateUpgradeSelectedSide(Bool)
+//    case updateShipIDMarker
     case reset
-    case updateSelectedManeuver(String)
-    case updateDialStatus(DialStatus)
-    case updateState(PilotStateData)
+//    case updateSelectedManeuver(String)
+//    case updateDialStatus(DialStatus)
+//    case updateState(PilotStateData)
 }
 
 enum MySquadAction {
@@ -100,6 +101,39 @@ func myAppReducer(
     }
     
 //    return Empty().eraseToAnyPublisher()
+}
+
+func shipReducer(state: inout MyShipViewState,
+                    action: MyShipAction,
+                    environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
+{
+    func reset() {
+        state.pilotStateData?.change(update: {
+            $0.reset()
+            updateState(newData: $0)
+        })
+    }
+    
+    func updateState(newData: PilotStateData) {
+        print("\(Date()) PAK_updateState: \(newData.description)")
+        
+        let json = PilotStateData.serialize(type: newData)
+        /// where do we get a PilotState instance????
+        guard let pilotState = state.pilotState else { return }
+
+        environment.pilotStateService.updatePilotState(pilotState: pilotState,
+                                                state: json,
+                                                pilotIndex: newData.pilot_index)
+
+        state.pilotStateData = newData
+    }
+    
+    switch(action) {
+        case .reset :
+            reset()
+    }
+    
+    return Empty().eraseToAnyPublisher()
 }
 
 func squadReducer(state: inout MySquadViewState,
