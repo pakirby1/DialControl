@@ -18,6 +18,12 @@ struct MyAppState {
 }
 
 struct MyShipViewState {
+    /*
+     Redux_SquadView:
+     var shipPilots: [ShipPilot] {
+         self.store.state.squad.shipPilots
+     }
+     */
     var pilotState: PilotState?
     var pilotStateData: PilotStateData?
 }
@@ -46,6 +52,7 @@ enum MyAppAction {
 }
 
 enum MyShipAction {
+    case initState(PilotStateData, PilotState)
 //    case updateHull(ChargeData<Int>)
 //    case updateShield(ChargeData<Int>)
 //    case updateForce(ChargeData<Int>)
@@ -129,6 +136,11 @@ func shipReducer(state: inout MyShipViewState,
     }
     
     switch(action) {
+        // FIXME: Do we really need this?  or can we load this from CoreData?
+        case let .initState(pilotStateData, pilotState):
+            state.pilotStateData = pilotStateData
+            state.pilotState = pilotState
+        
         case .reset :
             reset()
     }
