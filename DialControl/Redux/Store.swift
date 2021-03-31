@@ -14,6 +14,11 @@ import CoreData
 struct MyAppState {
     var faction: FactionSquadListState
     var squad: MySquadViewState
+    var ship: MyShipViewState
+}
+
+struct MyShipViewState {
+    var pilotStateData: PilotStateData?
 }
 
 struct MySquadViewState {
