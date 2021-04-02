@@ -11,13 +11,31 @@ import Combine
 import TimelaneCombine
 import CoreData
 
-protocol ShipViewModelProtocol {
-    var moc: NSManagedObjectContext { get set }
-    func update(type: PilotStatePropertyType, active: Int, inactive: Int)
-}
-
 extension ShipViewModel : ShipViewModelProtocol {}
 extension Redux_ShipViewModel : ShipViewModelProtocol {}
+
+/*
+ Since we cannot use protocols with @ObservedObject property wrapper
+ we can do this:
+ https://stackoverflow.com/questions/59503399/how-to-define-a-protocol-as-a-type-for-a-observedobject-property
+ */
+protocol ShipViewModelProtocol: ObservableObject {
+    var shipPilot: ShipPilot { get set }
+    var moc: NSManagedObjectContext { get set }
+    var pilotStateData: PilotStateData { get set }
+    var currentManeuver: String { get set }
+    var shipImageURL: String { get set }
+    var pilotStateService: PilotStateServiceProtocol { get }
+    var hullActive: Int { get }
+    var chargeActive: Int { get }
+    var forceActive: Int { get }
+    var shieldsActive: Int { get }
+    
+    func update(type: PilotStatePropertyType, active: Int, inactive: Int)
+    func handleDestroyed()
+    func updateSelectedManeuver(maneuver: String)
+    func updateDialStatus(status: DialStatus)
+}
 
 // MARK:- ShipViewModel
 class Redux_ShipViewModel: ObservableObject {
@@ -393,7 +411,14 @@ enum Redux_PilotStatePropertyType_New {
 }
 
 // MARK:- ShipView
-struct Redux_ShipView: View {
+/*
+Since we cannot use protocols with @ObservedObject property wrapper
+we can do this:
+ - specify the @ObservedObject type as a generic type that adopts
+   Redux_ShipViewModelProtocol
+https://stackoverflow.com/questions/59503399/how-to-define-a-protocol-as-a-type-for-a-observedobject-property
+*/
+struct Redux_ShipView<Model: ShipViewModelProtocol>: View {
 //    struct SelectedUpgrade {
 //        let upgrade: Upgrade
 //        let imageOverlayUrl: String
@@ -406,12 +431,12 @@ struct Redux_ShipView: View {
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
     @State var imageOverlayUrlBack: String = ""
-    @ObservedObject var viewModel: Redux_ShipViewModel
+    @ObservedObject var viewModel: Model
     let theme: Theme = WestworldUITheme()
     let printer = DeallocPrinter("ShipView")
     @State var selectedUpgrade: UpgradeView.UpgradeViewModel? = nil
     
-    init(viewModel: Redux_ShipViewModel) {
+    init(viewModel: Model) {
         self.viewModel = viewModel
         self.currentManeuver = ""
     }
@@ -532,7 +557,7 @@ struct Redux_ShipView: View {
                         side: (upgradeState.selected_side == 0) ? false : true,
                         frontUrl: self.imageOverlayUrl,
                         backUrl: self.imageOverlayUrlBack,
-                        viewModel: self.viewModel as ShipViewModelProtocol) { side in
+                        viewModel: self.viewModel) { side in
                             self.viewModel.update(
                                 type: PilotStatePropertyType.selectedSide(upgradeState,
                                                                           side), active: -1, inactive: -1

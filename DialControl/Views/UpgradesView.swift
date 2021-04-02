@@ -132,26 +132,18 @@ struct UpgradeView: View {
     }
 }
 
-struct MyTestView : View {
-    let viewModel: ShipViewModelProtocol
-    
-    var body: some View {
-        Text("MyTestView")
-    }
-}
-
-struct UpgradeCardFlipView : View {
+struct UpgradeCardFlipView<Model: ShipViewModelProtocol> : View {
     @State var flipped = false
     let frontUrl: String
     let backUrl: String
-    let viewModel: ShipViewModelProtocol
+    let viewModel: Model
     let update: (Bool) -> Void
     
     /// side: true (front), false (back)
     init(side: Bool,
          frontUrl: String,
          backUrl: String,
-         viewModel: ShipViewModelProtocol,
+         viewModel: Model,
          update: @escaping (Bool) -> Void)
     {
         _flipped = State(initialValue: side)

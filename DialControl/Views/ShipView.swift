@@ -12,8 +12,6 @@ import Combine
 import TimelaneCombine
 import CoreData
 
-
-
 // MARK:- ShipViewModel
 class ShipViewModel: ObservableObject {
     var shipPilot: ShipPilot
@@ -607,7 +605,6 @@ struct ShipView: View {
     }
     
     var upgradeCardImage: AnyView {
-        let x:MyTestView = MyTestView(viewModel: self.viewModel as! ShipViewModelProtocol)
         let emptyView = AnyView(EmptyView())
         
         var ret = AnyView(ImageView(url: self.imageOverlayUrl,

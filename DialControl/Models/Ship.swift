@@ -392,6 +392,7 @@ struct ShipPilot: Identifiable, Equatable {
 extension ShipPilot {
     var shipName: String { ship.xws }
     var pilotName: String { ship.pilots[0].xws }
+    
     var pilotStateData: PilotStateData? {
         if let json = self.pilotState.json {
             return PilotStateData.deserialize(jsonString: json)
