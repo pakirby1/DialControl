@@ -218,14 +218,13 @@ struct Charges: Codable {
     let recovers: Int
 }
 
-struct Pilot: Codable {
+struct PilotDTO: Codable {
     let name: String
     let initiative: Int
     let limited: Int
     let cost: Int
     let xws: String
     var text: String { return _text ?? "" }
-    var image: String
     var shipAbility: ShipAbility? { return _shipAbility ?? nil }
     var slots: [Slot]? { return _slots ?? [] }
     let artwork: String
@@ -247,7 +246,6 @@ struct Pilot: Codable {
         case limited
         case cost
         case xws
-        case image
         case _shipAbility = "shipAbility"
         case _slots = "slots"
         case artwork
@@ -256,6 +254,44 @@ struct Pilot: Codable {
         case _force = "force"
         case _charges = "charges"
     }
+}
+
+extension PilotDTO {
+    func asPilot() -> Pilot {
+        return Pilot(
+            name: self.name,
+            initiative: self.initiative,
+            limited: self.limited,
+            cost: self.cost,
+            xws: self.xws,
+            text: self.text,
+            image: "",
+            shipAbility: self.shipAbility,
+            slots: self.slots,
+            artwork: self.artwork,
+            ffg: self.ffg,
+            hyperspace: self.hyperspace,
+            force: self.force,
+            charges: self.charges
+        )
+    }
+}
+
+struct Pilot {
+    let name: String
+    let initiative: Int
+    let limited: Int
+    let cost: Int
+    let xws: String
+    var text: String
+    var image: String
+    var shipAbility: ShipAbility?
+    var slots: [Slot]?
+    let artwork: String
+    let ffg: Int
+    let hyperspace: Bool
+    var force: Force?
+    var charges: Charges?
 }
 
 struct Ship: Codable, JSONSerialization {
@@ -269,7 +305,7 @@ struct Ship: Codable, JSONSerialization {
     let stats: [Stat]
     let actions: [Action]
     let icon: String
-    var pilots: [Pilot]
+    var pilots: [PilotDTO]
     
     private var _xws: String?
     private var _ffg: Int?
@@ -346,7 +382,7 @@ extension Ship {
     }
     
     func selectedPilot(pilotId: String) -> Pilot {
-        pilots.filter{ $0.xws == pilotId }[0]
+        pilots.filter{ $0.xws == pilotId }[0].asPilot()
     }
     
     func pilotForce(pilotId: String) -> Int {
@@ -401,7 +437,7 @@ extension ShipPilot {
     }
     
     var pilot: Pilot {
-        return ship.pilots[0]
+        return ship.pilots[0].asPilot()
     }
     
     var halfPoints: Int {

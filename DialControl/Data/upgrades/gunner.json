@@ -423,6 +423,7 @@
         "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/bdc101788f827aeaf2f50a513b59aa7e.png",
         "ability": "After you execute a maneuver, you may spend 1 [Force] and choose a friendly ship at range 1-3 in your firing arc. If you do, it may perform a red [Focus] action, even while stressed.",
         "slots": ["Gunner"],
+        "force": { "value": 1, "recovers": 1 },
         "type": "Gunner"
       }
     ],
@@ -503,5 +504,22 @@
       }
     ],
     "cost": { "value": 7 }
+  },
+  {
+    "name": "Sabine Wren",
+    "limited": 1,
+    "xws": "sabinewren-gunner",
+    "hyperspace": true,
+    "sides": [
+      {
+        "ability": "After you perform a special attack, you may choose a number of friendly ships at range 0-3 of the defender up to the number of damage cards dealt to the defender during that attack. Each chosen ship may remove 1 strain or stress token.",
+        "title": "Sabine Wren",
+        "type": "Gunner",
+        "slots": ["Gunner"],
+        "ffg": 921,
+        "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/239d3285c1e55ae021c63a3f0f19985f.jpg"
+      }
+    ],
+    "cost": { "value": 2 }
   }
 ]

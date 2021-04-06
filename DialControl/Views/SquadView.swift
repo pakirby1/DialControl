@@ -123,7 +123,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
     shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
     
     var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-    let foundPilots: Pilot = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+    let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
 
     ship.pilots.removeAll()
     ship.pilots.append(foundPilots)

@@ -125,11 +125,6 @@
     ]
   },
   {
-    "name": "Synced Laser Cannons",
-    "cost": { "value": 6 },
-    "limited": 0,
-    "xws": "syncedlasercannons",
-    "hyperspace": true,
     "sides": [
       {
         "ffg": 674,
@@ -147,7 +142,12 @@
         "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/6927e82e460670044786cd46327cb891.png",
         "ability": "Attack: If you are calculating, the defender does not apply the range bonus."
       }
-    ]
+    ],
+    "name": "Synced Laser Cannons",
+    "cost": { "value": 6 },
+    "limited": 0,
+    "xws": "syncedlasercannons",
+    "hyperspace": true
   },
   {
     "name": "Underslung Blaster Cannon",
@@ -156,7 +156,7 @@
     "hyperspace": true,
     "sides": [
       {
-        "ability": "After an enemy ship executes a maneuver, you may perform this attack against it as a bonus attack. Attack ([Lock]):Your dice can be modified only by spending a lock for the default effect.",
+        "ability": "After an enemy ship executes a maneuver, you may perform this attack against it as a bonus attack. Attack ([Lock]): Your dice can be modified only by spending a lock for the default effect.",
         "title": "Underslung Blaster Cannon",
         "type": "Cannon",
         "slots": ["Cannon"],

@@ -107,7 +107,7 @@ class ShipViewModel: ObservableObject {
         shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
         
         let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-        let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
+        let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
         
         return (ship, foundPilots)
     }
@@ -121,7 +121,7 @@ class ShipViewModel: ObservableObject {
         shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
         
         let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-        var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0]
+        var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
         
         /// Update image to point to "https://pakirby1.github.io/Images/XWing/Pilots/{pilotName}.png
         foundPilots.image = ImageUrlTemplates.buildPilotUrl(xws: pilotName)

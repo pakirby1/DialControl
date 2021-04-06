@@ -53,10 +53,11 @@
         "name": "Full Throttle",
         "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
       },
-      "slots": ["Talent", "Sensor", "Cannon", "Missile"],
+      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Configuration"],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_123.jpg",
       "ffg": 123,
-      "hyperspace": false
+      "hyperspace": false,
+      "keywords": ["TIE"]
     },
     {
       "name": "Countess Ryad",
@@ -71,10 +72,11 @@
         "name": "Full Throttle",
         "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
       },
-      "slots": ["Talent", "Sensor", "Cannon", "Missile"],
+      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Configuration"],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_124.jpg",
       "ffg": 124,
-      "hyperspace": false
+      "hyperspace": false,
+      "keywords": ["TIE"]
     },
     {
       "name": "Delta Squadron Pilot",
@@ -88,10 +90,11 @@
         "name": "Full Throttle",
         "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
       },
-      "slots": ["Sensor", "Cannon", "Missile"],
+      "slots": ["Sensor", "Cannon", "Missile", "Configuration"],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_126.jpg",
       "ffg": 126,
-      "hyperspace": true
+      "hyperspace": true,
+      "keywords": ["TIE"]
     },
     {
       "name": "Onyx Squadron Ace",
@@ -105,10 +108,11 @@
         "name": "Full Throttle",
         "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
       },
-      "slots": ["Talent", "Sensor", "Cannon", "Missile"],
+      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Configuration"],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_125.jpg",
       "ffg": 125,
-      "hyperspace": true
+      "hyperspace": true,
+      "keywords": ["TIE"]
     },
     {
       "name": "Rexler Brath",
@@ -123,29 +127,66 @@
         "name": "Full Throttle",
         "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
       },
-      "slots": ["Talent", "Sensor", "Cannon", "Missile"],
+      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Configuration"],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_122.jpg",
       "ffg": 122,
-      "hyperspace": false
+      "hyperspace": false,
+      "keywords": ["TIE"]
     },
     {
-      "name": "Darth Vader",
-      "caption": "Dark Lord of the Sith",
-      "initiative": 6,
+      "name": "Vult Skerris",
+      "xws": "vultskerris",
+      "initiative": 5,
       "limited": 1,
-      "cost": 100,
-      "xws": "darthvader-tieddefender",
-      "ability": "You may not spend force charges except when attacking. While you perform an attack, you may spend 1 force charge to turn a blank result into a hit.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_122.png",
-      "force": { "value": 3, "recovers": 1, "side": ["dark"] },
       "shipAbility": {
         "name": "Full Throttle",
         "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
       },
-      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Force Power"],
-      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_122.jpg",
-      "ffg": 122,
-      "hyperspace": false
+      "caption": "Arrogant Ace",
+      "hyperspace": false,
+      "cost": 82,
+      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Configuration"],
+      "ability": "Action: Gain 1 strain token to recover 1 [Charge]. Before you engage, you may spend 1 [Charge] to perform an action.",
+      "keywords": ["TIE"],
+      "ffg": 887,
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/b515e5eda1c2df774f598afc4091af09.jpg"
+    },
+    {
+      "name": "Darth Vader",
+      "xws": "darthvader-tieddefender",
+      "initiative": 6,
+      "limited": 1,
+      "shipAbility": {
+        "name": "Full Throttle",
+        "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
+      },
+      "caption": "Dark Lord of the Sith",
+      "hyperspace": false,
+      "force": { "value": 3, "recovers": 1 },
+      "cost": 115,
+      "slots": ["Force Power", "Cannon", "Missile", "Configuration"],
+      "ability": "You cannot spend [Force] except while attacking. While you perform an attack, you may spend 1 [Force] to change 1 blank result to a [Hit] result.",
+      "keywords": ["Dark Side", "Sith", "TIE"],
+      "ffg": 886,
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/9c2cfc58582671a7073c6b5339ed3004.jpg"
+    },
+    {
+      "name": "Captain Dobbs",
+      "xws": "captaindobbs",
+      "initiative": 3,
+      "limited": 1,
+      "shipAbility": {
+        "name": "Full Throttle",
+        "text": "After you fully execute a speed 3-5 maneuver, you may perform an [Evade] action."
+      },
+      "caption": "Reliable Replacement",
+      "hyperspace": false,
+      "cost": 75,
+      "slots": ["Talent", "Sensor", "Cannon", "Missile", "Configuration"],
+      "ability": "While another friendly ship at range 0-1 defends, before the Neutralize Results step, if you are in the attack arc and are not ionized, you may gain 1 ion token to cancel 1 [Hit] result.",
+      "keywords": ["TIE"],
+      "ffg": 888,
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/1dde041cd0f46fb1ca2afe15264a3ad4.jpg"
     }
   ]
 }

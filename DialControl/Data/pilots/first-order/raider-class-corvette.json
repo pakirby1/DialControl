@@ -5,6 +5,22 @@
   "faction": "First Order",
   "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_Raider.png",
   "size": "Huge",
+  "dial": [
+    "0BR",
+    "0OR",
+    "0NR",
+    "1BB",
+    "1NB",
+    "1FW",
+    "2BW",
+    "2NW",
+    "2FB",
+    "3BR",
+    "3NR",
+    "3FB",
+    "4FW",
+    "5FR"
+  ],
   "stats": [],
   "actions": [],
   "pilots": [
@@ -22,7 +38,18 @@
       "text": "The First Order's supporters make use of former Imperial vessels, such as the Raider-class corvette. Though it has outlived the regime that created it, this craft still spreads terror across the galaxy.",
       "hyperspace": false,
       "engagement": 0,
-      "xws": "firstordercollaborators"
+      "xws": "firstordercollaborators",
+      "slots": [
+        "Command",
+        "Torpedo",
+        "Missile",
+        "Hardpoint",
+        "Hardpoint",
+        "Crew",
+        "Team",
+        "Team",
+        "Cargo"
+      ]
     }
   ]
 }

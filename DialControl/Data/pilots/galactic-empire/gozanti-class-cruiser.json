@@ -5,6 +5,19 @@
   "faction": "Galactic Empire",
   "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_Gozanti.png",
   "size": "Huge",
+  "dial": [
+    "0BR",
+    "0OR",
+    "0NR",
+    "1BW",
+    "1NW",
+    "1FB",
+    "2BR",
+    "2NR",
+    "2FB",
+    "3FB",
+    "4FR"
+  ],
   "stats": [],
   "actions": [],
   "pilots": [
@@ -19,10 +32,21 @@
         "name": "Docking Clamps",
         "text": "You can dock up to 4 small ships."
       },
-      "text": "Capable of carrying TIE fighters and operating independently for long periods of time, the Gozanti-class cruiser is a common sight in the skies of downtrodden worlds across the Outer Rim.",
+      "text": "Capable of carrying four TIE fighters and operating independently for long periods of time, the Gozanti-class cruiser is a common sight in the skies of downtrodden worlds across the Outer Rim.",
       "hyperspace": false,
       "engagement": 1,
-      "xws": "outerrimgarrison"
+      "xws": "outerrimgarrison",
+      "slots": [
+        "Command",
+        "Hardpoint",
+        "Crew",
+        "Crew",
+        "Gunner",
+        "Team",
+        "Cargo",
+        "Cargo",
+        "Title"
+      ]
     }
   ]
 }
