@@ -496,3 +496,9 @@ enum DialStatusEvent {
     case revealAll
     case hideAll
 }
+
+struct Transition {
+    let currentState: DialStatus
+    let event: DialStatusEvent
+    let nextState: DialStatus
+}

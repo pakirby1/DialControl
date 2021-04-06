@@ -60,7 +60,8 @@
       ],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_25.jpg",
       "ffg": 25,
-      "hyperspace": true
+      "hyperspace": true,
+      "keywords": ["B-wing"]
     },
     {
       "name": "Blue Squadron Pilot",
@@ -86,7 +87,8 @@
       ],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_26.jpg",
       "ffg": 26,
-      "hyperspace": true
+      "hyperspace": true,
+      "keywords": ["B-wing"]
     },
     {
       "name": "Braylen Stramm",
@@ -108,7 +110,8 @@
       ],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_23.jpg",
       "ffg": 23,
-      "hyperspace": true
+      "hyperspace": true,
+      "keywords": ["B-wing"]
     },
     {
       "name": "Ten Numb",
@@ -130,7 +133,8 @@
       ],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_24.jpg",
       "ffg": 24,
-      "hyperspace": true
+      "hyperspace": true,
+      "keywords": ["B-wing"]
     },
     {
       "name": "Gina Moonsong",
@@ -152,7 +156,52 @@
       "cost": 50,
       "ffg": 628,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/df07f280040d4284c04c194e18c62c9e.jpg",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/0fcceeaf64f96b4870146ffbec529dc2.png"
+      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/0fcceeaf64f96b4870146ffbec529dc2.png",
+      "keywords": ["B-wing"]
+    },
+    {
+      "name": "Hera Syndulla",
+      "xws": "herasyndulla-asf01bwing",
+      "initiative": 6,
+      "limited": 1,
+      "caption": "Phoenix Leader",
+      "hyperspace": false,
+      "keywords": ["B-wing", "Spectre"],
+      "cost": 55,
+      "slots": [
+        "Talent",
+        "Sensor",
+        "Cannon",
+        "Cannon",
+        "Torpedo",
+        "Modification",
+        "Configuration"
+      ],
+      "ability": "While another friendly ship at range 1-2 defends or performs an attack, you may transfer 1 of your focus tokens, evade tokens, or locks to that ship.",
+      "ffg": 878,
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/8a1e9cd504cde297c35d03aa728f5f40.jpg"
+    },
+    {
+      "name": "Netrem Pollard",
+      "xws": "netrempollard",
+      "initiative": 3,
+      "limited": 1,
+      "caption": "Dagger Leader",
+      "hyperspace": false,
+      "cost": 46,
+      "slots": [
+        "Talent",
+        "Sensor",
+        "Cannon",
+        "Cannon",
+        "Torpedo",
+        "Modification",
+        "Configuration"
+      ],
+      "ability": "After you barrel roll, you may choose 1 friendly ship that is not stressed at range 0-1. That ship gains 1 stress token, then you rotate 180°.",
+      "keywords": ["B-wing"],
+      "ffg": 879,
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/8e8ea8e29324398b455ec7b01bc1622e.jpg"
     }
   ]
 }

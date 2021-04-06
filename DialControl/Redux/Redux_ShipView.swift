@@ -20,12 +20,15 @@ extension Redux_ShipViewModel : ShipViewModelProtocol {}
  https://stackoverflow.com/questions/59503399/how-to-define-a-protocol-as-a-type-for-a-observedobject-property
  */
 protocol ShipViewModelProtocol: ObservableObject {
-    var shipPilot: ShipPilot { get set }
+    // Put into Environment
     var moc: NSManagedObjectContext { get set }
+    var pilotStateService: PilotStateServiceProtocol { get }
+    
+    var shipPilot: ShipPilot { get set }
     var pilotStateData: PilotStateData { get set }
     var currentManeuver: String { get set }
     var shipImageURL: String { get set }
-    var pilotStateService: PilotStateServiceProtocol { get }
+    
     var hullActive: Int { get }
     var chargeActive: Int { get }
     var forceActive: Int { get }

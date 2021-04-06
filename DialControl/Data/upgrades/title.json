@@ -285,6 +285,9 @@
         "type": "Title",
         "ability": "Gain a [Front Arc] primary weapon with a value of \"3.\" During the End Phase, do not remove up to 2 focus tokens.",
         "slots": ["Title"],
+        "grants": [
+          { "type": "stat", "value": "attack", "arc": "Front Arc", "amount": 3 }
+        ],
         "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_104.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_104.jpg",
         "ffg": 328
@@ -295,7 +298,7 @@
       { "factions": ["Rebel Alliance", "Scum and Villainy"] },
       { "ships": ["hwk290lightfreighter"] }
     ],
-    "hyperspace": false
+    "hyperspace": true
   },
   {
     "name": "Outrider",
@@ -685,7 +688,7 @@
     "hyperspace": false,
     "sides": [
       {
-        "ability": "Add [Cargo] slot. During the End Phase, you may recover 1 additional shield or 1 additional [Energy].",
+        "ability": "Add [Cargo] slot. During the End Phase, you may recover 1 additional [Shield] or [Energy].",
         "title": "Insatiable Worrt",
         "type": "Title",
         "slots": ["Title"],
@@ -925,6 +928,32 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/d16195cbd5b4a9e1cfaf94b35dd188e7.jpg"
       }
     ],
+    "restrictions": [
+      { "factions": ["Scum and Villainy", "Separatist Alliance"] },
+      { "ships": ["firesprayclasspatrolcraft"] }
+    ],
     "cost": { "value": 3 }
+  },
+  {
+    "name": "B6 Blade Wing Prototype",
+    "limited": 1,
+    "xws": "b6bladewingprototype",
+    "hyperspace": true,
+    "sides": [
+      {
+        "ability": "Add [Gunner] slot.",
+        "title": "B6 Blade Wing Prototype",
+        "type": "Title",
+        "slots": ["Title"],
+        "grants": [{ "type": "slot", "value": "Gunner", "amount": 1 }],
+        "ffg": 923,
+        "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/69e848f2da9a8f6f18d2f89096a94513.jpg"
+      }
+    ],
+    "cost": { "value": 2 },
+    "restrictions": [
+      { "factions": ["Rebel Alliance"] },
+      { "ships": ["asf01bwing"] }
+    ]
   }
 ]
