@@ -1,0 +1,56 @@
+{
+  "name": "CR90 Corellian Corvette",
+  "xws": "cr90corelliancorvette",
+  "ffg": 78,
+  "faction": "Rebel Alliance",
+  "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_CR90.png",
+  "size": "Huge",
+  "dial": [
+    "0BR",
+    "0OR",
+    "0NR",
+    "1BW",
+    "1NW",
+    "1FW",
+    "2BB",
+    "2NB",
+    "2FB",
+    "3NR",
+    "3FB",
+    "3BR",
+    "4FR",
+    "5FR"
+  ],
+  "stats": [],
+  "actions": [],
+  "pilots": [
+    {
+      "ffg": 706,
+      "name": "Alderaanian Guard",
+      "initiative": 8,
+      "cost": 146,
+      "limited": 0,
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/c029d78ab010ebb2d5a9405924efbf5a.jpg",
+      "shipAbility": {
+        "name": "Broadside Batteries",
+        "text": "You can acquire locks and perform primary attacks at range 1-4."
+      },
+      "text": "A craft used since before the Clone Wars, the CR90 corvette is favored by the Royal House of Alderaan for its versatility.",
+      "hyperspace": false,
+      "engagement": 0,
+      "xws": "alderaanianguard",
+      "slots": [
+        "Command",
+        "Hardpoint",
+        "Hardpoint",
+        "Crew",
+        "Crew",
+        "Gunner",
+        "Team",
+        "Team",
+        "Cargo",
+        "Title"
+      ]
+    }
+  ]
+}
