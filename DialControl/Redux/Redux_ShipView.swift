@@ -113,6 +113,11 @@ class Redux_ShipViewModel: ObservableObject {
                 }
             })
             .store(in: &cancellableSet)
+        
+        self.store.$state.sink(receiveValue: {
+            self.pilotStateData = $0.ship.pilotStateData!
+        })
+        .store(in: &cancellableSet)
     }
 
     lazy var shipImageURL: String = {
