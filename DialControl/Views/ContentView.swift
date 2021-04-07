@@ -86,7 +86,8 @@ class ViewFactory: ObservableObject {
                 let viewModel = Redux_ShipViewModel(moc: self.moc,
                                               shipPilot: shipPilot,
                                               squad: squad,
-                                              pilotStateService: self.diContainer.pilotStateService)
+                                              pilotStateService: self.diContainer.pilotStateService,
+                                              store: store)
                 
                 return AnyView(Redux_ShipView(viewModel: viewModel)
                     .environmentObject(self)

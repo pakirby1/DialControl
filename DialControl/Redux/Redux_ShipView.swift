@@ -60,17 +60,20 @@ class Redux_ShipViewModel: ObservableObject {
     // Images Support
 //    @ObservedObject var networkCacheViewModel: NetworkCacheViewModel
     @Published var images: [ImageData] = []
+    @ObservedObject var store: MyAppStore
     
     init(moc: NSManagedObjectContext,
          shipPilot: ShipPilot,
          squad: Squad,
-         pilotStateService: PilotStateServiceProtocol)
+         pilotStateService: PilotStateServiceProtocol,
+         store: MyAppStore)
     {
         self.shipPilot = shipPilot
         self.squad = squad
         self.pilotStateService = pilotStateService
         self.pilotStateData = shipPilot.pilotStateData!
         self.pilotState = shipPilot.pilotState
+        self.store = store
         
         // CoreData
         self.moc = moc
