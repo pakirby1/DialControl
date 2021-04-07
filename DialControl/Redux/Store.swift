@@ -26,6 +26,7 @@ struct MyShipViewState {
      */
     var pilotState: PilotState?
     var pilotStateData: PilotStateData?
+    var shipImage: String = ""
 }
 
 struct MySquadViewState {
@@ -49,10 +50,12 @@ struct FactionSquadListState {
 enum MyAppAction {
     case faction(action: MyFactionSquadListAction)
     case squad(action: MySquadAction)
+    case ship(action: MyShipAction)
 }
 
 enum MyShipAction {
     case initState(PilotStateData, PilotState)
+    case loadShipImage(String, String, Squad)
 //    case updateHull(ChargeData<Int>)
 //    case updateShield(ChargeData<Int>)
 //    case updateForce(ChargeData<Int>)
@@ -87,6 +90,7 @@ enum MyFactionSquadListAction {
 struct MyEnvironment {
     var squadService: SquadService
     var pilotStateService: PilotStateService
+    var jsonService: JSONService
 }
 
 // MARK: - Redux Store
@@ -101,10 +105,17 @@ func myAppReducer(
             return factionReducer(state: &state.faction,
                            action: action,
                            environment: environment)
+        
         case .squad(let action):
             return squadReducer(state: &state.squad,
                                   action: action,
                                   environment: environment)
+        
+        case .ship(let action):
+            return shipReducer(state: &state.ship,
+                              action: action,
+                              environment: environment)
+        
     }
     
 //    return Empty().eraseToAnyPublisher()
@@ -140,6 +151,9 @@ func shipReducer(state: inout MyShipViewState,
         case let .initState(pilotStateData, pilotState):
             state.pilotStateData = pilotStateData
             state.pilotState = pilotState
+        
+        case let .loadShipImage(shipName, pilotName, squad):
+            state.shipImage = environment.jsonService.loadShipFromJSON(shipName: shipName, pilotName: pilotName, squad: squad).1.image
         
         case .reset :
             reset()

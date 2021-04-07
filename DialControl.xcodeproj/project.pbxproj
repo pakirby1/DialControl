@@ -77,6 +77,7 @@
 		AEE65512260DE21A00AFAE6A /* HealthStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65511260DE21A00AFAE6A /* HealthStat.swift */; };
 		AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */; };
 		AEE65516260DFBBF00AFAE6A /* Redux_ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */; };
+		AEE6551E261D9F8F00AFAE6A /* JSONService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE6551D261D9F8F00AFAE6A /* JSONService.swift */; };
 		AEE98B4C24B5BD9F00E60128 /* CustomDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */; };
 		AEE98B4E24B5D45900E60128 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4D24B5D45900E60128 /* Globals.swift */; };
 		AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */; };
@@ -184,6 +185,7 @@
 		AEE65511260DE21A00AFAE6A /* HealthStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStat.swift; sourceTree = "<group>"; };
 		AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStatsView.swift; sourceTree = "<group>"; };
 		AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_ShipView.swift; sourceTree = "<group>"; };
+		AEE6551D261D9F8F00AFAE6A /* JSONService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONService.swift; sourceTree = "<group>"; };
 		AEE98B4B24B5BD9F00E60128 /* CustomDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomDivider.swift; sourceTree = "<group>"; };
 		AEE98B4D24B5D45900E60128 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		AEE98B4F24B5D4AA00E60128 /* ShipLookupBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipLookupBuilder.swift; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 				AEEB546924F11F3C0050913C /* SquadService.swift */,
 				AEEB546B24F11FE50050913C /* PilotStateService.swift */,
 				AEF5676F25DFCD17006DCD4C /* ShipService.swift */,
+				AEE6551D261D9F8F00AFAE6A /* JSONService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 				AE028C57249F81B200DF689B /* Cache.swift in Sources */,
 				AEEB546A24F11F3C0050913C /* SquadService.swift in Sources */,
 				AE1DF8F424B5E34500B84D38 /* UpArrowShape.swift in Sources */,
+				AEE6551E261D9F8F00AFAE6A /* JSONService.swift in Sources */,
 				AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */,
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,

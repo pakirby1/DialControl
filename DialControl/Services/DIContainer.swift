@@ -13,9 +13,11 @@ class DIContainer {
     // Have to be concrete types if used with @EnvironmentObject 
     var squadService: SquadService!
     var pilotStateService: PilotStateService!
+    var jsonService: JSONService!
     
     func registerServices(moc: NSManagedObjectContext) {
         self.squadService = SquadService(moc: moc)
         self.pilotStateService = PilotStateService(moc: moc)
+        self.jsonService = JSONService()
     }
 }
