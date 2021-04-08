@@ -56,17 +56,16 @@ enum MyAppAction {
 enum MyShipAction {
     case initState(PilotStateData, PilotState)
     case loadShipImage(String, String, Squad)
-//    case updateHull(ChargeData<Int>)
-//    case updateShield(ChargeData<Int>)
-//    case updateForce(ChargeData<Int>)
-//    case updateCharge(ChargeData<Int>)
-//    case updateUpgradeCharge(ChargeData<Int>)
-//    case updateUpgradeSelectedSide(Bool)
-//    case updateShipIDMarker
+    case updateHull(Int, Int)
+    case updateShield(Int, Int)
+    case updateForce(Int, Int)
+    case updateCharge(Int, Int)
+    case updateUpgradeCharge(UpgradeStateData, Int, Int)
+    case updateUpgradeSelectedSide(UpgradeStateData, Bool)
+    case updateShipIDMarker(String)
     case reset
-//    case updateSelectedManeuver(String)
+    case updateSelectedManeuver(String)
 //    case updateDialStatus(DialStatus)
-//    case updateState(PilotStateData)
 }
 
 enum MySquadAction {
@@ -158,6 +157,92 @@ func shipReducer(state: inout MyShipViewState,
                 .loadShipFromJSON(shipName: shipName,
                                   pilotName: pilotName,
                                   squad: squad).1.image
+        
+        case let .updateHull(active, inactive):
+            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+            
+            state.pilotStateData?.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
+                $0.updateHull(active: active, inactive: inactive)
+                updateState(newData: $0)
+            })
+        
+        case let .updateShield(active, inactive):
+            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+            
+            state.pilotStateData?.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
+                $0.updateShield(active: active, inactive: inactive)
+                updateState(newData: $0)
+            })
+        
+        case let .updateForce(active, inactive):
+            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+            
+            state.pilotStateData?.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
+                $0.updateForce(active: active, inactive: inactive)
+                updateState(newData: $0)
+            })
+        
+        case let .updateCharge(active, inactive):
+            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+            
+            state.pilotStateData?.change(update: {
+                print("PAK_\(#function) pilotStateData.id: \($0)")
+                $0.updateForce(active: active, inactive: inactive)
+                updateState(newData: $0)
+            })
+        
+        case let .updateShipIDMarker(marker):
+            print("\(Date()) \(#function) : \(marker)")
+            state.pilotStateData?.change(update: {
+                $0.updateShipID(shipID: marker)
+                updateState(newData: $0)
+            })
+        
+        case let .updateSelectedManeuver(maneuver):
+            print("\(Date()) \(#function) : \(maneuver)")
+            state.pilotStateData?.change(update: {
+                $0.updateManeuver(maneuver: maneuver)
+                updateState(newData: $0)
+            })
+        
+        case let .updateUpgradeCharge(upgrade, active, inactive):
+            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+            upgrade.change(update: { newUpgrade in
+                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
+                newUpgrade.updateCharge(active: active, inactive: inactive)
+                
+                // the old upgrade state is in the pilotStateData, so we need
+                // to replace the old upgrade state with the new upgrade state
+                // in $0
+                if let upgrades = state.pilotStateData?.upgradeStates {
+                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
+                        state.pilotStateData?.upgradeStates?[indexOfUpgrade] = newUpgrade
+                    }
+                }
+                
+                updateState(newData: state.pilotStateData!)
+            })
+        
+        case let .updateUpgradeSelectedSide(upgrade, selectedSide):
+            print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
+            upgrade.change(update: { newUpgrade in
+                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
+                newUpgrade.updateSelectedSide(side: selectedSide ? 1 : 0)
+                
+                // the old upgrade state is in the pilotStateData, so we need
+                // to replace the old upgrade state with the new upgrade state
+                // in $0
+                if let upgrades = state.pilotStateData?.upgradeStates {
+                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
+                        state.pilotStateData?.upgradeStates?[indexOfUpgrade] = newUpgrade
+                    }
+                }
+                
+                updateState(newData: state.pilotStateData!)
+            })
         
         case .reset :
             reset()
