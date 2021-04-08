@@ -418,11 +418,9 @@ class Redux_ShipViewModel: ObservableObject {
     }
 
     func updateDialStatus(status: DialStatus) {
-        print("\(Date()) \(#function) : \(status)")
-        self.pilotStateData.change(update: {
-            $0.updateDialStatus(status: status)
-            self.updateState(newData: $0)
-        })
+        self.store.send(.ship(action: .updateDialStatus(status)))
+        
+        
     }
     
     func updateState(newData: PilotStateData) {

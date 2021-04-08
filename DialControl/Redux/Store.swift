@@ -65,7 +65,7 @@ enum MyShipAction {
     case updateShipIDMarker(String)
     case reset
     case updateSelectedManeuver(String)
-//    case updateDialStatus(DialStatus)
+    case updateDialStatus(DialStatus)
 }
 
 enum MySquadAction {
@@ -246,6 +246,13 @@ func shipReducer(state: inout MyShipViewState,
         
         case .reset :
             reset()
+        
+        case .updateDialStatus(let status):
+            print("\(Date()) \(#function) : \(status)")
+            state.pilotStateData?.change(update: {
+                $0.updateDialStatus(status: status)
+                updateState(newData: $0)
+            })
     }
     
     return Empty().eraseToAnyPublisher()
