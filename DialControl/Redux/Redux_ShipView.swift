@@ -410,17 +410,11 @@ class Redux_ShipViewModel: ObservableObject {
     }
     
     func updateSelectedManeuver(maneuver: String) {
-        print("\(Date()) \(#function) : \(maneuver)")
-        self.pilotStateData.change(update: {
-            $0.updateManeuver(maneuver: maneuver)
-            self.updateState(newData: $0)
-        })
+        self.store.send(.ship(action: .updateSelectedManeuver(maneuver)))
     }
 
     func updateDialStatus(status: DialStatus) {
         self.store.send(.ship(action: .updateDialStatus(status)))
-        
-        
     }
     
     func updateState(newData: PilotStateData) {
