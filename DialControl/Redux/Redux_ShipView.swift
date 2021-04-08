@@ -44,14 +44,22 @@ protocol ShipViewModelProtocol: ObservableObject {
 class Redux_ShipViewModel: ObservableObject {
     var shipPilot: ShipPilot
     var squad: Squad
+    
+    // Streams
+    @Published var pilotStateData: PilotStateData
+    @Published var shipImageURL: String = ""
     @Published var shipImage: UIImage = UIImage()
     @Published var upgradeImage: UIImage = UIImage()
+    @Published var currentManeuver: String = ""
+    @Published var images: [ImageData] = []
+    
+    @ObservedObject var store: MyAppStore
+    
     private var _displayImageOverlay: Bool = false
     private var cancellableSet = Set<AnyCancellable>()
-    @Published var pilotStateData: PilotStateData
+    
     let pilotStateService: PilotStateServiceProtocol
     var pilotState: PilotState? = nil
-    @Published var currentManeuver: String = ""
 
     // CoreData
     private let frc: BindableFetchedResultsController<ImageData>
@@ -59,8 +67,6 @@ class Redux_ShipViewModel: ObservableObject {
     
     // Images Support
 //    @ObservedObject var networkCacheViewModel: NetworkCacheViewModel
-    @Published var images: [ImageData] = []
-    @ObservedObject var store: MyAppStore
     
     init(moc: NSManagedObjectContext,
          shipPilot: ShipPilot,
@@ -116,17 +122,32 @@ class Redux_ShipViewModel: ObservableObject {
         
         self.store.$state.sink(receiveValue: {
             self.pilotStateData = $0.ship.pilotStateData!
+            self.shipImageURL = $0.ship.shipImageURL
         })
         .store(in: &cancellableSet)
     }
 
-    lazy var shipImageURL: String = {
-        self.store.send(.ship(action: .loadShipImage(shipPilot.shipName, shipPilot.pilotName, self.squad)))
-        
-        return self.store.state.ship.shipImage
-//        loadShipFromJSON(shipName: shipPilot.shipName,
-//                       pilotName: shipPilot.pilotName).1.image
-    }()
+    
+    
+    func fetchImageURL() {
+        self.store.send(.ship(action: .loadShipImage(
+            shipPilot.shipName,
+            shipPilot.pilotName,
+            self.squad
+        )))
+    }
+    
+//    lazy var shipImageURL: String = {
+//        self.store.send(.ship(action: .loadShipImage(
+//            shipPilot.shipName,
+//            shipPilot.pilotName,
+//            self.squad
+//        )))
+//
+//        return self.store.state.ship.shipImageURL
+////        loadShipFromJSON(shipName: shipPilot.shipName,
+////                       pilotName: shipPilot.pilotName).1.image
+//    }()
     
     
     // Load values from pilotShipState, becuase shipPilot ontains the initial values
@@ -393,7 +414,7 @@ we can do this:
    Redux_ShipViewModelProtocol
 https://stackoverflow.com/questions/59503399/how-to-define-a-protocol-as-a-type-for-a-observedobject-property
 */
-struct Redux_ShipView<Model: ShipViewModelProtocol>: View {
+struct Redux_ShipView: View {
 //    struct SelectedUpgrade {
 //        let upgrade: Upgrade
 //        let imageOverlayUrl: String
@@ -406,12 +427,13 @@ struct Redux_ShipView<Model: ShipViewModelProtocol>: View {
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
     @State var imageOverlayUrlBack: String = ""
-    @ObservedObject var viewModel: Model
+//    @ObservedObject var viewModel: Model
+    @ObservedObject var viewModel: Redux_ShipViewModel
     let theme: Theme = WestworldUITheme()
     let printer = DeallocPrinter("ShipView")
     @State var selectedUpgrade: UpgradeView.UpgradeViewModel? = nil
     
-    init(viewModel: Model) {
+    init(viewModel: Redux_ShipViewModel) {
         self.viewModel = viewModel
         self.currentManeuver = ""
     }
@@ -478,7 +500,9 @@ struct Redux_ShipView<Model: ShipViewModelProtocol>: View {
             .background(theme.BUTTONBACKGROUND)
         }
         
-        return content
+        return content.onAppear() {
+            self.viewModel.fetchImageURL()
+        }
     }
 
     var imageOverlayView: AnyView {

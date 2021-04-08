@@ -26,7 +26,7 @@ struct MyShipViewState {
      */
     var pilotState: PilotState?
     var pilotStateData: PilotStateData?
-    var shipImage: String = ""
+    var shipImageURL: String = ""
 }
 
 struct MySquadViewState {
@@ -153,7 +153,11 @@ func shipReducer(state: inout MyShipViewState,
             state.pilotState = pilotState
         
         case let .loadShipImage(shipName, pilotName, squad):
-            state.shipImage = environment.jsonService.loadShipFromJSON(shipName: shipName, pilotName: pilotName, squad: squad).1.image
+            state.shipImageURL = environment
+                .jsonService
+                .loadShipFromJSON(shipName: shipName,
+                                  pilotName: pilotName,
+                                  squad: squad).1.image
         
         case .reset :
             reset()
