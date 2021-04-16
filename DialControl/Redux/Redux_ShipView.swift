@@ -198,46 +198,6 @@ class Redux_ShipViewModel: ObservableObject {
     
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
         func Redux_store() {
-            func updateUpgradeCharge(upgrade: UpgradeStateData, active: Int, inactive: Int) {
-                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-                    upgrade.change(update: { newUpgrade in
-                        print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                        newUpgrade.updateCharge(active: active, inactive: inactive)
-                        
-                        // the old upgrade state is in the pilotStateData, so we need
-                        // to replace the old upgrade state with the new upgrade state
-                        // in $0
-                        if let upgrades = self.pilotStateData.upgradeStates {
-                            if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                                self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
-                            }
-                        }
-                        
-                        self.updateState(newData: self.pilotStateData)
-                    })
-            }
-            
-            func updateUpgradeSelectedSide(upgrade: UpgradeStateData,
-                                           selectedSide: Bool)
-            {
-                print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
-                    upgrade.change(update: { newUpgrade in
-                        print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                        newUpgrade.updateSelectedSide(side: selectedSide ? 1 : 0)
-                        
-                        // the old upgrade state is in the pilotStateData, so we need
-                        // to replace the old upgrade state with the new upgrade state
-                        // in $0
-                        if let upgrades = self.pilotStateData.upgradeStates {
-                            if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                                self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
-                            }
-                        }
-                        
-                        self.updateState(newData: self.pilotStateData)
-                    })
-            }
-
             switch(type) {
                 case .hull:
                     self.store.send(.ship(action: .updateHull(active, inactive)))
@@ -252,12 +212,11 @@ class Redux_ShipViewModel: ObservableObject {
                 case .selectedManeuver(let maneuver):
                     self.store.send(.ship(action: .updateSelectedManeuver(maneuver)))
                 case .upgradeCharge(var upgrade):
-                    //                upgrade.updateCharge(active: active, inactive: inactive)
                     self.store.send(.ship(action: .updateUpgradeCharge(upgrade, active, inactive)))
                 case .selectedSide(var upgrade, let side):
-                    updateUpgradeSelectedSide(upgrade: upgrade, selectedSide: side)
+                    self.store.send(.ship(action: .updateUpgradeSelectedSide(upgrade, side)))
                 case .reset:
-                    reset()
+                    self.store.send(.ship(action: .reset))
             }
         }
         
