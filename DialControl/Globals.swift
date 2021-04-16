@@ -178,14 +178,16 @@ protocol IDeallocPrinter {
 
 class DeallocPrinter {
     let label: String
+    let id = UUID()
     
     init(_ label: String) {
         self.label = label
-        print("allocated \(label)")
+        print("\(Date()) allocated \(id) \(label)")
+//        DispatchQueue.global(qos: .)
     }
     
     deinit {
-        print("deallocated \(label)")
+        print("\(Date()) deallocated \(id) \(label)")
     }
 }
 

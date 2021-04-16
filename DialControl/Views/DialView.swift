@@ -164,18 +164,18 @@ struct DialView: View {
         print(currentManeuver.wrappedValue)
         
         self.dial = dial
-        buildDial(dial: dial)
-        
-        for (index, item) in self.angles.enumerated() {
-            let lower = item.lowerBound
-            let mid = (item.lowerBound + item.upperBound) / 2
-
-            self.angleRanges
-                .append(AngleRange(start: CGFloat(lower),
-                                   end: CGFloat(item.upperBound),
-                                   mid: CGFloat(mid),
-                                   sector: UInt(index)))
-        }
+//        buildDial(dial: dial)
+//        
+//        for (index, item) in self.angles.enumerated() {
+//            let lower = item.lowerBound
+//            let mid = (item.lowerBound + item.upperBound) / 2
+//
+//            self.angleRanges
+//                .append(AngleRange(start: CGFloat(lower),
+//                                   end: CGFloat(item.upperBound),
+//                                   mid: CGFloat(mid),
+//                                   sector: UInt(index)))
+//        }
         
         anglePublisher
             .lane("anglePublisher")
@@ -194,6 +194,7 @@ struct DialView: View {
         
         let pathNodes: [PathNodeStruct<ManeuverDialSelection>] = maneuvers.map{
             let view = ManeuverDialSelection(maneuver: $0, size: 30)
+//            let view = EmptyView()
             
             // 0 degrees in SwiftUI is at the pi / 2 (90 clockwise) location, so add
             // -90 to get the correct location
@@ -308,7 +309,8 @@ struct DialView: View {
     }
     
     func getCirclePoints(centerPoint point: CGPoint, radius: CGFloat, n: Int) -> [CGPoint] {
-        let result: [CGPoint] = stride(from: 0.0, to: 360.0, by: Double(360 / n)).map {
+        let result: [CGPoint] = stride(from: 0.0, to: 360.0, by: Double(360 / n)).map
+        {
             let bearing = CGFloat($0) * .pi / 180
             let x = point.x + radius * cos(bearing)
             let y = point.y + radius * sin(bearing)

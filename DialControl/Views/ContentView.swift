@@ -305,16 +305,17 @@ struct Rotation: View {
     
     var body: some View {
         
-        let rotationGesture = RotationGesture(minimumAngleDelta: Angle(degrees: 1))
+        let rotationGesture = RotationGesture(minimumAngleDelta: Angle(degrees: 45))
             .updating($rotationState) { value, state, transation in
                 state = .rotating(angle: value)
-        }.onEnded { value in
-            self.viewRotationState += value
-            let segmentAngle = 360.0 / Double(self.totalSegments)
-            let tempSegment = self.rotationAngle.degrees / segmentAngle
-//            self.currentSegment = UInt()
-            print("onEnded.value: \(value.degrees) viewRotationState: \(self.viewRotationState.degrees) segmentAngle: \(segmentAngle) tempSegment: \(tempSegment)")
-        }
+            }
+            .onEnded { value in
+                self.viewRotationState += value
+                let segmentAngle = 360.0 / Double(self.totalSegments)
+                let tempSegment = self.rotationAngle.degrees / segmentAngle
+    //            self.currentSegment = UInt()
+                print("onEnded.value: \(value.degrees) viewRotationState: \(self.viewRotationState.degrees) segmentAngle: \(segmentAngle) tempSegment: \(tempSegment)")
+            }
         
         return
             ZStack {

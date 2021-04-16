@@ -31,6 +31,8 @@ struct InnerCircle: View {
     private var angles: [Range<CGFloat>] = []
     @Binding var currentManeuver: String
     
+    let printer = DeallocPrinter("InnerCircle")
+    
     init(innerDiameter: CGFloat,
          currentManeuver: Binding<String>,
          dial: [String]) {
