@@ -241,6 +241,7 @@ extension Redux_SquadView {
                                                    dialStatus: data.dial_status,
                                                    updatePilotStateCallback: self.updatePilotState)
                     .environmentObject(self.viewFactory)
+                    .environmentObject(self.store)
 //                    .eraseToAnyView()
             }
             

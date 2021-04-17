@@ -72,6 +72,7 @@ enum MySquadAction {
     case updateSquad(SquadData)
     case updatePilotState(PilotStateData, PilotState)
     case getShips(Squad, SquadData)
+    case flipDial(PilotStateData, PilotState)
 }
 
 enum MyFactionSquadListAction {
@@ -263,6 +264,19 @@ func squadReducer(state: inout MySquadViewState,
                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
     switch(action) {
+        case let .flipDial(pilotStateData, pilotState):
+            pilotStateData.change(update: {
+                var newPSD = $0
+                
+                newPSD.dial_status.handleEvent(event: .dialTapped)
+                
+                environment
+                    .pilotStateService
+                    .updateState(newData: newPSD, state: pilotState)
+                
+                print("\(Date()) PAK_\(#function) after pilotStateData id: \(String(describing: pilotState.id)) dial_status: \(newPSD.dial_status)")
+            })
+                            
         case let .updateSquad(squad):
             environment
                 .squadService

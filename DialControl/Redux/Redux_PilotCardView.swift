@@ -17,6 +17,7 @@ struct Redux_PilotCardView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @State var dialStatus: DialStatus
     let updatePilotStateCallback: (PilotStateData, PilotState) -> ()
+    @EnvironmentObject var store: MyAppStore
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -132,7 +133,7 @@ extension Redux_PilotCardView {
                                       shipPilot: self.shipPilot,
                                       displayUpgrades: true,
                                       displayHeaders: false,
-                                      displayDial: true)
+                                      displayDial: true).environmentObject(self.store)
     }
 }
 
@@ -144,6 +145,7 @@ struct Redux_PilotDetailsView: View {
     let displayDial: Bool
     let theme: Theme = WestworldUITheme()
     @State var currentManeuver: String = ""
+    @EnvironmentObject var store: MyAppStore
     
     var dialViewNew: some View {
         let status = self.shipPilot.pilotStateData!.dial_status
@@ -318,6 +320,7 @@ extension Redux_PilotDetailsView {
                 return
             }
             
+            /*
             data.change(update: {
                 var newPSD = $0
                 
@@ -325,19 +328,19 @@ extension Redux_PilotDetailsView {
                 newPSD.dial_status.handleEvent(event: .dialTapped)
                 
                 // Update CoreData
-                self.updatePilotStateCallback(newPSD, self.shipPilot.pilotState)
-//                self.pilotStateService.updateState(newData: newPSD,
-//                                                   state: self.shipPilot.pilotState)
+                self.pilotStateService.updateState(newData: newPSD,
+                                                   state: self.shipPilot.pilotState)
                 print("\(Date()) PAK_\(#function) after pilotStateData id: \(self.shipPilot.id) dial_status: \(newPSD.dial_status)")
                 
                 // self.shipPilot.pilotState.json was updated but
                 // the self.shipPilot property was NOT updated so no refesh taken
                 // Hack to force refresh of view
-//                self.objectWillChange.send()
+                self.objectWillChange.send()
             })
-        }
-        
-        if let _ = self.shipPilot.pilotStateData {
+            */
+            
+            self.store.send(.squad(action: .flipDial(data, shipPilot.pilotState)))
+            
             print("\(Date()) PAK_\(#function) pilotStateData id: \(self.shipPilot.id) dial_status: \(self.shipPilot.pilotStateData?.dial_status)")
         }
     }
