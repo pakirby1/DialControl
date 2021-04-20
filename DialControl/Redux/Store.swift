@@ -149,17 +149,15 @@ func shipReducer(state: inout MyShipViewState,
     func updateHull(_ active: Int, _ inactive: Int) {
         print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
         
-        state.pilotStateData?.change(update: {
-            print("PAK_\(#function) pilotStateData.id: \($0)")
-            $0.updateHull(active: active, inactive: inactive)
-            updateState(newData: $0)
-        })
+//        let x = { (psd: PilotStateData) in psd.updateHull(active: active, inactive: inactive) }
+        
+        update(handler: { $0.updateHull(active: active, inactive: inactive) })
     }
     
-    func update(handler: (PilotStateData) -> ()) {
+    func update(handler: (inout PilotStateData) -> ()) {
         state.pilotStateData?.change(update: {
             print("PAK_\(#function) pilotStateData.id: \($0)")
-            handler($0)
+            handler(&$0)
             updateState(newData: $0)
         })
     }
