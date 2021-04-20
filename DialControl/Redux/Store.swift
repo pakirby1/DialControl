@@ -146,6 +146,24 @@ func shipReducer(state: inout MyShipViewState,
         state.pilotStateData = newData
     }
     
+    func updateHull(_ active: Int, _ inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+        
+        state.pilotStateData?.change(update: {
+            print("PAK_\(#function) pilotStateData.id: \($0)")
+            $0.updateHull(active: active, inactive: inactive)
+            updateState(newData: $0)
+        })
+    }
+    
+    func update(handler: (PilotStateData) -> ()) {
+        state.pilotStateData?.change(update: {
+            print("PAK_\(#function) pilotStateData.id: \($0)")
+            handler($0)
+            updateState(newData: $0)
+        })
+    }
+    
     switch(action) {
         // FIXME: Do we really need this?  or can we load this from CoreData?
         case let .initState(pilotStateData, pilotState):
@@ -160,13 +178,7 @@ func shipReducer(state: inout MyShipViewState,
                                   squad: squad).1.image
         
         case let .updateHull(active, inactive):
-            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            
-            state.pilotStateData?.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateHull(active: active, inactive: inactive)
-                updateState(newData: $0)
-            })
+            updateHull(active, inactive)
         
         case let .updateShield(active, inactive):
             print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
