@@ -126,10 +126,55 @@ func shipReducer(state: inout MyShipViewState,
                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
     func reset() {
-        state.pilotStateData?.change(update: {
-            $0.reset()
-            updateState(newData: $0)
-        })
+        print("\(Date()) \(#function) : reset")
+        update(psdHandler: { $0.reset() })
+    }
+    
+    func updateShipIDMarker(marker: String) {
+        print("\(Date()) \(#function) : \(marker)")
+        update(psdHandler: { $0.updateShipID(shipID: marker) })
+    }
+    
+    func updateSelectedManeuver(maneuver: String ) {
+        print("\(Date()) \(#function) : \(maneuver)")
+        update(psdHandler: { $0.updateManeuver(maneuver: maneuver) })
+    }
+    
+    func updateHull(_ active: Int, _ inactive: Int) {
+        print(active, inactive)
+        update(psdHandler: { $0.updateHull(active: active, inactive: inactive) })
+    }
+    
+    func updateShield(_ active: Int , _ inactive: Int ) {
+        print(active, inactive)
+        update(psdHandler: { $0.updateHull(active: active, inactive: inactive) })
+    }
+    
+    func updateForce(_ active: Int, _ inactive: Int) {
+        print(active, inactive)
+        update(psdHandler: { $0.updateForce(active: active, inactive: inactive) })
+    }
+    
+    func updateCharge(_ active: Int , _ inactive: Int ) {
+        print(active, inactive)
+        update(psdHandler: { $0.updateCharge(active: active, inactive: inactive) })
+    }
+    
+    func updateUpgradeCharge(upgrade: UpgradeStateData, active: Int, inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+        update(upgrade: upgrade,
+               upgradeHandler: { $0.updateCharge(active: active, inactive: inactive) })
+    }
+    
+    func updateUpgradeSelectedSide(upgrade: UpgradeStateData, selectedSide: Bool) {
+        print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
+        update(upgrade: upgrade,
+               upgradeHandler: { $0.updateSelectedSide(side: selectedSide ? 1 : 0) })
+    }
+    
+    func updateDialStatus(status: DialStatus) {
+        print("\(Date()) \(#function) : \(status)")
+        update(psdHandler: { $0.updateDialStatus(status: status) })
     }
     
     func updateState(newData: PilotStateData) {
@@ -146,23 +191,38 @@ func shipReducer(state: inout MyShipViewState,
         state.pilotStateData = newData
     }
     
-    func updateHull(_ active: Int, _ inactive: Int) {
-        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-        
-//        let x = { (psd: PilotStateData) in psd.updateHull(active: active, inactive: inactive) }
-        
-        update(handler: { $0.updateHull(active: active, inactive: inactive) })
-    }
-    
-    func update(handler: (inout PilotStateData) -> ()) {
+    func update(psdHandler: (inout PilotStateData) -> ()) {
         state.pilotStateData?.change(update: {
             print("PAK_\(#function) pilotStateData.id: \($0)")
-            handler(&$0)
+            psdHandler(&$0)
             updateState(newData: $0)
         })
     }
+
+    func update(upgrade: UpgradeStateData, upgradeHandler: (inout UpgradeStateData) -> ()) {
+        upgrade.change(update: { newUpgrade in
+            print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
+            upgradeHandler(&newUpgrade)
+            
+            // the old upgrade state is in the pilotStateData, so we need
+            // to replace the old upgrade state with the new upgrade state
+            // in $0
+            if let upgrades = state.pilotStateData?.upgradeStates {
+                if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
+                    state.pilotStateData?.upgradeStates?[indexOfUpgrade] = newUpgrade
+                }
+            }
+            
+            updateState(newData: state.pilotStateData!)
+        })
+    }
     
+    func printStat(_ active: Int, _ inactive: Int) {
+        print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
+    }
+
     switch(action) {
+
         // FIXME: Do we really need this?  or can we load this from CoreData?
         case let .initState(pilotStateData, pilotState):
             state.pilotStateData = pilotStateData
@@ -179,91 +239,31 @@ func shipReducer(state: inout MyShipViewState,
             updateHull(active, inactive)
         
         case let .updateShield(active, inactive):
-            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            
-            state.pilotStateData?.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateShield(active: active, inactive: inactive)
-                updateState(newData: $0)
-            })
+            updateShield(active, inactive)
         
         case let .updateForce(active, inactive):
-            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            
-            state.pilotStateData?.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateForce(active: active, inactive: inactive)
-                updateState(newData: $0)
-            })
+            updateForce(active, inactive)
         
         case let .updateCharge(active, inactive):
-            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            
-            state.pilotStateData?.change(update: {
-                print("PAK_\(#function) pilotStateData.id: \($0)")
-                $0.updateForce(active: active, inactive: inactive)
-                updateState(newData: $0)
-            })
+            updateCharge(active, inactive)
         
         case let .updateShipIDMarker(marker):
-            print("\(Date()) \(#function) : \(marker)")
-            state.pilotStateData?.change(update: {
-                $0.updateShipID(shipID: marker)
-                updateState(newData: $0)
-            })
+            updateShipIDMarker(marker: marker)
         
         case let .updateSelectedManeuver(maneuver):
-            print("\(Date()) \(#function) : \(maneuver)")
-            state.pilotStateData?.change(update: {
-                $0.updateManeuver(maneuver: maneuver)
-                updateState(newData: $0)
-            })
+            updateSelectedManeuver(maneuver: maneuver)
         
         case let .updateUpgradeCharge(upgrade, active, inactive):
-            print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            upgrade.change(update: { newUpgrade in
-                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                newUpgrade.updateCharge(active: active, inactive: inactive)
-                
-                // the old upgrade state is in the pilotStateData, so we need
-                // to replace the old upgrade state with the new upgrade state
-                // in $0
-                if let upgrades = state.pilotStateData?.upgradeStates {
-                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                        state.pilotStateData?.upgradeStates?[indexOfUpgrade] = newUpgrade
-                    }
-                }
-                
-                updateState(newData: state.pilotStateData!)
-            })
+            updateUpgradeCharge(upgrade: upgrade, active: active, inactive: inactive)
         
         case let .updateUpgradeSelectedSide(upgrade, selectedSide):
-            print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
-            upgrade.change(update: { newUpgrade in
-                print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                newUpgrade.updateSelectedSide(side: selectedSide ? 1 : 0)
-                
-                // the old upgrade state is in the pilotStateData, so we need
-                // to replace the old upgrade state with the new upgrade state
-                // in $0
-                if let upgrades = state.pilotStateData?.upgradeStates {
-                    if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                        state.pilotStateData?.upgradeStates?[indexOfUpgrade] = newUpgrade
-                    }
-                }
-                
-                updateState(newData: state.pilotStateData!)
-            })
+            updateUpgradeSelectedSide(upgrade: upgrade, selectedSide: selectedSide)
         
         case .reset :
             reset()
         
         case .updateDialStatus(let status):
-            print("\(Date()) \(#function) : \(status)")
-            state.pilotStateData?.change(update: {
-                $0.updateDialStatus(status: status)
-                updateState(newData: $0)
-            })
+            updateDialStatus(status: status)
     }
     
     return Empty().eraseToAnyPublisher()

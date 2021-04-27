@@ -563,6 +563,7 @@ enum GrantElement : Codable {
     case stat(StatGrant)
     case force(ForceGrant)
     case linkedAction(LinkedActionGrant)
+    case arc(ArcGrant)
     
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -574,6 +575,11 @@ enum GrantElement : Codable {
         
         if let x = try? container.decode(ActionGrant.self) {
             self = .action(x)
+            return
+        }
+        
+        if let x = try? container.decode(ArcGrant.self) {
+            self = .arc(x)
             return
         }
         
@@ -608,6 +614,8 @@ enum GrantElement : Codable {
         switch self {
         case .action(let x):
             try container.encode(x)
+        case .arc(let x):
+            try container.encode(x)
         case .slot(let x):
             try container.encode(x)
         case .stat(let x):
@@ -625,6 +633,8 @@ extension GrantElement: CustomStringConvertible {
         switch(self) {
             case .action(let actionGrant):
                 return actionGrant.description
+            case .arc(let arcGrant):
+                return arcGrant.description
             case .slot(let slotGrant) :
                 return slotGrant.description
             case .stat(let statGrant) :
@@ -637,6 +647,18 @@ extension GrantElement: CustomStringConvertible {
     }
 }
 
+// MARK:- ArcGrant
+struct ArcGrant : Codable {
+    let type: String
+    let value: String
+}
+
+extension ArcGrant: CustomStringConvertible {
+    var description: String {
+        return "ArcGrant type: \(type) value: { \(value) }"
+    }
+}
+
 // MARK:- ActionGrant
 struct ActionGrant : Codable {
     let type: String
@@ -645,7 +667,7 @@ struct ActionGrant : Codable {
 
 extension ActionGrant: CustomStringConvertible {
     var description: String {
-        return "type: \(type) value: { \(value) }"
+        return "ActionGrant type: \(type) value: { \(value) }"
     }
 }
 
@@ -658,7 +680,7 @@ struct SlotGrant : Codable {
 
 extension SlotGrant : CustomStringConvertible {
     var description: String {
-        return "type: \(type) value: \(value) amount: \(amount)"
+        return "SlotGrant type: \(type) value: \(value) amount: \(amount)"
     }
 }
 
@@ -672,7 +694,7 @@ struct StatGrant : Codable {
 
 extension StatGrant : CustomStringConvertible {
     var description: String {
-        return "type: \(type) value: \(value) amount: \(amount) arc: \(arc)\n"
+        return "StatGrant type: \(type) value: \(value) amount: \(amount) arc: \(arc)\n"
     }
 }
 

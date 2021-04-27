@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import DialControl
+//@testable import DialControl
 
 class DialControlTests: XCTestCase {
 

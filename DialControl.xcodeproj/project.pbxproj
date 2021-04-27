@@ -38,6 +38,7 @@
 		AE2D80F42428C74700248CA4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F32428C74700248CA4 /* Theme.swift */; };
 		AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F52428D3E800248CA4 /* NavigationStack.swift */; };
 		AE2D80F8242B76AF00248CA4 /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2D80F7242B76AF00248CA4 /* ShipView.swift */; };
+		AE300073263173D100C326B3 /* ReduxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE300072263173D100C326B3 /* ReduxTests.swift */; };
 		AE3539542430C64700AC023A /* WedgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3539532430C64700AC023A /* WedgeView.swift */; };
 		AE3B2AF62602241A00451C9F /* Redux_SquadView_Old.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */; };
 		AE3B2AF82603851F00451C9F /* Redux_PilotCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */; };
@@ -139,6 +140,7 @@
 		AE2D80F32428C74700248CA4 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		AE2D80F52428D3E800248CA4 /* NavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStack.swift; sourceTree = "<group>"; };
 		AE2D80F7242B76AF00248CA4 /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
+		AE300072263173D100C326B3 /* ReduxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduxTests.swift; sourceTree = "<group>"; };
 		AE3539532430C64700AC023A /* WedgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WedgeView.swift; sourceTree = "<group>"; };
 		AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadView_Old.swift; sourceTree = "<group>"; };
 		AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_PilotCardView.swift; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 			children = (
 				AE4D58DC23F8087E00C66136 /* DialControlTests.swift */,
 				AE4D58DE23F8087E00C66136 /* Info.plist */,
+				AE300072263173D100C326B3 /* ReduxTests.swift */,
 			);
 			path = DialControlTests;
 			sourceTree = "<group>";
@@ -651,6 +654,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE300073263173D100C326B3 /* ReduxTests.swift in Sources */,
 				AE4D58DD23F8087E00C66136 /* DialControlTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
