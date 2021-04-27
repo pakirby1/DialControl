@@ -6,13 +6,37 @@
 //  Copyright © 2020 SoftDesk. All rights reserved.
 //
 
+import UIKit
+import SwiftUI
+import Combine
+import CoreData
+import Foundation
 import XCTest
-//@testable import DialControl
+@testable import DialControl
 
 class DialControlTests: XCTestCase {
-
+    var cancellables = Set<AnyCancellable>()
+    var store: MyAppStore?
+    
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        // Used only if we have a unique constraint on our CoreData entity?
+        moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
+        let diContainer = DIContainer()
+        diContainer.registerServices(moc: moc)
+        
+        self.store = MyAppStore(
+            state: MyAppState.init(faction: FactionSquadListState(),
+                                   squad: MySquadViewState(),
+                                   ship: MyShipViewState()),
+            reducer: myAppReducer,
+            environment: MyEnvironment(squadService: diContainer.squadService,
+                               pilotStateService: diContainer.pilotStateService,
+                               jsonService: diContainer.jsonService)
+        )
     }
 
     override func tearDown() {

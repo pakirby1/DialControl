@@ -8,32 +8,37 @@
 
 import UIKit
 import SwiftUI
+import Combine
 import CoreData
 import Foundation
 import XCTest
 @testable import DialControl
 
 extension DialControlTests {
-    func testA() {
-        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        
-        // Used only if we have a unique constraint on our CoreData entity?
-        moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
-        
-        let diContainer = DIContainer()
-        diContainer.registerServices(moc: moc)
-        
-        let store: MyAppStore = MyAppStore(
-            state: MyAppState.init(faction: FactionSquadListState(),
-                                   squad: MySquadViewState(),
-                                   ship: MyShipViewState()),
-            reducer: myAppReducer,
-            environment: MyEnvironment(squadService: diContainer.squadService,
-                               pilotStateService: diContainer.pilotStateService,
-                               jsonService: diContainer.jsonService)
-        )
+    func testDeleteAllSquads() {
+        // Subscribe to the store
+        self.store?.$state
+//            .dropFirst(2)
+            .sink(receiveValue: { state in
+                print("state.faction.displayDeleteAllSquadsConfirmation = \(state.faction.displayDeleteAllSquadsConfirmation)")
+                XCTAssertEqual(state.faction.displayDeleteAllSquadsConfirmation, false, "Display Delete all Squads confirmation is incorrect")
+            }).store(in: &cancellables)
         
         // Send the store an event
+//        self.store?.send(.faction(action: .deleteAllSquads))
+    }
+    
+    func testLoadAllSquads() {
+        // Subscribe to the store
+        self.store?.$state
+            .dropFirst(2)
+            .sink(receiveValue: { state in
+            print("state.faction.squadDataList.count = \(state.faction.squadDataList.count)")
+            XCTAssertEqual(state.faction.squadDataList.count, 4, "Squad list count from store is incorrect")
+        }).store(in: &cancellables)
+        
+        // Send the store an event
+        self.store?.send(.faction(action: .loadSquads))
         
         // XCTAssert()
     }
