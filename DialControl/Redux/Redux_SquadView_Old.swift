@@ -229,25 +229,20 @@ extension Redux_SquadView {
     func updateSquad(squadData: SquadData) {
         self.store.send(.squad(action: .updateSquad(squadData)))
     }
-    
+
     private func buildShipButton(shipPilot: ShipPilot) -> some View {
-        
-        @ViewBuilder
-        func buildPilotCardView(shipPilot: ShipPilot) -> some View {
+        func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
             // Get the dial status from the pilot state
             if let data = shipPilot.pilotStateData {
                 print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
-                return Redux_PilotCardView(shipPilot: shipPilot,
+                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
                                                    updatePilotStateCallback: self.updatePilotState)
                     .environmentObject(self.viewFactory)
-                    .environmentObject(self.store)
-//                    .eraseToAnyView()
+                    .environmentObject(self.store))
             }
             
-            //FIXME:- return an error view
-            return EmptyView()
-//                .eraseToAnyView()
+            return AnyView(EmptyView())
         }
         
         return Button(action: {
