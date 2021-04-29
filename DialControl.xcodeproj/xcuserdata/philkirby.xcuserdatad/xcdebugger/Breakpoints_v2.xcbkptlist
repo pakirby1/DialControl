@@ -7,96 +7,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B65F5EBE-A216-47C6-A329-A6E30B1E33BC"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_SquadView_Old.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "shipsGrid"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "B65F5EBE-A216-47C6-A329-A6E30B1E33BC - 483fc01ecf123f58"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; SwiftUI.ForEach&lt;Swift.Array&lt;DialControl.ShipPilot&gt;, Foundation.UUID, &lt;&lt;opaque return type of DialControl.Redux_SquadView.(buildShipButton in _917EAC33E4A02CAEE66BA518265A7E62)(shipPilot: DialControl.ShipPilot) -&gt; some&gt;&gt;.0&gt; in closure #1 (Swift.Int) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI.ForEach&lt;Swift.Range&lt;Swift.Int&gt;, Swift.Int, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0&gt; in DialControl.Redux_SquadView.shipsGrid.getter : some"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Redux/Redux_SquadView_Old.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "76"
-                  endingLineNumber = "76"
-                  offsetFromSymbolStart = "58">
-               </Location>
-               <Location
-                  uuid = "B65F5EBE-A216-47C6-A329-A6E30B1E33BC - d668aab5f65a2dab"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (DialControl.ShipPilot) -&gt; &lt;&lt;opaque return type of DialControl.Redux_SquadView.(buildShipButton in _917EAC33E4A02CAEE66BA518265A7E62)(shipPilot: DialControl.ShipPilot) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI.ForEach&lt;Swift.Array&lt;DialControl.ShipPilot&gt;, Foundation.UUID, &lt;&lt;opaque return type of DialControl.Redux_SquadView.(buildShipButton in _917EAC33E4A02CAEE66BA518265A7E62)(shipPilot: DialControl.ShipPilot) -&gt; some&gt;&gt;.0&gt; in closure #1 (Swift.Int) -&gt; &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0 in closure #1 () -&gt; SwiftUI.ForEach&lt;Swift.Range&lt;Swift.Int&gt;, Swift.Int, &lt;&lt;opaque return type of (extension in SwiftUI):SwiftUI.View.padding(SwiftUI.Edge.Set, Swift.Optional&lt;CoreGraphics.CGFloat&gt;) -&gt; some&gt;&gt;.0&gt; in DialControl.Redux_SquadView.shipsGrid.getter : some"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Redux/Redux_SquadView_Old.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "70"
-                  endingLineNumber = "70"
-                  offsetFromSymbolStart = "30">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A1D7D0C1-0D8E-42D8-B9B7-9A90B9CE6571"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_SquadView_Old.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
-            landmarkName = "shipsGrid"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7EBFA4AF-C3C4-4C29-9522-A42EC925F4C5"
+            uuid = "5C93BC72-AC16-460C-9694-E5C90DE85D94"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DialControl/Redux/Redux_SquadView_Old.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "chunkedShips"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D672C45C-21A4-4DC5-9D4B-17C8BCE7DE1D"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_SquadView_Old.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
-            landmarkName = "sortedShipPilots"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
+            landmarkName = "shipsGridNew"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>

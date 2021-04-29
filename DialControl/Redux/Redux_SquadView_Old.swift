@@ -25,7 +25,11 @@ struct Redux_SquadView: View, DamagedSquadRepresenting {
     let squadData: SquadData
     
     var shipPilots: [ShipPilot] {
-        self.store.state.squad.shipPilots
+//        loadShips()
+        print("PAKshipPilots \(Date()) count: \(self.store.state.squad.shipPilots.count)")
+        self.store.state.squad.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
+        
+        return self.store.state.squad.shipPilots
     }
     
     var chunkedShips : [[ShipPilot]] {
@@ -68,13 +72,38 @@ extension Redux_SquadView {
     }
     
     var shipsGrid: some View {
-        print("PAK.chunkedShips.count \(chunkedShips.count)")
-        
-        return ScrollView(.vertical, showsIndicators: false) {
-            ForEach(0..<chunkedShips.count) { index in
+        ScrollView(.vertical, showsIndicators: false) {
+            // throws Fatal error: Index out of range
+//            ForEach(0..<chunkedShips.count) { index in
+                ForEach(0...chunkedShips.count-1, id: \.self) { index in
                 HStack {
                     ForEach(self.chunkedShips[index]) { shipPilot in
                         self.buildShipButton(shipPilot: shipPilot)
+                    }
+                }
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+            }
+        }
+    }
+    
+    var shipsGridNew: some View {
+        let myships: [[ShipPilot]] = self.store.state.squad.shipPilots.chunked(into: 2)
+        
+        print("PAK_shipsGrid ships.count: \(myships.count)")
+        myships.forEach{ $0.forEach{ print("PAK_shipsGrid \($0.shipName)") } }
+        
+        return ScrollView(.vertical, showsIndicators: false) {
+            ForEach(0...myships.count-1, id: \.self) { index in
+                HStack {
+                    if (index == myships.count) {
+                        Text("PAK_shipsGrid Overflow, myships.count = \(myships.count) index = \(index)")
+                    } else {
+                        Text("PAK_shipsGrid index \(index)")
+                        ForEach(myships[index], id:\.self.id) { shipPilot in
+                            Text("PAK_shipsGrid building \(shipPilot.shipName)")
+    //                        self.buildShipButton(shipPilot: shipPilot)
+                        }
                     }
                 }
                 .padding(.leading, 20)
@@ -212,6 +241,7 @@ extension Redux_SquadView {
             // TODO: Switch & AppStore
             self.loadShips()
             self.activationOrder = self.squadData.engaged
+            print("PAKshipPilots \(Date()) .onAppear")
         }
     }
     
