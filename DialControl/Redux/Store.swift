@@ -147,7 +147,7 @@ func shipReducer(state: inout MyShipViewState,
     
     func updateShield(_ active: Int , _ inactive: Int ) {
         print(active, inactive)
-        update(psdHandler: { $0.updateHull(active: active, inactive: inactive) })
+        update(psdHandler: { $0.updateShield(active: active, inactive: inactive) })
     }
     
     func updateForce(_ active: Int, _ inactive: Int) {

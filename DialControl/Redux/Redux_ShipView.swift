@@ -81,6 +81,8 @@ class Redux_ShipViewModel: ObservableObject {
         self.pilotState = shipPilot.pilotState
         self.store = store
         
+        
+        
         // CoreData
         self.moc = moc
         self.frc = BindableFetchedResultsController<ImageData>(fetchRequest: ImageData.fetchAll(),
@@ -96,6 +98,10 @@ class Redux_ShipViewModel: ObservableObject {
         // players.  This way clients don't have to access viewModel.frc.fetchedObjects
         // directly.  Use $ to geet access to the publisher of the @Published.
         let q = DispatchQueue(label: "ShipViewModel")
+        
+        // Init
+        self.initState()
+        self.fetchImageURL()
         
         self.frc
             .$fetchedObjects
@@ -120,14 +126,26 @@ class Redux_ShipViewModel: ObservableObject {
             })
             .store(in: &cancellableSet)
         
-        self.store.$state.sink(receiveValue: {
-            self.pilotStateData = $0.ship.pilotStateData!
-            self.shipImageURL = $0.ship.shipImageURL
-        })
-        .store(in: &cancellableSet)
+        self.store
+            .$state
+            .lane("state")
+            .sink(receiveValue: {
+                self.pilotStateData = $0.ship.pilotStateData!
+                self.shipImageURL = $0.ship.shipImageURL
+                
+                print("PAKRedux_ShipView")
+                print(self.pilotStateData)
+                print(self.shipImageURL)
+            })
+            .store(in: &cancellableSet)
     }
 
-    
+    func initState() {
+        self.store.send(.ship(action: .initState(
+            shipPilot.pilotStateData!,
+            shipPilot.pilotState
+        )))
+    }
     
     func fetchImageURL() {
         self.store.send(.ship(action: .loadShipImage(
@@ -353,8 +371,8 @@ class Redux_ShipViewModel: ObservableObject {
         }
         
         /// Switch (PilotStateData_Change)
-        old()
-//        Redux_store()
+//        old()
+        Redux_store()
 //        new()
     }
     
@@ -516,9 +534,7 @@ struct Redux_ShipView: View {
             .background(theme.BUTTONBACKGROUND)
         }
         
-        return content.onAppear() {
-            self.viewModel.fetchImageURL()
-        }
+        return content
     }
 
     var imageOverlayView: AnyView {

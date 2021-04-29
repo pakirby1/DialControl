@@ -40,7 +40,7 @@ class FeaturesManager {
         add(DefaultFeature(name: "UpdateImageUrls", enabled: true))
         add(DefaultFeature(name: "Redux", enabled: false))
         add(DefaultFeature(name: "MyRedux", enabled: true))
-        add(DefaultFeature(name: "Redux_ShipView", enabled: false))
+        add(DefaultFeature(name: "Redux_ShipView", enabled: true))
     }
 }
 

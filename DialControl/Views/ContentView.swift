@@ -135,7 +135,7 @@ class ViewFactory: ObservableObject {
         case .back:
             self.navigation.back()
             if let current = self.navigation.current() {
-                return buildView(type: current)
+                return Redux_buildView(type: current)
             } else {
                 return AnyView(Text("Invalid back view on stack"))
             }

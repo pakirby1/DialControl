@@ -68,7 +68,9 @@ extension Redux_SquadView {
     }
     
     var shipsGrid: some View {
-        ScrollView(.vertical, showsIndicators: false) {
+        print("PAK.chunkedShips.count \(chunkedShips.count)")
+        
+        return ScrollView(.vertical, showsIndicators: false) {
             ForEach(0..<chunkedShips.count) { index in
                 HStack {
                     ForEach(self.chunkedShips[index]) { shipPilot in
