@@ -7,54 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B21F7EAA-EBF1-4700-A9FE-901B59717F1C"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Models/Ship.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "385"
-            endingLineNumber = "385"
-            landmarkName = "selectedPilot(pilotId:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "B21F7EAA-EBF1-4700-A9FE-901B59717F1C - 58cf66b2344de955"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DialControl.Ship.selectedPilot(pilotId: Swift.String) -&gt; DialControl.Pilot"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Models/Ship.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "385"
-                  endingLineNumber = "385"
-                  offsetFromSymbolStart = "62">
-               </Location>
-               <Location
-                  uuid = "B21F7EAA-EBF1-4700-A9FE-901B59717F1C - f448ecb510469aca"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (DialControl.PilotDTO) -&gt; Swift.Bool in DialControl.Ship.selectedPilot(pilotId: Swift.String) -&gt; DialControl.Pilot"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Models/Ship.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "385"
-                  endingLineNumber = "385"
-                  offsetFromSymbolStart = "35">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "63BA1735-C9CC-4C40-BF80-F232729A85C9"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -64,104 +16,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "440"
             endingLineNumber = "440"
-            landmarkName = "pilot"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C76EFE55-1C8F-426D-A2D9-1174FE8D669A"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Views/ShipView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "loadShipFromJSON_Old(shipName:pilotName:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C76EFE55-1C8F-426D-A2D9-1174FE8D669A - 9bb857429477a00a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DialControl.ShipViewModel.(loadShipFromJSON_Old in _5ACC6CF2E709A877F120D563D6DF93CF)(shipName: Swift.String, pilotName: Swift.String) -&gt; (DialControl.Ship, DialControl.Pilot)"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Views/ShipView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "110"
-                  endingLineNumber = "110"
-                  offsetFromSymbolStart = "2182">
-               </Location>
-               <Location
-                  uuid = "C76EFE55-1C8F-426D-A2D9-1174FE8D669A - aad3413cf652785d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (DialControl.PilotDTO) -&gt; Swift.Bool in DialControl.ShipViewModel.(loadShipFromJSON_Old in _5ACC6CF2E709A877F120D563D6DF93CF)(shipName: Swift.String, pilotName: Swift.String) -&gt; (DialControl.Ship, DialControl.Pilot)"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Views/ShipView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "110"
-                  endingLineNumber = "110"
-                  offsetFromSymbolStart = "35">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1C8FBA73-1647-4CEE-A9D2-18BAF76147E1"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Views/ShipView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
-            landmarkName = "loadShipFromJSON_New(shipName:pilotName:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1C8FBA73-1647-4CEE-A9D2-18BAF76147E1 - 9bb857429477a00a"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DialControl.ShipViewModel.(loadShipFromJSON_New in _5ACC6CF2E709A877F120D563D6DF93CF)(shipName: Swift.String, pilotName: Swift.String) -&gt; (DialControl.Ship, DialControl.Pilot)"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Views/ShipView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "124"
-                  endingLineNumber = "124"
-                  offsetFromSymbolStart = "2182">
-               </Location>
-               <Location
-                  uuid = "1C8FBA73-1647-4CEE-A9D2-18BAF76147E1 - 47e3f0ae4c241f3a"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (DialControl.PilotDTO) -&gt; Swift.Bool in DialControl.ShipViewModel.(loadShipFromJSON_New in _5ACC6CF2E709A877F120D563D6DF93CF)(shipName: Swift.String, pilotName: Swift.String) -&gt; (DialControl.Ship, DialControl.Pilot)"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Views/ShipView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "124"
-                  endingLineNumber = "124"
-                  offsetFromSymbolStart = "35">
-               </Location>
-            </Locations>
+            landmarkName = "ShipPilot"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -183,33 +39,145 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "7FAC8D73-C03E-4BCF-A18D-4078FEB94E4A"
+            uuid = "B19254E4-5608-4A93-B349-2178C0EEAED6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DialControl/Views/ContentView.swift"
+            filePath = "DialControl/Models/Ship.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
-            landmarkName = "body"
-            landmarkType = "24">
+            startingLineNumber = "392"
+            endingLineNumber = "392"
+            landmarkName = "selectedPilot(pilotId:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "86EF401A-F041-4D5D-9EC5-7317F22CD70A"
+            uuid = "85BA7DAE-A788-46BE-A41D-FD0F3F2FF9AD"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DialControl/Views/DialView.swift"
+            filePath = "DialControl/Models/Ship.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "buildPathNodes(radius:maneuvers:)"
+            startingLineNumber = "395"
+            endingLineNumber = "395"
+            landmarkName = "pilotForce(pilotId:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "36190243-CD1B-4BF2-A729-B152F793952E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControl/Views/FactionSquadList.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "refreshSquadsList()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3DFAF647-CE45-414D-9523-D651705CF8AA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControl/Views/FactionSquadList.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
+            landmarkName = "loadSquadsListFromCoreData()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "21D26286-EABA-482B-80B3-6BA910DA0A51"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControl/Models/Ship.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "389"
+            endingLineNumber = "389"
+            landmarkName = "selectedPilot(pilotId:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "21D26286-EABA-482B-80B3-6BA910DA0A51 - 58cf66b2344de955"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DialControl.Ship.selectedPilot(pilotId: Swift.String) -&gt; DialControl.Pilot"
+                  moduleName = "DialControl"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Models/Ship.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "389"
+                  endingLineNumber = "389"
+                  offsetFromSymbolStart = "76">
+               </Location>
+               <Location
+                  uuid = "21D26286-EABA-482B-80B3-6BA910DA0A51 - f448ecb510469aca"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (DialControl.PilotDTO) -&gt; Swift.Bool in DialControl.Ship.selectedPilot(pilotId: Swift.String) -&gt; DialControl.Pilot"
+                  moduleName = "DialControl"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Models/Ship.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "389"
+                  endingLineNumber = "389"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C3EA9969-9538-4D86-9395-53C3F0D0F322"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControl/Models/Ship.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "410"
+            endingLineNumber = "410"
+            landmarkName = "pilotCharge(pilotId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "55767C89-C6DD-46AC-BC0F-96751194B1E1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControl/Services/PilotStateService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "calculate_force_active(ship:squadPilot:allUpgrades:)"
+            landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
