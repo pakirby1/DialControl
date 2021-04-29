@@ -381,12 +381,21 @@ extension Ship {
         }
     }
     
-    func selectedPilot(pilotId: String) -> Pilot {
-        pilots.filter{ $0.xws == pilotId }[0].asPilot()
+    func selectedPilot(pilotId: String) -> Pilot? {
+        let foundPilots = pilots.filter{ $0.xws == pilotId }
+        
+        if foundPilots.count > 0 {
+            return foundPilots[0].asPilot()
+        }
+        
+        print("Ship.selectedPilot pilot not found \(pilotId)")
+        return nil
     }
     
     func pilotForce(pilotId: String) -> Int {
-        let pilot = selectedPilot(pilotId: pilotId)
+        guard let pilot = selectedPilot(pilotId: pilotId) else {
+            return 0
+        }
         
         guard let force = pilot.force?.value else {
             return 0
@@ -396,7 +405,9 @@ extension Ship {
     }
     
     func pilotCharge(pilotId: String) -> Int {
-        let pilot = selectedPilot(pilotId: pilotId)
+        guard let pilot = selectedPilot(pilotId: pilotId) else {
+            return 0
+        }
         
         guard let charge = pilot.charges?.value else {
             return 0
