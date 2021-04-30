@@ -35,13 +35,22 @@ class FeaturesManager {
     
     func configureFeatures() {
         // features
-        add(DefaultFeature(name: "DialTest", enabled: true))
-        add(DefaultFeature(name: "PilotStateData_Change", enabled: true))
-        add(DefaultFeature(name: "UpdateImageUrls", enabled: true))
-        add(DefaultFeature(name: "Redux", enabled: false))
-        add(DefaultFeature(name: "MyRedux", enabled: true))
-        add(DefaultFeature(name: "Redux_ShipView", enabled: true))
+        add(DefaultFeature(name: FeatureId.DialTest.rawValue, enabled: true))
+        add(DefaultFeature(name: FeatureId.PilotStateData_Change.rawValue, enabled: true))
+        add(DefaultFeature(name: FeatureId.UpdateImageUrls.rawValue, enabled: true))
+        add(DefaultFeature(name: FeatureId.Redux.rawValue, enabled: false))
+        add(DefaultFeature(name: FeatureId.MyRedux.rawValue, enabled: true))
+        add(DefaultFeature(name: FeatureId.Redux_ShipView.rawValue, enabled: true))
     }
+}
+
+enum FeatureId : String {
+    case Redux_ShipView
+    case MyRedux
+    case Redux
+    case UpdateImageUrls
+    case PilotStateData_Change
+    case DialTest
 }
 
 protocol Feature {

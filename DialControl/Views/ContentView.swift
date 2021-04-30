@@ -81,7 +81,7 @@ class ViewFactory: ObservableObject {
     
     func Redux_buildView(type: ViewType) -> AnyView {
         func buildShipView(shipPilot: ShipPilot, squad: Squad) -> AnyView {
-            if FeaturesManager.shared.isFeatureEnabled("Redux_ShipView")
+            if FeaturesManager.shared.isFeatureEnabled(FeatureId.Redux_ShipView.rawValue)
             {
                 let viewModel = Redux_ShipViewModel(moc: self.moc,
                                               shipPilot: shipPilot,
