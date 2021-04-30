@@ -81,27 +81,15 @@ class ViewFactory: ObservableObject {
     
     func Redux_buildView(type: ViewType) -> AnyView {
         func buildShipView(shipPilot: ShipPilot, squad: Squad) -> AnyView {
-            if FeaturesManager.shared.isFeatureEnabled(FeatureId.Redux_ShipView.rawValue)
-            {
-                let viewModel = Redux_ShipViewModel(moc: self.moc,
-                                              shipPilot: shipPilot,
-                                              squad: squad,
-                                              pilotStateService: self.diContainer.pilotStateService,
-                                              store: store)
-                
-                return AnyView(Redux_ShipView(viewModel: viewModel)
-                    .environmentObject(self)
-                )
-            } else {
-                let viewModel = ShipViewModel(moc: self.moc,
-                                              shipPilot: shipPilot,
-                                              squad: squad,
-                                              pilotStateService: self.diContainer.pilotStateService)
-                
-                return AnyView(ShipView(viewModel: viewModel)
-                    .environmentObject(self)
-                )
-            }
+            let viewModel = Redux_ShipViewModel(moc: self.moc,
+                                          shipPilot: shipPilot,
+                                          squad: squad,
+                                          pilotStateService: self.diContainer.pilotStateService,
+                                          store: store)
+            
+            return AnyView(Redux_ShipView(viewModel: viewModel)
+                .environmentObject(self)
+            )
         }
         
         switch(type) {

@@ -40,12 +40,10 @@ class FeaturesManager {
         add(DefaultFeature(name: FeatureId.UpdateImageUrls.rawValue, enabled: true))
         add(DefaultFeature(name: FeatureId.Redux.rawValue, enabled: false))
         add(DefaultFeature(name: FeatureId.MyRedux.rawValue, enabled: true))
-        add(DefaultFeature(name: FeatureId.Redux_ShipView.rawValue, enabled: true))
     }
 }
 
 enum FeatureId : String {
-    case Redux_ShipView
     case MyRedux
     case Redux
     case UpdateImageUrls
