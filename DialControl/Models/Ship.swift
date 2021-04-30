@@ -426,13 +426,19 @@ struct ShipPilot: Identifiable, Equatable {
 //    var pilotStateData: PilotStateData?
     
     static func ==(lhs: ShipPilot, rhs: ShipPilot) -> Bool {
-        return true
+        return lhs.id == rhs.id
     }
 
     enum Status {
         case full
         case half(Int)
         case destroyed(Int)
+    }
+}
+
+extension ShipPilot: Hashable {
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
