@@ -370,7 +370,6 @@ class Redux_ShipViewModel: ObservableObject {
             }
         }
         
-        /// Switch (PilotStateData_Change)
 //        old()
         Redux_store()
 //        new()

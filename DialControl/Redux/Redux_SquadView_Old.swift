@@ -289,7 +289,6 @@ extension Redux_SquadView {
     
     private func resetAllShips() {
         sortedShipPilots.forEach{ shipPilot in
-            /// Switch (PilotStateData_Change)
             if var data = shipPilot.pilotStateData {
                 data.change(update: {
                     $0.reset()
@@ -303,7 +302,6 @@ extension Redux_SquadView {
     
     private func updateAllDials() {
         sortedShipPilots.forEach{ shipPilot in
-            /// Switch (PilotStateData_Change)
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
                     data.change(update: {

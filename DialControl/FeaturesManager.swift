@@ -35,7 +35,6 @@ class FeaturesManager {
     
     func configureFeatures() {
         // features
-        add(DefaultFeature(id: FeatureId.PilotStateData_Change, enabled: true))
         add(DefaultFeature(id: FeatureId.UpdateImageUrls, enabled: true))
         add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
     }
@@ -44,7 +43,6 @@ class FeaturesManager {
 enum FeatureId : String {
     case MyRedux
     case UpdateImageUrls
-    case PilotStateData_Change
 }
 
 protocol Feature {

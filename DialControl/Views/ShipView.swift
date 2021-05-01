@@ -223,7 +223,6 @@ class ShipViewModel: ObservableObject {
             }
         }
         
-        /// Switch (PilotStateData_Change)
         old()
 //        new()
     }

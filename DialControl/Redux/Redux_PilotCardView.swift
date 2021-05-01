@@ -313,7 +313,6 @@ extension Redux_PilotDetailsView {
     }
     
     func flipDial() {
-        /// Switch (PilotStateData_Change)
         if var data = self.shipPilot.pilotStateData {
             guard !data.isDestroyed else {
                 // Do not flip if destroyed

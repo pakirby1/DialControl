@@ -242,7 +242,6 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     
     func updateAllDials() {
         sortedShipPilots.forEach{ shipPilot in
-            /// Switch (PilotStateData_Change)
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
                     data.change(update: {
@@ -265,7 +264,6 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     
     func resetAllShips() {
         sortedShipPilots.forEach{ shipPilot in
-            /// Switch (PilotStateData_Change)
             if var data = shipPilot.pilotStateData {
                 data.change(update: {
                     $0.reset()
@@ -557,7 +555,6 @@ class PilotDetailsViewModel: ObservableObject {
     }
     
     func flipDial() {
-        /// Switch (PilotStateData_Change)
         if var data = self.shipPilot.pilotStateData {
             guard !data.isDestroyed else {
                 // Do not flip if destroyed
