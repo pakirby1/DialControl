@@ -34,7 +34,6 @@ class FeaturesManager {
     static let shared = FeaturesManager()
     
     func configureFeatures() {
-        // features
         add(DefaultFeature(id: FeatureId.UpdateImageUrls, enabled: true))
         add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
     }
