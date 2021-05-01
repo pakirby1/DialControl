@@ -91,7 +91,7 @@ class ShipViewModel: ObservableObject {
     
     /// What do we return if we encounter an error (empty file)?
     func loadShipFromJSON(shipName: String, pilotName: String) -> (Ship, Pilot) {
-        if FeaturesManager.shared.isFeatureEnabled("UpdateImageUrls") {
+        if FeaturesManager.shared.isFeatureEnabled(.UpdateImageUrls) {
             return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName)
         } else {
             return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName)

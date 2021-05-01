@@ -121,7 +121,7 @@ struct Redux_FactionSquadList: View {
             }
             
             return {
-                if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+                if FeaturesManager.shared.isFeatureEnabled(.MyRedux)
                 {
                     new()
                 } else {
@@ -410,7 +410,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             }
             
             return {
-                if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+                if FeaturesManager.shared.isFeatureEnabled(.MyRedux)
                 {
                     new()
                 } else {

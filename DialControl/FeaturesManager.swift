@@ -9,18 +9,18 @@
 import Foundation
 
 class FeaturesManager {
-    var features: [String: Feature] = [:]
+    var features: [FeatureId: Feature] = [:]
     
     func add(_ feature: Feature) {
-        features[feature.name] = feature
+        features[feature.id] = feature
     }
     
-    func remove(_ name: String) {
-        features.removeValue(forKey: name)
+    func remove(_ id: FeatureId) {
+        features.removeValue(forKey: id)
     }
     
-    func isFeatureEnabled(_ name: String) -> Bool {
-        if let feature = features[name] {
+    func isFeatureEnabled(_ id: FeatureId) -> Bool {
+        if let feature = features[id] {
             return feature.enabled
         }
         
@@ -35,11 +35,11 @@ class FeaturesManager {
     
     func configureFeatures() {
         // features
-        add(DefaultFeature(name: FeatureId.DialTest.rawValue, enabled: true))
-        add(DefaultFeature(name: FeatureId.PilotStateData_Change.rawValue, enabled: true))
-        add(DefaultFeature(name: FeatureId.UpdateImageUrls.rawValue, enabled: true))
-        add(DefaultFeature(name: FeatureId.Redux.rawValue, enabled: false))
-        add(DefaultFeature(name: FeatureId.MyRedux.rawValue, enabled: true))
+        add(DefaultFeature(id: FeatureId.DialTest, enabled: true))
+        add(DefaultFeature(id: FeatureId.PilotStateData_Change, enabled: true))
+        add(DefaultFeature(id: FeatureId.UpdateImageUrls, enabled: true))
+        add(DefaultFeature(id: FeatureId.Redux, enabled: false))
+        add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
     }
 }
 
@@ -52,11 +52,11 @@ enum FeatureId : String {
 }
 
 protocol Feature {
-    var name: String { get }
+    var id: FeatureId { get }
     var enabled: Bool { get }
 }
 
 struct DefaultFeature: Feature {
-    let name: String
+    let id: FeatureId
     let enabled: Bool
 }

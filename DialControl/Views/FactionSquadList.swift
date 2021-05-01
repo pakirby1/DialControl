@@ -169,7 +169,7 @@ struct FactionSquadList: View {
             }
             
             return {
-                if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+                if FeaturesManager.shared.isFeatureEnabled(.MyRedux)
                 {
                     new()
                 } else {
@@ -434,7 +434,7 @@ struct FactionSquadCard: View {
             }
             
             return {
-                if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+                if FeaturesManager.shared.isFeatureEnabled(.MyRedux)
                 {
                     new()
                 } else {

@@ -52,7 +52,7 @@ class JSONService : JSONServiceProtocol {
             return (ship, foundPilots)
         }
         
-        if FeaturesManager.shared.isFeatureEnabled("UpdateImageUrls") {
+        if FeaturesManager.shared.isFeatureEnabled(.UpdateImageUrls) {
             return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName, squad: squad)
         } else {
             return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName, squad: squad)

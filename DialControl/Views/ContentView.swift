@@ -68,7 +68,7 @@ class ViewFactory: ObservableObject {
     
     func buildView() -> AnyView {
         if let type = navigation.current() {
-            if FeaturesManager.shared.isFeatureEnabled("MyRedux")
+            if FeaturesManager.shared.isFeatureEnabled(.MyRedux)
             {
                 return Redux_buildView(type: type)
             } else {
