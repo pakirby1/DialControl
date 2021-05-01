@@ -38,14 +38,12 @@ class FeaturesManager {
         add(DefaultFeature(id: FeatureId.DialTest, enabled: true))
         add(DefaultFeature(id: FeatureId.PilotStateData_Change, enabled: true))
         add(DefaultFeature(id: FeatureId.UpdateImageUrls, enabled: true))
-        add(DefaultFeature(id: FeatureId.Redux, enabled: false))
         add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
     }
 }
 
 enum FeatureId : String {
     case MyRedux
-    case Redux
     case UpdateImageUrls
     case PilotStateData_Change
     case DialTest
