@@ -21,6 +21,7 @@ struct MyAppState {
 struct MyXWSImportViewState {
     var showAlert: Bool = false
     var alertText: String = ""
+    var navigateBack: Void = ()
 }
 
 struct MyShipViewState {
@@ -62,6 +63,7 @@ enum MyAppAction {
 
 enum MyXWSImportAction {
     case importXWS(String)
+    case navigateBack
 }
 
 enum MyShipAction {
@@ -141,8 +143,23 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                       action: MyXWSImportAction,
                       environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never> {
     switch(action) {
-        case let .importXWS(xws):
-            print(".importXWS(\(xws))")
+        case .importXWS(var xws):
+            let squad = environment.squadService.loadSquad(jsonString: &xws)
+            
+            if squad.name != Squad.emptySquad.name {
+                // Save the squad JSON to CoreData
+                let squadData = environment.squadService.saveSquad(jsonString: xws,
+                                                         name: squad.name ?? "")
+                
+                // Create the state and save to PilotState
+                environment.pilotStateService.createPilotState(squad: squad, squadData: squadData)
+                
+                //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
+                return Just<MyAppAction>(.xwsImport(action: .navigateBack)).eraseToAnyPublisher()
+            }
+                
+        case .navigateBack:
+            state.navigateBack = ()
     }
     
     return Empty().eraseToAnyPublisher()

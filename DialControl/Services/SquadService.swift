@@ -12,6 +12,7 @@ import Combine
 
 class SquadService: SquadServiceProtocol, ObservableObject {
     var alertText: String = ""
+    var showAlert: Bool = false
     
     let moc: NSManagedObjectContext
     
@@ -21,6 +22,7 @@ class SquadService: SquadServiceProtocol, ObservableObject {
 }
 
 protocol SquadServiceProtocol : class {
+    var showAlert: Bool { get set }
     var alertText: String { get set }
     var moc: NSManagedObjectContext { get }
     func loadSquad(jsonString: String) -> Squad
@@ -32,6 +34,22 @@ protocol SquadServiceProtocol : class {
 }
     
 extension SquadServiceProtocol {
+    func loadSquad(jsonString: inout String) -> Squad {
+        // replace janky yasb exported to remove '-' characters.
+        jsonString = jsonString
+            .replacingOccurrences(of: "force-power", with: "forcepower")
+            .replacingOccurrences(of: "tactical-relay", with: "tacticalrelay")
+        
+        return Squad.serializeJSON(jsonString: jsonString) { errorString in
+            self.alertText = errorString
+            self.showAlert = true
+        }
+    }
+    
+    func saveSquad(jsonString: String, name: String) -> SquadData {
+        return self.saveSquad(jsonString: jsonString, name: name)
+    }
+    
     func saveSquad(jsonString: String,
                    name: String,
                    isFavorite: Bool = false) -> SquadData

@@ -27,25 +27,7 @@ class Redux_SquadXWSImportViewModel : ObservableObject {
         self.pilotStateService = pilotStateService
     }
     
-    func loadSquad(jsonString: inout String) -> Squad {
-        // replace janky yasb exported to remove '-' characters.
-        jsonString = jsonString
-            .replacingOccurrences(of: "force-power", with: "forcepower")
-            .replacingOccurrences(of: "tactical-relay", with: "tacticalrelay")
-        
-        return Squad.serializeJSON(jsonString: jsonString) { errorString in
-            self.alertText = errorString
-            self.showAlert = true
-        }
-    }
     
-    func saveSquad(jsonString: String, name: String) -> SquadData {
-        return self.squadService.saveSquad(jsonString: jsonString, name: name)
-    }
-    
-    func createPilotState(squad: Squad, squadData: SquadData) {
-        self.pilotStateService.createPilotState(squad: squad, squadData: squadData)
-    }
     
     /*
      struct UpgradeStateData {
@@ -81,18 +63,15 @@ class Redux_SquadXWSImportViewModel : ObservableObject {
 
 struct Redux_SquadXWSImportView : View {
     @State private var xws: String = ""
-    @EnvironmentObject var viewFactory: ViewFactory
     @State var showAlert: Bool = false
     @State var alertText: String = ""
-    @ObservedObject var viewModel: SquadXWSImportViewModel
-
+    
+    @EnvironmentObject var store: MyAppStore
+    @EnvironmentObject var viewFactory: ViewFactory
+    
     let textViewObserver: TextViewObservable = TextViewObservable()
     let lineHeight = UIFont.systemFont(ofSize: 17).lineHeight
-    
-    init(viewModel: SquadXWSImportViewModel) {
-        self.viewModel = viewModel
-    }
-    
+        
     var body: some View {
         VStack {
             HStack {
@@ -115,26 +94,16 @@ struct Redux_SquadXWSImportView : View {
                 .environmentObject(textViewObserver)
             
             Button(action: {
-                let squad = self.viewModel.loadSquad(jsonString: &self.xws)
+                self.store.send(.xwsImport(action: .importXWS(self.xws)))
                 
-                if squad.name != Squad.emptySquad.name {
-                    // Save the squad JSON to CoreData
-                    let squadData = self.viewModel.saveSquad(jsonString: self.xws,
-                                                             name: squad.name ?? "")
-                    
-                    // Create the state and save to PilotState
-                    self.viewModel.createPilotState(squad: squad, squadData: squadData)
-                    
-//                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
-                    self.viewFactory.back()
-                }
+//                
             } ) {
                 Text("Import")
             }
         }.padding(10)
-            .alert(isPresented: $viewModel.showAlert) {
+            .alert(isPresented: $store.state.xwsImport.showAlert) {
             Alert(title: Text("Error"),
-                  message: Text(viewModel.alertText),
+                  message: Text(store.state.xwsImport.alertText),
                   dismissButton: .default(Text("OK")))
         }
     }
