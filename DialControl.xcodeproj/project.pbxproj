@@ -75,6 +75,7 @@
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
 		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
+		AEE16D8A263EAB9700A8E804 /* Redux_SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE16D89263EAB9700A8E804 /* Redux_SquadXWSImportView.swift */; };
 		AEE65512260DE21A00AFAE6A /* HealthStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65511260DE21A00AFAE6A /* HealthStat.swift */; };
 		AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */; };
 		AEE65516260DFBBF00AFAE6A /* Redux_ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */; };
@@ -184,6 +185,7 @@
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
+		AEE16D89263EAB9700A8E804 /* Redux_SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadXWSImportView.swift; sourceTree = "<group>"; };
 		AEE65511260DE21A00AFAE6A /* HealthStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStat.swift; sourceTree = "<group>"; };
 		AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStatsView.swift; sourceTree = "<group>"; };
 		AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_ShipView.swift; sourceTree = "<group>"; };
@@ -399,6 +401,7 @@
 				AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */,
 				AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */,
 				AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */,
+				AEE16D89263EAB9700A8E804 /* Redux_SquadXWSImportView.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -606,6 +609,7 @@
 				AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */,
 				AE1DF8F124B5E0CD00B84D38 /* CardView.swift in Sources */,
 				AE028C59249F825100DF689B /* NetworkCache.swift in Sources */,
+				AEE16D8A263EAB9700A8E804 /* Redux_SquadXWSImportView.swift in Sources */,
 				AEA192DC25C2DFC30033ACBD /* Action.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
 				AEEB546824F11EB40050913C /* DIContainer.swift in Sources */,

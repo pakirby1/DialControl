@@ -15,6 +15,12 @@ struct MyAppState {
     var faction: FactionSquadListState
     var squad: MySquadViewState
     var ship: MyShipViewState
+    var xwsImport: MyXWSImportViewState
+}
+
+struct MyXWSImportViewState {
+    var showAlert: Bool = false
+    var alertText: String = ""
 }
 
 struct MyShipViewState {
@@ -51,6 +57,11 @@ enum MyAppAction {
     case faction(action: MyFactionSquadListAction)
     case squad(action: MySquadAction)
     case ship(action: MyShipAction)
+    case xwsImport(action: MyXWSImportAction)
+}
+
+enum MyXWSImportAction {
+    case importXWS(String)
 }
 
 enum MyShipAction {
@@ -116,9 +127,25 @@ func myAppReducer(
                               action: action,
                               environment: environment)
         
+        case .xwsImport(let action):
+            return xwsImportReducer(state: &state.xwsImport,
+                               action: action,
+                               environment: environment)
+        
     }
     
 //    return Empty().eraseToAnyPublisher()
+}
+
+func xwsImportReducer(state: inout MyXWSImportViewState,
+                      action: MyXWSImportAction,
+                      environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never> {
+    switch(action) {
+        case let .importXWS(xws):
+            print(".importXWS(\(xws))")
+    }
+    
+    return Empty().eraseToAnyPublisher()
 }
 
 func shipReducer(state: inout MyShipViewState,

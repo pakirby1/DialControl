@@ -38,7 +38,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let store: MyAppStore = MyAppStore(
             state: MyAppState.init(faction: FactionSquadListState(),
                                    squad: MySquadViewState(),
-                                   ship: MyShipViewState()),
+                                   ship: MyShipViewState(),
+                                   xwsImport: MyXWSImportViewState()),
             reducer: myAppReducer,
             environment: MyEnvironment(squadService: diContainer.squadService,
                                pilotStateService: diContainer.pilotStateService,
