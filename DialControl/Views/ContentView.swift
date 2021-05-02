@@ -104,8 +104,9 @@ class ViewFactory: ObservableObject {
             return buildShipView(shipPilot: shipPilot, squad: squad)
             
         case .squadImportView:
-            return AnyView(SquadXWSImportView(viewModel: SquadXWSImportViewModel(moc: self.moc, squadService: self.diContainer.squadService, pilotStateService: self.diContainer.pilotStateService))
+            return AnyView(Redux_SquadXWSImportView()
                 .environmentObject(self)
+                .environmentObject(store)
                 )
             
         case .multiLineTextView:

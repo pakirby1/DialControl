@@ -21,7 +21,7 @@ struct MyAppState {
 struct MyXWSImportViewState {
     var showAlert: Bool = false
     var alertText: String = ""
-    var navigateBack: Void = ()
+    var navigateBack: Bool = false
 }
 
 struct MyShipViewState {
@@ -159,7 +159,7 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
             }
                 
         case .navigateBack:
-            state.navigateBack = ()
+            state.navigateBack = true
     }
     
     return Empty().eraseToAnyPublisher()

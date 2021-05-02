@@ -71,12 +71,16 @@ struct Redux_SquadXWSImportView : View {
     
     let textViewObserver: TextViewObservable = TextViewObservable()
     let lineHeight = UIFont.systemFont(ofSize: 17).lineHeight
-        
+    
+    func navigateBack() {
+        self.viewFactory.back()
+    }
+    
     var body: some View {
         VStack {
             HStack {
                 Button(action: {
-                    self.viewFactory.back()
+                    self.navigateBack()
                 }) {
                     Text("< Back")
                 }
@@ -95,8 +99,6 @@ struct Redux_SquadXWSImportView : View {
             
             Button(action: {
                 self.store.send(.xwsImport(action: .importXWS(self.xws)))
-                
-//                
             } ) {
                 Text("Import")
             }
@@ -105,7 +107,13 @@ struct Redux_SquadXWSImportView : View {
             Alert(title: Text("Error"),
                   message: Text(store.state.xwsImport.alertText),
                   dismissButton: .default(Text("OK")))
-        }
+        }.onReceive(store.$state, perform: { state in
+            print("\(Date()) Redux_SquadXWSImportView.body.onReceive navigateBack = \(state.xwsImport.navigateBack)")
+            
+            if state.xwsImport.navigateBack == true {
+                self.navigateBack()
+            }
+        })
     }
 }
 
