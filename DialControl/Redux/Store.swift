@@ -64,6 +64,7 @@ enum MyAppAction {
 enum MyXWSImportAction {
     case importXWS(String)
     case navigateBack
+    case displayAlert(String)
 }
 
 enum MyShipAction {
@@ -142,24 +143,62 @@ func myAppReducer(
 func xwsImportReducer(state: inout MyXWSImportViewState,
                       action: MyXWSImportAction,
                       environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never> {
-    switch(action) {
-        case .importXWS(var xws):
-            let squad = environment.squadService.loadSquad(jsonString: &xws)
+    func importXWS(xws: inout String) -> AnyPublisher<MyAppAction, Never> {
+        let squad = environment.squadService.loadSquad(jsonString: &xws)
+        
+        if squad.name != Squad.emptySquad.name {
+            // Save the squad JSON to CoreData
+            let squadData = environment.squadService.saveSquad(jsonString: xws,
+                                                     name: squad.name ?? "")
             
+            // Create the state and save to PilotState
+            environment.pilotStateService.createPilotState(squad: squad, squadData: squadData)
+            
+            //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
+            return Just<MyAppAction>(.xwsImport(action: .navigateBack)).eraseToAnyPublisher()
+        }
+        
+        return Empty().eraseToAnyPublisher()
+    }
+    
+    func importXWS_HandleErrors(xws: inout String) -> AnyPublisher<MyAppAction, Never> {
+        do {
+            let squad = try environment.squadService.loadSquad_throws(jsonString: &xws)
+        
             if squad.name != Squad.emptySquad.name {
                 // Save the squad JSON to CoreData
-                let squadData = environment.squadService.saveSquad(jsonString: xws,
+                let squadData = try environment.squadService.saveSquad_throws(jsonString: xws,
                                                          name: squad.name ?? "")
                 
                 // Create the state and save to PilotState
-                environment.pilotStateService.createPilotState(squad: squad, squadData: squadData)
+                try environment.pilotStateService.createPilotState_throws(squad: squad, squadData: squadData)
                 
                 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                 return Just<MyAppAction>(.xwsImport(action: .navigateBack)).eraseToAnyPublisher()
             }
+        } catch {
+            print(error.localizedDescription)
+            return Just<MyAppAction>(.xwsImport(action: .displayAlert(error.localizedDescription)))
+                .eraseToAnyPublisher()
+        }
+        
+        return Empty().eraseToAnyPublisher()
+    }
+    
+    switch(action) {
+        case .importXWS(var xws):
+            if (FeaturesManager.shared.isFeatureEnabled(.importXWS_HandleErrors))
+            {
+                return importXWS_HandleErrors(xws: &xws)
+            } else {
+                return importXWS(xws: &xws)
+            }
                 
         case .navigateBack:
             state.navigateBack = true
+        
+        case .displayAlert(let message):
+            state.alertText = message
     }
     
     return Empty().eraseToAnyPublisher()

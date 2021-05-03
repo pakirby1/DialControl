@@ -25,14 +25,71 @@ protocol SquadServiceProtocol : class {
     var showAlert: Bool { get set }
     var alertText: String { get set }
     var moc: NSManagedObjectContext { get }
-    func loadSquad(jsonString: String) -> Squad
+    func loadSquad(jsonString: inout String) -> Squad
     func saveSquad(jsonString: String, name: String, isFavorite: Bool) -> SquadData
     func updateSquad(squadData: SquadData)
     func deleteSquad(squadData: SquadData)
     func loadSquadsList(callback: ([SquadData]) -> Void)
     func loadSquadsListRx() -> AnyPublisher<[SquadData], Error>
+
+    // throwing funcs
+    func loadSquad_throws(jsonString: inout String) throws -> Squad
+    func saveSquad_throws(jsonString: String, name: String, isFavorite: Bool) throws -> SquadData
 }
+
+enum SquadServiceProtocolError: LocalizedError {
+    case jsonSerializationError(String)
+    case saveSquadError(String)
     
+    var errorDescription: String? {
+        switch self {
+            case let .jsonSerializationError(message):
+                return "JSON Serialization Error: \(message)"
+            
+            case let .saveSquadError(message):
+                return "Save Squad Error: \(message)"
+        }
+    }
+}
+
+extension SquadServiceProtocol {
+    func loadSquad_throws(jsonString: inout String) throws -> Squad {
+        func handleError(errorString: String) throws -> Void {
+            self.alertText = errorString
+            self.showAlert = true
+            
+            throw SquadServiceProtocolError.jsonSerializationError("")
+        }
+        
+        // replace janky yasb exported to remove '-' characters.
+        jsonString = jsonString
+            .replacingOccurrences(of: "force-power", with: "forcepower")
+            .replacingOccurrences(of: "tactical-relay", with: "tacticalrelay")
+        
+        return Squad.serializeJSON(jsonString: jsonString,
+                                   callBack: handleError as? ((String) -> ()))
+    }
+    
+    func saveSquad_throws(jsonString: String,
+                   name: String,
+                   isFavorite: Bool = false) throws -> SquadData
+    {
+        let squadData = SquadData(context: self.moc)
+        squadData.id = UUID()
+        squadData.name = name
+        squadData.json = jsonString
+        squadData.favorite = isFavorite
+        
+        do {
+            try self.moc.save()
+        } catch {
+            throw SquadServiceProtocolError.saveSquadError(error.localizedDescription)
+        }
+        
+        return squadData
+    }
+}
+
 extension SquadServiceProtocol {
     func loadSquad(jsonString: inout String) -> Squad {
         // replace janky yasb exported to remove '-' characters.
@@ -47,7 +104,7 @@ extension SquadServiceProtocol {
     }
     
     func saveSquad(jsonString: String, name: String) -> SquadData {
-        return self.saveSquad(jsonString: jsonString, name: name)
+        return self.saveSquad(jsonString: jsonString, name: name, isFavorite: false)
     }
     
     func saveSquad(jsonString: String,
@@ -69,11 +126,11 @@ extension SquadServiceProtocol {
         return squadData
     }
     
-    func loadSquad(jsonString: String) -> Squad {
-        return Squad.serializeJSON(jsonString: jsonString) { [weak self] errorString in
-            self?.alertText = errorString
-        }
-    }
+//    func loadSquad(jsonString: String) -> Squad {
+//        return Squad.serializeJSON(jsonString: jsonString) { [weak self] errorString in
+//            self?.alertText = errorString
+//        }
+//    }
     
     func updateSquad(squadData: SquadData) {
         do {
