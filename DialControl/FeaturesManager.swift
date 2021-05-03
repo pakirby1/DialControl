@@ -34,14 +34,12 @@ class FeaturesManager {
     static let shared = FeaturesManager()
     
     func configureFeatures() {
-        add(DefaultFeature(id: FeatureId.UpdateImageUrls, enabled: true))
         add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
     }
 }
 
 enum FeatureId : String {
     case MyRedux
-    case UpdateImageUrls
 }
 
 protocol Feature {

@@ -58,7 +58,6 @@ class ShipViewModel: ObservableObject {
         // and assign it to
         // players.  This way clients don't have to access viewModel.frc.fetchedObjects
         // directly.  Use $ to geet access to the publisher of the @Published.
-        let q = DispatchQueue(label: "ShipViewModel")
         
         self.frc
             .$fetchedObjects
@@ -91,28 +90,6 @@ class ShipViewModel: ObservableObject {
     
     /// What do we return if we encounter an error (empty file)?
     func loadShipFromJSON(shipName: String, pilotName: String) -> (Ship, Pilot) {
-        if FeaturesManager.shared.isFeatureEnabled(.UpdateImageUrls) {
-            return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName)
-        } else {
-            return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName)
-        }
-    }
-    
-    private func loadShipFromJSON_Old(shipName: String, pilotName: String) -> (Ship, Pilot) {
-        var shipJSON: String = ""
-        
-        print("shipName: \(shipName)")
-        print("pilotName: \(pilotName)")
-        
-        shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
-        
-        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-        let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
-        
-        return (ship, foundPilots)
-    }
-    
-    private func loadShipFromJSON_New(shipName: String, pilotName: String) -> (Ship, Pilot) {
         var shipJSON: String = ""
         
         print("shipName: \(shipName)")

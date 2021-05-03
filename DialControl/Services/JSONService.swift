@@ -20,43 +20,19 @@ class JSONService : JSONServiceProtocol {
                           pilotName: String,
                           squad: Squad) -> (Ship, Pilot)
     {
-        func loadShipFromJSON_Old(shipName: String, pilotName: String, squad: Squad) -> (Ship, Pilot) {
-            var shipJSON: String = ""
-            
-            print("shipName: \(shipName)")
-            print("pilotName: \(pilotName)")
-            
-            shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
-            
-            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            let foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
-            
-            return (ship, foundPilots)
-        }
+        var shipJSON: String = ""
         
-        func loadShipFromJSON_New(shipName: String, pilotName: String, squad: Squad) -> (Ship, Pilot)
-        {
-            var shipJSON: String = ""
-            
-            print("shipName: \(shipName)")
-            print("pilotName: \(pilotName)")
-            
-            shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
-            
-            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
-            
-            /// Update image to point to "https://pakirby1.github.io/Images/XWing/Pilots/{pilotName}.png
-            foundPilots.image = ImageUrlTemplates.buildPilotUrl(xws: pilotName)
-            
-            return (ship, foundPilots)
-        }
+        print("shipName: \(shipName)")
+        print("pilotName: \(pilotName)")
         
-        if FeaturesManager.shared.isFeatureEnabled(.UpdateImageUrls) {
-            return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName, squad: squad)
-        } else {
-            return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName, squad: squad)
-        }
+        shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
+        
+        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+        var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
+        
+        /// Update image to point to "https://pakirby1.github.io/Images/XWing/Pilots/{pilotName}.png
+        foundPilots.image = ImageUrlTemplates.buildPilotUrl(xws: pilotName)
+        
+        return (ship, foundPilots)
     }
-    
 }
