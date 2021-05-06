@@ -108,13 +108,14 @@ struct Redux_SquadXWSImportView : View {
                   message: Text(store.state.xwsImport.alertText),
                   dismissButton: .default(Text("OK")))
         }
-        .onReceive(store.$state, perform: { state in
-            print("\(Date()) Redux_SquadXWSImportView.body.onReceive navigateBack = \(state.xwsImport.navigateBack)")
-            
-            if state.xwsImport.navigateBack == true {
-                self.navigateBack()
-            }
-        })
+        // MARK:- Figure out how to navigate back from the Store
+//        .onReceive(store.$state, perform: { state in
+//            print("\(Date()) Redux_SquadXWSImportView.body.onReceive navigateBack = \(state.xwsImport.navigateBack)")
+//
+//            if state.xwsImport.navigateBack == true {
+//                self.navigateBack()
+//            }
+//        })
     }
 }
 

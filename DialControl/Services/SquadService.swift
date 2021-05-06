@@ -58,7 +58,7 @@ extension SquadServiceProtocol {
             self.alertText = errorString
             self.showAlert = true
             
-            throw SquadServiceProtocolError.jsonSerializationError("")
+            throw SquadServiceProtocolError.jsonSerializationError(errorString)
         }
         
         // replace janky yasb exported to remove '-' characters.

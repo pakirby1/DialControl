@@ -170,19 +170,23 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                 let squadData = try environment.squadService.saveSquad_throws(jsonString: xws,
                                                          name: squad.name ?? "")
                 
-                // Create the state and save to PilotState
                 try environment.pilotStateService.createPilotState_throws(squad: squad, squadData: squadData)
                 
                 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
-                return Just<MyAppAction>(.xwsImport(action: .navigateBack)).eraseToAnyPublisher()
+                return Just<MyAppAction>(.xwsImport(action: .navigateBack))
+                    .print("FeatureId.importXWS_HandleErrors")
+                    .eraseToAnyPublisher()
             }
         } catch {
             print(error.localizedDescription)
             return Just<MyAppAction>(.xwsImport(action: .displayAlert(error.localizedDescription)))
+                .print("FeatureId.importXWS_HandleErrors")
                 .eraseToAnyPublisher()
         }
         
-        return Empty().eraseToAnyPublisher()
+        return Empty()
+            .print("FeatureId.importXWS_HandleErrors")
+            .eraseToAnyPublisher()
     }
     
     switch(action) {
@@ -195,9 +199,10 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
             }
                 
         case .navigateBack:
-            state.navigateBack.toggle()
+            state.navigateBack = true
         
         case .displayAlert(let message):
+            state.showAlert = true
             state.alertText = message
     }
     
@@ -480,7 +485,17 @@ typealias Reducer<State, Action, Environment> =
 (inout State, Action, Environment) -> AnyPublisher<Action, Never>
 
 class Store<State, Action, Environment> : ObservableObject {
-    @Published var state: State
+//    @Published var state: State
+    @Published var state: State {
+        didSet {
+            logMessage("PAK_Redux_New viewProperties.didSet \(state)")
+        }
+        
+        willSet {
+            logMessage("PAK_Redux_New viewProperties.willSet \(state)")
+        }
+    }
+    
     private let environment: Environment
     private let reducer: Reducer<State, Action, Environment>
     private var cancellables = Set<AnyCancellable>()
@@ -519,6 +534,7 @@ extension Store {
         let nextAction = reducer(&state, action, environment)
 
         nextAction
+            .print("Store.send")
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: send)
             .store(in: &cancellables)

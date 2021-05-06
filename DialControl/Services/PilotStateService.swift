@@ -23,11 +23,15 @@ protocol PilotStateServiceProtocol : class {
 /// https://kaitlin.dev/2018/05/09/custom-errors.html
 enum PilotStateServiceProtocolError: LocalizedError {
     case savePilotStateError(String)
+    case createPilotStateError(String)
     
     var errorDescription: String? {
         switch self {
             case let .savePilotStateError(message):
-            return message
+                return message
+            
+            case let .createPilotStateError(message):
+                return message
         }
     }
 }
@@ -48,8 +52,6 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                               state: json,
                               pilotIndex: newData.pilot_index)
     }
-    
-    
     
     func createPilotState(squad: Squad, squadData: SquadData) {
         func calculate_force_active(ship: Ship,
@@ -349,6 +351,7 @@ extension PilotStateService {
             shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
             
             do {
+                
                 let ship: Ship = try Ship.deserializeJSON(jsonString: shipJSON)
                 
                 // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)

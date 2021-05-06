@@ -13,6 +13,26 @@ protocol JSONSerialization {
     static func serialize<T: Encodable>(type: T) -> String
 }
 
+enum JSONSerializationError : LocalizedError {
+    case dataCorrupted
+    case keyNotFound(String)
+    case valueNotFound(String)
+    case typeMismatch(String)
+    
+    var errorDescription: String? {
+        switch(self) {
+            case .dataCorrupted :
+                return "XWS Data is invalid."
+            case .keyNotFound(let key):
+                return "Key Not Found: \(key)"
+            case .valueNotFound(let value):
+                return "Value Not Found: \(value)"
+            case .typeMismatch(let type):
+                return "Type Mismatch: \(type)"
+        }
+    }
+}
+
 extension JSONSerialization {
     /// JSON -> T
     static func deserialize<T: Decodable>(jsonString: String) -> T {
@@ -43,6 +63,34 @@ extension JSONSerialization {
         }
     
         return ret! // FIXME: How do I NOT use optionals???
+    }
+    
+    static func deserialize_throws<T: Decodable>(jsonString: String) throws -> T {
+        print(jsonString)
+        let jsonData = jsonString.data(using: .utf8)!
+        let decoder = JSONDecoder()
+        
+        do {
+            return try decoder.decode(T.self, from: jsonData)
+        } catch let DecodingError.dataCorrupted(context) {
+            print(context)
+            throw JSONSerializationError.dataCorrupted
+        } catch let DecodingError.keyNotFound(key, context) {
+            print("Key '\(key)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+            throw JSONSerializationError.keyNotFound("\(key) \(context.codingPath)")
+        } catch let DecodingError.valueNotFound(value, context) {
+            print("Value '\(value)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+            throw JSONSerializationError.valueNotFound("\(value) \(context.codingPath)")
+        } catch let DecodingError.typeMismatch(type, context)  {
+            print("Type '\(type)' mismatch:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+            throw JSONSerializationError.typeMismatch("\(type) \(context.codingPath)")
+        } catch {
+            print("error: ", error)
+            throw error
+        }
     }
     
     /// T -> JSON
