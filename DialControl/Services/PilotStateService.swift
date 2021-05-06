@@ -343,45 +343,50 @@ extension PilotStateService {
         
         func buildPilotStateData(squad: Squad,
                                  squadPilot: SquadPilot,
-                                 pilotIndex: Int) -> String
+                                 pilotIndex: Int) throws -> String
         {
             var shipJSON: String = ""
             shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
             
-            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            
-            // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
-            
-            let arc = ship.arcStats
-            let agility = ship.agilityStats
-            var allUpgrades : [Upgrade] = []
-            
-            // Add the upgrades from SquadPilot.upgrades by iterating over the
-            // UpgradeCardEnum cases and calling getUpgrade
-            if let upgrades = squadPilot.upgrades {
-                allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+            do {
+                let ship: Ship = try Ship.deserializeJSON(jsonString: shipJSON)
+                
+                // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
+                
+                let arc = ship.arcStats
+                let agility = ship.agilityStats
+                var allUpgrades : [Upgrade] = []
+                
+                // Add the upgrades from SquadPilot.upgrades by iterating over the
+                // UpgradeCardEnum cases and calling getUpgrade
+                if let upgrades = squadPilot.upgrades {
+                    allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+                }
+                
+                let pilotStateData = PilotStateData(
+                    pilot_index: pilotIndex,
+                    adjusted_attack: arc,
+                    adjusted_defense: agility,
+                    hull_active: calculateActive(type: .hull,ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                    hull_inactive: 0,
+                    shield_active: calculateActive(type: .shields, ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                    shield_inactive: 0,
+                    force_active: calculate_force_active(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                    force_inactive: 0,
+                    charge_active: ship.pilotCharge(pilotId: squadPilot.id),
+                    charge_inactive: 0,
+                    selected_maneuver: "",
+                    shipID: "",
+                    upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
+                    dial_status: DialStatus.hidden
+                )
+                
+                let json = PilotStateData.serialize(type: pilotStateData)
+                return json
             }
-            
-            let pilotStateData = PilotStateData(
-                pilot_index: pilotIndex,
-                adjusted_attack: arc,
-                adjusted_defense: agility,
-                hull_active: calculateActive(type: .hull,ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
-                hull_inactive: 0,
-                shield_active: calculateActive(type: .shields, ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
-                shield_inactive: 0,
-                force_active: calculate_force_active(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
-                force_inactive: 0,
-                charge_active: ship.pilotCharge(pilotId: squadPilot.id),
-                charge_inactive: 0,
-                selected_maneuver: "",
-                shipID: "",
-                upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
-                dial_status: DialStatus.hidden
-            )
-            
-            let json = PilotStateData.serialize(type: pilotStateData)
-            return json
+            catch {
+                throw error
+            }
         }
         
         var pilotIndex: Int = 0
@@ -389,11 +394,13 @@ extension PilotStateService {
         // for each pilot in squad.pilots
         for pilot in squad.pilots {
             // get the ship
-            let json = buildPilotStateData(squad: squad,
-                                           squadPilot: pilot,
-                                           pilotIndex: pilotIndex)
+            
             
             do {
+                let json = try buildPilotStateData(squad: squad,
+                                               squadPilot: pilot,
+                                               pilotIndex: pilotIndex)
+                
                 try savePilotState_throws(squadData: squadData,
                                state: json,
                                pilotIndex: pilotIndex)

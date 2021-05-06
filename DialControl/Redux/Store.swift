@@ -195,7 +195,7 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
             }
                 
         case .navigateBack:
-            state.navigateBack = true
+            state.navigateBack.toggle()
         
         case .displayAlert(let message):
             state.alertText = message
@@ -484,6 +484,8 @@ class Store<State, Action, Environment> : ObservableObject {
     private let environment: Environment
     private let reducer: Reducer<State, Action, Environment>
     private var cancellables = Set<AnyCancellable>()
+    
+    @Published var navigateBack: Void?
     
     init(state: State,
          reducer: @escaping Reducer<State, Action, Environment>,

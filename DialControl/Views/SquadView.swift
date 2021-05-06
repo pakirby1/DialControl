@@ -135,15 +135,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
     if let upgrades = squadPilot.upgrades {
         allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
     }
-    
-    var pilotStateData: PilotStateData? {
-        if let json = pilotState.json {
-            return PilotStateData.deserialize(jsonString: json)
-        }
-
-        return nil
-    }
-    
+   
     return ShipPilot(ship: ship,
                      upgrades: allUpgrades,
                      points: squadPilot.points,

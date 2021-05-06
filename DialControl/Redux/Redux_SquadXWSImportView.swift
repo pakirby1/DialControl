@@ -107,7 +107,8 @@ struct Redux_SquadXWSImportView : View {
             Alert(title: Text("Error"),
                   message: Text(store.state.xwsImport.alertText),
                   dismissButton: .default(Text("OK")))
-        }.onReceive(store.$state, perform: { state in
+        }
+        .onReceive(store.$state, perform: { state in
             print("\(Date()) Redux_SquadXWSImportView.body.onReceive navigateBack = \(state.xwsImport.navigateBack)")
             
             if state.xwsImport.navigateBack == true {

@@ -330,6 +330,10 @@ struct Ship: Codable, JSONSerialization {
     static func serializeJSON(jsonString: String) -> Ship {
         return deserialize(jsonString: jsonString)
     }
+    
+    static func deserializeJSON(jsonString: String) throws -> Ship {
+        return deserialize(jsonString: jsonString)
+    }
 }
 
 extension Ship {
