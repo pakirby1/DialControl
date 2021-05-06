@@ -363,7 +363,7 @@ extension PilotStateService {
                 // Add the upgrades from SquadPilot.upgrades by iterating over the
                 // UpgradeCardEnum cases and calling getUpgrade
                 if let upgrades = squadPilot.upgrades {
-                    allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+                    allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
                 }
                 
                 let pilotStateData = PilotStateData(
@@ -384,7 +384,7 @@ extension PilotStateService {
                     dial_status: DialStatus.hidden
                 )
                 
-                let json = PilotStateData.serialize(type: pilotStateData)
+                let json = try PilotStateData.serialize_throws(type: pilotStateData)
                 return json
             }
             catch {

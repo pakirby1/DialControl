@@ -18,6 +18,8 @@ enum JSONSerializationError : LocalizedError {
     case keyNotFound(String)
     case valueNotFound(String)
     case typeMismatch(String)
+    case encoding(String)
+    case bundlePathNotFound(String)
     
     var errorDescription: String? {
         switch(self) {
@@ -29,6 +31,10 @@ enum JSONSerializationError : LocalizedError {
                 return "Value Not Found: \(value)"
             case .typeMismatch(let type):
                 return "Type Mismatch: \(type)"
+            case .encoding(let message):
+                return "Encoding failure: \(message)"
+            case .bundlePathNotFound(let path):
+                return "Bundle path not found \(path)"
         }
     }
 }
@@ -106,5 +112,20 @@ extension JSONSerialization {
         
         return str
     }
+    
+    static func serialize_throws<T: Encodable>(type: T) throws -> String {
+        let encoder = JSONEncoder()
+        
+        // open func encode<T>(_ value: T) throws -> Data where T : Encodable
+        guard let data = try? encoder.encode(type) else {
+            throw JSONSerializationError.encoding("\(type)")
+            fatalError("Failed to encode.")
+        }
+
+        let str = String(decoding: data, as: UTF8.self)
+        
+        return str
+    }
+    
 }
 

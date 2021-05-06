@@ -133,7 +133,7 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
     // Add the upgrades from SquadPilot.upgrades by iterating over the
     // UpgradeCardEnum cases and calling getUpgrade
     if let upgrades = squadPilot.upgrades {
-        allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+        allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
     }
    
     return ShipPilot(ship: ship,
