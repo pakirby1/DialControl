@@ -16,6 +16,12 @@ struct MyAppState {
     var squad: MySquadViewState
     var ship: MyShipViewState
     var xwsImport: MyXWSImportViewState
+    var factionFilter: FactionFilterState
+}
+
+struct FactionFilterState {
+    var factions: [Faction] = []
+    var selectedFactions = Set<Faction>()
 }
 
 struct MyXWSImportViewState {
@@ -59,12 +65,20 @@ enum MyAppAction {
     case squad(action: MySquadAction)
     case ship(action: MyShipAction)
     case xwsImport(action: MyXWSImportAction)
+    case factionFilter(action: MyFactionFilterListAction)
 }
 
 enum MyXWSImportAction {
     case importXWS(String)
-    case navigateBack
+    case importSuccess
     case displayAlert(String)
+}
+
+enum MyFactionFilterListAction {
+    case loadFactions
+    case selectFaction(Faction)
+    case deselectFaction(Faction)
+    case deselectAll
 }
 
 enum MyShipAction {
@@ -135,9 +149,31 @@ func myAppReducer(
                                action: action,
                                environment: environment)
         
+        case .factionFilter(let action):
+            return factionFilterReducer(state: &state.xwsImport,
+                                        action: action,
+                                        environment: environment)
     }
     
 //    return Empty().eraseToAnyPublisher()
+}
+
+func factionFilterReducer(state: inout MyXWSImportViewState,
+                          action: MyFactionFilterListAction,
+                          environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
+{
+    switch(action) {
+        case .loadFactions:
+            return Empty().eraseToAnyPublisher()
+        case .selectFaction(let faction):
+            return Empty().eraseToAnyPublisher()
+        case .deselectFaction(let faction):
+            return Empty().eraseToAnyPublisher()
+        case .deselectAll:
+            return Empty().eraseToAnyPublisher()
+    }
+    
+    return Empty().eraseToAnyPublisher()
 }
 
 func xwsImportReducer(state: inout MyXWSImportViewState,
@@ -155,7 +191,7 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
             environment.pilotStateService.createPilotState(squad: squad, squadData: squadData)
             
             //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
-            return Just<MyAppAction>(.xwsImport(action: .navigateBack)).eraseToAnyPublisher()
+            return Just<MyAppAction>(.xwsImport(action: .importSuccess)).eraseToAnyPublisher()
         }
         
         return Empty().eraseToAnyPublisher()
@@ -173,7 +209,7 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                 try environment.pilotStateService.createPilotState_throws(squad: squad, squadData: squadData)
                 
                 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
-                return Just<MyAppAction>(.xwsImport(action: .navigateBack))
+                return Just<MyAppAction>(.xwsImport(action: .importSuccess))
                     .print("FeatureId.importXWS_HandleErrors")
                     .eraseToAnyPublisher()
             }
@@ -198,8 +234,9 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                 return importXWS(xws: &xws)
             }
                 
-        case .navigateBack:
-            state.navigateBack = true
+        case .importSuccess:
+            state.showAlert = true
+            state.alertText = "XWS Imported"
         
         case .displayAlert(let message):
             state.showAlert = true
