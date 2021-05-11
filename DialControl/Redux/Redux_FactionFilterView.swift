@@ -12,6 +12,8 @@ import SwiftUI
 struct Redux_FactionFilterView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     let faction: Faction
+    @State var selectedFactions = Set<Faction>()
+    @EnvironmentObject var store: MyAppStore
     
     var header: some View {
         HStack {
@@ -34,7 +36,9 @@ struct Redux_FactionFilterView: View {
     
     func factionList() -> some View {
         List(Faction.allCases, id:\.self) { faction in
-            FactionFilterRow(faction: faction)
+            FactionFilterRow(faction: faction) { faction in
+                store.send(MyAppAction.factionFilter(action: .selectFaction(faction)))
+            }
         }
     }
     
@@ -50,6 +54,7 @@ struct Redux_FactionFilterView: View {
 struct FactionFilterRow: View {
     let faction: Faction
     let symbolSize: CGFloat = 72.0
+    let callBack: (Faction) -> Void
     
     var body: some View {
         HStack {
@@ -57,6 +62,9 @@ struct FactionFilterRow: View {
                 .font(.custom("xwing-miniatures", size: self.symbolSize))
             
             Text(faction.rawValue).font(.largeTitle)
+        }.onTapGesture{
+            print("Tapped \(faction.rawValue)")
+            self.callBack(faction)
         }
     }
 }

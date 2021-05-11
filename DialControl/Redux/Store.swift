@@ -150,7 +150,7 @@ func myAppReducer(
                                environment: environment)
         
         case .factionFilter(let action):
-            return factionFilterReducer(state: &state.xwsImport,
+            return factionFilterReducer(state: &state.factionFilter,
                                         action: action,
                                         environment: environment)
     }
@@ -158,15 +158,23 @@ func myAppReducer(
 //    return Empty().eraseToAnyPublisher()
 }
 
-func factionFilterReducer(state: inout MyXWSImportViewState,
+func factionFilterReducer(state: inout FactionFilterState,
                           action: MyFactionFilterListAction,
                           environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
     switch(action) {
         case .loadFactions:
             return Empty().eraseToAnyPublisher()
+            
         case .selectFaction(let faction):
+            // If faction is already selected, remove it
+            if state.selectedFactions.contains(faction) {
+                state.selectedFactions.remove(faction)
+            } else {
+                state.selectedFactions.insert(faction)
+            }
             return Empty().eraseToAnyPublisher()
+            
         case .deselectFaction(let faction):
             return Empty().eraseToAnyPublisher()
         case .deselectAll:

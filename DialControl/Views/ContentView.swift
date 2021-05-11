@@ -118,8 +118,9 @@ class ViewFactory: ObservableObject {
                 .environmentObject(store))
             
         case .factionFilterView(let faction):
-            return AnyView(FactionFilterView(faction: faction)
-                .environmentObject(self))
+            return AnyView(Redux_FactionFilterView(faction: faction)
+                .environmentObject(self)
+                .environmentObject(store))
             
         case .back:
             self.navigation.back()
