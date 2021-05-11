@@ -49,3 +49,19 @@ extension SquadData {
     @NSManaged public func removeFromPilotState(_ values: NSSet)
 
 }
+
+extension SquadData {
+    func hasFaction(faction: Faction) -> Bool {
+        let search = "\"faction\":\"\(faction.xwsID)\""
+        
+        guard let json = self.json else {
+            return false
+        }
+        
+        if json.contains(search) {
+            return true
+        }
+        
+        return false
+    }
+}

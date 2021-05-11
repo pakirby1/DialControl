@@ -110,7 +110,6 @@ enum MyFactionSquadListAction {
     case deleteSquad(SquadData)
     case updateSquad(SquadData)
     case favorite(Bool, SquadData)
-    case refreshSquads
     case updateFavorites(Bool)
     case getShips(Squad, SquadData)
 }
@@ -130,7 +129,7 @@ func myAppReducer(
 {
     switch action {
         case .faction(let action):
-            return factionReducer(state: &state.faction,
+            return factionReducer(state: &state,
                            action: action,
                            environment: environment)
         
@@ -441,36 +440,70 @@ func squadReducer(state: inout MySquadViewState,
     return Empty().eraseToAnyPublisher()
 }
 
-func factionReducer(state: inout FactionSquadListState,
+func factionReducer(state: inout MyAppState,
                     action: MyFactionSquadListAction,
                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
-    func filterByFavorites(_ isFavorite: Bool = true) {
-        let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-        
-        state.squadDataList = state.squadDataList.filter{ $0.favorite == showFavoritesOnly }
-    }
- 
-    func filterByFaction(faction: Faction) {
-//            state.squadDataList = state.squadDataList.filter{ $0.faction == faction }
-    }
     
     func loadAllSquads() -> AnyPublisher<MyAppAction, Never> {
         return Just<MyAppAction>(.faction(action: .loadSquads)).eraseToAnyPublisher()
     }
     
+    func setSquads(squads: [SquadData]) {
+        func filterByFavorites(_ isFavorite: Bool = true) {
+            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+            
+            state.faction.squadDataList = state.faction.squadDataList.filter{ $0.favorite == showFavoritesOnly }
+        }
+        
+        func filterByFactions() {
+            var filters: [SquadDataFilter] = []
+            
+            state.factionFilter.selectedFactions.forEach { faction in
+                let filter: (SquadData) -> Bool = { $0.hasFaction(faction: faction) }
+                filters.append(filter)
+            }
+            
+            state.faction.squadDataList = filters.reduce(state.faction.squadDataList) { squads, filter in
+                return squads.filter(filter)
+            }
+        }
+
+        func setSquads_Old(squads: [SquadData]) {
+            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+            
+            if showFavoritesOnly {
+                filterByFavorites()
+            } else {
+                state.faction.squadDataList = squads
+            }
+        }
+        
+        func setSquads_New(squads: [SquadData]) {
+            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+            
+            if showFavoritesOnly {
+                filterByFavorites()
+            } else {
+                state.faction.squadDataList = squads
+            }
+            
+            filterByFactions()
+        }
+        
+        setSquads_Old(squads: squads)
+//        setSquads_New(squads: squads)
+    }
+    
     switch(action) {
         case let .getShips(squad, data):
-            state.shipPilots = SquadCardViewModel.getShips(
+            state.faction.shipPilots = SquadCardViewModel.getShips(
                 squad: squad,
                 squadData: data)
         
         case .updateFavorites(let showFavorites):
             UserDefaults.standard.set(showFavorites, forKey: "displayFavoritesOnly")
             return loadAllSquads()
-        
-        case .refreshSquads:
-            filterByFavorites()
         
         case .loadSquads:
             return environment
@@ -481,16 +514,10 @@ func factionReducer(state: inout FactionSquadListState,
                 .eraseToAnyPublisher()
         
         case let .setSquads(squads):
-            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-            
-            if showFavoritesOnly {
-                filterByFavorites()
-            } else {
-                state.squadDataList = squads
-            }
+            setSquads(squads: squads)
         
         case .deleteAllSquads:
-            state.squadDataList.forEach {
+            state.faction.squadDataList.forEach {
                 environment
                     .squadService
                     .deleteSquad(squadData: $0)
@@ -528,6 +555,7 @@ func factionReducer(state: inout FactionSquadListState,
 typealias MyAppStore = Store<MyAppState, MyAppAction, MyEnvironment>
 typealias Reducer<State, Action, Environment> =
 (inout State, Action, Environment) -> AnyPublisher<Action, Never>
+typealias SquadDataFilter = (SquadData) -> Bool
 
 class Store<State, Action, Environment> : ObservableObject {
 //    @Published var state: State

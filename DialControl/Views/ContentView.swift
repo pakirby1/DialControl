@@ -225,6 +225,19 @@ enum Faction: String, CaseIterable {
         }
     }
     
+    var xwsID: String {
+        switch(self) {
+        case .galacticrepublic: return "galacticrepublic" // Good
+        case .separatistalliance: return "separatistalliance" // Good
+        case .galacticempire: return "galacticempire"
+        case .rebelalliance: return "rebelalliance" // Good
+        case .scumandvillainy: return "scumandvillainy" // Good
+        case .resistance: return "resistance" // Good
+        case .firstorder: return "firstorder"
+        case .none: return ""
+        }
+    }
+    
     static func buildFaction(jsonFaction: String) -> Faction? {
         if jsonFaction == "galacticempire" {
             return Faction.galacticempire
