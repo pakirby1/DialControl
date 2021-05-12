@@ -17,6 +17,11 @@ struct MyAppState {
     var ship: MyShipViewState
     var xwsImport: MyXWSImportViewState
     var factionFilter: FactionFilterState
+    var tools: ToolsViewState
+}
+
+struct ToolsViewState {
+    var imageUrl: String = ""
 }
 
 struct FactionFilterState {
@@ -66,6 +71,12 @@ enum MyAppAction {
     case ship(action: MyShipAction)
     case xwsImport(action: MyXWSImportAction)
     case factionFilter(action: MyFactionFilterListAction)
+    case tools(action: ToolsAction)
+}
+
+enum ToolsAction {
+    case deleteImageCache
+    case downloadAllImages
 }
 
 enum MyXWSImportAction {
@@ -128,6 +139,11 @@ func myAppReducer(
 ) -> AnyPublisher<MyAppAction, Never>
 {
     switch action {
+        case .tools(let action):
+            return toolReducer(state: &state.tools,
+                               action: action,
+                               environment: environment)
+            
         case .faction(let action):
             return factionReducer(state: &state,
                            action: action,
@@ -155,6 +171,19 @@ func myAppReducer(
     }
     
 //    return Empty().eraseToAnyPublisher()
+}
+
+func toolReducer(state: inout ToolsViewState,
+                 action: ToolsAction,
+                 environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
+{
+    switch(action) {
+        case .deleteImageCache:
+            return Empty().eraseToAnyPublisher()
+        
+        case .downloadAllImages:
+            return Empty().eraseToAnyPublisher()
+    }
 }
 
 func factionFilterReducer(state: inout FactionFilterState,
@@ -480,15 +509,22 @@ func factionReducer(state: inout MyAppState,
         }
         
         func setSquads_New(squads: [SquadData]) {
+            var filters: [SquadDataFilter] = []
+            
             let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
             
             if showFavoritesOnly {
-                filterByFavorites()
-            } else {
-                state.faction.squadDataList = squads
+                filters.append({ $0.favorite == showFavoritesOnly })
             }
             
-            filterByFactions()
+            state.factionFilter.selectedFactions.forEach { faction in
+                let filter: (SquadData) -> Bool = { $0.hasFaction(faction: faction) }
+                filters.append(filter)
+            }
+            
+            state.faction.squadDataList = filters.reduce(state.faction.squadDataList) { squads, filter in
+                return squads.filter(filter)
+            }
         }
         
         setSquads_Old(squads: squads)

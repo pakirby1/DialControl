@@ -104,7 +104,7 @@ struct Redux_SquadXWSImportView : View {
             }
         }.padding(10)
             .alert(isPresented: $store.state.xwsImport.showAlert) {
-            Alert(title: Text("Error"),
+            Alert(title: Text("Alert"),
                   message: Text(store.state.xwsImport.alertText),
                   dismissButton: .default(Text("OK")))
         }

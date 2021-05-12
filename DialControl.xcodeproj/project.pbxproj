@@ -73,6 +73,7 @@
 		AEBDCDAE25020A2E0004415F /* LAATProxy.json in Resources */ = {isa = PBXBuildFile; fileRef = AEBDCDAD25020A2E0004415F /* LAATProxy.json */; };
 		AEC1243024A32CFC00C0599A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC1242F24A32CFC00C0599A /* NetworkService.swift */; };
 		AEC125E42513468600021096 /* UpgradeUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC125E32513468600021096 /* UpgradeUtility.swift */; };
+		AEC76F91264BD9CD00449A56 /* Redux_ToolsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC76F90264BD9CD00449A56 /* Redux_ToolsView.swift */; };
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
 		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
@@ -183,6 +184,7 @@
 		AEBDCDAD25020A2E0004415F /* LAATProxy.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = LAATProxy.json; sourceTree = "<group>"; };
 		AEC1242F24A32CFC00C0599A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		AEC125E32513468600021096 /* UpgradeUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeUtility.swift; sourceTree = "<group>"; };
+		AEC76F90264BD9CD00449A56 /* Redux_ToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_ToolsView.swift; sourceTree = "<group>"; };
 		AECF88C8253AB6AD00AAA23B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 				AEE65515260DFBBE00AFAE6A /* Redux_ShipView.swift */,
 				AEE16D89263EAB9700A8E804 /* Redux_SquadXWSImportView.swift */,
 				AE7E5B3E2646A78C00BBEA15 /* Redux_FactionFilterView.swift */,
+				AEC76F90264BD9CD00449A56 /* Redux_ToolsView.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -607,6 +610,7 @@
 				AE93ADDB24529F120017AEE8 /* SquadXWSImportView.swift in Sources */,
 				AE7EC215245DA13400E92704 /* PopoverView.swift in Sources */,
 				AE1DF8EF24B5D80E00B84D38 /* ImageView.swift in Sources */,
+				AEC76F91264BD9CD00449A56 /* Redux_ToolsView.swift in Sources */,
 				AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */,
 				AE2D80EE242780FC00248CA4 /* squad.swift in Sources */,
 				AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */,
