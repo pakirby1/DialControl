@@ -40,8 +40,25 @@ struct Redux_FactionSquadList: View {
             
             squadList
             
+            footerView
+        }
+    }
+    
+    var footerView: some View {
+        HStack {
             deleteAllButton
                 .padding(10)
+            
+            toolsButton
+                .padding(10)
+        }
+    }
+    
+    var toolsButton: some View {
+        Button(action: {}) {
+            Image(systemName: "wrench.and.screwdriver")
+                .foregroundColor(.white)
+                .font(.largeTitle)
         }
     }
     
@@ -82,12 +99,18 @@ struct Redux_FactionSquadList: View {
             titleView
             favoritesFilterView
             Spacer()
-            
-            Button(action: {
-                self.viewFactory.viewType = .squadImportView
-            }) {
-                Text("Import XWS")
-            }
+            xwsImportButton
+        }
+    }
+    
+    var xwsImportButton: some View {
+        Button(action: {
+            self.viewFactory.viewType = .squadImportView
+        }) {
+            Image(systemName: "plus.circle.fill")
+                .foregroundColor(.white)
+                .font(.largeTitle)
+//            Text("Import XWS")
         }
     }
     
