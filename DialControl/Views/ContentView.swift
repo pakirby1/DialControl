@@ -93,6 +93,11 @@ class ViewFactory: ObservableObject {
         }
         
         switch(type) {
+        case .toolsView:
+            return AnyView(Redux_ToolsView()
+                            .environmentObject(self)
+                            .environmentObject(store))
+                
         case .squadViewPAK(let squad, let squadData):
             return AnyView(Redux_SquadView(squad: squad,
                                      squadData: squadData)
@@ -135,6 +140,11 @@ class ViewFactory: ObservableObject {
     func buildView(type: ViewType) -> AnyView {
         
         switch(type) {
+        case .toolsView:
+            return AnyView(Redux_ToolsView()
+                            .environmentObject(self)
+                            .environmentObject(store))
+                
         case .squadViewPAK(let squad, let squadData):
             let viewModel = SquadViewModel(squad: squad,
                                            squadData: squadData)
@@ -278,6 +288,7 @@ enum ViewType {
     case factionSquadList(Faction)
     case factionFilterView(Faction)
     case squadViewPAK(Squad, SquadData)
+    case toolsView
     case back
 }
 
