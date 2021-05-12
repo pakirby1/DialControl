@@ -55,7 +55,10 @@ struct Redux_FactionSquadList: View {
     }
     
     var toolsButton: some View {
-        Button(action: {}) {
+        Button(action: {
+            self.viewFactory.viewType = .toolsView
+        })
+        {
             Image(systemName: "wrench.and.screwdriver")
                 .foregroundColor(.white)
                 .font(.largeTitle)

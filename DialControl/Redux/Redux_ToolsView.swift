@@ -37,7 +37,10 @@ struct Redux_ToolsView: View {
         
         self.tools.append(Tool(title: "Download All Images", action: {}))
         
-        self.tools.append(Tool(title: "Delete All Squads", action: { self.store.send(.faction(action: .deleteAllSquads)) }))
+        self.tools.append(Tool(title: "Delete All Squads",
+                               titleColor: Color.red,
+                               action: { self.store.send(.faction(action: .deleteAllSquads)) })
+        )
     }
     
     var body: some View {
@@ -52,6 +55,15 @@ struct Redux_ToolsView: View {
 struct Tool : Hashable {
     let title: String
     let action: () -> Void
+    let titleColor: Color
+    
+    init(title: String,
+         titleColor: Color = WestworldUITheme().TEXT_FOREGROUND,
+         action: @escaping () -> Void) {
+        self.title = title
+        self.titleColor = titleColor
+        self.action = action
+    }
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(title)
@@ -99,7 +111,7 @@ struct ToolsCard: View {
         HStack {
             Text(self.tool.title)
                 .font(.title)
-                .foregroundColor(viewModel.textForeground)
+                .foregroundColor(self.tool.titleColor)
         }
     }
     
