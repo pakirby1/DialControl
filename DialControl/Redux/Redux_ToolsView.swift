@@ -13,6 +13,7 @@ struct Redux_ToolsView: View {
     @EnvironmentObject var viewFactory: ViewFactory
     @State var tools: [Tool] = []
     @EnvironmentObject var store: MyAppStore
+    @State var displayDeleteAllConfirmation: Bool = false
     
     var header: some View {
         HStack {
@@ -32,6 +33,12 @@ struct Redux_ToolsView: View {
         }
     }
     
+    func displayDeleteConfirmation() {
+//        if self.store.state.faction.squadDataList.count > 0 {
+            self.displayDeleteAllConfirmation = true
+//        }
+    }
+
     func buildTools() {
         self.tools.append(Tool(title: "Delete Image Cache", action: {}))
         
@@ -39,8 +46,29 @@ struct Redux_ToolsView: View {
         
         self.tools.append(Tool(title: "Delete All Squads",
                                titleColor: Color.red,
-                               action: { self.store.send(.faction(action: .deleteAllSquads)) })
+                               action: displayDeleteConfirmation)
         )
+    }
+    
+    var deleteAllAlertAction: () -> Void {
+        get {
+            return { self.store.send(.faction(action: .deleteAllSquads)) }
+        }
+    }
+    
+    var cancelAlertAction: () -> Void {
+        get {
+            return self.cancelAction(title: "Delete") {
+                self.displayDeleteAllConfirmation = false
+            }
+        }
+    }
+    
+    func cancelAction(title: String, callback: @escaping () -> Void) -> () -> Void {
+        return {
+            print("Cancelled \(title)")
+            callback()
+        }
     }
     
     var body: some View {
@@ -49,6 +77,13 @@ struct Redux_ToolsView: View {
             toolsList()
             Spacer()
         }.onAppear(perform: buildTools)
+        .alert(isPresented: $displayDeleteAllConfirmation) {
+            Alert(title: Text("Delete"),
+                  message: Text("All Squads?"),
+                primaryButton: Alert.Button.default(Text("Delete"), action: deleteAllAlertAction),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
+            )
+        }
     }
 }
 

@@ -46,9 +46,6 @@ struct Redux_FactionSquadList: View {
     
     var footerView: some View {
         HStack {
-            deleteAllButton
-                .padding(10)
-            
             toolsButton
                 .padding(10)
         }
@@ -64,18 +61,7 @@ struct Redux_FactionSquadList: View {
                 .font(.largeTitle)
         }
     }
-    
-    var deleteAllButton: some View {
-        Button(action: {
-            if self.squadDataList.count > 0 {
-                    self.displayDeleteAllConfirmation = true
-                }
-            })
-        {
-            Text("Delete All Squads")
-        }
-    }
-    
+
     var titleView: some View {
         Text("\(self.faction)")
             .font(.largeTitle)
