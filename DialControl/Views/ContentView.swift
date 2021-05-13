@@ -122,8 +122,8 @@ class ViewFactory: ObservableObject {
                 .environmentObject(self)
                 .environmentObject(store))
             
-        case .factionFilterView(let faction):
-            return AnyView(Redux_FactionFilterView(faction: faction)
+        case .factionFilterView:
+            return AnyView(Redux_FactionFilterView()
                 .environmentObject(self)
                 .environmentObject(store))
             
@@ -177,8 +177,8 @@ class ViewFactory: ObservableObject {
                 .environmentObject(self)
                 .environmentObject(store))
             
-        case .factionFilterView(let faction):
-            return AnyView(FactionFilterView(faction: faction)
+        case .factionFilterView:
+            return AnyView(FactionFilterView(faction: .none)
                 .environmentObject(self))
             
         case .back:
@@ -220,7 +220,7 @@ enum Faction: String, CaseIterable {
     case scumandvillainy = "Scum and Villainy"
     case resistance = "Resistance"
     case firstorder = "First Order"
-    case none = ""
+    case none = "All Factions"
     
     var characterCode: String {
         switch(self) {
@@ -286,7 +286,7 @@ enum ViewType {
     case squadImportView
     case multiLineTextView
     case factionSquadList(Faction)
-    case factionFilterView(Faction)
+    case factionFilterView
     case squadViewPAK(Squad, SquadData)
     case toolsView
     case back

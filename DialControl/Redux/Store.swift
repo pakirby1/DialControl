@@ -26,7 +26,7 @@ struct ToolsViewState {
 
 struct FactionFilterState {
     var factions: [Faction] = []
-    var selectedFactions = Set<Faction>()
+    var selectedFaction: Faction = .none
 }
 
 struct MyXWSImportViewState {
@@ -195,12 +195,17 @@ func factionFilterReducer(state: inout FactionFilterState,
             return Empty().eraseToAnyPublisher()
             
         case .selectFaction(let faction):
-            // If faction is already selected, remove it
-            if state.selectedFactions.contains(faction) {
-                state.selectedFactions.remove(faction)
+            if faction == .none {
+                state.selectedFaction = .none
             } else {
-                state.selectedFactions.insert(faction)
+                // If faction is already selected, remove it
+                if state.selectedFaction == faction {
+                    state.selectedFaction = .none
+                } else {
+                    state.selectedFaction = faction
+                }
             }
+
             return Empty().eraseToAnyPublisher()
             
         case .deselectFaction(let faction):
@@ -488,8 +493,10 @@ func factionReducer(state: inout MyAppState,
         func filterByFactions() {
             var filters: [SquadDataFilter] = []
             
-            state.factionFilter.selectedFactions.forEach { faction in
-                let filter: (SquadData) -> Bool = { $0.hasFaction(faction: faction) }
+            let selectedFaction = state.factionFilter.selectedFaction
+            
+            if (selectedFaction != .none) {
+                let filter: (SquadData) -> Bool = { $0.hasFaction(faction: selectedFaction) }
                 filters.append(filter)
             }
             
@@ -513,12 +520,16 @@ func factionReducer(state: inout MyAppState,
             
             let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
             
+            state.faction.squadDataList = squads
+            
             if showFavoritesOnly {
                 filters.append({ $0.favorite == showFavoritesOnly })
             }
             
-            state.factionFilter.selectedFactions.forEach { faction in
-                let filter: (SquadData) -> Bool = { $0.hasFaction(faction: faction) }
+            let selectedFaction = state.factionFilter.selectedFaction
+            
+            if (selectedFaction != .none) {
+                let filter: (SquadData) -> Bool = { $0.hasFaction(faction: selectedFaction) }
                 filters.append(filter)
             }
             
@@ -527,8 +538,8 @@ func factionReducer(state: inout MyAppState,
             }
         }
         
-        setSquads_Old(squads: squads)
-//        setSquads_New(squads: squads)
+//        setSquads_Old(squads: squads)
+        setSquads_New(squads: squads)
     }
     
     switch(action) {

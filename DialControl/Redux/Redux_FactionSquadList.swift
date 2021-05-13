@@ -63,7 +63,7 @@ struct Redux_FactionSquadList: View {
     }
 
     var titleView: some View {
-        Text("\(self.faction)")
+        Text(self.store.state.factionFilter.selectedFaction.rawValue)
             .font(.largeTitle)
     }
     
@@ -79,13 +79,14 @@ struct Redux_FactionSquadList: View {
     var headerView: some View {
         HStack {
             Button(action: {
-                self.viewFactory.viewType = .factionFilterView(.none)
+                self.viewFactory.viewType = .factionFilterView
             }) {
                 Text("Filter")
             }
             
             Spacer()
             titleView
+            Spacer()
             favoritesFilterView
             Spacer()
             xwsImportButton
