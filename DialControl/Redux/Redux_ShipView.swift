@@ -480,11 +480,7 @@ struct Redux_ShipView: View {
                         self.viewFactory.back()
                     }) {
                         HStack {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 24, weight: .bold))
-                            
-                            Text("Back to Squad")
-                                .foregroundColor(theme.TEXT_FOREGROUND)
+                            BackButtonView().environmentObject(viewFactory)
                         }
                     }.padding(5)
                 }

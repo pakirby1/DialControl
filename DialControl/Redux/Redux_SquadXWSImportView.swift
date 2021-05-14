@@ -79,11 +79,7 @@ struct Redux_SquadXWSImportView : View {
     var body: some View {
         VStack {
             HStack {
-                Button(action: {
-                    self.navigateBack()
-                }) {
-                    Text("< Back")
-                }
+                BackButtonView().environmentObject(viewFactory)
                 
                 Spacer()
             }

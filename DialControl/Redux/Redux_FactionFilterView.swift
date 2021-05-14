@@ -17,11 +17,7 @@ struct Redux_FactionFilterView: View {
 
     var header: some View {
         HStack {
-            Button(action: {
-                self.viewFactory.back()
-            }) {
-                Text("< Faction Squad List")
-            }
+            BackButtonView().environmentObject(viewFactory)
             
             Spacer()
             

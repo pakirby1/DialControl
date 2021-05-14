@@ -17,11 +17,7 @@ struct Redux_ToolsView: View {
     
     var header: some View {
         HStack {
-            Button(action: {
-                self.viewFactory.back()
-            }) {
-                Text("< Back")
-            }
+            BackButtonView().environmentObject(viewFactory)
             
             Spacer()
         }.padding(10)

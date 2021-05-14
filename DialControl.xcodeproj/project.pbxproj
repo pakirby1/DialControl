@@ -77,6 +77,7 @@
 		AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */; };
 		AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */; };
 		AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */ = {isa = PBXBuildFile; fileRef = AEDAFCF724B095DD0073C60E /* Notes.txt */; };
+		AEDCB2CC264E7A6500DE4F10 /* BackButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDCB2CB264E7A6500DE4F10 /* BackButtonView.swift */; };
 		AEE16D8A263EAB9700A8E804 /* Redux_SquadXWSImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE16D89263EAB9700A8E804 /* Redux_SquadXWSImportView.swift */; };
 		AEE65512260DE21A00AFAE6A /* HealthStat.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65511260DE21A00AFAE6A /* HealthStat.swift */; };
 		AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */; };
@@ -189,6 +190,7 @@
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AEDAFCF724B095DD0073C60E /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
+		AEDCB2CB264E7A6500DE4F10 /* BackButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonView.swift; sourceTree = "<group>"; };
 		AEE16D89263EAB9700A8E804 /* Redux_SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadXWSImportView.swift; sourceTree = "<group>"; };
 		AEE65511260DE21A00AFAE6A /* HealthStat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStat.swift; sourceTree = "<group>"; };
 		AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthStatsView.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				AE93ADDE2452A8EA0017AEE8 /* TextView.swift */,
 				AEBA6360241B58D9008B00DB /* UpArrowView.swift */,
 				AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */,
+				AEDCB2CB264E7A6500DE4F10 /* BackButtonView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE2D80F0242784D400248CA4 /* SquadView.swift in Sources */,
+				AEDCB2CC264E7A6500DE4F10 /* BackButtonView.swift in Sources */,
 				AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */,
 				AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */,
 				AEBA6361241B58D9008B00DB /* UpArrowView.swift in Sources */,

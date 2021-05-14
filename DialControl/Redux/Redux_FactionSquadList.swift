@@ -64,7 +64,7 @@ struct Redux_FactionSquadList: View {
 
     var titleView: some View {
         Text(self.store.state.factionFilter.selectedFaction.rawValue)
-            .font(.largeTitle)
+            .font(.title)
     }
     
     var favoritesFilterView: some View {
@@ -81,10 +81,12 @@ struct Redux_FactionSquadList: View {
             Button(action: {
                 self.viewFactory.viewType = .factionFilterView
             }) {
-                Text("Filter")
+//                Text("Filter")
+                Image(systemName: "line.horizontal.3.decrease.circle.fill")
+                    .foregroundColor(.white)
+                    .font(.system(size: 48, weight: .bold))
             }
             
-            Spacer()
             titleView
             Spacer()
             favoritesFilterView
@@ -99,8 +101,7 @@ struct Redux_FactionSquadList: View {
         }) {
             Image(systemName: "plus.circle.fill")
                 .foregroundColor(.white)
-                .font(.largeTitle)
-//            Text("Import XWS")
+                .font(.system(size: 48, weight: .bold))
         }
     }
     

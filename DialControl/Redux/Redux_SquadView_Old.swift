@@ -88,11 +88,7 @@ extension Redux_SquadView {
     
     var header: some View {
         HStack {
-            Button(action: {
-                self.viewFactory.back()
-            }) {
-                Text("< Faction Squad List")
-            }
+            BackButtonView().environmentObject(viewFactory)
            
             Toggle(isOn: self.$isFirstPlayer.didSet{
                 // Hack because swift thinks I don't want to perform
