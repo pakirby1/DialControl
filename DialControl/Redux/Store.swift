@@ -221,24 +221,6 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                       action: MyXWSImportAction,
                       environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never> {
     func importXWS(xws: inout String) -> AnyPublisher<MyAppAction, Never> {
-        let squad = environment.squadService.loadSquad(jsonString: &xws)
-        
-        if squad.name != Squad.emptySquad.name {
-            // Save the squad JSON to CoreData
-            let squadData = environment.squadService.saveSquad(jsonString: xws,
-                                                     name: squad.name ?? "")
-            
-            // Create the state and save to PilotState
-            environment.pilotStateService.createPilotState(squad: squad, squadData: squadData)
-            
-            //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
-            return Just<MyAppAction>(.xwsImport(action: .importSuccess)).eraseToAnyPublisher()
-        }
-        
-        return Empty().eraseToAnyPublisher()
-    }
-    
-    func importXWS_HandleErrors(xws: inout String) -> AnyPublisher<MyAppAction, Never> {
         do {
             let squad = try environment.squadService.loadSquad_throws(jsonString: &xws)
         
@@ -251,29 +233,21 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                 
                 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                 return Just<MyAppAction>(.xwsImport(action: .importSuccess))
-                    .print("FeatureId.importXWS_HandleErrors")
                     .eraseToAnyPublisher()
             }
         } catch {
             print(error.localizedDescription)
             return Just<MyAppAction>(.xwsImport(action: .displayAlert(error.localizedDescription)))
-                .print("FeatureId.importXWS_HandleErrors")
                 .eraseToAnyPublisher()
         }
         
         return Empty()
-            .print("FeatureId.importXWS_HandleErrors")
             .eraseToAnyPublisher()
     }
     
     switch(action) {
         case .importXWS(var xws):
-            if (FeaturesManager.shared.isFeatureEnabled(.importXWS_HandleErrors))
-            {
-                return importXWS_HandleErrors(xws: &xws)
-            } else {
-                return importXWS(xws: &xws)
-            }
+            return importXWS(xws: &xws)
                 
         case .importSuccess:
             state.showAlert = true
