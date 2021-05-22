@@ -11,6 +11,7 @@ import Combine
 // MARK: - NetworkCacheService
 protocol INetworkCacheService {
     func loadData(url: String) -> AnyPublisher<Data, Error>
+    func loadDataIgnoreCache(url: String) -> AnyPublisher<Data, Error>
 }
 
 class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCacheService, IPrintLog where Local.LocalObject == Remote.RemoteObject
@@ -77,6 +78,25 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
                 if (!localData) {
                     self.localStore.saveData(key: url, value: data)
                 }
+                
+                return data
+            }
+            .print()
+            .eraseToAnyPublisher()
+    }
+    
+    func loadDataIgnoreCache(url: String) -> AnyPublisher<Data, Error> {
+        self.classFuncString = "\(self).\(#function)"
+        print("\(Date()) \(self.classFuncString)")
+        
+        // download the image and write to cache
+        return self.remoteStore.loadData(url: url)
+            .print()
+            .map { result -> Data in
+                print("Success: \(result)")
+                let data = result as! Data
+                
+                self.localStore.saveData(key: url, value: data)
                 
                 return data
             }
