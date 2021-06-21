@@ -25,7 +25,7 @@ struct Redux_ToolsView: View {
     
     func toolsList() -> some View {
         ForEach(tools, id:\.self) { tool in
-            ToolsCard(tool: tool)
+            ToolsCard(tool: tool).environmentObject(store)
         }
     }
     
@@ -35,10 +35,14 @@ struct Redux_ToolsView: View {
 //        }
     }
 
+    func downloadAllImages() {
+        self.store.send(.tools(action: .downloadAllImages))
+    }
+    
     func buildTools() {
         self.tools.append(Tool(title: "Delete Image Cache", action: {}))
         
-        self.tools.append(Tool(title: "Download All Images", action: {}))
+        self.tools.append(Tool(title: "Download All Images", action: downloadAllImages, displayStatus: true))
         
         self.tools.append(Tool(title: "Delete All Squads",
                                titleColor: Color.red,
@@ -87,13 +91,17 @@ struct Tool : Hashable {
     let title: String
     let action: () -> Void
     let titleColor: Color
+    let displayStatus: Bool
     
     init(title: String,
          titleColor: Color = WestworldUITheme().TEXT_FOREGROUND,
-         action: @escaping () -> Void) {
+         action: @escaping () -> Void,
+         displayStatus: Bool = false)
+    {
         self.title = title
         self.titleColor = titleColor
         self.action = action
+        self.displayStatus = displayStatus
     }
     
     func hash(into hasher: inout Hasher) {
@@ -122,7 +130,7 @@ struct ToolsCard: View {
             theme.BORDER_INACTIVE
         }
     }
-    
+    @EnvironmentObject var store: MyAppStore
     let tool: Tool
     let viewModel = ToolsCardViewModel()
     
@@ -146,12 +154,24 @@ struct ToolsCard: View {
         }
     }
     
+    var statusView: some View {
+        Text(self.store.state.tools.downloadImageEvent?.file ?? "")
+            .font(.headline)
+            .foregroundColor(self.tool.titleColor)
+    }
+    
     var body: some View {
         Button(action: self.tool.action)
         {
             ZStack {
                 background
-                titleView
+                VStack {
+                    titleView
+                    
+                    if (tool.displayStatus) {
+                        statusView
+                    }
+                }
             }
         }
     }

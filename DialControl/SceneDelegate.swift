@@ -45,7 +45,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             reducer: myAppReducer,
             environment: MyEnvironment(squadService: diContainer.squadService,
                                pilotStateService: diContainer.pilotStateService,
-                               jsonService: diContainer.jsonService)
+                               jsonService: diContainer.jsonService,
+                               imageService: diContainer.imageService)
         )
         
         let viewFactory = ViewFactory(moc: moc,

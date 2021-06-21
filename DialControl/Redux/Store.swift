@@ -22,6 +22,7 @@ struct MyAppState {
 
 struct ToolsViewState {
     var imageUrl: String = ""
+    var downloadImageEvent: DownloadImageEvent?
 }
 
 struct FactionFilterState {
@@ -77,6 +78,7 @@ enum MyAppAction {
 enum ToolsAction {
     case deleteImageCache
     case downloadAllImages
+    case setDownloadImageEvent(DownloadImageEvent)
 }
 
 enum MyXWSImportAction {
@@ -129,6 +131,7 @@ struct MyEnvironment {
     var squadService: SquadService
     var pilotStateService: PilotStateService
     var jsonService: JSONService
+    var imageService: ImageService
 }
 
 // MARK: - Redux Store
@@ -140,7 +143,7 @@ func myAppReducer(
 {
     switch action {
         case .tools(let action):
-            return toolReducer(state: &state.tools,
+            return toolsReducer(state: &state.tools,
                                action: action,
                                environment: environment)
             
@@ -173,7 +176,7 @@ func myAppReducer(
 //    return Empty().eraseToAnyPublisher()
 }
 
-func toolReducer(state: inout ToolsViewState,
+func toolsReducer(state: inout ToolsViewState,
                  action: ToolsAction,
                  environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
@@ -182,6 +185,14 @@ func toolReducer(state: inout ToolsViewState,
             return Empty().eraseToAnyPublisher()
         
         case .downloadAllImages:
+            return environment
+                .imageService
+                .downloadAllImages()
+                .map{ MyAppAction.tools(action:ToolsAction.setDownloadImageEvent($0)) }
+                .eraseToAnyPublisher()
+            
+        case .setDownloadImageEvent(let event):
+            state.downloadImageEvent = event
             return Empty().eraseToAnyPublisher()
     }
 }

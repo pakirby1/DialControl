@@ -30,6 +30,7 @@
 		AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE6124166830005C54F5 /* PathNode.swift */; };
 		AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */; };
 		AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE65241668CF005C54F5 /* AngleRange.swift */; };
+		AE2ADE8126809A9100142419 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2ADE8026809A9100142419 /* ImageService.swift */; };
 		AE2C0EC9243CA52A00042318 /* pilots in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0EC8243CA52A00042318 /* pilots */; };
 		AE2C0F0A24408AE400042318 /* upgrades in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0F0924408AE400042318 /* upgrades */; };
 		AE2D80EC24277F0100248CA4 /* squad.json in Resources */ = {isa = PBXBuildFile; fileRef = AE2D80EB24277F0100248CA4 /* squad.json */; };
@@ -136,6 +137,7 @@
 		AE1FBE6124166830005C54F5 /* PathNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathNode.swift; sourceTree = "<group>"; };
 		AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManeuverDialSelection.swift; sourceTree = "<group>"; };
 		AE1FBE65241668CF005C54F5 /* AngleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleRange.swift; sourceTree = "<group>"; };
+		AE2ADE8026809A9100142419 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		AE2C0EC8243CA52A00042318 /* pilots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pilots; sourceTree = "<group>"; };
 		AE2C0F0924408AE400042318 /* upgrades */ = {isa = PBXFileReference; lastKnownFileType = folder; path = upgrades; sourceTree = "<group>"; };
 		AE2D80EB24277F0100248CA4 /* squad.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = squad.json; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				AEEB546B24F11FE50050913C /* PilotStateService.swift */,
 				AEF5676F25DFCD17006DCD4C /* ShipService.swift */,
 				AEE6551D261D9F8F00AFAE6A /* JSONService.swift */,
+				AE2ADE8026809A9100142419 /* ImageService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -662,6 +665,7 @@
 				AE1FBE5924166443005C54F5 /* DialView.swift in Sources */,
 				AE1FBE6024166798005C54F5 /* Rotated.swift in Sources */,
 				AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */,
+				AE2ADE8126809A9100142419 /* ImageService.swift in Sources */,
 				AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
