@@ -74,7 +74,12 @@ struct Redux_ToolsView: View {
     var body: some View {
         VStack {
             header
-            toolsList()
+//            toolsList()
+            ToolsCard(tool: Tool(title: "Delete Image Cache", action: {}))
+            ToolsCard(tool: Tool(title: "Download All Images", action: downloadAllImages, displayStatus: true))
+            ToolsCard(tool: Tool(title: "Delete All Squads",
+                                 titleColor: Color.red,
+                                 action: displayDeleteConfirmation))
             Spacer()
         }.onAppear(perform: buildTools)
         .alert(isPresented: $displayDeleteAllConfirmation) {
@@ -172,6 +177,73 @@ struct ToolsCard: View {
                         statusView
                     }
                 }
+            }
+        }
+    }
+}
+
+struct ToolsCardNew<AccessoryView: View>: View {
+    struct ToolsCardViewModel {
+        let theme: Theme = WestworldUITheme()
+        let symbolSize: CGFloat = 36.0
+        
+        var buttonBackground: Color {
+            theme.BUTTONBACKGROUND
+        }
+        
+        var textForeground: Color {
+            theme.TEXT_FOREGROUND
+        }
+        
+        var border: Color {
+            theme.BORDER_INACTIVE
+        }
+    }
+    
+    @EnvironmentObject var store: MyAppStore
+    let tool: Tool
+    let viewModel = ToolsCardViewModel()
+    let accessoryView: AccessoryView?
+    
+    var border: some View {
+        RoundedRectangle(cornerRadius: 15)
+            .stroke(viewModel.border, lineWidth: 3)
+    }
+    
+    var background: some View {
+        RoundedRectangle(cornerRadius: 15)
+            .fill(viewModel.buttonBackground)
+            .frame(width: 800, height: 80)
+            .overlay(border)
+    }
+    
+    var titleView: some View {
+        HStack {
+            Text(self.tool.title)
+                .font(.title)
+                .foregroundColor(self.tool.titleColor)
+        }
+    }
+    
+    var statusView: some View {
+        Text(self.store.state.tools.downloadImageEvent?.file ?? "")
+            .font(.headline)
+            .foregroundColor(self.tool.titleColor)
+    }
+    
+    var body: some View {
+        Button(action: self.tool.action)
+        {
+            ZStack {
+                background
+                VStack {
+                    titleView
+                    
+                    if (tool.displayStatus) {
+                        statusView
+                    }
+                }
+                accessoryView.offset(x: 50, y: 0)
             }
         }
     }

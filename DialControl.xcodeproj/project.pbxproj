@@ -31,6 +31,7 @@
 		AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */; };
 		AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE65241668CF005C54F5 /* AngleRange.swift */; };
 		AE2ADE8126809A9100142419 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2ADE8026809A9100142419 /* ImageService.swift */; };
+		AE2ADE832683142400142419 /* ProgressControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2ADE822683142400142419 /* ProgressControl.swift */; };
 		AE2C0EC9243CA52A00042318 /* pilots in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0EC8243CA52A00042318 /* pilots */; };
 		AE2C0F0A24408AE400042318 /* upgrades in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0F0924408AE400042318 /* upgrades */; };
 		AE2D80EC24277F0100248CA4 /* squad.json in Resources */ = {isa = PBXBuildFile; fileRef = AE2D80EB24277F0100248CA4 /* squad.json */; };
@@ -138,6 +139,7 @@
 		AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManeuverDialSelection.swift; sourceTree = "<group>"; };
 		AE1FBE65241668CF005C54F5 /* AngleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleRange.swift; sourceTree = "<group>"; };
 		AE2ADE8026809A9100142419 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
+		AE2ADE822683142400142419 /* ProgressControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressControl.swift; sourceTree = "<group>"; };
 		AE2C0EC8243CA52A00042318 /* pilots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pilots; sourceTree = "<group>"; };
 		AE2C0F0924408AE400042318 /* upgrades */ = {isa = PBXFileReference; lastKnownFileType = folder; path = upgrades; sourceTree = "<group>"; };
 		AE2D80EB24277F0100248CA4 /* squad.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = squad.json; sourceTree = "<group>"; };
@@ -413,6 +415,7 @@
 				AEE16D89263EAB9700A8E804 /* Redux_SquadXWSImportView.swift */,
 				AE7E5B3E2646A78C00BBEA15 /* Redux_FactionFilterView.swift */,
 				AEC76F90264BD9CD00449A56 /* Redux_ToolsView.swift */,
+				AE2ADE822683142400142419 /* ProgressControl.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -626,6 +629,7 @@
 				AE028C59249F825100DF689B /* NetworkCache.swift in Sources */,
 				AEE16D8A263EAB9700A8E804 /* Redux_SquadXWSImportView.swift in Sources */,
 				AEA192DC25C2DFC30033ACBD /* Action.swift in Sources */,
+				AE2ADE832683142400142419 /* ProgressControl.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
 				AEEB546824F11EB40050913C /* DIContainer.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
