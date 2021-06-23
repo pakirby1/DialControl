@@ -49,6 +49,17 @@ struct Redux_SquadView: View, DamagedSquadRepresenting {
         
         return copy
     }
+    
+    var revealedDialCount: Int {
+        self.shipPilots.filter{
+            guard let status = $0.pilotStateData?.dial_status else { return false }
+            return status == .revealed
+        }.count
+    }
+    
+    var hiddenDialCount: Int {
+        self.shipPilots.count - revealedDialCount
+    }
 }
 
 //MARK:- View
@@ -124,11 +135,25 @@ extension Redux_SquadView {
             .foregroundColor(theme.TEXT_FOREGROUND)
         
         let hide = Button(action: {
-            self.revealAllDials.toggle()
+            func logDetails() {
+                print("PAK_Redux_SquadView revealAllDials: \(self.revealAllDials)")
+                print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
+                print("PAK_Redux_SquadView shipPilots Count: \(self.shipPilots.count)")
+            }
             
+            logDetails()
+            
+            if self.revealedDialCount != self.shipPilots.count {
+                self.revealAllDials.toggle()
+                self.updateAllDials()
+            } else {
+                self.revealAllDials.toggle()
+                self.updateAllDials()
+            }
+            
+            logDetails()
+
             print("PAK_DialStatus_New Button: \(self.revealAllDials)")
-        
-            self.updateAllDials()
         }) {
             Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
         }
