@@ -143,14 +143,9 @@ extension Redux_SquadView {
             
             logDetails()
             
-            if self.revealedDialCount != self.shipPilots.count {
-                self.revealAllDials.toggle()
-                self.updateAllDials()
-            } else {
-                self.revealAllDials.toggle()
-                self.updateAllDials()
-            }
-            
+            self.revealAllDials.toggle()
+            self.updateAllDials()
+
             logDetails()
 
             print("PAK_DialStatus_New Button: \(self.revealAllDials)")
