@@ -60,6 +60,28 @@ struct Redux_SquadView: View, DamagedSquadRepresenting {
     var hiddenDialCount: Int {
         self.shipPilots.count - revealedDialCount
     }
+    
+    var dialsState : SquadDialsState {
+        get {
+            if revealedDialCount == self.shipPilots.count {
+                return .revealed
+            } else {
+                return .hidden
+            }
+        }
+    }
+    
+    enum SquadDialsState: CustomStringConvertible {
+        case revealed
+        case hidden
+        
+        var description: String {
+            switch(self) {
+                case .hidden: return "Hidden"
+                case .revealed: return "Revealed"
+            }
+        }
+    }
 }
 
 //MARK:- View
@@ -134,23 +156,42 @@ extension Redux_SquadView {
             .lineLimit(1)
             .foregroundColor(theme.TEXT_FOREGROUND)
         
-        let hide = Button(action: {
+        let hideAll = Button(action: {
             func logDetails() {
-                print("PAK_Redux_SquadView revealAllDials: \(self.revealAllDials)")
+                print("PAK_Redux_SquadView dialsState: \(self.dialsState)")
                 print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
                 print("PAK_Redux_SquadView shipPilots Count: \(self.shipPilots.count)")
             }
             
             logDetails()
             
-            self.revealAllDials.toggle()
-            self.updateAllDials()
+//            self.revealAllDials.toggle()
+            self.updateAllDials(newDialStatus: .hidden)
 
             logDetails()
 
-            print("PAK_DialStatus_New Button: \(self.revealAllDials)")
+            print("PAK_DialStatus_New Button: \(self.dialsState)")
         }) {
-            Text(self.revealAllDials ? "Hide" : "Reveal").foregroundColor(Color.white)
+            Text("Hide").foregroundColor(Color.white)
+        }
+        
+        let revealAll = Button(action: {
+            func logDetails() {
+                print("PAK_Redux_SquadView dialsState: \(self.dialsState)")
+                print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
+                print("PAK_Redux_SquadView shipPilots Count: \(self.shipPilots.count)")
+            }
+            
+            logDetails()
+            
+//            self.revealAllDials.toggle()
+            self.updateAllDials(newDialStatus: .revealed)
+
+            logDetails()
+
+            print("PAK_DialStatus_New Button: \(self.dialsState)")
+        }) {
+            Text("Reveal").foregroundColor(Color.white)
         }
         
         let reset = Button(action: {
@@ -183,6 +224,23 @@ extension Redux_SquadView {
             return AnyView(EmptyView())
         }
         
+        var dialState: some View {
+            func row(label: String, text: String) -> some View {
+                return Text("\(label): \(text)")
+            }
+            
+            return VStack {
+                row(label: "dialsState", text: self.dialsState.description)
+                row(label: "revealedDialCount", text: self.revealedDialCount.description)
+                row(label: "hiddenDialCount", text: self.hiddenDialCount.description)
+                row(label: "shipPilots Count", text: self.shipPilots.count.description)
+            }
+        }
+        
+        var hideOrRevealAll: some View {
+            (self.dialsState == .hidden) ? revealAll : hideAll
+        }
+    
         return ZStack {
             VStack(alignment: .leading) {
                 // Header
@@ -201,13 +259,19 @@ extension Redux_SquadView {
 
                     Spacer()
 
-                    hide
+                    hideOrRevealAll
 
                     Spacer()
 
                     damaged
                 }.padding(20)
 
+                HStack {
+                    Spacer()
+                    dialState
+                    Spacer()
+                }
+                
                 // Body
                 // TODO: Switch & AppStore
                 if shipPilots.isEmpty {
@@ -322,13 +386,31 @@ extension Redux_SquadView {
                 if data.dial_status != .destroyed {
                     data.change(update: {
                         print("PAK_DialStatus pilotStateData.id: \($0)")
-                        let revealAllDialsStatus: DialStatus = self.revealAllDials ? .revealed : .hidden
+                        let revealAllDialsStatus: DialStatus = (self.dialsState == .revealed) ? .revealed : .hidden
                         $0.dial_status = revealAllDialsStatus
                         
                         self.updatePilotState(pilotStateData: $0,
                                                            pilotState: shipPilot.pilotState)
                         print("PAK_DialStatus updateAllDials $0.dial_status = \(revealAllDialsStatus)")
                         print("PAK_DialStatus updateAllDials $0.dial_revealed = \(self.revealAllDials)")
+                    })
+                }
+            }
+        }
+    }
+    
+    private func updateAllDials(newDialStatus: DialStatus) {
+        sortedShipPilots.forEach{ shipPilot in
+            if var data = shipPilot.pilotStateData {
+                if data.dial_status != .destroyed {
+                    data.change(update: {
+                        print("PAK_DialStatus pilotStateData.id: \($0)")
+    
+                        $0.dial_status = newDialStatus
+                        
+                        self.updatePilotState(pilotStateData: $0,
+                                                           pilotState: shipPilot.pilotState)
+                        print("PAK_DialStatus updateAllDials $0.dial_status = \($0.dial_status)")
                     })
                 }
             }

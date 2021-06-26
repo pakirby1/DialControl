@@ -223,8 +223,6 @@ struct SquadCardView: View, DamagedSquadRepresenting {
             }
     
     func buildShipButton(shipPilot: ShipPilot) -> some View {
-        
-        
         return Button(action: {
             self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
         }) {
