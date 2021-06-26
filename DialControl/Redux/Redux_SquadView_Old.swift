@@ -156,43 +156,7 @@ extension Redux_SquadView {
             .lineLimit(1)
             .foregroundColor(theme.TEXT_FOREGROUND)
         
-        let hideAll = Button(action: {
-            func logDetails() {
-                print("PAK_Redux_SquadView dialsState: \(self.dialsState)")
-                print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
-                print("PAK_Redux_SquadView shipPilots Count: \(self.shipPilots.count)")
-            }
-            
-            logDetails()
-            
-//            self.revealAllDials.toggle()
-            self.updateAllDials(newDialStatus: .hidden)
-
-            logDetails()
-
-            print("PAK_DialStatus_New Button: \(self.dialsState)")
-        }) {
-            Text("Hide").foregroundColor(Color.white)
-        }
         
-        let revealAll = Button(action: {
-            func logDetails() {
-                print("PAK_Redux_SquadView dialsState: \(self.dialsState)")
-                print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
-                print("PAK_Redux_SquadView shipPilots Count: \(self.shipPilots.count)")
-            }
-            
-            logDetails()
-            
-//            self.revealAllDials.toggle()
-            self.updateAllDials(newDialStatus: .revealed)
-
-            logDetails()
-
-            print("PAK_DialStatus_New Button: \(self.dialsState)")
-        }) {
-            Text("Reveal").foregroundColor(Color.white)
-        }
         
         let reset = Button(action: {
             self.displayResetAllConfirmation = true
@@ -238,7 +202,30 @@ extension Redux_SquadView {
         }
         
         var hideOrRevealAll: some View {
-            (self.dialsState == .hidden) ? revealAll : hideAll
+            func buildButton(_ newDialStatus: DialStatus) -> some View {
+                let title: String = (newDialStatus == .hidden) ? "Hide" : "Reveal"
+                
+                return Button(action: {
+                    func logDetails() {
+                        print("PAK_Redux_SquadView dialsState: \(self.dialsState)")
+                        print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
+                        print("PAK_Redux_SquadView shipPilots Count: \(self.shipPilots.count)")
+                    }
+                    
+                    logDetails()
+                    
+        //            self.revealAllDials.toggle()
+                    self.updateAllDials(newDialStatus: newDialStatus)
+
+                    logDetails()
+
+                    print("PAK_DialStatus_New Button: \(self.dialsState)")
+                }) {
+                    Text(title).foregroundColor(Color.white)
+                }
+            }
+            
+            return (self.dialsState == .hidden) ? buildButton(.revealed) : buildButton(.hidden)
         }
     
         return ZStack {
