@@ -404,4 +404,3 @@ extension Redux_SquadView {
         }
     }
 }
-

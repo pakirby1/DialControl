@@ -25,7 +25,13 @@ struct Redux_ToolsView: View {
     
     func toolsList() -> some View {
         ForEach(tools, id:\.self) { tool in
-            ToolsCard(tool: tool).environmentObject(store)
+//            ToolsCardNew(tool: tool, content: {}).environmentObject(store)
+            ToolsCardNew(tool: tool) {
+                ProgressControl(size: 70,
+                                ratio: store.state.tools.downloadImageEvent?.completionRatio ?? 0,
+                                onStart: self.downloadAllImages,
+                                onStop: self.downloadAllImages)
+            }.environmentObject(store)
         }
     }
     
@@ -37,6 +43,10 @@ struct Redux_ToolsView: View {
 
     func downloadAllImages() {
         self.store.send(.tools(action: .downloadAllImages))
+    }
+    
+    func cancel() {
+//        self.store.send(.tools(action: .cancelDownloadAllImages))
     }
     
     func buildTools() {
@@ -71,12 +81,28 @@ struct Redux_ToolsView: View {
         }
     }
     
+    var downloadAllImagesCard : some View {
+        let tool = Tool(title: "Download All Images",
+                        action: downloadAllImages,
+                        displayStatus: true)
+        
+        return ToolsCardNew(tool: tool) {
+//            Text("Test")
+            ProgressControl(size: 60,
+                            ratio: store.state.tools.downloadImageEvent?.completionRatio ?? 0,
+                            onStart: self.downloadAllImages,
+                            onStop: self.downloadAllImages)
+//                .border(Color.white, width: 1)
+                .environmentObject(store)
+        }
+    }
+    
     var body: some View {
         VStack {
             header
 //            toolsList()
             ToolsCard(tool: Tool(title: "Delete Image Cache", action: {}))
-            ToolsCard(tool: Tool(title: "Download All Images", action: downloadAllImages, displayStatus: true))
+            downloadAllImagesCard
             ToolsCard(tool: Tool(title: "Delete All Squads",
                                  titleColor: Color.red,
                                  action: displayDeleteConfirmation))
@@ -182,6 +208,23 @@ struct ToolsCard: View {
     }
 }
 
+struct CustomView <Content: View>: View {
+    
+    var content: () -> Content
+    
+    init(@ViewBuilder content: @escaping () -> Content) { self.content = content }
+    
+    var body: some View {
+
+            content()  // <<: Do anything you want with your imported View here.
+
+    }
+}
+
+/// Displays a tool card view with a generic accessory view
+///
+/// - Parameter AccessoryView: Generic type constraint. used by the `@ViewBuilder`
+///   closure input parameter
 struct ToolsCardNew<AccessoryView: View>: View {
     struct ToolsCardViewModel {
         let theme: Theme = WestworldUITheme()
@@ -203,7 +246,18 @@ struct ToolsCardNew<AccessoryView: View>: View {
     @EnvironmentObject var store: MyAppStore
     let tool: Tool
     let viewModel = ToolsCardViewModel()
-    let accessoryView: AccessoryView?
+    var content: () -> AccessoryView
+    
+    /// - Parameter tool: Model object
+    /// - Parameter content: closure that returns an `AccessoryView` generic type
+    ///
+    /// `ToolsCardView(tool: greetingTool) {`
+    /// `     Image(named: 'greetingPic')  `
+    /// ` } `
+    init(tool: Tool, @ViewBuilder content: @escaping () -> AccessoryView) {
+        self.content = content
+        self.tool = tool
+    }
     
     var border: some View {
         RoundedRectangle(cornerRadius: 15)
@@ -243,7 +297,7 @@ struct ToolsCardNew<AccessoryView: View>: View {
                         statusView
                     }
                 }
-                accessoryView.offset(x: 50, y: 0)
+                self.content().offset(x: 300, y: 0)
             }
         }
     }

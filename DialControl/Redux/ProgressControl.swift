@@ -163,7 +163,7 @@ struct ProgressControl : View {
         }
         
         func path(in rect: CGRect) -> Path {
-            let lineWidth:CGFloat = 10
+            let lineWidth:CGFloat = 5
             let diameter = min(rect.size.width, rect.size.height)
             let radius = (diameter / 2.0) - (lineWidth / 2.0)
             let center = CGPoint(x: rect.origin.x + rect.size.width / 2.0,
