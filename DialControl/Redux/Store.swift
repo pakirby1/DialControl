@@ -79,7 +79,7 @@ enum MyAppAction {
 enum ToolsAction {
     case deleteImageCache
     case downloadAllImages
-    case setDownloadImageEvent(DownloadImageEvent)
+    case setDownloadImageEvent(Result<DownloadImageEvent, Never>)
     case cancelDownloadAllImages
     case setCancelDownloadAllImages(DownloadAllImagesError)
 }
@@ -223,7 +223,13 @@ func toolsReducer(state: inout ToolsViewState,
             */
             
         case .setDownloadImageEvent(let event):
-            state.downloadImageEvent = event
+            switch(event) {
+                case .success(let event):
+                    state.downloadImageEvent = event
+                case .failure(let error):
+                    state.message = "Failed"
+            }
+            
             return Empty().eraseToAnyPublisher()
             
         case .setCancelDownloadAllImages(let event):

@@ -55,7 +55,9 @@ class ImageService : ObservableObject, UrlBuildable {
         cancellables.removeAll()
     }
     
-    func downloadAllImages() -> AnyPublisher<DownloadImageEvent, Never> {
+    typealias DownloadImageEventResult = AnyPublisher<Result<DownloadImageEvent, Never>, Never>
+    
+    func downloadAllImages() ->  DownloadImageEventResult {
         let urls = buildImagesUrls().compactMap{ URL(string: $0) }
         let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
         var index: Int = 0
@@ -63,12 +65,12 @@ class ImageService : ObservableObject, UrlBuildable {
         
         // buildImagesUrls()
         // .publisher.flatMap(maxPublishers: .max(1)) { url ->
-        return pub.flatMap(maxPublishers: .max(1)) { url -> AnyPublisher<DownloadImageEvent, Never> in
+        return pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventResult in
             print("\(#function) \(url)")
             index += 1
             
             // download & create event
-            return self.downloadImage(at: url)
+            let x: DownloadImageEventResult = self.downloadImage(at: url)
                 .print()
                 .replaceError(with: UIImage())
                 .map{ _ in DownloadImageEvent(
@@ -77,7 +79,10 @@ class ImageService : ObservableObject, UrlBuildable {
                         url: url.absoluteString) }
                 .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
                        scheduler: RunLoop.main)
+                .convertToResult()
                 .eraseToAnyPublisher()
+            
+            return x
         }.eraseToAnyPublisher()
     }
 }
