@@ -23,6 +23,7 @@ struct MyAppState {
 struct ToolsViewState {
     var imageUrl: String = ""
     var downloadImageEvent: DownloadImageEvent?
+    var message: String = ""
 }
 
 struct FactionFilterState {
@@ -79,6 +80,19 @@ enum ToolsAction {
     case deleteImageCache
     case downloadAllImages
     case setDownloadImageEvent(DownloadImageEvent)
+    case cancelDownloadAllImages
+    case setCancelDownloadAllImages(DownloadAllImagesError)
+}
+
+enum DownloadAllImagesError: CustomStringConvertible {
+    case cancelled
+    
+    var description: String {
+        switch(self) {
+            case .cancelled:
+                return "Cancelled"
+        }
+    }
 }
 
 enum MyXWSImportAction {
@@ -185,14 +199,35 @@ func toolsReducer(state: inout ToolsViewState,
             return Empty().eraseToAnyPublisher()
         
         case .downloadAllImages:
+            state.message = ""
             return environment
                 .imageService
                 .downloadAllImages()
                 .map{ MyAppAction.tools(action:ToolsAction.setDownloadImageEvent($0)) }
                 .eraseToAnyPublisher()
+        
+        case .cancelDownloadAllImages:
+            return Empty().eraseToAnyPublisher()
+            /*
+            return environment
+                .imageService
+                .cancel()
+                .map { result -> DownloadAllImagesError in
+                    switch(result) {
+                        default:
+                        return DownloadAllImagesError.cancelled
+                    }
+                }
+                .map{ MyAppAction.tools(action:ToolsAction.setCancelDownloadAllImages($0)) }
+                .eraseToAnyPublisher()
+            */
             
         case .setDownloadImageEvent(let event):
             state.downloadImageEvent = event
+            return Empty().eraseToAnyPublisher()
+            
+        case .setCancelDownloadAllImages(let event):
+            state.message = event.description
             return Empty().eraseToAnyPublisher()
     }
 }

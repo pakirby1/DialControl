@@ -10,6 +10,14 @@ import Foundation
 import SwiftUI
 import Combine
 
+extension Publisher {
+    func convertToResult() -> AnyPublisher<Result<Output, Failure>, Never> {
+        self.map(Result.success)
+            .catch { Just(.failure($0)) }
+            .eraseToAnyPublisher()
+    }
+}
+
 extension View {
     func eraseToAnyView() -> AnyView {
         AnyView(self)

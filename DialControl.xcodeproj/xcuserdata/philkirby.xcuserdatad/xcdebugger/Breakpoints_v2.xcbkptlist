@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "50080300-1446-43D1-BF48-D8E2E57673EF"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DialControl/Redux/Redux_SquadView_Old.swift"

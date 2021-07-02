@@ -46,7 +46,7 @@ struct Redux_ToolsView: View {
     }
     
     func cancel() {
-//        self.store.send(.tools(action: .cancelDownloadAllImages))
+        self.store.send(.tools(action: .cancelDownloadAllImages))
     }
     
     func buildTools() {
@@ -91,7 +91,7 @@ struct Redux_ToolsView: View {
             ProgressControl(size: 60,
                             ratio: store.state.tools.downloadImageEvent?.completionRatio ?? 0,
                             onStart: self.downloadAllImages,
-                            onStop: self.downloadAllImages)
+                            onStop: self.cancel)
 //                .border(Color.white, width: 1)
                 .environmentObject(store)
         }
@@ -280,7 +280,15 @@ struct ToolsCardNew<AccessoryView: View>: View {
     }
     
     var statusView: some View {
-        Text(self.store.state.tools.downloadImageEvent?.file ?? "")
+        var message: String = ""
+        
+        if (self.store.state.tools.message.count > 0) {
+            message = self.store.state.tools.message
+        } else {
+            message = self.store.state.tools.downloadImageEvent?.file ?? ""
+        }
+        
+        return Text(message)
             .font(.headline)
             .foregroundColor(self.tool.titleColor)
     }
