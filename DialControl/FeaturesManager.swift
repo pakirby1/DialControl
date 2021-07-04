@@ -36,12 +36,14 @@ class FeaturesManager {
     func configureFeatures() {
         add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
         add(DefaultFeature(id: FeatureId.importXWS_HandleErrors, enabled: true))
+        add(DefaultFeature(id: FeatureId.DownloadAllImages, enabled: true))
     }
 }
 
 enum FeatureId : String {
     case MyRedux
     case importXWS_HandleErrors
+    case DownloadAllImages
 }
 
 protocol Feature {

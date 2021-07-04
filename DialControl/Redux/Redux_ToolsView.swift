@@ -85,15 +85,45 @@ struct Redux_ToolsView: View {
         let tool = Tool(title: "Download All Images",
                         action: downloadAllImages,
                         displayStatus: true)
-        
-        return ToolsCardNew(tool: tool) {
-//            Text("Test")
+        func buildProgressControl_Old() -> some View {
             ProgressControl(size: 60,
                             ratio: store.state.tools.downloadImageEvent?.completionRatio ?? 0,
                             onStart: self.downloadAllImages,
                             onStop: self.cancel)
 //                .border(Color.white, width: 1)
                 .environmentObject(store)
+        }
+        
+        func buildProgressControl_New() -> some View {
+            let dies = store.state.tools.downloadImageEventState
+            
+            switch(dies) {
+                case .inProgress(let event) :
+                    return ProgressControl(size: 60,
+                                           ratio: event.completionRatio,
+                                           onStart: self.downloadAllImages,
+                                           onStop: self.cancel).environmentObject(store)
+                case .completed:
+                    return ProgressControl(size: 60,
+                                           ratio: 1,
+                                           onStart: self.downloadAllImages,
+                                           onStop: self.cancel).environmentObject(store)
+                    
+                default:
+                    return ProgressControl(size: 60,
+                                           ratio: 0,
+                                           onStart: self.downloadAllImages,
+                                           onStop: self.cancel).environmentObject(store)
+            }
+        }
+        
+        return ToolsCardNew(tool: tool) {
+            if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
+            {
+                buildProgressControl_New()
+            } else {
+                buildProgressControl_Old()
+            }
         }
     }
     
@@ -279,13 +309,37 @@ struct ToolsCardNew<AccessoryView: View>: View {
         }
     }
     
-    var statusView: some View {
+    var statusView_Old: some View {
         var message: String = ""
         
         if (self.store.state.tools.message.count > 0) {
             message = self.store.state.tools.message
         } else {
             message = self.store.state.tools.downloadImageEvent?.file ?? ""
+        }
+        
+        return Text(message)
+            .font(.headline)
+            .foregroundColor(self.tool.titleColor)
+    }
+    
+    var statusView_New: some View {
+        var message: String = ""
+        
+        let dies = store.state.tools.downloadImageEventState
+        
+        switch(dies) {
+            case .inProgress(let event) :
+                message = event.description
+                
+            case .completed:
+                message = "Completed"
+                
+            case .failed(let errorMessage):
+                message = errorMessage
+                
+            default:
+                message = "Idle"
         }
         
         return Text(message)
@@ -302,7 +356,12 @@ struct ToolsCardNew<AccessoryView: View>: View {
                     titleView
                     
                     if (tool.displayStatus) {
-                        statusView
+                        if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
+                        {
+                            statusView_New
+                        } else {
+                            statusView_Old
+                        }
                     }
                 }
                 self.content().offset(x: 300, y: 0)

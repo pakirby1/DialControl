@@ -24,6 +24,7 @@ struct ToolsViewState {
     var imageUrl: String = ""
     var downloadImageEvent: DownloadImageEvent?
     var message: String = ""
+    var downloadImageEventState: DownloadImageEventState = .idle
 }
 
 struct FactionFilterState {
@@ -79,18 +80,21 @@ enum MyAppAction {
 enum ToolsAction {
     case deleteImageCache
     case downloadAllImages
-    case setDownloadImageEvent(Result<DownloadImageEvent, Never>)
+    case setDownloadImageEvent(Result<DownloadImageEvent, URLError>)
     case cancelDownloadAllImages
     case setCancelDownloadAllImages(DownloadAllImagesError)
 }
 
-enum DownloadAllImagesError: CustomStringConvertible {
+enum DownloadAllImagesError: Error, CustomStringConvertible {
     case cancelled
+    case serverError(Error)
     
     var description: String {
         switch(self) {
             case .cancelled:
                 return "Cancelled"
+            case .serverError(let error):
+                return error.localizedDescription
         }
     }
 }
@@ -194,6 +198,38 @@ func toolsReducer(state: inout ToolsViewState,
                  action: ToolsAction,
                  environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
+    func processDownloadEvent(event: Result<DownloadImageEvent, URLError>, useNewFunction: Bool = false)
+    {
+        func old() {
+            switch(event) {
+                case .success(let event):
+                    state.downloadImageEvent = event
+                case .failure(let error):
+                    state.message = error.localizedDescription
+            }
+        }
+        
+        func new() {
+            switch(event) {
+                case .success(let event):
+                    if event.isCompleted {
+                        state.downloadImageEventState = .completed
+                    } else {
+                        state.downloadImageEventState = .inProgress(event)
+                    }
+                case .failure(let error):
+                    state.downloadImageEventState = .failed( error.localizedDescription)
+            }
+        }
+        
+        if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
+        {
+            new()
+        } else {
+            old()
+        }
+    }
+    
     switch(action) {
         case .deleteImageCache:
             return Empty().eraseToAnyPublisher()
@@ -223,12 +259,7 @@ func toolsReducer(state: inout ToolsViewState,
             */
             
         case .setDownloadImageEvent(let event):
-            switch(event) {
-                case .success(let event):
-                    state.downloadImageEvent = event
-                case .failure(let error):
-                    state.message = "Failed"
-            }
+            processDownloadEvent(event: event)
             
             return Empty().eraseToAnyPublisher()
             

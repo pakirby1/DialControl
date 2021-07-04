@@ -55,7 +55,7 @@ class ImageService : ObservableObject, UrlBuildable {
         cancellables.removeAll()
     }
     
-    typealias DownloadImageEventResult = AnyPublisher<Result<DownloadImageEvent, Never>, Never>
+    typealias DownloadImageEventResult = AnyPublisher<Result<DownloadImageEvent, URLError>, Never>
     
     func downloadAllImages() ->  DownloadImageEventResult {
         let urls = buildImagesUrls().compactMap{ URL(string: $0) }
@@ -72,7 +72,7 @@ class ImageService : ObservableObject, UrlBuildable {
             // download & create event
             let x: DownloadImageEventResult = self.downloadImage(at: url)
                 .print()
-                .replaceError(with: UIImage())
+//                .replaceError(with: UIImage())
                 .map{ _ in DownloadImageEvent(
                         index: index,
                         total: urls.count,
@@ -115,10 +115,21 @@ extension UrlBuildable {
 }
 
 
+enum DownloadImageEventState {
+    case idle
+    case inProgress(DownloadImageEvent)
+    case completed
+    case failed(String)
+}
+
 struct DownloadImageEvent: CustomStringConvertible {
     let index: Int
     let total: Int
     let url: String
+    
+    var isCompleted: Bool {
+        return (index + 1 == total)
+    }
     
     var completionRatio: CGFloat {
         return (CGFloat(index) / CGFloat(total))
