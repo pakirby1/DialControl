@@ -128,7 +128,7 @@ struct DownloadImageEvent: CustomStringConvertible {
     let url: String
     
     var isCompleted: Bool {
-        return (index + 1 == total)
+        return (index == total)
     }
     
     var completionRatio: CGFloat {

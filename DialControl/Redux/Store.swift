@@ -161,7 +161,7 @@ func myAppReducer(
 {
     switch action {
         case .tools(let action):
-            let reducer = toolReducerFactory()
+            let reducer = toolReducerFactory(isMock: true)
             
             return reducer(&state.tools,
                                action,
@@ -249,11 +249,29 @@ func mock_toolsReducer(state: inout ToolsViewState,
             
         case .downloadAllImages:
             state.message = ""
-            let event = DownloadImageEvent(index: 0, total: 3, url: "Hello")
-            let res = Result<DownloadImageEvent, URLError>.success(event)
             
-            subject.send(res)
-            return subject
+            func allGood(total: Int = 10) -> [Result<DownloadImageEvent, URLError>] {
+                var arr = [Result<DownloadImageEvent, URLError>]()
+                
+                for i in 1...total {
+                    arr.append(Result.success(DownloadImageEvent(index: i, total: total, url: "Hello \(i)")))
+                }
+                
+                return arr
+            }
+            
+            return allGood()
+                .publisher
+                .print("mock_toolsReducer")
+                .flatMap(maxPublishers: .max(1)){
+                    Just($0)
+                        .print("mock_toolsReducer.flatMap \(Date())")
+                        .delay(
+                            for: RunLoop.SchedulerTimeType.Stride(TimeInterval(3)),
+                               
+                            scheduler: RunLoop.main)
+                }
+                .print("mock_toolsReducer \(Date())")
                 .map{ MyAppAction.tools(action:ToolsAction.setDownloadImageEvent($0)) }
                 .eraseToAnyPublisher()
             
