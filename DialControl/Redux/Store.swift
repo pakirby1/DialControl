@@ -667,10 +667,29 @@ protocol IStore {
     associatedtype Environment
     
     var state: State { get set }
-    var environment: Environment { get }
-    var reducer: Reducer<State, Action, Environment> { get }
+//    var environment: Environment { get }
+//    var reducer: Reducer<State, Action, Environment> { get }
     
     func send(_ action: Action)
+}
+
+class MockStore<State, Action, Environment> : ObservableObject, IStore {
+    @Published var state: State
+    private let environment: Environment
+    private let reducer: Reducer<State, Action, Environment>
+    
+    init(state: State,
+         reducer: @escaping Reducer<State, Action, Environment>,
+         environment: Environment)
+    {
+        self.state = state
+        self.reducer = reducer
+        self.environment = environment
+    }
+    
+    func send(_ action: Action) {
+        print("send")
+    }
 }
 
 class Store<State, Action, Environment> : ObservableObject {
