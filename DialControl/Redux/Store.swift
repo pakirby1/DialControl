@@ -161,9 +161,11 @@ func myAppReducer(
 {
     switch action {
         case .tools(let action):
-            return toolsReducer(state: &state.tools,
-                               action: action,
-                               environment: environment)
+            let reducer = toolReducerFactory()
+            
+            return reducer(&state.tools,
+                               action,
+                               environment)
             
         case .faction(let action):
             return factionReducer(state: &state,
@@ -192,6 +194,94 @@ func myAppReducer(
     }
     
 //    return Empty().eraseToAnyPublisher()
+}
+
+func toolReducerFactory(isMock: Bool = false) -> (inout ToolsViewState, ToolsAction, MyEnvironment) -> AnyPublisher<MyAppAction, Never>
+{
+    if (!isMock) {
+        return toolsReducer
+    } else {
+        return mock_toolsReducer
+    }
+}
+
+func mock_toolsReducer(state: inout ToolsViewState,
+                       action: ToolsAction,
+                       environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
+{
+    var subject = PassthroughSubject<Result<DownloadImageEvent, URLError>, Never>()
+    
+    func processDownloadEvent(event: Result<DownloadImageEvent, URLError>, useNewFunction: Bool = false)
+    {
+        func old() {
+            switch(event) {
+                case .success(let event):
+                    state.downloadImageEvent = event
+                case .failure(let error):
+                    state.message = error.localizedDescription
+            }
+        }
+        
+        func new() {
+            switch(event) {
+                case .success(let event):
+                    if event.isCompleted {
+                        state.downloadImageEventState = .completed
+                    } else {
+                        state.downloadImageEventState = .inProgress(event)
+                    }
+                case .failure(let error):
+                    state.downloadImageEventState = .failed( error.localizedDescription)
+            }
+        }
+        
+        if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
+        {
+            new()
+        } else {
+            old()
+        }
+    }
+    
+    switch(action) {
+        case .deleteImageCache:
+            return Empty().eraseToAnyPublisher()
+            
+        case .downloadAllImages:
+            state.message = ""
+            let event = DownloadImageEvent(index: 0, total: 3, url: "Hello")
+            let res = Result<DownloadImageEvent, URLError>.success(event)
+            
+            subject.send(res)
+            return subject
+                .map{ MyAppAction.tools(action:ToolsAction.setDownloadImageEvent($0)) }
+                .eraseToAnyPublisher()
+            
+        case .cancelDownloadAllImages:
+            return Empty().eraseToAnyPublisher()
+        /*
+         return environment
+         .imageService
+         .cancel()
+         .map { result -> DownloadAllImagesError in
+         switch(result) {
+         default:
+         return DownloadAllImagesError.cancelled
+         }
+         }
+         .map{ MyAppAction.tools(action:ToolsAction.setCancelDownloadAllImages($0)) }
+         .eraseToAnyPublisher()
+         */
+        
+        case .setDownloadImageEvent(let event):
+            processDownloadEvent(event: event)
+            
+            return Empty().eraseToAnyPublisher()
+            
+        case .setCancelDownloadAllImages(let event):
+            state.message = event.description
+            return Empty().eraseToAnyPublisher()
+    }
 }
 
 func toolsReducer(state: inout ToolsViewState,
@@ -667,9 +757,7 @@ protocol IStore {
     associatedtype Environment
     
     var state: State { get set }
-//    var environment: Environment { get }
-//    var reducer: Reducer<State, Action, Environment> { get }
-    
+
     func send(_ action: Action)
 }
 
@@ -677,6 +765,7 @@ class MockStore<State, Action, Environment> : ObservableObject, IStore {
     @Published var state: State
     private let environment: Environment
     private let reducer: Reducer<State, Action, Environment>
+    private var cancellables = Set<AnyCancellable>()
     
     init(state: State,
          reducer: @escaping Reducer<State, Action, Environment>,
@@ -688,7 +777,13 @@ class MockStore<State, Action, Environment> : ObservableObject, IStore {
     }
     
     func send(_ action: Action) {
-        print("send")
+        let nextAction = reducer(&state, action, environment)
+
+        nextAction
+            .print("Store.send")
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: send)
+            .store(in: &cancellables)
     }
 }
 
