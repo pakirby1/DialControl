@@ -661,6 +661,18 @@ typealias Reducer<State, Action, Environment> =
 (inout State, Action, Environment) -> AnyPublisher<Action, Never>
 typealias SquadDataFilter = (SquadData) -> Bool
 
+protocol IStore {
+    associatedtype State
+    associatedtype Action
+    associatedtype Environment
+    
+    var state: State { get set }
+    var environment: Environment { get }
+    var reducer: Reducer<State, Action, Environment> { get }
+    
+    func send(_ action: Action)
+}
+
 class Store<State, Action, Environment> : ObservableObject {
 //    @Published var state: State
     @Published var state: State {
