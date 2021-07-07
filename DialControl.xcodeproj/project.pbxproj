@@ -31,6 +31,7 @@
 		AE1FBE64241668A2005C54F5 /* ManeuverDialSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */; };
 		AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1FBE65241668CF005C54F5 /* AngleRange.swift */; };
 		AE28F90E26961E3700AE871D /* ImageServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28F90D26961E3700AE871D /* ImageServiceTests.swift */; };
+		AE28F910269627BB00AE871D /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28F90F269627BB00AE871D /* StoreTests.swift */; };
 		AE2ADE8126809A9100142419 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2ADE8026809A9100142419 /* ImageService.swift */; };
 		AE2ADE832683142400142419 /* ProgressControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2ADE822683142400142419 /* ProgressControl.swift */; };
 		AE2C0EC9243CA52A00042318 /* pilots in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0EC8243CA52A00042318 /* pilots */; };
@@ -140,6 +141,7 @@
 		AE1FBE63241668A2005C54F5 /* ManeuverDialSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManeuverDialSelection.swift; sourceTree = "<group>"; };
 		AE1FBE65241668CF005C54F5 /* AngleRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AngleRange.swift; sourceTree = "<group>"; };
 		AE28F90D26961E3700AE871D /* ImageServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServiceTests.swift; sourceTree = "<group>"; };
+		AE28F90F269627BB00AE871D /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
 		AE2ADE8026809A9100142419 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		AE2ADE822683142400142419 /* ProgressControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressControl.swift; sourceTree = "<group>"; };
 		AE2C0EC8243CA52A00042318 /* pilots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pilots; sourceTree = "<group>"; };
@@ -394,6 +396,7 @@
 				AE4D58DE23F8087E00C66136 /* Info.plist */,
 				AE300072263173D100C326B3 /* ReduxTests.swift */,
 				AE28F90D26961E3700AE871D /* ImageServiceTests.swift */,
+				AE28F90F269627BB00AE871D /* StoreTests.swift */,
 			);
 			path = DialControlTests;
 			sourceTree = "<group>";
@@ -684,6 +687,7 @@
 				AE300073263173D100C326B3 /* ReduxTests.swift in Sources */,
 				AE4D58DD23F8087E00C66136 /* DialControlTests.swift in Sources */,
 				AE28F90E26961E3700AE871D /* ImageServiceTests.swift in Sources */,
+				AE28F910269627BB00AE871D /* StoreTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
