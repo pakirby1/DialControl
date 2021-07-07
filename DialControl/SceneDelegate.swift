@@ -20,6 +20,24 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
+        // Helper funcs
+        func buildState() -> MyAppState {
+            MyAppState.init(faction: FactionSquadListState(),
+                                   squad: MySquadViewState(),
+                                   ship: MyShipViewState(),
+                                   xwsImport: MyXWSImportViewState(),
+                                   factionFilter: FactionFilterState(),
+                                   tools: ToolsViewState())
+        }
+        
+        func buildEnvironment() -> MyEnvironment {
+            MyEnvironment(squadService: diContainer.squadService,
+                pilotStateService: diContainer.pilotStateService,
+                jsonService: diContainer.jsonService,
+                imageService: diContainer.imageService)
+        }
+
+        
         // Get the managed object context from the shared persistent container.
         let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
@@ -36,17 +54,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
          Cannot convert value of type 'Reducer<MyAppState, MyAppAction, World>' (aka '(inout MyAppState, MyAppAction, World) -> AnyPublisher<MyAppAction, Never>') to expected argument type '(inout _, _, _) -> AnyPublisher<_, Never>'
          */
         let store: MyAppStore = MyAppStore(
-            state: MyAppState.init(faction: FactionSquadListState(),
-                                   squad: MySquadViewState(),
-                                   ship: MyShipViewState(),
-                                   xwsImport: MyXWSImportViewState(),
-                                   factionFilter: FactionFilterState(),
-                                   tools: ToolsViewState()),
+            state: buildState(),
             reducer: myAppReducer,
-            environment: MyEnvironment(squadService: diContainer.squadService,
-                               pilotStateService: diContainer.pilotStateService,
-                               jsonService: diContainer.jsonService,
-                               imageService: diContainer.imageService)
+            environment: buildEnvironment()
         )
         
         let viewFactory = ViewFactory(moc: moc,

@@ -260,10 +260,19 @@ func mock_toolsReducer(state: inout ToolsViewState,
                 return arr
             }
             
-            return allGood()
+            func fails() -> [Result<DownloadImageEvent, URLError>] {
+                var x = allGood(total: 3)
+                let failed : Result<DownloadImageEvent, URLError> = .failure(URLError.init(URLError.Code(rawValue: 404) ))
+                
+                x.insert(failed, at: 1)
+                return x
+            }
+            
+            return fails()
                 .publisher
                 .print("mock_toolsReducer")
                 .flatMap(maxPublishers: .max(1)){
+                    // check failure
                     Just($0)
                         .print("mock_toolsReducer.flatMap \(Date())")
                         .delay(

@@ -19,6 +19,22 @@ class DialControlTests: XCTestCase {
     var store: MyAppStore?
     
     override func setUp() {
+        func buildState() -> MyAppState {
+            MyAppState.init(faction: FactionSquadListState(),
+                                   squad: MySquadViewState(),
+                                   ship: MyShipViewState(),
+                                   xwsImport: MyXWSImportViewState(),
+                                   factionFilter: FactionFilterState(),
+                                   tools: ToolsViewState())
+        }
+        
+        func buildEnvironment() -> MyEnvironment {
+            MyEnvironment(squadService: diContainer.squadService,
+                pilotStateService: diContainer.pilotStateService,
+                jsonService: diContainer.jsonService,
+                imageService: diContainer.imageService)
+        }
+        
         // Put setup code here. This method is called before the invocation of each test method in the class.
         let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
@@ -29,13 +45,9 @@ class DialControlTests: XCTestCase {
         diContainer.registerServices(moc: moc)
         
         self.store = MyAppStore(
-            state: MyAppState.init(faction: FactionSquadListState(),
-                                   squad: MySquadViewState(),
-                                   ship: MyShipViewState()),
+            state: buildState(),
             reducer: myAppReducer,
-            environment: MyEnvironment(squadService: diContainer.squadService,
-                               pilotStateService: diContainer.pilotStateService,
-                               jsonService: diContainer.jsonService)
+            environment: buildEnvironment()
         )
     }
 

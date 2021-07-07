@@ -153,16 +153,19 @@ struct Tool : Hashable {
     let action: () -> Void
     let titleColor: Color
     let displayStatus: Bool
+    let statusMessage: String
     
     init(title: String,
          titleColor: Color = WestworldUITheme().TEXT_FOREGROUND,
          action: @escaping () -> Void,
-         displayStatus: Bool = false)
+         displayStatus: Bool = false,
+         statusMessage: String = "")
     {
         self.title = title
         self.titleColor = titleColor
         self.action = action
         self.displayStatus = displayStatus
+        self.statusMessage = statusMessage
     }
     
     func hash(into hasher: inout Hasher) {
