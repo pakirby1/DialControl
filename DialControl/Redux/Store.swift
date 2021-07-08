@@ -355,7 +355,8 @@ func toolsReducer(state: inout ToolsViewState,
             state.message = ""
             return environment
                 .imageService
-                .downloadAllImages()
+//                .downloadAllImages()
+                .pak_downloadAllImage()
                 .map{ MyAppAction.tools(action:ToolsAction.setDownloadImageEvent($0)) }
                 .eraseToAnyPublisher()
         

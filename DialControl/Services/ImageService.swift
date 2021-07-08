@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import SwiftUI
+import TimelaneCombine
 
 class ImageService : ObservableObject, UrlBuildable {
     @Published var currentImage: DownloadImageEvent?
@@ -35,12 +36,49 @@ class ImageService : ObservableObject, UrlBuildable {
     typealias DownloadImageEventResult = Result<DownloadImageEvent, URLError>
     typealias DownloadImageEventResultPublisher = AnyPublisher<DownloadImageEventResult, Never>
     
+    func pak_downloadAllImage() -> DownloadImageEventResultPublisher {
+        let urls = buildImagesUrls().compactMap{ URL(string: $0) }
+        let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
+        var index: Int = 0
+        let delay: Int = 2
+        
+        let downloadResults = pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventResultPublisher in
+            print("\(#function) \(url)")
+            index += 1
+            
+            // download & create event
+            return self.downloadImage(at: url)
+                    .print()
+                    .map{ _ in DownloadImageEvent(
+                            index: index,
+                            total: urls.count,
+                            url: url.absoluteString,
+                            isCompleted: false) }
+                    .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
+                           scheduler: RunLoop.main)
+                    .convertToResult()
+                    .eraseToAnyPublisher()
+        }
+        .append(Just(DownloadImageEvent.buildCompleted()))
+        .eraseToAnyPublisher()
+        
+        return self.cancelPublisher
+                        .print("Print example")
+                        .filter{ $0 == false}
+                        .flatMap{ _ in
+                            downloadResults
+                        }
+            .lane("ReduxViewModel.init() self.store.$state")
+            .eraseToAnyPublisher()
+    }
+    
     func downloadAllImages() ->  DownloadImageEventResultPublisher {
         let urls = buildImagesUrls().compactMap{ URL(string: $0) }
         let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
         var index: Int = 0
         let delay: Int = 2
         
+                
         let first = pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventResultPublisher in
             print("\(#function) \(url)")
             index += 1
