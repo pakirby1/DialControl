@@ -26,7 +26,6 @@ struct Redux_ToolsView: View {
     
     func toolsList() -> some View {
         ForEach(tools, id:\.self) { tool in
-//            ToolsCardNew(tool: tool, content: {}).environmentObject(store)
             ToolsCardNew(tool: tool) {
                 ProgressControl(size: 70,
                                 onStart: self.downloadAllImages,
@@ -36,9 +35,7 @@ struct Redux_ToolsView: View {
     }
     
     func displayDeleteConfirmation() {
-//        if self.store.state.faction.squadDataList.count > 0 {
-            self.displayDeleteAllConfirmation = true
-//        }
+        self.displayDeleteAllConfirmation = true
     }
 
     func downloadAllImages() {
@@ -99,38 +96,6 @@ struct Redux_ToolsView: View {
                             onStop: self.cancel)
 //                .border(Color.white, width: 1)
                 .environmentObject(store)
-            
-            /*
-            let dies = store.state.tools.downloadImageEventState
-            switch(dies) {
-                case .inProgress(let event) :
-                    return ProgressControl(state: $state,
-                                           size: 60,
-                                           ratio: event.completionRatio,
-                                           onStart: self.downloadAllImages,
-                                           onStop: self.cancel).environmentObject(store)
-                case .completed:
-                    return ProgressControl(state: $state,
-                                           size: 60,
-                                           ratio: 1,
-                                           onStart: self.downloadAllImages,
-                                           onStop: self.cancel).environmentObject(store)
-                    
-                case .idle:
-                    return ProgressControl(state: $state,
-                                           size: 60,
-                                           ratio: 0,
-                                           onStart: self.downloadAllImages,
-                                           onStop: self.cancel).environmentObject(store)
-                
-                case .failed(_):
-                    return ProgressControl(state: $state,
-                                           size: 60,
-                                           ratio: 0,
-                                           onStart: self.downloadAllImages,
-                                           onStop: self.cancel).environmentObject(store)
-            }
-            */
         }
         
         return ToolsCardNew(tool: tool) {
@@ -146,7 +111,6 @@ struct Redux_ToolsView: View {
     var body: some View {
         VStack {
             header
-//            toolsList()
             ToolsCard(tool: Tool(title: "Delete Image Cache", action: {}))
             downloadAllImagesCard
             ToolsCard(tool: Tool(title: "Delete All Squads",
