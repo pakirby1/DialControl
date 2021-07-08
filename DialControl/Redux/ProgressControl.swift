@@ -16,12 +16,13 @@ enum ProgressControlState {
     case active
     case paused
     case cancelled
+    case completed
     
     mutating func handleEvent(event: ProgressControlEvent,
                               onStart: ()->(),
                               onStop: ()->())
     {
-        print("current: \(self) event: \(event)")
+        print("controlImage current: \(self) event: \(event)")
         
         switch(self, event) {
             case (.idle, .tap) :
@@ -40,6 +41,10 @@ enum ProgressControlState {
                 self = .idle
                 onStop()
                 
+            case (.completed, .tap) :
+                self = .active
+                onStart()
+                
             case (.active, .doubleTap) :
                 self = .cancelled
                 onStop()
@@ -49,6 +54,8 @@ enum ProgressControlState {
             case (.paused, .doubleTap):
                 return
             case (.idle, .doubleTap):
+                return
+            case (.completed, .doubleTap):
                 return
         }
         
@@ -62,13 +69,15 @@ enum ProgressControlEvent {
 }
 
 struct ProgressControl : View {
-    @State var isPlaying: Bool = false
-    @State private var state: ProgressControlState = .active
+//    @State var isPlaying: Bool = false
+    @State var state: ProgressControlState = .idle
     let size: CGFloat
     @State private var test: String = ""
-    let ratio: CGFloat
+    @State private var ratio: CGFloat = 0
     let onStart: () -> Void
     let onStop: () -> Void
+    let id = UUID()
+    @EnvironmentObject var store: MyAppStore
     
     var body: some View {
         ZStack {
@@ -83,7 +92,23 @@ struct ProgressControl : View {
             state.handleEvent(event: .doubleTap, onStart: self.start, onStop: self.stop)
         }.onTapGesture(count: 1) {
             state.handleEvent(event: .tap, onStart: self.start, onStop: self.stop)
-        }
+        }.onReceive(store.$state, perform: { state in
+            switch(state.tools.downloadImageEventState) {
+                case .idle:
+                    self.state = .idle
+                case .failed(_):
+                    self.state = .cancelled
+                case .inProgress(let event):
+                    let ratio = event.completionRatio
+                    
+                    print("file: \(event.description) ratio: \(ratio)")
+                    self.ratio = ratio
+                    self.state = .active
+                case .completed:
+                    self.ratio = 0
+                    self.state = .idle
+            }
+        })
     }
     
     /*
@@ -95,21 +120,6 @@ struct ProgressControl : View {
         Circle()
             .foregroundColor(Color("DarkGray"))
             .frame(width: size, height: size, alignment: .center)
-    }
-    
-    var userControl: some View {
-        var imageName: String
-        
-        switch(self.isPlaying) {
-            case false:
-                imageName = "play.fill"
-            case true:
-                imageName = "pause.fill"
-        }
-        
-        return Image(systemName: imageName)
-            .font(.largeTitle)
-            .foregroundColor(Color.blue)
     }
     
     var controlImage: some View {
@@ -130,12 +140,16 @@ struct ProgressControl : View {
             }
         }
         
+        print("\(#function) id: \(self.id) \(self.state)")
+        
         switch(self.state) {
             case .idle:
                 return buildImage(name: "play.fill")
             case .active:
                 return buildImage(name: "pause.fill")
             case .paused:
+                return buildImage(name: "play.fill")
+            case .completed:
                 return buildImage(name: "play.fill")
             case .cancelled:
                 return buildImage(name: "CancelIcon", isCustom: true)

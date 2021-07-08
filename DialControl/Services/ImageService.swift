@@ -14,6 +14,10 @@ class ImageService : ObservableObject, UrlBuildable {
     @Published var currentImage: DownloadImageEvent?
     private var cancellables = Set<AnyCancellable>()
     
+    private var isCancelled: Bool = false
+    
+    private var cancelPublisher = CurrentValueSubject<Bool, Never>(false)
+    
     func downloadImage(at: URL) -> AnyPublisher<UIImage, URLError> {
         return URLSession.shared.dataTaskPublisher(for: at)
                 .compactMap { UIImage(data: $0.data) }
@@ -21,38 +25,11 @@ class ImageService : ObservableObject, UrlBuildable {
                 .eraseToAnyPublisher()
     }
     
-    func downloadAllImages() {
-        let urls = buildImagesUrls().compactMap{ URL(string: $0) }
-        let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
-        var index: Int = 0
-        let delay: Int = 2
-        
-        // buildImagesUrls()
-        // .publisher.flatMap(maxPublishers: .max(1)) { url ->
-        pub.flatMap(maxPublishers: .max(1)) { url -> AnyPublisher<DownloadImageEvent, Never> in
-            print("\(#function) \(url)")
-            index += 1
-            
-            // download & create event
-            return self.downloadImage(at: url)
-                .print()
-                .replaceError(with: UIImage())
-                .map{ _ in DownloadImageEvent(
-                        index: index,
-                        total: urls.count,
-                        url: url.absoluteString) }
-                .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
-                       scheduler: RunLoop.main)
-                .eraseToAnyPublisher()
-        }
-        .sink(receiveValue: {
-            self.currentImage = $0
-        }).store(in: &cancellables)
-    }
-    
     func cancel() {
         currentImage = nil
         cancellables.removeAll()
+        self.cancelPublisher.send(true)
+        print("\(#function) isCancelled: \(isCancelled)")
     }
     
     typealias DownloadImageEventResult = Result<DownloadImageEvent, URLError>
@@ -64,23 +41,31 @@ class ImageService : ObservableObject, UrlBuildable {
         var index: Int = 0
         let delay: Int = 2
         
-        return pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventResultPublisher in
+        let first = pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventResultPublisher in
             print("\(#function) \(url)")
             index += 1
             
             // download & create event
             return self.downloadImage(at: url)
-                .print()
-                .map{ _ in DownloadImageEvent(
-                        index: index,
-                        total: urls.count,
-                        url: url.absoluteString) }
-                .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
-                       scheduler: RunLoop.main)
-                .convertToResult()
-                .eraseToAnyPublisher()
-            
-        }.eraseToAnyPublisher()
+                    .print()
+                    .map{ _ in DownloadImageEvent(
+                            index: index,
+                            total: urls.count,
+                            url: url.absoluteString,
+                            isCompleted: false) }
+                    .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
+                           scheduler: RunLoop.main)
+                    .convertToResult()
+                    .eraseToAnyPublisher()
+        }
+        .eraseToAnyPublisher()
+        
+        let second = Just(DownloadImageEvent.buildCompleted())
+        
+        return second
+            .print("prepend")
+            .prepend(first)
+            .eraseToAnyPublisher()
     }
 }
 
@@ -123,10 +108,7 @@ struct DownloadImageEvent: CustomStringConvertible {
     let index: Int
     let total: Int
     let url: String
-    
-    var isCompleted: Bool {
-        return (index == total)
-    }
+    let isCompleted: Bool
     
     var completionRatio: CGFloat {
         return (CGFloat(index) / CGFloat(total))
@@ -138,5 +120,9 @@ struct DownloadImageEvent: CustomStringConvertible {
     
     var file: String {
         return url.components(separatedBy: "/").last ?? ""
+    }
+    
+    static func buildCompleted() -> ImageService.DownloadImageEventResult {
+        return .success(DownloadImageEvent(index: 0, total: 0, url: "", isCompleted: true))
     }
 }

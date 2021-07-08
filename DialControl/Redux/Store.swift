@@ -161,7 +161,7 @@ func myAppReducer(
 {
     switch action {
         case .tools(let action):
-            let reducer = toolReducerFactory(isMock: true)
+            let reducer = toolReducerFactory(isMock: false)
             
             return reducer(&state.tools,
                                action,
@@ -254,7 +254,7 @@ func mock_toolsReducer(state: inout ToolsViewState,
                 var arr = [Result<DownloadImageEvent, URLError>]()
                 
                 for i in 1...total {
-                    arr.append(Result.success(DownloadImageEvent(index: i, total: total, url: "Hello \(i)")))
+                    arr.append(Result.success(DownloadImageEvent(index: i, total: total, url: "Hello \(i)", isCompleted: false)))
                 }
                 
                 return arr
@@ -868,5 +868,9 @@ extension Store {
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: send)
             .store(in: &cancellables)
+    }
+    
+    func cancel() {
+        cancellables.removeAll()
     }
 }

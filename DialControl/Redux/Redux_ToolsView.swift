@@ -14,6 +14,7 @@ struct Redux_ToolsView: View {
     @State var tools: [Tool] = []
     @EnvironmentObject var store: MyAppStore
     @State var displayDeleteAllConfirmation: Bool = false
+    @State var state: ProgressControlState = .active
     
     var header: some View {
         HStack {
@@ -28,9 +29,8 @@ struct Redux_ToolsView: View {
 //            ToolsCardNew(tool: tool, content: {}).environmentObject(store)
             ToolsCardNew(tool: tool) {
                 ProgressControl(size: 70,
-                                ratio: store.state.tools.downloadImageEvent?.completionRatio ?? 0,
                                 onStart: self.downloadAllImages,
-                                onStop: self.downloadAllImages)
+                                onStop: self.cancel)
             }.environmentObject(store)
         }
     }
@@ -46,7 +46,7 @@ struct Redux_ToolsView: View {
     }
     
     func cancel() {
-        self.store.send(.tools(action: .cancelDownloadAllImages))
+        self.store.cancel()
     }
     
     func buildTools() {
@@ -87,7 +87,6 @@ struct Redux_ToolsView: View {
                         displayStatus: true)
         func buildProgressControl_Old() -> some View {
             ProgressControl(size: 60,
-                            ratio: store.state.tools.downloadImageEvent?.completionRatio ?? 0,
                             onStart: self.downloadAllImages,
                             onStop: self.cancel)
 //                .border(Color.white, width: 1)
@@ -95,26 +94,43 @@ struct Redux_ToolsView: View {
         }
         
         func buildProgressControl_New() -> some View {
-            let dies = store.state.tools.downloadImageEventState
+            ProgressControl(size: 60,
+                            onStart: self.downloadAllImages,
+                            onStop: self.cancel)
+//                .border(Color.white, width: 1)
+                .environmentObject(store)
             
+            /*
+            let dies = store.state.tools.downloadImageEventState
             switch(dies) {
                 case .inProgress(let event) :
-                    return ProgressControl(size: 60,
+                    return ProgressControl(state: $state,
+                                           size: 60,
                                            ratio: event.completionRatio,
                                            onStart: self.downloadAllImages,
                                            onStop: self.cancel).environmentObject(store)
                 case .completed:
-                    return ProgressControl(size: 60,
+                    return ProgressControl(state: $state,
+                                           size: 60,
                                            ratio: 1,
                                            onStart: self.downloadAllImages,
                                            onStop: self.cancel).environmentObject(store)
                     
-                default:
-                    return ProgressControl(size: 60,
+                case .idle:
+                    return ProgressControl(state: $state,
+                                           size: 60,
+                                           ratio: 0,
+                                           onStart: self.downloadAllImages,
+                                           onStop: self.cancel).environmentObject(store)
+                
+                case .failed(_):
+                    return ProgressControl(state: $state,
+                                           size: 60,
                                            ratio: 0,
                                            onStart: self.downloadAllImages,
                                            onStop: self.cancel).environmentObject(store)
             }
+            */
         }
         
         return ToolsCardNew(tool: tool) {
