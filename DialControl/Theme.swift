@@ -36,3 +36,14 @@ struct WestworldUITheme : Theme {
 let regularMediumSymbolConfig = UIImage.SymbolConfiguration(pointSize: 48.0,
                                                             weight: .regular,
                                                             scale: .medium)
+struct AdaptiveTheme {
+    static let red = UIColor.systemRed
+    static let blue = UIColor.systemBlue
+    static let green = UIColor.systemGreen
+    static let label = UIColor.label
+    static let lightGray = UIColor.systemGray
+    static let mediumGray = UIColor.systemGray2
+    static let darkGray = UIColor.systemGray3
+    static let veryDarkGray = UIColor.systemGray4
+}
+
