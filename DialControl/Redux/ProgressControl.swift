@@ -12,11 +12,21 @@ import Combine
 import SwiftUI
 
 enum ProgressControlState {
-    case idle
-    case active
-    case paused
-    case cancelled
-    case completed
+    /*
+     DownloadEventEnum
+     
+     case idle
+     case inProgress(DownloadEvent)
+     case finished
+     case failed(Error)
+     case cancelled
+     */
+    
+    case idle   // idle
+    case active // inProgress(DownloadEvent)
+    case paused // ???
+    case cancelled // cancelled, failed
+    case completed // finished
     
     mutating func handleEvent(event: ProgressControlEvent,
                               onStart: ()->(),
@@ -86,36 +96,33 @@ struct ProgressControl : View {
             ProgressArc(ratio: Double(ratio))
                 .rotation(Angle(degrees: -90))
                 .frame(width: size, height: size, alignment: .center)
-            //                Text("\(viewModel.ratio)")
         }
         .onTapGesture(count: 2) {
             state.handleEvent(event: .doubleTap, onStart: self.start, onStop: self.stop)
         }.onTapGesture(count: 1) {
             state.handleEvent(event: .tap, onStart: self.start, onStop: self.stop)
-        }.onReceive(store.$state, perform: { state in
-            switch(state.tools.downloadImageEventState) {
-                case .idle:
-                    self.state = .idle
-                case .failed(_):
-                    self.state = .cancelled
-                case .inProgress(let event):
-                    let ratio = event.completionRatio
-                    
-                    print("file: \(event.description) ratio: \(ratio)")
-                    self.ratio = ratio
-                    self.state = .active
-                case .completed:
-                    self.ratio = 0
-                    self.state = .idle
-            }
-        })
+        }.onReceive(store.$state, perform: handleEvent(state:))
     }
     
-    /*
-     .onReceive(viewModel.$ratio, perform: { ratio in
-     self.status = "\(ratio)"
-     })
-     */
+    func handleEvent(state: MyAppState) {
+        switch(state.tools.currentImage) {
+            case .idle:
+                self.state = .idle
+            case .cancelled:
+                self.state = .cancelled
+            case .finished:
+                self.state = .completed
+            case .inProgress(let event):
+                let ratio = event.completionRatio
+                
+                print("file: \(event.description) ratio: \(ratio)")
+                self.ratio = ratio
+                self.state = .active
+            case .failed(_):
+                self.state = .cancelled
+        }
+    }
+    
     var backgroundView: some View {
         Circle()
             .foregroundColor(Color("DarkGray"))

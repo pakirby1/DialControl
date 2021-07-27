@@ -11,99 +11,159 @@ import Combine
 import SwiftUI
 import TimelaneCombine
 
-class ImageService : ObservableObject, UrlBuildable {
-    @Published var currentImage: DownloadImageEvent?
-    private var cancellables = Set<AnyCancellable>()
+// MARK:- Events
+struct DownloadEvent: CustomStringConvertible {
+    let index: Int
+    let total: Int
+    let url: String
+
+    var completionRatio: CGFloat {
+        return (CGFloat(index) / CGFloat(total))
+    }
+
+    var description: String {
+        return "\(index) of \(total): \(file)"
+    }
+
+    var file: String {
+        return url.components(separatedBy: "/").last ?? ""
+    }
+}
+
+enum DownloadEventEnum : CustomStringConvertible {
+    case idle
+    case inProgress(DownloadEvent)
+    case finished
+    case failed(Error)
+    case cancelled
     
-    private var isCancelled: Bool = false
+    var description: String {
+        switch(self) {
+            case .inProgress(let die) :
+                return "\(die.index) of \(die.total): \(die.file)"
+            case .finished:
+                return "Download Finished"
+            case .failed(let error):
+                return "Download Failed : \(error)"
+            case .cancelled:
+                return "Download Cancelled"
+            case .idle:
+                return "Tap to start download"
+        }
+    }
     
-    private var cancelPublisher = CurrentValueSubject<Bool, Never>(false)
-    
+    func asResult() -> Result<DownloadEventEnum, Error> {
+        return .success(self)
+    }
+}
+
+enum DownloadImageError: Error {
+    case notFound(String)
+    case networkError
+}
+
+typealias DownloadImageEventEnumStream = AnyPublisher<Result<DownloadEventEnum, Error>, Never>
+
+// MARK:- protocols
+protocol ImageServiceProtocol : ObservableObject {
+    var isCancelled: Bool { get set }
+    func downloadAllImages() -> DownloadImageEventEnumStream
+    func cancel()
+}
+
+extension ImageServiceProtocol {
     func downloadImage(at: URL) -> AnyPublisher<UIImage, URLError> {
         return URLSession.shared.dataTaskPublisher(for: at)
                 .compactMap { UIImage(data: $0.data) }
                 .receive(on: RunLoop.main)
                 .eraseToAnyPublisher()
     }
-    
+}
+
+class ImageService : ImageServiceProtocol, UrlBuildable {
     func cancel() {
-        currentImage = nil
-        cancellables.removeAll()
-        self.cancelPublisher.send(true)
-        print("\(#function) isCancelled: \(isCancelled)")
+        self.isCancelled = true
     }
     
-    typealias DownloadImageEventResult = Result<DownloadImageEvent, URLError>
-    typealias DownloadImageEventResultPublisher = AnyPublisher<DownloadImageEventResult, Never>
-    
-    func pak_downloadAllImage() -> DownloadImageEventResultPublisher {
-        let urls = buildImagesUrls().compactMap{ URL(string: $0) }
+    var isCancelled: Bool = false
+    let finishedUrls: [String] = ["https://github.com/pakirby1/TableViewTutorial.git",
+                              "https://github.com/pakirby1/asfasf.git",
+                              "https://github.com/pakirby1/oieoiwer.git",
+                          "https://github.com/AvdLee/CombineSwiftPlayground"]
+
+    func downloadAllImages() -> DownloadImageEventEnumStream {
+        func processImage(url: URL,
+                          index: Int,
+                          total: Int) -> DownloadImageEventEnumStream
+        {
+            return downloadImage(at: url)
+                .print()
+                .map{ image -> Result<DownloadEventEnum, Error> in
+                    let die = DownloadEvent(index: index,
+                                                 total: total,
+                                                 url: url.absoluteString)
+                    
+                    return DownloadEventEnum.inProgress(die).asResult()
+                }
+                .catch{ [unowned self] error -> Just<Result<DownloadEventEnum, Error>> in
+                    self.isCancelled = true
+                    print("======= Failed =======")
+                    return Just(.failure(error))
+                }
+                .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
+                       scheduler: RunLoop.main)
+                .eraseToAnyPublisher()
+        }
+        
+        func buildReturn(append: Bool,
+                         stream: DownloadImageEventEnumStream,
+                         finished: DownloadImageEventEnumStream) -> DownloadImageEventEnumStream
+        {
+            if (append) {
+                print("Appending Finished")
+                return stream.append(finished).eraseToAnyPublisher()
+            }
+            
+            return stream
+        }
+        
+        let urls: [URL] = buildImagesUrls()
         let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
         var index: Int = 0
         let delay: Int = 2
+        let total = urls.count
         
-        let downloadResults = pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventResultPublisher in
+        let ret = pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventEnumStream in
             print("\(#function) \(url)")
             index += 1
             
-            // download & create event
-            return self.downloadImage(at: url)
-                    .print()
-                    .map{ _ in DownloadImageEvent(
-                            index: index,
-                            total: urls.count,
-                            url: url.absoluteString,
-                            isCompleted: false) }
-                    .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
-                           scheduler: RunLoop.main)
-                    .convertToResult()
-                    .eraseToAnyPublisher()
-        }
-        .append(Just(DownloadImageEvent.buildCompleted()))
-        .eraseToAnyPublisher()
-        
-        return self.cancelPublisher
-                        .print("Print example")
-                        .filter{ $0 == false}
-                        .flatMap{ _ in
-                            downloadResults
-                        }
-            .lane("ReduxViewModel.init() self.store.$state")
-            .eraseToAnyPublisher()
-    }
-    
-    func downloadAllImages() ->  DownloadImageEventResultPublisher {
-        let urls = buildImagesUrls().compactMap{ URL(string: $0) }
-        let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
-        var index: Int = 0
-        let delay: Int = 2
-        
+            
+            guard (!self.isCancelled) else {
+                return Just(DownloadEventEnum
+                                .cancelled
+                                .asResult()
+                ).eraseToAnyPublisher()
+            }
+
+            guard (index < total) else {
+                print("index >= total index: \(index) of \(total)")
+                let finishedStream = DownloadEventEnum.finished
                 
-        let first = pub.flatMap(maxPublishers: .max(1)) { url -> DownloadImageEventResultPublisher in
-            print("\(#function) \(url)")
-            index += 1
-            
-            // download & create event
-            return self.downloadImage(at: url)
-                    .print()
-                    .map{ _ in DownloadImageEvent(
-                            index: index,
-                            total: urls.count,
-                            url: url.absoluteString,
-                            isCompleted: false) }
-                    .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
-                           scheduler: RunLoop.main)
-                    .convertToResult()
+                let finished: DownloadImageEventEnumStream = Just(.success(finishedStream)).eraseToAnyPublisher()
+
+                let downloadEvent = processImage(url: url,
+                                                 index: index,
+                                                 total: total)
                     .eraseToAnyPublisher()
+
+                return buildReturn(append: !self.isCancelled, stream: downloadEvent, finished: finished)
+            }
+
+            // download & create event
+            return processImage(url: url, index: index, total: total)
         }
-        .eraseToAnyPublisher()
-        
-        let second = Just(DownloadImageEvent.buildCompleted())
-        
-        return second
-            .print("prepend")
-            .prepend(first)
-            .eraseToAnyPublisher()
+
+        return ret.eraseToAnyPublisher()
     }
 }
 
@@ -119,12 +179,6 @@ extension UrlBuildable {
         ret.append("https://pakirby1.github.io/images/XWing/upgrades/landocalrissian.png")
         ret.append("https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png")
         ret.append("https://pakirby1.github.io/images/XWing/upgrades/chewbacca-crew-swz19.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/r7a7.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/moldycrow.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/fanatical.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/4lom.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/drk1probedroids.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/delayedfuses.png")
 
         return ret
     }
@@ -160,9 +214,9 @@ struct DownloadImageEvent: CustomStringConvertible {
         return url.components(separatedBy: "/").last ?? ""
     }
     
-    static func buildCompleted() -> ImageService.DownloadImageEventResult {
-        return .success(DownloadImageEvent(index: 0, total: 0, url: "", isCompleted: true))
-    }
+//    static func buildCompleted() -> ImageService.DownloadImageEventResult {
+//        return .success(DownloadImageEvent(index: 0, total: 0, url: "", isCompleted: true))
+//    }
 }
 
 // https://www.swiftbysundell.com/articles/handling-loading-states-in-swiftui/

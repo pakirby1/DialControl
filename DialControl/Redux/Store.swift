@@ -23,6 +23,7 @@ struct MyAppState {
 struct ToolsViewState {
     var imageUrl: String = ""
     var downloadImageEvent: DownloadImageEvent?
+    var currentImage: DownloadEventEnum = .idle
     var message: String = ""
     var downloadImageEventState: DownloadImageEventState = .idle
 }
@@ -80,7 +81,7 @@ enum MyAppAction {
 enum ToolsAction {
     case deleteImageCache
     case downloadAllImages
-    case setDownloadImageEvent(Result<DownloadImageEvent, URLError>)
+    case setDownloadEvent(DownloadEventEnum)
     case cancelDownloadAllImages
     case setCancelDownloadAllImages(DownloadAllImagesError)
 }
@@ -161,11 +162,9 @@ func myAppReducer(
 {
     switch action {
         case .tools(let action):
-            let reducer = toolReducerFactory(isMock: false)
-            
-            return reducer(&state.tools,
-                               action,
-                               environment)
+            return toolsReducer(state: &state.tools,
+                                action: action,
+                                environment: environment)
             
         case .faction(let action):
             return factionReducer(state: &state,
@@ -198,116 +197,16 @@ func myAppReducer(
 
 func toolReducerFactory(isMock: Bool = false) -> (inout ToolsViewState, ToolsAction, MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
-    if (!isMock) {
         return toolsReducer
-    } else {
-        return mock_toolsReducer
-    }
 }
 
-func mock_toolsReducer(state: inout ToolsViewState,
-                       action: ToolsAction,
-                       environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
-{
-    var subject = PassthroughSubject<Result<DownloadImageEvent, URLError>, Never>()
-    
-    func processDownloadEvent(event: Result<DownloadImageEvent, URLError>, useNewFunction: Bool = false)
-    {
-        func old() {
-            switch(event) {
-                case .success(let event):
-                    state.downloadImageEvent = event
-                case .failure(let error):
-                    state.message = error.localizedDescription
-            }
-        }
-        
-        func new() {
-            switch(event) {
-                case .success(let event):
-                    if event.isCompleted {
-                        state.downloadImageEventState = .completed
-                    } else {
-                        state.downloadImageEventState = .inProgress(event)
-                    }
-                case .failure(let error):
-                    state.downloadImageEventState = .failed( error.localizedDescription)
-            }
-        }
-        
-        if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
-        {
-            new()
-        } else {
-            old()
-        }
-    }
-    
-    switch(action) {
-        case .deleteImageCache:
-            return Empty().eraseToAnyPublisher()
-            
-        case .downloadAllImages:
-            state.message = ""
-            
-            func allGood(total: Int = 10) -> [Result<DownloadImageEvent, URLError>] {
-                var arr = [Result<DownloadImageEvent, URLError>]()
-                
-                for i in 1...total {
-                    arr.append(Result.success(DownloadImageEvent(index: i, total: total, url: "Hello \(i)", isCompleted: false)))
-                }
-                
-                return arr
-            }
-            
-            func fails() -> [Result<DownloadImageEvent, URLError>] {
-                var x = allGood(total: 3)
-                let failed : Result<DownloadImageEvent, URLError> = .failure(URLError.init(URLError.Code(rawValue: 404) ))
-                
-                x.insert(failed, at: 1)
-                return x
-            }
-            
-            return fails()
-                .publisher
-                .print("mock_toolsReducer")
-                .flatMap(maxPublishers: .max(1)){
-                    // check failure
-                    Just($0)
-                        .print("mock_toolsReducer.flatMap \(Date())")
-                        .delay(
-                            for: RunLoop.SchedulerTimeType.Stride(TimeInterval(3)),
-                               
-                            scheduler: RunLoop.main)
-                }
-                .print("mock_toolsReducer \(Date())")
-                .map{ MyAppAction.tools(action:ToolsAction.setDownloadImageEvent($0)) }
-                .eraseToAnyPublisher()
-            
-        case .cancelDownloadAllImages:
-            return Empty().eraseToAnyPublisher()
-        /*
-         return environment
-         .imageService
-         .cancel()
-         .map { result -> DownloadAllImagesError in
-         switch(result) {
-         default:
-         return DownloadAllImagesError.cancelled
-         }
-         }
-         .map{ MyAppAction.tools(action:ToolsAction.setCancelDownloadAllImages($0)) }
-         .eraseToAnyPublisher()
-         */
-        
-        case .setDownloadImageEvent(let event):
-            processDownloadEvent(event: event)
-            
-            return Empty().eraseToAnyPublisher()
-            
-        case .setCancelDownloadAllImages(let event):
-            state.message = event.description
-            return Empty().eraseToAnyPublisher()
+func buildSetDownloadEvent(result: Result<DownloadEventEnum, Error>) -> MyAppAction {
+    switch(result) {
+        case .success(let event):
+            return MyAppAction.tools(action:ToolsAction.setDownloadEvent(event))
+        case .failure(let error):
+            let failureEvent = DownloadEventEnum.failed(error)
+            return MyAppAction.tools(action:ToolsAction.setDownloadEvent(failureEvent))
     }
 }
 
@@ -315,38 +214,6 @@ func toolsReducer(state: inout ToolsViewState,
                  action: ToolsAction,
                  environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
-    func processDownloadEvent(event: Result<DownloadImageEvent, URLError>, useNewFunction: Bool = false)
-    {
-        func old() {
-            switch(event) {
-                case .success(let event):
-                    state.downloadImageEvent = event
-                case .failure(let error):
-                    state.message = error.localizedDescription
-            }
-        }
-        
-        func new() {
-            switch(event) {
-                case .success(let event):
-                    if event.isCompleted {
-                        state.downloadImageEventState = .completed
-                    } else {
-                        state.downloadImageEventState = .inProgress(event)
-                    }
-                case .failure(let error):
-                    state.downloadImageEventState = .failed( error.localizedDescription)
-            }
-        }
-        
-        if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
-        {
-            new()
-        } else {
-            old()
-        }
-    }
-    
     switch(action) {
         case .deleteImageCache:
             return Empty().eraseToAnyPublisher()
@@ -355,34 +222,22 @@ func toolsReducer(state: inout ToolsViewState,
             state.message = ""
             return environment
                 .imageService
-//                .downloadAllImages()
-                .pak_downloadAllImage()
-                .map{ MyAppAction.tools(action:ToolsAction.setDownloadImageEvent($0)) }
+                .downloadAllImages()
+                .map(buildSetDownloadEvent(result:))
                 .eraseToAnyPublisher()
-        
+ 
         case .cancelDownloadAllImages:
-            return Empty().eraseToAnyPublisher()
-            /*
-            return environment
-                .imageService
-                .cancel()
-                .map { result -> DownloadAllImagesError in
-                    switch(result) {
-                        default:
-                        return DownloadAllImagesError.cancelled
-                    }
-                }
-                .map{ MyAppAction.tools(action:ToolsAction.setCancelDownloadAllImages($0)) }
-                .eraseToAnyPublisher()
-            */
-            
-        case .setDownloadImageEvent(let event):
-            processDownloadEvent(event: event)
-            
             return Empty().eraseToAnyPublisher()
             
         case .setCancelDownloadAllImages(let event):
             state.message = event.description
+            return Empty().eraseToAnyPublisher()
+            
+        case .setDownloadEvent(let event):
+            state.currentImage = event
+            return Empty().eraseToAnyPublisher()
+            
+        default:
             return Empty().eraseToAnyPublisher()
     }
 }

@@ -10,6 +10,15 @@ import Foundation
 import SwiftUI
 import Combine
 
+/// Performs a side-effect
+///
+/// return URLSession.shared.dataTaskPublisher(for: at)
+///     .compactMap { UIImage(data: $0.data) }
+///     .do { print($0) }
+///
+/// - Parameters:
+///   - handler: Closure that contains the side-effect logic
+/// - Returns: The publishers' output (as-is)
 extension Publisher {
     func `do`(handler: @escaping (Output) -> ()) -> AnyPublisher<Output, Failure> {
         self.handleEvents(receiveOutput: { value in

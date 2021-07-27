@@ -174,6 +174,7 @@ struct ToolsCard: View {
             theme.BORDER_INACTIVE
         }
     }
+    
     @EnvironmentObject var store: MyAppStore
     let tool: Tool
     let viewModel = ToolsCardViewModel()
@@ -203,6 +204,9 @@ struct ToolsCard: View {
             .font(.headline)
             .foregroundColor(self.tool.titleColor)
     }
+    
+    
+    
     
     var body: some View {
         Button(action: self.tool.action)
@@ -306,28 +310,20 @@ struct ToolsCardNew<AccessoryView: View>: View {
             .foregroundColor(self.tool.titleColor)
     }
     
-    var statusView_New: some View {
-        var message: String = ""
-        
-        let dies = store.state.tools.downloadImageEventState
-        
-        switch(dies) {
-            case .inProgress(let event) :
-                message = event.description
-                
-            case .completed:
-                message = "Completed"
-                
-            case .failed(let errorMessage):
-                message = errorMessage
-                
-            default:
-                message = "Idle"
-        }
-        
-        return Text(message)
-            .font(.headline)
-            .foregroundColor(self.tool.titleColor)
+    var statusView_New: AnyView {
+        return VStack {
+            Button(action: {
+                    self
+                        .store
+                        .send(MyAppAction.tools(action: .downloadAllImages))
+            })
+            {
+                Text("Download All Images")
+                    .font(.largeTitle)
+            }
+            
+            Text(self.store.state.tools.currentImage.description)
+        }.eraseToAnyView()
     }
     
     var body: some View {
@@ -336,8 +332,6 @@ struct ToolsCardNew<AccessoryView: View>: View {
             ZStack {
                 background
                 VStack {
-                    titleView
-                    
                     if (tool.displayStatus) {
                         if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
                         {
