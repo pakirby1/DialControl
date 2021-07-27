@@ -11,6 +11,14 @@ import SwiftUI
 import Combine
 
 extension Publisher {
+    func `do`(handler: @escaping (Output) -> ()) -> AnyPublisher<Output, Failure> {
+        self.handleEvents(receiveOutput: { value in
+            handler(value)
+        }).eraseToAnyPublisher()
+    }
+}
+
+extension Publisher {
     func convertToResult() -> AnyPublisher<Result<Output, Failure>, Never> {
         self.map(Result.success)
             .catch { Just(.failure($0)) }
