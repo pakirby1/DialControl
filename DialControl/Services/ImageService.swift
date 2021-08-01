@@ -172,22 +172,124 @@ protocol UrlBuildable {
 }
 
 extension UrlBuildable {
-    func buildImagesUrls() -> [String] {
-        var ret: [String] = []
-        
-        ret.append("https://pakirby1.github.io/images/XWing/upgrades/perceptivecopilot.png")
-        ret.append("https://pakirby1.github.io/images/XWing/upgrades/landocalrissian.png")
-        ret.append("https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png")
-        ret.append("https://pakirby1.github.io/images/XWing/upgrades/chewbacca-crew-swz19.png")
-
-        return ret
-    }
+//    func buildImagesUrls() -> [String] {
+//        var ret: [String] = []
+//
+//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/perceptivecopilot.png")
+//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/landocalrissian.png")
+//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png")
+//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/chewbacca-crew-swz19.png")
+//
+//        return ret
+//    }
     
     func buildImagesUrls() -> [URL] {
         return buildImagesUrls().compactMap({ URL(string: $0) })
     }
 }
 
+extension ImageService {
+    private func getAllUpgradeFiles() -> [String] {
+        var files: [String] = ["/upgrades/astromech.json",
+                               "/upgrades/cannon.json"
+        ]
+        
+        return files
+    }
+    
+    private func getAllPilotFiles() -> [String] {
+        var files: [String] = ["/pilots/scum-and-villainy/g-1a-starfighter.json",
+                               "/pilots/first-order/tie-ba-interceptor.json"
+        ]
+        
+        return files
+    }
+    
+    private func getAllFiles() -> [String] {
+        return getAllPilotFiles()
+    }
+    
+    func buildImagesUrls() -> [String] {
+        var ret: [String] = []
+        var cancellables = Set<AnyCancellable>()
+        
+        let x: [DownloadImageType<LocalURL>] = getAllPilotFiles()
+            .compactMap{ LocalURL(string:$0) }
+            .map{ DownloadImageType.pilot($0) }
+        
+        let y = x.publisher.eraseToAnyPublisher()
+        let z = y.flatMap{ [unowned self] in self.buildXWS(url: $0) }.eraseToAnyPublisher()
+        let a = z.flatMap{ [unowned self] in self.buildURL(xws: $0) }.eraseToAnyPublisher()
+        
+        a.sink(receiveValue: { remote in
+            switch(remote) {
+                case .pilot(let url):
+                    ret.append(url.absoluteString)
+                case .upgrade(let url):
+                    ret.append(url.absoluteString)
+            }
+        }).store(in: &cancellables)
+        
+//        let y: [AnyPublisher<DownloadImageType<XWS>, Never>] = x.flatMap{ buildXWS(url: $0) }
+            
+//        let z: [AnyPublisher<DownloadImageType<RemoteURL>, Never>] = y.flatMap{
+//            let r: AnyPublisher<DownloadImageType<XWS>, Never> = $0
+//            return r
+//        }
+        
+//            .flatMap{ buildXWS(url: $0) }
+//            .flatMap{ buildURL(xws: $0) }
+        return ret
+    }
+    
+    func buildXWS(url: DownloadImageType<LocalURL>) -> AnyPublisher<DownloadImageType<XWS>, Never> {
+        return Just(url.buildXWS()).eraseToAnyPublisher()
+    }
+    
+    func buildURL(xws: DownloadImageType<XWS>) -> AnyPublisher<DownloadImageType<RemoteURL>, Never> {
+        return Just(xws.buildURL()).eraseToAnyPublisher()
+    }
+}
+
+enum DownloadImageType<T> {
+    case pilot(T)
+    case upgrade(T)
+}
+
+typealias LocalURL = URL
+typealias RemoteURL = URL
+typealias XWS = String
+
+extension DownloadImageType where T == LocalURL {
+    func buildXWS() -> DownloadImageType<XWS> {
+        switch(self) {
+            case .pilot(let url):
+                return .pilot("4lom")
+            case .upgrade(let url):
+                return .upgrade("4lom")
+        }
+    }
+}
+
+extension DownloadImageType where T == XWS {
+    func buildURL() -> DownloadImageType<RemoteURL> {
+        switch(self) {
+            case .pilot(let xws):
+                if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
+                    return .pilot(remoteURL)
+                }
+                
+            case .upgrade(let xws):
+                if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
+                    return .upgrade(remoteURL)
+                }
+        }
+        
+        let URL = URL(string:"")
+        
+        return .pilot(URL ?? "")
+    }
+}
 
 enum DownloadImageEventState {
     case idle
