@@ -218,8 +218,8 @@ extension ImageService {
             .map{ DownloadImageType.pilot($0) }
         
         let y = x.publisher.eraseToAnyPublisher()
-        let z = y.flatMap{ [unowned self] in self.buildXWS(url: $0) }.eraseToAnyPublisher()
-        let a = z.flatMap{ [unowned self] in self.buildURL(xws: $0) }.eraseToAnyPublisher()
+        let z: AnyPublisher<DownloadImageType<XWS>, Never> = y.map{ [unowned self] in $0.buildXWS() }.eraseToAnyPublisher()
+        let a: AnyPublisher<DownloadImageType<RemoteURL>, Never> = z.map{ [unowned self] in $0.buildURL() }.eraseToAnyPublisher()
         
         a.sink(receiveValue: { remote in
             switch(remote) {
@@ -286,8 +286,7 @@ extension DownloadImageType where T == XWS {
         }
         
         let URL = URL(string:"")
-        
-        return .pilot(URL ?? "")
+        return .pilot(URL(string: "") ?? URL(string: ""))
     }
 }
 
