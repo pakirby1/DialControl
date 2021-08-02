@@ -210,44 +210,41 @@ extension ImageService {
     }
     
     func buildImagesUrls() -> [String] {
+        func buildPilotsStream() -> AnyPublisher<DownloadImageType<RemoteURL>, Never> {
+            getAllPilotFiles()  // [String]
+                .compactMap{ LocalURL(string:$0) }  // [LocalURL]
+                .map{ DownloadImageType.pilot($0) } // [DownloadImageType<LocalURL>]
+                .publisher  // Publishers.Sequence<[DownloadImageType<LocalURL>], Never>
+                .map{ $0.buildXWS() } // Publishers.Sequence<[DownloadImageType<XWS>], Never>
+                .compactMap{ $0.buildURL() } // Publishers.Sequence<[DownloadImageType<RemoteURL>], Never>
+                .eraseToAnyPublisher()  // AnyPublisher<DownloadImageType<RemoteURL>, Never>
+        }
+        
+        func buildUpgradesStream() -> AnyPublisher<DownloadImageType<RemoteURL>, Never> {
+            getAllUpgradeFiles()  // [String]
+                .compactMap{ LocalURL(string:$0) }  // [LocalURL]
+                .map{ DownloadImageType.upgrade($0) } // [DownloadImageType<LocalURL>]
+                .publisher  // Publishers.Sequence<[DownloadImageType<LocalURL>], Never>
+                .map{ $0.buildXWS() } // Publishers.Sequence<[DownloadImageType<XWS>], Never>
+                .compactMap{ $0.buildURL() } // Publishers.Sequence<[DownloadImageType<RemoteURL>], Never>
+                .eraseToAnyPublisher()  // AnyPublisher<DownloadImageType<RemoteURL>, Never>
+        }
+        
         var ret: [String] = []
         var cancellables = Set<AnyCancellable>()
         
-        let x: [DownloadImageType<LocalURL>] = getAllPilotFiles()
-            .compactMap{ LocalURL(string:$0) }
-            .map{ DownloadImageType.pilot($0) }
-        
-        let y = x.publisher.eraseToAnyPublisher()
-        let z: AnyPublisher<DownloadImageType<XWS>, Never> = y.map{ [unowned self] in $0.buildXWS() }.eraseToAnyPublisher()
-        let a: AnyPublisher<DownloadImageType<RemoteURL>, Never> = z.map{ [unowned self] in $0.buildURL() }.eraseToAnyPublisher()
-        
-        a.sink(receiveValue: { remote in
-            switch(remote) {
-                case .pilot(let url):
-                    ret.append(url.absoluteString)
-                case .upgrade(let url):
-                    ret.append(url.absoluteString)
-            }
-        }).store(in: &cancellables)
-        
-//        let y: [AnyPublisher<DownloadImageType<XWS>, Never>] = x.flatMap{ buildXWS(url: $0) }
-            
-//        let z: [AnyPublisher<DownloadImageType<RemoteURL>, Never>] = y.flatMap{
-//            let r: AnyPublisher<DownloadImageType<XWS>, Never> = $0
-//            return r
-//        }
-        
-//            .flatMap{ buildXWS(url: $0) }
-//            .flatMap{ buildURL(xws: $0) }
+        buildPilotsStream()
+            .merge(with: buildUpgradesStream())
+            .sink(receiveValue: { remote in
+                switch(remote) {
+                    case .pilot(let url):
+                        ret.append(url.absoluteString)
+                    case .upgrade(let url):
+                        ret.append(url.absoluteString)
+                }
+            }).store(in: &cancellables)
+
         return ret
-    }
-    
-    func buildXWS(url: DownloadImageType<LocalURL>) -> AnyPublisher<DownloadImageType<XWS>, Never> {
-        return Just(url.buildXWS()).eraseToAnyPublisher()
-    }
-    
-    func buildURL(xws: DownloadImageType<XWS>) -> AnyPublisher<DownloadImageType<RemoteURL>, Never> {
-        return Just(xws.buildURL()).eraseToAnyPublisher()
     }
 }
 
@@ -272,7 +269,7 @@ extension DownloadImageType where T == LocalURL {
 }
 
 extension DownloadImageType where T == XWS {
-    func buildURL() -> DownloadImageType<RemoteURL> {
+    func buildURL() -> DownloadImageType<RemoteURL>? {
         switch(self) {
             case .pilot(let xws):
                 if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
@@ -285,8 +282,7 @@ extension DownloadImageType where T == XWS {
                 }
         }
         
-        let URL = URL(string:"")
-        return .pilot(URL(string: "") ?? URL(string: ""))
+        return nil
     }
 }
 
