@@ -204,6 +204,10 @@ class Redux_ShipViewModel: ObservableObject {
         return ship.dial
     }
     
+    var shipId: String {
+        return self.pilotStateData.shipID
+    }
+    
     func handleDestroyed() {
         let current = pilotStateData.dial_status
         
@@ -393,6 +397,10 @@ class Redux_ShipViewModel: ObservableObject {
         self.store.send(.ship(action: .updateDialStatus(status)))
     }
     
+    func updateShipID(shipId: String) {
+        self.store.send(.ship(action: .updateShipIDMarker(shipId)))
+    }
+    
     func updateState(newData: PilotStateData) {
         print("\(Date()) PAK_updateState: \(newData.description)")
         
@@ -465,6 +473,8 @@ struct Redux_ShipView: View {
     let theme: Theme = WestworldUITheme()
     let printer = DeallocPrinter("ShipView")
     @State var selectedUpgrade: UpgradeView.UpgradeViewModel? = nil
+    @State var displaySetShipID: Bool = false
+    @State var textEntered: String = ""
     
     init(viewModel: Redux_ShipViewModel) {
         self.viewModel = viewModel
@@ -485,12 +495,18 @@ struct Redux_ShipView: View {
                     }.padding(5)
                 }
                 
+                var shipIDView: some View {
+                    Text(viewModel.shipId)
+                }
+                
                 return HStack {
                     HStack(alignment: .top) {
                         backButtonView
                     }
                     .frame(width: 150, height: 50, alignment: .leading)
                     //            .border(Color.blue, width: 2)
+                    
+                    shipIDView
                     
                     PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService),
                              displayUpgrades: true,
@@ -710,6 +726,24 @@ extension Redux_ShipView {
                                 updateType: PilotStatePropertyType.charge)
                 
                 Text("Dial Status: \(dialStatusText)")
+                
+                if displaySetShipID == true {
+                    CustomAlert(
+                        title: "Set Ship ID",
+                        textInputLabel: "Ship ID",
+                        textEntered: $textEntered,
+                        showingAlert: $displaySetShipID) {
+                        self.viewModel.updateShipID(shipId: textEntered)
+                    }
+                    
+                } else {
+                    VStack {
+                        Button("Set Ship ID") {
+                            self.displaySetShipID.toggle()
+                        }
+                        Text("Ship ID: \(textEntered)")
+                    }
+                }
             }.padding(.top, 20)
             //                    .border(Color.green, width: 2)
         }
@@ -781,3 +815,45 @@ extension Redux_ShipView {
     }
 }
 
+struct CustomAlert: View {
+    let title: String
+    let textInputLabel: String
+    @Binding var textEntered: String
+    @Binding var showingAlert: Bool
+    let background = Color(UIColor.systemBackground)
+    let textColor = Color(UIColor.label)
+    let handler: () -> ()
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(background)
+            VStack {
+                Text(title)
+                    .font(.title)
+                    .foregroundColor(textColor)
+                
+                Divider()
+                
+                TextField(textInputLabel, text: $textEntered)
+                    .padding(5)
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(textColor)
+                    .padding(.horizontal, 20)
+                    
+                    
+                Divider()
+                
+                HStack {
+                    Button("OK") {
+                        handler()
+                        self.showingAlert.toggle()
+                    }
+                }
+                .padding(30)
+                .padding(.horizontal, 40)
+            }
+        }
+        .frame(width: 200, height: 150)
+    }
+}
