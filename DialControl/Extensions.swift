@@ -10,6 +10,13 @@ import Foundation
 import SwiftUI
 import Combine
 
+extension View {
+    func debugType() -> some View {
+        print(type(of: self))
+        return self
+    }
+}
+
 private extension View {
     @ViewBuilder func applyIf<T: View>(_ condition: @autoclosure () -> Bool, apply: (Self) -> T) -> some View {
         if condition() {

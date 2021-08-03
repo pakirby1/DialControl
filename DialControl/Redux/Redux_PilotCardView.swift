@@ -113,13 +113,38 @@ struct Redux_PilotCardView: View {
             .bold()
             .foregroundColor(Color.orange)
     }
+
+    func buildSmallIndicatorView(color: Color) -> some View {
+        return IndicatorView(label: " ", bgColor: color, fgColor: Color.clear).frame(width: 5, height: 5, alignment: .center).padding(20)
+    }
     
     var shipID: some View {
-        guard let data = shipPilot.pilotStateData else {
-            return Text("").padding(5).foregroundColor(Color.white)
+        @ViewBuilder
+        func buildShipIDView() -> some View {
+            switch(shipPilot.pilotStateData!.shipID) {
+                case "Red":
+                    buildSmallIndicatorView(color: Color.red)
+                case "Green":
+                    buildSmallIndicatorView(color: Color.green)
+                case "Yellow":
+                    buildSmallIndicatorView(color: Color.yellow)
+                case "Blue":
+                    buildSmallIndicatorView(color: Color.blue)
+                case "Orange":
+                    buildSmallIndicatorView(color: Color.orange)
+                case "Purple":
+                    buildSmallIndicatorView(color: Color.purple)
+                case "Pink":
+                    buildSmallIndicatorView(color: Color.pink)
+                case "Gray", "Grey":
+                    buildSmallIndicatorView(color: Color.gray)
+                    
+                default:
+                    Text(shipPilot.pilotStateData!.shipID).padding(5).foregroundColor(Color.white)
+            }
         }
         
-        return Text(data.shipID).padding(5).foregroundColor(Color.white)
+        return buildShipIDView()
     }
     
     var pilotShipNames: some View {
