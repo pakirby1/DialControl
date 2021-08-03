@@ -121,7 +121,7 @@ struct Redux_PilotCardView: View {
     var shipID: some View {
         @ViewBuilder
         func buildShipIDView() -> some View {
-            switch(shipPilot.pilotStateData!.shipID) {
+            switch(shipPilot.pilotStateData!.shipID.trimmingCharacters(in: .whitespaces)) {
                 case "Red":
                     buildSmallIndicatorView(color: Color.red)
                 case "Green":
