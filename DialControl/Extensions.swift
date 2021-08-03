@@ -10,6 +10,16 @@ import Foundation
 import SwiftUI
 import Combine
 
+private extension View {
+    @ViewBuilder func applyIf<T: View>(_ condition: @autoclosure () -> Bool, apply: (Self) -> T) -> some View {
+        if condition() {
+            apply(self)
+        } else {
+            self
+        }
+    }
+}
+
 /// Performs a side-effect
 ///
 /// return URLSession.shared.dataTaskPublisher(for: at)

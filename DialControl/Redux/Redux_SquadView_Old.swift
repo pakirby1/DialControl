@@ -253,11 +253,11 @@ extension Redux_SquadView {
                     damaged
                 }.padding(20)
 
-                HStack {
-                    Spacer()
-                    dialState
-                    Spacer()
-                }
+//                HStack {
+//                    Spacer()
+//                    dialState
+//                    Spacer()
+//                }
                 
                 // Body
                 // TODO: Switch & AppStore

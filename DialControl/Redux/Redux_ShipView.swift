@@ -482,6 +482,17 @@ struct Redux_ShipView: View {
     }
 
     // MARK:- computed properties
+    var customAlert: some View {
+        CustomAlert(
+            title: "Set Ship ID",
+            textInputLabel: "Ship ID",
+            textEntered: $textEntered,
+            showingAlert: $displaySetShipID)
+        {
+            self.viewModel.updateShipID(shipId: textEntered)
+        }
+    }
+    
     var body: some View {
         var content: some View {
             var headerView: some View {
@@ -543,6 +554,7 @@ struct Redux_ShipView: View {
             .padding()
             .overlay(imageOverlayView)
             .background(theme.BUTTONBACKGROUND)
+            .popup(isPresented: displaySetShipID, alignment: .center, content: { customAlert })
         }
         
         return content
@@ -727,22 +739,11 @@ extension Redux_ShipView {
                 
                 Text("Dial Status: \(dialStatusText)")
                 
-                if displaySetShipID == true {
-                    CustomAlert(
-                        title: "Set Ship ID",
-                        textInputLabel: "Ship ID",
-                        textEntered: $textEntered,
-                        showingAlert: $displaySetShipID) {
-                        self.viewModel.updateShipID(shipId: textEntered)
+                VStack {
+                    Button("Set Ship ID") {
+                        self.displaySetShipID.toggle()
                     }
-                    
-                } else {
-                    VStack {
-                        Button("Set Ship ID") {
-                            self.displaySetShipID.toggle()
-                        }
-                        Text("Ship ID: \(textEntered)")
-                    }
+                    Text("Ship ID: \(textEntered)")
                 }
             }.padding(.top, 20)
             //                    .border(Color.green, width: 2)

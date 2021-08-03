@@ -28,8 +28,10 @@ struct Redux_PilotCardView: View {
                 HStack {
                     initiative
                     
-                    halfStatus
+                    
 
+                    shipID
+                    
                     Spacer()
                     
                     pilotShipNames
@@ -112,6 +114,14 @@ struct Redux_PilotCardView: View {
             .foregroundColor(Color.orange)
     }
     
+    var shipID: some View {
+        guard let data = shipPilot.pilotStateData else {
+            return Text("").padding(5).foregroundColor(Color.white)
+        }
+        
+        return Text(data.shipID).padding(5).foregroundColor(Color.white)
+    }
+    
     var pilotShipNames: some View {
         VStack {
             Text("\(shipPilot.pilot.name)")
@@ -134,6 +144,22 @@ extension Redux_PilotCardView {
                                       displayUpgrades: true,
                                       displayHeaders: false,
                                       displayDial: true).environmentObject(self.store)
+    }
+}
+
+struct DamagedStatusView: View {
+    let shipPilot: ShipPilot
+    
+    var body: some View {
+        if let data = shipPilot.pilotStateData {
+            if data.isDestroyed {
+                return Text("Destroyed").foregroundColor(Color.red)
+            } else if data.isHalved {
+                return Text("Half").foregroundColor(Color.yellow)
+            }
+        }
+        
+        return Text("").foregroundColor(Color.white)
     }
 }
 
@@ -187,29 +213,35 @@ struct Redux_PilotDetailsView: View {
     }
     
     var body: some View {
-        HStack {
-            buildPointsView()
+        VStack(spacing: 0) {
+            DamagedStatusView(shipPilot: shipPilot)
             
-            buildPointsView(half: true)
-            
-            IndicatorView(label: "\(self.shipPilot.threshold)",
-                bgColor: Color.yellow,
-                fgColor: Color.black)
-            
-            Spacer()
-            
-            upgrades
-            
-            Spacer()
-            
-            if (displayDial) {
-                dialViewNew
+            HStack {
+                buildPointsView()
+                
+                buildPointsView(half: true)
+                
+                IndicatorView(label: "\(self.shipPilot.threshold)",
+                    bgColor: Color.yellow,
+                    fgColor: Color.black)
+                
+                Spacer()
+                
+                upgrades
+                
+                Spacer()
+                
+                if (displayDial) {
+                    dialViewNew
+                }
+            }
+//            .border(Color.white)
+            .padding(.leading, 10)
+            .onAppear() {
+                print("\(Date()) PilotDetailsView.body.onAppear")
             }
         }
-        .padding(15)
-        .onAppear() {
-            print("\(Date()) PilotDetailsView.body.onAppear")
-        }
+        
     }
 }
 
