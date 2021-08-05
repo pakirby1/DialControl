@@ -574,9 +574,13 @@ func factionReducer(state: inout MyAppState,
     
     switch(action) {
         case let .getShips(squad, data):
-            state.faction.shipPilots = SquadCardViewModel.getShips(
+            logMessage("PAK_damagedPoints .getShips() \(data)")
+            let x = SquadCardViewModel.getShips(
                 squad: squad,
                 squadData: data)
+            logMessage("PAK_damagedPoints .getShips() \(x)")
+            
+            state.faction.shipPilots = x
         
         case .updateFavorites(let showFavorites):
             UserDefaults.standard.set(showFavorites, forKey: "displayFavoritesOnly")
@@ -674,11 +678,12 @@ class Store<State, Action, Environment> : ObservableObject {
 //    @Published var state: State
     @Published var state: State {
         didSet {
-            logMessage("PAK_Redux_New viewProperties.didSet \(state)")
+            let s: MyAppState = state as! MyAppState
+            logMessage("PAK_Wrong_Damage viewProperties.didSet \(s.faction.shipPilots)")
         }
         
         willSet {
-            logMessage("PAK_Redux_New viewProperties.willSet \(state)")
+            logMessage("PAK_Wrong_Damage viewProperties.willSet \(state)")
         }
     }
     

@@ -115,28 +115,34 @@ struct Redux_PilotCardView: View {
     }
 
     func buildSmallIndicatorView(color: Color) -> some View {
-        return IndicatorView(label: " ", bgColor: color, fgColor: Color.clear).frame(width: 5, height: 5, alignment: .center).padding(20)
+        return IndicatorView(
+            label: " ",
+            bgColor: color,
+            fgColor: Color.clear).frame(
+                width: 5,
+                height: 5,
+                alignment: .center).padding(20)
     }
     
     var shipID: some View {
         @ViewBuilder
         func buildShipIDView() -> some View {
-            switch(shipPilot.pilotStateData!.shipID.trimmingCharacters(in: .whitespaces)) {
-                case "Red":
+            switch(shipPilot.pilotStateData!.shipID.lowercased().trimmingCharacters(in: .whitespaces)) {
+                case "red":
                     buildSmallIndicatorView(color: Color.red)
-                case "Green":
+                case "green":
                     buildSmallIndicatorView(color: Color.green)
-                case "Yellow":
+                case "yellow":
                     buildSmallIndicatorView(color: Color.yellow)
-                case "Blue":
+                case "blue":
                     buildSmallIndicatorView(color: Color.blue)
-                case "Orange":
+                case "orange":
                     buildSmallIndicatorView(color: Color.orange)
-                case "Purple":
+                case "purple":
                     buildSmallIndicatorView(color: Color.purple)
-                case "Pink":
+                case "pink":
                     buildSmallIndicatorView(color: Color.pink)
-                case "Gray", "Grey":
+                case "gray", "grey":
                     buildSmallIndicatorView(color: Color.gray)
                     
                 default:

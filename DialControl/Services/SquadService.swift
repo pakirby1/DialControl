@@ -184,9 +184,13 @@ protocol DamagedSquadRepresenting {
 extension DamagedSquadRepresenting {
     var damagedPoints: Int {
         let count = self.shipPilots.count
-        logMessage("damagedPoints count: \(count)")
+        logMessage("PAK_damagedPoints var damagedPoints")
+        
+        let names = self.shipPilots.map { $0.ship.name }
+        logMessage("PAK_damagedPoints names: \(names)")
         
         let points: [Int] = self.shipPilots.map { shipPilot in
+            logMessage("PAK_damagedPoints ship: \(shipPilot.ship.name)")
             switch(shipPilot.healthStatus) {
             case .destroyed(let value):
                 return value
@@ -197,7 +201,10 @@ extension DamagedSquadRepresenting {
             }
         }
         
-        return points.reduce(0, +)
+        let sum = points.reduce(0, +)
+        logMessage("damagedPoints sum: \(sum)")
+        
+        return sum
     }
 }
 

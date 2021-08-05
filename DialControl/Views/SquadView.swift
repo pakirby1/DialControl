@@ -533,6 +533,7 @@ struct IndicatorView: View {
     }
 }
 
+
 class PilotDetailsViewModel: ObservableObject {
     @Published var shipPilot: ShipPilot
     let pilotStateService: PilotStateServiceProtocol

@@ -29,7 +29,9 @@ struct Redux_FactionSquadList: View {
     
     var squadDataList : [SquadData] {
         get {
-            return self.store.state.faction.squadDataList
+            let list = self.store.state.faction.squadDataList
+            logMessage("damagedPoints list \(list)")
+            return list
         }
     }
     
@@ -251,7 +253,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     }
     
     func loadShips() {
-        logMessage("damagedPoints Redux_FactionSquadCardViewModel.loadShips() ")
+        logMessage("PAK_damagedPoints Redux_FactionSquadCardViewModel.loadShips() ")
         
         store.send(.faction(action: .getShips(self.squad, self.squadData)))
         
@@ -273,10 +275,11 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     var shipPilots: [ShipPilot] {
         get {
+            logMessage("damagedPoints shipPilots: \(self.store.state.faction.shipPilots)")
             return self.store.state.faction.shipPilots
         }
         set {
-            
+
         }
     }
     
@@ -286,6 +289,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     var squad: Squad {
         if let json = squadData.json {
+            logMessage("damagedPoints json: \(json)")
             return loadSquad(jsonString: json)
         }
         
@@ -309,7 +313,9 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     }
     
     var damagedPointsView: some View {
-        Text("\(damagedPoints)")
+        logMessage("PAK_Wrong_Damage damagedPointsView")
+        
+        return Text("\(damagedPoints)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -460,7 +466,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // view body needs to be recreated after onAppear
             // This can be done by updating an @State property, or
             // observing an @Published property.
-            print("\(Date()) damagedPoints FactionSquadCard.onAppear()")
+            logMessage("PAK_Wrong_Damage FactionSquadCard.onAppear()")
             
             // Have to call in .onAppear because the @EnvironmentObject store
             // is not available until AFTER init() is called
