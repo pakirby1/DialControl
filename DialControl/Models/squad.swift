@@ -270,6 +270,7 @@ struct Squad: Codable, JSONSerialization {
     // Mandatory
     let faction: String
     let pilots: [SquadPilot]
+    var shipPilots: [ShipPilot] = []
     
     // Optional
     var description: String? { return _description ?? nil }
@@ -348,10 +349,16 @@ struct Squad: Codable, JSONSerialization {
     static func getSquad(squadData: SquadData) -> Squad {
         if let json = squadData.json {
             logMessage("damagedPoints json: \(json)")
-            return loadSquad(jsonString: json)
+            let squad = loadSquad(jsonString: json)
+            
+            let shipPilots = SquadCardViewModel.getShips(squad: squad, squadData: squadData)
         }
         
         return Squad.emptySquad
+    }
+    
+    mutating func setShipPilots(shipPilots: [ShipPilot]) {
+        self.shipPilots = shipPilots
     }
 }
 
