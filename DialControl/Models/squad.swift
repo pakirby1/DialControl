@@ -340,6 +340,19 @@ struct Squad: Codable, JSONSerialization {
         
         return Squad.emptySquad
     }
+    
+    static func loadSquad(jsonString: String) -> Squad {
+        return Squad.serializeJSON(jsonString: jsonString)
+    }
+    
+    static func getSquad(squadData: SquadData) -> Squad {
+        if let json = squadData.json {
+            logMessage("damagedPoints json: \(json)")
+            return loadSquad(jsonString: json)
+        }
+        
+        return Squad.emptySquad
+    }
 }
 
 // Custom JSON decoding

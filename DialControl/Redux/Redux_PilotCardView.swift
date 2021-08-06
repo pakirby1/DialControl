@@ -114,24 +114,24 @@ struct Redux_PilotCardView: View {
             .foregroundColor(Color.orange)
     }
 
-    func buildNumberView(id: Int) -> some View {
-        let name = "\(id).circle"
-        return Image(systemName: name)
-            .font(.largeTitle)
-            .foregroundColor(Color.white)
-    }
-    
-    func buildSmallIndicatorView(color: Color) -> some View {
-        return IndicatorView(
-            label: " ",
-            bgColor: color,
-            fgColor: Color.clear).frame(
-                width: 5,
-                height: 5,
-                alignment: .center).padding(20)
-    }
-    
     var shipID: some View {
+        func buildNumberView(id: Int) -> some View {
+            let name = "\(id).circle"
+            return Image(systemName: name)
+                .font(.largeTitle)
+                .foregroundColor(Color.white)
+        }
+        
+        func buildSmallIndicatorView(color: Color) -> some View {
+            return IndicatorView(
+                label: " ",
+                bgColor: color,
+                fgColor: Color.clear).frame(
+                    width: 5,
+                    height: 5,
+                    alignment: .center).padding(20)
+        }
+        
         @ViewBuilder
         func buildShipIDView() -> some View {
             let id = shipPilot.pilotStateData!.shipID.lowercased().trimmingCharacters(in: .whitespaces)

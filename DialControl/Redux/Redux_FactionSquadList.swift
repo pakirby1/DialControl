@@ -113,7 +113,7 @@ struct Redux_FactionSquadList: View {
         }
     }
     
-    var shipsSection: some View {
+    var shipsSection_FactionSquadList_DamagedPoints : some View {
         Section {
             ForEach(squadDataList, id:\.self) { squadData in
                 Redux_FactionSquadCard(squadData: squadData,
@@ -121,6 +121,35 @@ struct Redux_FactionSquadList: View {
                                        updateCallback: self.updateSquad)
                 .environmentObject(self.viewFactory)
                 .environmentObject(self.store)
+            }
+        }
+    }
+    
+    var shipsSection: some View {
+        if FeaturesManager.shared.isFeatureEnabled(.FactionSquadList_DamagedPoints)
+        {
+            let sequence: Zip2Sequence<[SquadData], [[ShipPilot]]> = zip(squadDataList, self.store.state.faction.shipPilotsCollection)
+            let a: Array<(SquadData, Array<ShipPilot>)> = Array(sequence)
+            
+            return Section {
+                ForEach(a, id:\.self) { squadData in
+                    Redux_FactionSquadCard(squadData: squadData.0,
+                                           squadPilots: [],
+                                           deleteCallback: self.deleteSquad,
+                                           updateCallback: self.updateSquad)
+                    .environmentObject(self.viewFactory)
+                    .environmentObject(self.store)
+                }
+            }
+        } else {
+            return Section {
+                ForEach(squadDataList, id:\.self) { squadData in
+                    Redux_FactionSquadCard(squadData: squadData,
+                                           deleteCallback: self.deleteSquad,
+                                           updateCallback: self.updateSquad)
+                    .environmentObject(self.viewFactory)
+                    .environmentObject(self.store)
+                }
             }
         }
     }
@@ -237,6 +266,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     let deleteCallback: (SquadData) -> ()
     let updateCallback: (SquadData) -> ()
     let squadData: SquadData
+    var squadPilots: [ShipPilot] = []
     
     init(squadData: SquadData,
          deleteCallback: @escaping (SquadData) -> (),
@@ -248,8 +278,16 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
         self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
     }
     
-    private func loadSquad(jsonString: String) -> Squad {
-        return Squad.serializeJSON(jsonString: jsonString)
+    init(squadData: SquadData,
+         squadPilots: [ShipPilot],
+         deleteCallback: @escaping (SquadData) -> (),
+         updateCallback: @escaping (SquadData) -> ())
+    {
+        self.deleteCallback = deleteCallback
+        self.updateCallback = updateCallback
+        self.squadData = squadData
+        self.squadPilots = squadPilots
+        self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
     }
     
     func loadShips() {
@@ -288,12 +326,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     }
     
     var squad: Squad {
-        if let json = squadData.json {
-            logMessage("damagedPoints json: \(json)")
-            return loadSquad(jsonString: json)
-        }
-        
-        return Squad.emptySquad
+        return Squad.getSquad(squadData: self.squadData)
     }
     
     var background: some View {
