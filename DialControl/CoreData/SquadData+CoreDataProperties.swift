@@ -65,3 +65,71 @@ extension SquadData {
         return false
     }
 }
+
+extension SquadData {
+    
+    var squad: Squad {
+        if let json = self.json {
+            logMessage("damagedPoints json: \(json)")
+            return Squad.serializeJSON(jsonString: json)
+        }
+
+        return Squad.emptySquad
+    }
+    
+    var shipPilots: [ShipPilot] {
+        get {
+            getShips()
+        }
+    }
+    
+    func getShips() -> [ShipPilot] {
+        let pilotStates = self
+            .pilotStateArray
+            .sorted(by: { $0.pilotIndex < $1.pilotIndex })
+        
+        pilotStates.forEach{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
+        
+        let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
+        
+        zipped.forEach{ print("\(String(describing: $0.0.name)): \($0.1)")}
+        
+        let ret = zipped.map{
+            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+        }
+        
+        ret.printAll(tag: "PAK_DialStatus getShips()")
+        
+        return ret
+    }
+    
+    private func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
+        var shipJSON: String = ""
+        
+        print("shipName: \(squadPilot.ship)")
+        print("pilotName: \(squadPilot.name)")
+        print("faction: \(squad.faction)")
+        print("pilotStateId: \(String(describing: pilotState.id))")
+        
+        shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
+        
+        var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+        let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+
+        ship.pilots.removeAll()
+        ship.pilots.append(foundPilots)
+        
+        var allUpgrades : [Upgrade] = []
+        
+        // Add the upgrades from SquadPilot.upgrades by iterating over the
+        // UpgradeCardEnum cases and calling getUpgrade
+        if let upgrades = squadPilot.upgrades {
+            allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
+        }
+       
+        return ShipPilot(ship: ship,
+                         upgrades: allUpgrades,
+                         points: squadPilot.points,
+                         pilotState: pilotState)
+    }
+}

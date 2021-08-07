@@ -252,21 +252,21 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
         return Squad.serializeJSON(jsonString: jsonString)
     }
     
-    func loadShips() {
-        logMessage("PAK_damagedPoints Redux_FactionSquadCardViewModel.loadShips() ")
-        
-        store.send(.faction(action: .getShips(self.squad, self.squadData)))
-        
-        if store.state.faction.shipPilots.count == 0 {
-            print("No Ships in Squad")
-        }
-    }
+//    func loadShips() {
+//        logMessage("PAK_damagedPoints Redux_FactionSquadCardViewModel.loadShips() ")
+//
+//        store.send(.faction(action: .getShips(self.squad, self.squadData)))
+//
+//        if store.state.faction.shipPilots.count == 0 {
+//            print("No Ships in Squad")
+//        }
+//    }
     
     func favoriteTapped() {
         logMessage("damagedPoints Redux_FactionSquadCardViewModel.favoriteTapped()")
         squadData.favorite.toggle()
         updateCallback(squadData)
-        loadShips()
+//        loadShips()
     }
     
     func deleteSquad() {
@@ -275,11 +275,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     var shipPilots: [ShipPilot] {
         get {
-            logMessage("damagedPoints shipPilots: \(self.store.state.faction.shipPilots)")
-            return self.store.state.faction.shipPilots
-        }
-        set {
-
+            self.squadData.shipPilots
         }
     }
     
@@ -288,12 +284,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     }
     
     var squad: Squad {
-        if let json = squadData.json {
-            logMessage("damagedPoints json: \(json)")
-            return loadSquad(jsonString: json)
-        }
-        
-        return Squad.emptySquad
+        squadData.squad
     }
     
     var background: some View {
@@ -470,7 +461,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             
             // Have to call in .onAppear because the @EnvironmentObject store
             // is not available until AFTER init() is called
-            self.loadShips()
             
             // inject the AppStore into the view model here since
             // @EnvironmentObject isn't accessible in the init()
