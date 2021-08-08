@@ -302,9 +302,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     var squad: Squad {
         squadData.squad
     }
-//    var squad: Squad {
-//        return Squad.getSquad(squadData: self.squadData)
-//    }
     
     var background: some View {
         RoundedRectangle(cornerRadius: 15)
