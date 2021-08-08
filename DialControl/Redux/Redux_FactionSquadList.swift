@@ -294,10 +294,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
         }
     }
     
-    var json: String {
-        squadData.json ?? ""
-    }
-    
     // get from SquadData
     var squad: Squad {
         squadData.squad
