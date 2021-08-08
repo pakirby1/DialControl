@@ -207,7 +207,7 @@ struct FactionSquadList: View {
 //        }
         .padding(10)
         .onAppear {
-            self.store.send(.faction(action: .loadSquads))
+//            self.store.send(.faction(action: .loadSquads))
             self.viewModel.refreshSquadsList()
         }
         .alert(isPresented: $displayDeleteAllConfirmation) {

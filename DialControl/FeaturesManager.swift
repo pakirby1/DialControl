@@ -37,6 +37,7 @@ class FeaturesManager {
         add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
         add(DefaultFeature(id: FeatureId.importXWS_HandleErrors, enabled: true))
         add(DefaultFeature(id: FeatureId.DownloadAllImages, enabled: true))
+        add(DefaultFeature(id: FeatureId.FactionSquadList_DamagedPoints, enabled: true))
     }
 }
 
@@ -44,6 +45,7 @@ enum FeatureId : String {
     case MyRedux
     case importXWS_HandleErrors
     case DownloadAllImages
+    case FactionSquadList_DamagedPoints
 }
 
 protocol Feature {

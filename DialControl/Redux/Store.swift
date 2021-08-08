@@ -66,6 +66,7 @@ struct FactionSquadListState {
     }
     
     var shipPilots: [ShipPilot] = []
+    var shipPilotsCollection: Array<[ShipPilot]> = []
 }
 
 // MARK:- MyAppAction
@@ -565,6 +566,21 @@ func factionReducer(state: inout MyAppState,
             
             state.faction.squadDataList = filters.reduce(state.faction.squadDataList) { squads, filter in
                 return squads.filter(filter)
+            }
+            
+            if FeaturesManager.shared.isFeatureEnabled(.FactionSquadList_DamagedPoints)
+            {
+                var squadPilotsCollection: Array<[ShipPilot]> = []
+                
+                state.faction.squadDataList.forEach{ squadData in
+                    if let json = squadData.json {
+                        let squad = Squad.serializeJSON(jsonString: json)
+                        let squadPilots = SquadCardViewModel.getShips(squad: squad, squadData: squadData)
+                        squadPilotsCollection.append(squadPilots)
+                    }
+                }
+                
+                state.faction.shipPilotsCollection = squadPilotsCollection
             }
         }
         
