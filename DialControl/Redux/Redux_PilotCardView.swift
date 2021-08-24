@@ -375,6 +375,7 @@ protocol ShipIDRepresentable {
     var shipPilot: ShipPilot { get }
 }
 
+
 extension ShipIDRepresentable {
     var shipID: some View {
         func buildNumberView(id: Int) -> some View {
