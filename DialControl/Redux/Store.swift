@@ -575,7 +575,8 @@ func factionReducer(state: inout MyAppState,
                 state.faction.squadDataList.forEach{ squadData in
                     if let json = squadData.json {
                         let squad = Squad.serializeJSON(jsonString: json)
-                        let squadPilots = SquadCardViewModel.getShips(squad: squad, squadData: squadData)
+//                        let squadPilots = SquadCardViewModel.getShips(squad: squad, squadData: squadData)
+                        let squadPilots = squadData.getShips()
                         squadPilotsCollection.append(squadPilots)
                     }
                 }

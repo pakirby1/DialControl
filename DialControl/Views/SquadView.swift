@@ -97,45 +97,45 @@ struct SquadCardViewModel {
     static func getShips(squad: Squad, squadData: SquadData) -> [ShipPilot] {
         let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
         _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
-        
+
         let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
-        
+
         _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
-        
+
         let ret = zipped.map{
             getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
-        
+
         ret.printAll(tag: "PAK_DialStatus getShips()")
-        
+
         return ret
     }
 }
 
 func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
     var shipJSON: String = ""
-    
+
     print("shipName: \(squadPilot.ship)")
     print("pilotName: \(squadPilot.name)")
     print("faction: \(squad.faction)")
     print("pilotStateId: \(String(describing: pilotState.id))")
-    
+
     shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
-    
+
     var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
     let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
 
     ship.pilots.removeAll()
     ship.pilots.append(foundPilots)
-    
+
     var allUpgrades : [Upgrade] = []
-    
+
     // Add the upgrades from SquadPilot.upgrades by iterating over the
     // UpgradeCardEnum cases and calling getUpgrade
     if let upgrades = squadPilot.upgrades {
         allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
     }
-   
+
     return ShipPilot(ship: ship,
                      upgrades: allUpgrades,
                      points: squadPilot.points,
@@ -382,24 +382,40 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         .onAppear{
             print("PAK_DialStatus SquadCardView.onAppear()")
             // TODO: Switch & AppStore
-            self.loadShips()
+//            self.loadShips()
             self.activationOrder = self.squadData.engaged
         }
     }
     
     // TODO: Switch & AppStore
     func loadShips() {
-        logMessage("damagedPoints SquadCardView.loadShips")
-        print("PAK_DialStatus SquadCardView.loadShips()")
-        self.shipPilots = SquadCardViewModel.getShips(
-            squad: self.squad,
-            squadData: self.squadData)
+        func loadShips_new() {
+            logMessage("damagedPoints SquadCardView.loadShips")
+            print("PAK_DialStatus SquadCardView.loadShips()")
+            self.shipPilots = self.squadData.getShips()
 
-        self.shipPilots.printAll(tag: "PAK_DialStatus self.shipPilots")
+            self.shipPilots.printAll(tag: "PAK_DialStatus self.shipPilots")
 
-        self.shipPilots.forEach{ shipPilot in
-            print("PAK_DialStatus SquadCardView.loadShips() \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
+            self.shipPilots.forEach{ shipPilot in
+                print("PAK_DialStatus SquadCardView.loadShips() \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
+            }
         }
+        
+        func loadShips_old() {
+            logMessage("damagedPoints SquadCardView.loadShips")
+            print("PAK_DialStatus SquadCardView.loadShips()")
+            self.shipPilots = SquadCardViewModel.getShips(
+                squad: self.squad,
+                squadData: self.squadData)
+
+            self.shipPilots.printAll(tag: "PAK_DialStatus self.shipPilots")
+
+            self.shipPilots.forEach{ shipPilot in
+                print("PAK_DialStatus SquadCardView.loadShips() \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
+            }
+        }
+        
+        loadShips_new()
     }
 }
 

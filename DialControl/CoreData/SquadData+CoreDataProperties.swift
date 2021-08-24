@@ -67,22 +67,6 @@ extension SquadData {
 }
 
 extension SquadData {
-    
-//    var squad: Squad {
-//        if let json = self.json {
-//            logMessage("damagedPoints json: \(json)")
-//            return Squad.serializeJSON(jsonString: json)
-//        }
-//
-//        return Squad.emptySquad
-//    }
-    
-//    var shipPilots: [ShipPilot] {
-//        get {
-//            getShips()
-//        }
-//    }
-    
     func getShips() -> [ShipPilot] {
         let pilotStates = self
             .pilotStateArray

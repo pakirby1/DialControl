@@ -127,6 +127,16 @@ class ImageService : ImageServiceProtocol, UrlBuildable {
             return stream
         }
         
+        
+        var cancelledEvent: AnyPublisher<Result<DownloadEventEnum, Error>, Never> {
+            let x = Just(DownloadEventEnum
+                            .cancelled
+                            .asResult()
+            )
+            
+            return x.eraseToAnyPublisher()
+        }
+        
         let urls: [URL] = buildImagesUrls()
         let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
         var index: Int = 0
@@ -137,12 +147,8 @@ class ImageService : ImageServiceProtocol, UrlBuildable {
             print("\(#function) \(url)")
             index += 1
             
-            
             guard (!self.isCancelled) else {
-                return Just(DownloadEventEnum
-                                .cancelled
-                                .asResult()
-                ).eraseToAnyPublisher()
+                return cancelledEvent
             }
 
             guard (index < total) else {
@@ -319,7 +325,7 @@ struct DownloadImageEvent: CustomStringConvertible {
 // https://www.swiftbysundell.com/articles/handling-loading-states-in-swiftui/
 enum LoadingState<Value> {
     case idle
-    case loading
+    case loading(Double)
     case failed(Error)
     case loaded(Value)
 }
@@ -330,8 +336,20 @@ protocol LoadableObject: ObservableObject {
     func load()
 }
 
+protocol LoadableView: View {
+    var ratio: Double { get set }
+}
+
+struct SimpleLoadingView: LoadableView {
+    @State var ratio: Double
+    
+    var body: some View {
+        Text("SimpleLoadingView ratio: \(ratio)")
+    }
+}
+
 struct AsyncContentView<Source: LoadableObject,
-                        LoadingView: View,
+                        LoadingView: LoadableView,
                         Content: View>: View {
     @ObservedObject var source: Source
     var loadingView: LoadingView
@@ -343,16 +361,20 @@ struct AsyncContentView<Source: LoadableObject,
         self.source = source
         self.loadingView = loadingView
         self.content = content
+        
+//        self.loadingView.
     }
 
     var body: some View {
         switch source.state {
         case .idle:
             Color.clear.onAppear(perform: source.load)
-        case .loading:
+        case .loading(let ratio):
             loadingView
+//                .overlay(Text("ratio: \(ratio)"))
         case .failed(let error):
-            EmptyView()
+            loadingView
+                .overlay(Text("error: \(error.localizedDescription)"))
         case .loaded(let output):
             content(output)
         }
@@ -370,7 +392,7 @@ class PublishedObject<Wrapped: Publisher>: LoadableObject {
     }
 
     func load() {
-        state = .loading
+        state = .loading(0)
 
         cancellable = publisher
             .map(LoadingState.loaded)
