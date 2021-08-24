@@ -455,7 +455,9 @@ we can do this:
    Redux_ShipViewModelProtocol
 https://stackoverflow.com/questions/59503399/how-to-define-a-protocol-as-a-type-for-a-observedobject-property
 */
-struct Redux_ShipView: View {
+struct Redux_ShipView: View, ShipIDRepresentable {
+    
+    
 //    struct SelectedUpgrade {
 //        let upgrade: Upgrade
 //        let imageOverlayUrl: String
@@ -482,6 +484,10 @@ struct Redux_ShipView: View {
     }
 
     // MARK:- computed properties
+    var shipPilot: ShipPilot {
+        viewModel.shipPilot
+    }
+    
     var customAlert: some View {
         CustomAlert(
             title: "Set Ship ID",
@@ -506,10 +512,6 @@ struct Redux_ShipView: View {
                     }.padding(5)
                 }
                 
-                var shipIDView: some View {
-                    Text(viewModel.shipId)
-                }
-                
                 return HStack {
                     HStack(alignment: .top) {
                         backButtonView
@@ -517,7 +519,7 @@ struct Redux_ShipView: View {
                     .frame(width: 150, height: 50, alignment: .leading)
                     //            .border(Color.blue, width: 2)
                     
-                    shipIDView
+                    shipID
                     
                     PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService),
                              displayUpgrades: true,
