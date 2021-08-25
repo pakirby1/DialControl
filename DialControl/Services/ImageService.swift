@@ -79,7 +79,10 @@ class ImageService : ImageServiceProtocol {
             ).eraseToAnyPublisher()
         }
         
-        let urls: [URL] = buildImagesUrls()
+        let pilotURLs = buildImagesUrls(imageType: .pilots)
+        let upgradeURLs = buildImagesUrls(imageType: .upgrades)
+        let urls: [URL] = pilotURLs + upgradeURLs
+        
         let pub: AnyPublisher<URL, Never> = urls.publisher.eraseToAnyPublisher()
         var index: Int = 0
         let delay: Int = 2
@@ -120,6 +123,17 @@ enum DownloadURLsError: Swift.Error {
     case fileDecodingFailed(name: String, Swift.Error)
 }
 
+enum DownloadImageDirectory: CustomStringConvertible {
+    case pilots
+    case upgrades
+    
+    var description: String {
+        switch(self) {
+            case .pilots: return "pilots"
+            case .upgrades: return "upgrades"
+        }
+    }
+}
 extension ImageService {
     private var pilotsBaseURL: String {
         return "https://pakirby1.github.io/images/XWing/pilots/"
@@ -156,10 +170,12 @@ extension ImageService {
         return ret
     }
     
-    private func buildImagesUrls() -> [URL] {
+    /// Build a list of URLs for all Images
+    /// - Parameter directory: either "pilots" or "upgrades"
+    private func buildImagesUrls(imageType: DownloadImageDirectory) -> [URL] {
         func buildFileURLs() -> [URL] {
             // get all files in Bundle/Data/Pilots and sub directories
-            let files = readRecursive(subDirectory: "pilots")
+            let files = readRecursive(subDirectory: imageType.description)
             let urls: [URL] = files.map{ URL(string: $0)! }
             
             return urls
@@ -167,24 +183,29 @@ extension ImageService {
         
         func buildXWS(file: URL) throws -> [String] {
             // get the xws for each pilot from JSON file
-            guard let directoryURL = URL(string: "pilots", relativeTo: Bundle.main.bundleURL) else {
+            guard let directoryURL = URL(string: imageType.description, relativeTo: Bundle.main.bundleURL) else {
                 return []
             }
             
             let path = directoryURL.appendingPathComponent(file.absoluteString)
+            var xwsArr: [String] = []
             
             do {
                 let data = try Data(contentsOf: path)
                 let json = try JSON(data: data)
                 
-                let pilotsXWSArr = json["pilots"].arrayValue.map { $0["xws"].stringValue }
+                switch(imageType) {
+                    case .pilots:
+                        xwsArr = json["pilots"].arrayValue.map { $0["xws"].stringValue }
+                    
+                    case .upgrades:
+                        xwsArr = json["xws"].arrayValue.map { $0["xws"].stringValue }
+                }
                 
-                return pilotsXWSArr
+                return xwsArr
             } catch {
                 throw DownloadURLsError.fileDecodingFailed(name: path.absoluteString, error)
             }
-            
-            return []
         }
         
         func buildImagesURLs(xwsArr: [String]) -> [URL] {
