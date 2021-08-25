@@ -45,8 +45,9 @@
 		AE300073263173D100C326B3 /* ReduxTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE300072263173D100C326B3 /* ReduxTests.swift */; };
 		AE3539542430C64700AC023A /* WedgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3539532430C64700AC023A /* WedgeView.swift */; };
 		AE390EE726D507AB007D054A /* ShipIDRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE390EE626D507AB007D054A /* ShipIDRepresentable.swift */; };
-		AE390EEC26D6CEB0007D054A /* DownloadURLsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE390EEB26D6CEB0007D054A /* DownloadURLsService.swift */; };
 		AE390EEF26D6D0D0007D054A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = AE390EEE26D6D0D0007D054A /* SwiftyJSON */; };
+		AE390EF126D6DAA9007D054A /* DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE390EF026D6DAA9007D054A /* DownloadImage.swift */; };
+		AE390EF326D6DBCB007D054A /* AsyncObjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE390EF226D6DBCB007D054A /* AsyncObjectView.swift */; };
 		AE3B2AF62602241A00451C9F /* Redux_SquadView_Old.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */; };
 		AE3B2AF82603851F00451C9F /* Redux_PilotCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */; };
 		AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */; };
@@ -158,7 +159,8 @@
 		AE300072263173D100C326B3 /* ReduxTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReduxTests.swift; sourceTree = "<group>"; };
 		AE3539532430C64700AC023A /* WedgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WedgeView.swift; sourceTree = "<group>"; };
 		AE390EE626D507AB007D054A /* ShipIDRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipIDRepresentable.swift; sourceTree = "<group>"; };
-		AE390EEB26D6CEB0007D054A /* DownloadURLsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadURLsService.swift; sourceTree = "<group>"; };
+		AE390EF026D6DAA9007D054A /* DownloadImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImage.swift; sourceTree = "<group>"; };
+		AE390EF226D6DBCB007D054A /* AsyncObjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncObjectView.swift; sourceTree = "<group>"; };
 		AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadView_Old.swift; sourceTree = "<group>"; };
 		AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_PilotCardView.swift; sourceTree = "<group>"; };
 		AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesManager.swift; sourceTree = "<group>"; };
@@ -310,6 +312,7 @@
 				AEBA6360241B58D9008B00DB /* UpArrowView.swift */,
 				AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */,
 				AEDCB2CB264E7A6500DE4F10 /* BackButtonView.swift */,
+				AE390EF226D6DBCB007D054A /* AsyncObjectView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				AEA192D925C2DEF80033ACBD /* State.swift */,
 				AEA192DB25C2DFC30033ACBD /* Action.swift */,
 				AE390EE626D507AB007D054A /* ShipIDRepresentable.swift */,
+				AE390EF026D6DAA9007D054A /* DownloadImage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -453,7 +457,6 @@
 				AEF5676F25DFCD17006DCD4C /* ShipService.swift */,
 				AEE6551D261D9F8F00AFAE6A /* JSONService.swift */,
 				AE2ADE8026809A9100142419 /* ImageService.swift */,
-				AE390EEB26D6CEB0007D054A /* DownloadURLsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -648,9 +651,9 @@
 				AE2ADE832683142400142419 /* ProgressControl.swift in Sources */,
 				AE2D80F62428D3E800248CA4 /* NavigationStack.swift in Sources */,
 				AEEB546824F11EB40050913C /* DIContainer.swift in Sources */,
-				AE390EEC26D6CEB0007D054A /* DownloadURLsService.swift in Sources */,
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */,
+				AE390EF326D6DBCB007D054A /* AsyncObjectView.swift in Sources */,
 				AEB3A82625FA3B8F00F3C68D /* Redux_FactionSquadList.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AEF5677025DFCD17006DCD4C /* ShipService.swift in Sources */,
@@ -658,6 +661,7 @@
 				AE3539542430C64700AC023A /* WedgeView.swift in Sources */,
 				AEA35D5025F251D4007A2D36 /* Store.swift in Sources */,
 				AE2D80F42428C74700248CA4 /* Theme.swift in Sources */,
+				AE390EF126D6DAA9007D054A /* DownloadImage.swift in Sources */,
 				AEF5677225DFE0AD006DCD4C /* ResetButton.swift in Sources */,
 				AE390EE726D507AB007D054A /* ShipIDRepresentable.swift in Sources */,
 				AED0381C24A9D4540064A547 /* SquadData+CoreDataProperties.swift in Sources */,

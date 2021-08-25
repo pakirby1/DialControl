@@ -10,59 +10,7 @@ import Foundation
 import Combine
 import SwiftUI
 import TimelaneCombine
-
-// MARK:- Events
-struct DownloadEvent: CustomStringConvertible {
-    let index: Int
-    let total: Int
-    let url: String
-
-    var completionRatio: CGFloat {
-        return (CGFloat(index) / CGFloat(total))
-    }
-
-    var description: String {
-        return "\(index) of \(total): \(file)"
-    }
-
-    var file: String {
-        return url.components(separatedBy: "/").last ?? ""
-    }
-}
-
-enum DownloadEventEnum : CustomStringConvertible {
-    case idle
-    case inProgress(DownloadEvent)
-    case finished
-    case failed(Error)
-    case cancelled
-    
-    var description: String {
-        switch(self) {
-            case .inProgress(let die) :
-                return "\(die.index) of \(die.total): \(die.file)"
-            case .finished:
-                return "Download Finished"
-            case .failed(let error):
-                return "Download Failed : \(error)"
-            case .cancelled:
-                return "Download Cancelled"
-            case .idle:
-                return "Tap to start download"
-        }
-    }
-    
-    func asResult() -> Result<DownloadEventEnum, Error> {
-        return .success(self)
-    }
-}
-
-enum DownloadImageError: Error {
-    case notFound(String)
-    case networkError
-}
-
-typealias DownloadImageEventEnumStream = AnyPublisher<Result<DownloadEventEnum, Error>, Never>
+import SwiftyJSON
 
 // MARK:- protocols
 protocol ImageServiceProtocol : ObservableObject {
@@ -78,19 +26,16 @@ extension ImageServiceProtocol {
                 .receive(on: RunLoop.main)
                 .eraseToAnyPublisher()
     }
-}
-
-class ImageService : ImageServiceProtocol, UrlBuildable {
+    
     func cancel() {
         self.isCancelled = true
     }
-    
-    var isCancelled: Bool = false
-    let finishedUrls: [String] = ["https://github.com/pakirby1/TableViewTutorial.git",
-                              "https://github.com/pakirby1/asfasf.git",
-                              "https://github.com/pakirby1/oieoiwer.git",
-                          "https://github.com/AvdLee/CombineSwiftPlayground"]
+}
 
+class ImageService : ImageServiceProtocol {
+    var urls: [String] = []
+    var isCancelled: Bool = false
+    
     func downloadAllImages() -> DownloadImageEventEnumStream {
         func processImage(url: URL,
                           index: Int,
@@ -127,14 +72,11 @@ class ImageService : ImageServiceProtocol, UrlBuildable {
             return stream
         }
         
-        
         var cancelledEvent: AnyPublisher<Result<DownloadEventEnum, Error>, Never> {
-            let x = Just(DownloadEventEnum
+            return Just(DownloadEventEnum
                             .cancelled
                             .asResult()
-            )
-            
-            return x.eraseToAnyPublisher()
+            ).eraseToAnyPublisher()
         }
         
         let urls: [URL] = buildImagesUrls()
@@ -173,299 +115,105 @@ class ImageService : ImageServiceProtocol, UrlBuildable {
     }
 }
 
-protocol UrlBuildable {
-    func buildImagesUrls() -> [String]
-}
-
-extension UrlBuildable {
-//    func buildImagesUrls() -> [String] {
-//        var ret: [String] = []
-//
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/perceptivecopilot.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/landocalrissian.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png")
-//        ret.append("https://pakirby1.github.io/images/XWing/upgrades/chewbacca-crew-swz19.png")
-//
-//        return ret
-//    }
-    
-    func buildImagesUrls() -> [URL] {
-        return buildImagesUrls().compactMap({ URL(string: $0) })
-    }
+enum DownloadURLsError: Swift.Error {
+    case fileNotFound(name: String)
+    case fileDecodingFailed(name: String, Swift.Error)
 }
 
 extension ImageService {
-    private func getAllUpgradeFiles() -> [String] {
-        var files: [String] = ["/upgrades/astromech.json",
-                               "/upgrades/cannon.json"
-        ]
-        
-        return files
+    private var pilotsBaseURL: String {
+        return "https://pakirby1.github.io/images/XWing/pilots/"
     }
     
-    private func getAllPilotFiles() -> [String] {
-        var files: [String] = ["/pilots/scum-and-villainy/g-1a-starfighter.json",
-                               "/pilots/first-order/tie-ba-interceptor.json"
-        ]
-        
-        return files
+    private var upgradesBaseURL: String {
+        return "https://pakirby1.github.io/images/XWing/upgrades/"
     }
     
-    private func getAllFiles() -> [String] {
-        return getAllPilotFiles()
-    }
     
-    func buildImagesUrls() -> [String] {
-        func buildPilotsStream() -> AnyPublisher<DownloadImageType<RemoteURL>, Never> {
-            getAllPilotFiles()  // [String]
-                .compactMap{ LocalURL(string:$0) }  // [LocalURL]
-                .map{ DownloadImageType.pilot($0) } // [DownloadImageType<LocalURL>]
-                .publisher  // Publishers.Sequence<[DownloadImageType<LocalURL>], Never>
-                .map{ $0.buildXWS() } // Publishers.Sequence<[DownloadImageType<XWS>], Never>
-                .compactMap{ $0.buildURL() } // Publishers.Sequence<[DownloadImageType<RemoteURL>], Never>
-                .eraseToAnyPublisher()  // AnyPublisher<DownloadImageType<RemoteURL>, Never>
-        }
-        
-        func buildUpgradesStream() -> AnyPublisher<DownloadImageType<RemoteURL>, Never> {
-            getAllUpgradeFiles()  // [String]
-                .compactMap{ LocalURL(string:$0) }  // [LocalURL]
-                .map{ DownloadImageType.upgrade($0) } // [DownloadImageType<LocalURL>]
-                .publisher  // Publishers.Sequence<[DownloadImageType<LocalURL>], Never>
-                .map{ $0.buildXWS() } // Publishers.Sequence<[DownloadImageType<XWS>], Never>
-                .compactMap{ $0.buildURL() } // Publishers.Sequence<[DownloadImageType<RemoteURL>], Never>
-                .eraseToAnyPublisher()  // AnyPublisher<DownloadImageType<RemoteURL>, Never>
+    /// returns
+    ///     ["first-order/tie-fo-fighter.json",
+    ///     "galactic-empire/tie-rb-heavy.json"]
+    private func readRecursive(subDirectory: String) -> [String] {
+        guard let directoryURL = URL(string: subDirectory, relativeTo: Bundle.main.bundleURL) else {
+            return []
         }
         
         var ret: [String] = []
-        var cancellables = Set<AnyCancellable>()
         
-        buildPilotsStream()
-            .merge(with: buildUpgradesStream())
-            .sink(receiveValue: { remote in
-                switch(remote) {
-                    case .pilot(let url):
-                        ret.append(url.absoluteString)
-                    case .upgrade(let url):
-                        ret.append(url.absoluteString)
+        print(directoryURL.path)
+        
+        if let enumerator =
+            FileManager.default.enumerator(atPath: directoryURL.path)
+        {
+            for case let path as String in enumerator {
+                // Skip entries with '_' prefix, for example
+                if path.hasSuffix("json") {
+                    ret.append(path)
                 }
-            }).store(in: &cancellables)
-
+            }
+        }
+        
         return ret
     }
-}
-
-enum DownloadImageType<T> {
-    case pilot(T)
-    case upgrade(T)
-}
-
-typealias LocalURL = URL
-typealias RemoteURL = URL
-typealias XWS = String
-
-/// https://pakirby1.github.io/images/XWing/pilots/majorvonreg.png
-extension DownloadImageType where T == LocalURL {
-    /// for pilot URL = "/pilots/first-order/tie-ba-interceptor.json"
-    ///     ["majorvonreg", "holo", "ember", "firstorderprovocateur" ... ]
-    /// for upgrade URL = "/upgrades/astromech.json
-    ///     ["chopper", "genius", "r2astromech" ... ]
-    func buildXWS() -> DownloadImageType<XWS> {
-        switch(self) {
-            case .pilot(let url):
-                return .pilot("4lom")
-            case .upgrade(let url):
-                return .upgrade("4lom")
+    
+    private func buildImagesUrls() -> [URL] {
+        func buildFileURLs() -> [URL] {
+            // get all files in Bundle/Data/Pilots and sub directories
+            let files = readRecursive(subDirectory: "pilots")
+            let urls: [URL] = files.map{ URL(string: $0)! }
+            
+            return urls
         }
-    }
-    
-    func buildXWSs() -> [DownloadImageType<XWS>] {
-        switch(self) {
-            case .pilot(let url) :
-                return getXWSForPilots(in: url)
-            case .upgrade(let url) :
-                return getXWSForUpgrades(in: url)
-        }
-    }
-    
-    func getXWSForPilots(in: URL) -> [DownloadImageType<XWS>] {
-        return [
-            .pilot("majorvonreg"),
-            .pilot("holo"),
-            .pilot("ember"),
-            .pilot("firstorderprovocateur")
-        ]
-    }
-    
-    func getXWSForUpgrades(in: URL) -> [DownloadImageType<XWS>] {
-        return [
-            .upgrade("chopper"),
-            .upgrade("genius"),
-            .upgrade("r2astromech")
-        ]
-    }
-}
-
-extension DownloadImageType where T == XWS {
-    static var pilotBaseURL = "https://pakirby1.github.io/images/XWing/pilots/"
-    
-    static var upgradeBaseURL = "https://pakirby1.github.io/images/XWing/upgrades/"
-    
-    func buildURL() -> DownloadImageType<RemoteURL>? {
         
-        switch(self) {
-            case .pilot(let xws):
-                if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
-                    return .pilot(remoteURL)
-                }
+        func buildXWS(file: URL) throws -> [String] {
+            // get the xws for each pilot from JSON file
+            guard let directoryURL = URL(string: "pilots", relativeTo: Bundle.main.bundleURL) else {
+                return []
+            }
+            
+            let path = directoryURL.appendingPathComponent(file.absoluteString)
+            
+            do {
+                let data = try Data(contentsOf: path)
+                let json = try JSON(data: data)
                 
-            case .upgrade(let xws):
-                if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
-                    return .upgrade(remoteURL)
-                }
-        }
-        
-        return nil
-    }
-    
-    func buildURL_New() -> DownloadImageType<RemoteURL>? {
-        switch(self) {
-            case .pilot(let xws):
-                if let url = URL(string: "\(DownloadImageType<XWS>.pilotBaseURL)\(xws).png") {
-                    return .pilot(url)
-                }
-            case .upgrade(let xws):
-                if let url = URL(string: "\(DownloadImageType<XWS>.upgradeBaseURL)\(xws).png") {
-                    return .upgrade(url)
-                }
-        }
-        
-        return nil
-    }
-}
-
-enum DownloadImageEventState {
-    case idle
-    case inProgress(DownloadImageEvent)
-    case completed
-    case failed(String)
-}
-
-struct DownloadImageEvent: CustomStringConvertible {
-    let index: Int
-    let total: Int
-    let url: String
-    let isCompleted: Bool
-    
-    var completionRatio: CGFloat {
-        return (CGFloat(index) / CGFloat(total))
-    }
-    
-    var description: String {
-        return "\(index) of \(total): \(file)"
-    }
-    
-    var file: String {
-        return url.components(separatedBy: "/").last ?? ""
-    }
-    
-//    static func buildCompleted() -> ImageService.DownloadImageEventResult {
-//        return .success(DownloadImageEvent(index: 0, total: 0, url: "", isCompleted: true))
-//    }
-}
-
-// https://www.swiftbysundell.com/articles/handling-loading-states-in-swiftui/
-enum LoadingState<Value> {
-    case idle
-    case loading(Double)
-    case failed(Error)
-    case loaded(Value)
-}
-
-protocol LoadableObject: ObservableObject {
-    associatedtype Output
-    var state: LoadingState<Output> { get }
-    func load()
-}
-
-protocol LoadableView: View {
-    var ratio: Double { get set }
-}
-
-struct SimpleLoadingView: LoadableView {
-    @State var ratio: Double
-    
-    var body: some View {
-        Text("SimpleLoadingView ratio: \(ratio)")
-    }
-}
-
-struct AsyncContentView<Source: LoadableObject,
-                        LoadingView: LoadableView,
-                        Content: View>: View {
-    @ObservedObject var source: Source
-    var loadingView: LoadingView
-    var content: (Source.Output) -> Content
-
-    init(source: Source,
-         loadingView: LoadingView,
-         @ViewBuilder content: @escaping (Source.Output) -> Content) {
-        self.source = source
-        self.loadingView = loadingView
-        self.content = content
-        
-//        self.loadingView.
-    }
-
-    var body: some View {
-        switch source.state {
-        case .idle:
-            Color.clear.onAppear(perform: source.load)
-        case .loading(let ratio):
-            loadingView
-//                .overlay(Text("ratio: \(ratio)"))
-        case .failed(let error):
-            loadingView
-                .overlay(Text("error: \(error.localizedDescription)"))
-        case .loaded(let output):
-            content(output)
-        }
-    }
-}
-
-class PublishedObject<Wrapped: Publisher>: LoadableObject {
-    @Published private(set) var state = LoadingState<Wrapped.Output>.idle
-
-    private let publisher: Wrapped
-    private var cancellable: AnyCancellable?
-
-    init(publisher: Wrapped) {
-        self.publisher = publisher
-    }
-
-    func load() {
-        state = .loading(0)
-
-        cancellable = publisher
-            .map(LoadingState.loaded)
-            .catch { error in
-                Just(LoadingState.failed(error))
+                let pilotsXWSArr = json["pilots"].arrayValue.map { $0["xws"].stringValue }
+                
+                return pilotsXWSArr
+            } catch {
+                throw DownloadURLsError.fileDecodingFailed(name: path.absoluteString, error)
             }
-            .sink { [weak self] state in
-                self?.state = state
+            
+            return []
+        }
+        
+        func buildImagesURLs(xwsArr: [String]) -> [URL] {
+            // are we building a pilot or upgrade URL?
+            return xwsArr.compactMap{ xws -> URL? in
+                let url = "\(pilotsBaseURL)\(xws).png"
+                return URL(string: url)
             }
+        }
+        
+        var imagesURLs: [URL] = []
+        let fileUrlPublisher: Publishers.Sequence<[URL], Never>  = buildFileURLs().publisher
+        var cancellables = Set<AnyCancellable>()
+        
+        fileUrlPublisher.map{ fileURL -> [URL] in
+            do {
+                let xwsArr = try buildXWS(file: fileURL)
+                let urls = buildImagesURLs(xwsArr: xwsArr)
+                
+                return urls
+            } catch {
+                return []
+            }
+            
+        }
+        .print()
+        .sink(receiveValue: { imagesURLs.append(contentsOf: $0) })
+        .store(in: &cancellables)
+        
+        return imagesURLs
     }
 }
-
-/*
-extension AsyncContentView {
-    init<P: Publisher>(
-        source: P,
-        @ViewBuilder content: @escaping (P.Output) -> Content
-    ) where Source == PublishedObject<P> {
-        self.init(
-            source: PublishedObject(publisher: source),
-            content: content
-        )
-    }
-}
-*/
