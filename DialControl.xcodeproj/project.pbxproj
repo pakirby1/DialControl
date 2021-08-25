@@ -14,7 +14,6 @@
 		AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6424A2C93B00DF689B /* ImageData.swift */; };
 		AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */; };
 		AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */; };
-		AE0E38C024E37BEB00A3A824 /* Test in Resources */ = {isa = PBXBuildFile; fileRef = AE0E38BF24E37BEB00A3A824 /* Test */; };
 		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
 		AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */ = {isa = PBXBuildFile; fileRef = AE15E78D241D02120002F696 /* tie-in-interceptor.json */; };
 		AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */; };
@@ -129,7 +128,6 @@
 		AE028C6424A2C93B00DF689B /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFetchedResultsController.swift; sourceTree = "<group>"; };
 		AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotStateData.swift; sourceTree = "<group>"; };
-		AE0E38BF24E37BEB00A3A824 /* Test */ = {isa = PBXFileReference; lastKnownFileType = text; path = Test; sourceTree = "<group>"; };
 		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AE15E78D241D02120002F696 /* tie-in-interceptor.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tie-in-interceptor.json"; sourceTree = "<group>"; };
 		AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradesView.swift; sourceTree = "<group>"; };
@@ -344,7 +342,6 @@
 			isa = PBXGroup;
 			children = (
 				AECF88C7253AB68800AAA23B /* Documentation */,
-				AE0E38BF24E37BEB00A3A824 /* Test */,
 				AE3539532430C64700AC023A /* WedgeView.swift */,
 				AE4D58C123F8087C00C66136 /* DialControl */,
 				AE4D58DB23F8087E00C66136 /* DialControlTests */,
@@ -581,7 +578,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AE0E38C024E37BEB00A3A824 /* Test in Resources */,
 				AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */,
 				AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */,
 				AEBDCDAE25020A2E0004415F /* LAATProxy.json in Resources */,

@@ -12,7 +12,7 @@ import SwiftUI
 import TimelaneCombine
 import SwiftyJSON
 
-// MARK:- protocols
+// MARK:- protocol
 protocol ImageServiceProtocol : ObservableObject {
     var isCancelled: Bool { get set }
     func downloadAllImages() -> DownloadImageEventEnumStream
@@ -21,6 +21,7 @@ protocol ImageServiceProtocol : ObservableObject {
 
 extension ImageServiceProtocol {
     func downloadImage(at: URL) -> AnyPublisher<UIImage, URLError> {
+        // NetworkCacheViewModel.loadImage(url: at)
         return URLSession.shared.dataTaskPublisher(for: at)
                 .compactMap { UIImage(data: $0.data) }
                 .receive(on: RunLoop.main)
@@ -32,6 +33,7 @@ extension ImageServiceProtocol {
     }
 }
 
+// MARK:- service
 class ImageService : ImageServiceProtocol {
     var urls: [String] = []
     var isCancelled: Bool = false
@@ -43,7 +45,7 @@ class ImageService : ImageServiceProtocol {
         {
             return downloadImage(at: url)
                 .print()
-                .map{ image -> Result<DownloadEventEnum, Error> in
+                .map{ _ -> Result<DownloadEventEnum, Error> in
                     let die = DownloadEvent(index: index,
                                                  total: total,
                                                  url: url.absoluteString)
@@ -118,22 +120,6 @@ class ImageService : ImageServiceProtocol {
     }
 }
 
-enum DownloadURLsError: Swift.Error {
-    case fileNotFound(name: String)
-    case fileDecodingFailed(name: String, Swift.Error)
-}
-
-enum DownloadImageDirectory: CustomStringConvertible {
-    case pilots
-    case upgrades
-    
-    var description: String {
-        switch(self) {
-            case .pilots: return "pilots"
-            case .upgrades: return "upgrades"
-        }
-    }
-}
 extension ImageService {
     private var pilotsBaseURL: String {
         return "https://pakirby1.github.io/images/XWing/pilots/"
@@ -236,5 +222,23 @@ extension ImageService {
         .store(in: &cancellables)
         
         return imagesURLs
+    }
+}
+
+// MARK:- enums
+enum DownloadURLsError: Swift.Error {
+    case fileNotFound(name: String)
+    case fileDecodingFailed(name: String, Swift.Error)
+}
+
+enum DownloadImageDirectory: CustomStringConvertible {
+    case pilots
+    case upgrades
+    
+    var description: String {
+        switch(self) {
+            case .pilots: return "pilots"
+            case .upgrades: return "upgrades"
+        }
     }
 }
