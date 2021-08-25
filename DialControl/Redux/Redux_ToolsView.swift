@@ -348,30 +348,4 @@ struct ToolsCardNew<AccessoryView: View>: View {
 }
 
 
-func readRecursive() {
-    let directoryURL = Bundle.main.bundleURL
-    let localFileManager = FileManager()
-     
-    let resourceKeys = Set<URLResourceKey>([.nameKey, .isDirectoryKey])
-    let directoryEnumerator = localFileManager.enumerator(at: directoryURL, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)!
-     
-    var fileURLs: [URL] = []
-    for case let fileURL as URL in directoryEnumerator {
-        guard let resourceValues = try? fileURL.resourceValues(forKeys: resourceKeys),
-            let isDirectory = resourceValues.isDirectory,
-            let name = resourceValues.name
-            else {
-                continue
-        }
-        
-        if isDirectory {
-            if name == "_extras" {
-                directoryEnumerator.skipDescendants()
-            }
-        } else {
-            fileURLs.append(fileURL)
-        }
-    }
-     
-    print(fileURLs)
-}
+

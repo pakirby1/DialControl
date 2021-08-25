@@ -263,7 +263,12 @@ typealias LocalURL = URL
 typealias RemoteURL = URL
 typealias XWS = String
 
+/// https://pakirby1.github.io/images/XWing/pilots/majorvonreg.png
 extension DownloadImageType where T == LocalURL {
+    /// for pilot URL = "/pilots/first-order/tie-ba-interceptor.json"
+    ///     ["majorvonreg", "holo", "ember", "firstorderprovocateur" ... ]
+    /// for upgrade URL = "/upgrades/astromech.json
+    ///     ["chopper", "genius", "r2astromech" ... ]
     func buildXWS() -> DownloadImageType<XWS> {
         switch(self) {
             case .pilot(let url):
@@ -272,10 +277,41 @@ extension DownloadImageType where T == LocalURL {
                 return .upgrade("4lom")
         }
     }
+    
+    func buildXWSs() -> [DownloadImageType<XWS>] {
+        switch(self) {
+            case .pilot(let url) :
+                return getXWSForPilots(in: url)
+            case .upgrade(let url) :
+                return getXWSForUpgrades(in: url)
+        }
+    }
+    
+    func getXWSForPilots(in: URL) -> [DownloadImageType<XWS>] {
+        return [
+            .pilot("majorvonreg"),
+            .pilot("holo"),
+            .pilot("ember"),
+            .pilot("firstorderprovocateur")
+        ]
+    }
+    
+    func getXWSForUpgrades(in: URL) -> [DownloadImageType<XWS>] {
+        return [
+            .upgrade("chopper"),
+            .upgrade("genius"),
+            .upgrade("r2astromech")
+        ]
+    }
 }
 
 extension DownloadImageType where T == XWS {
+    static var pilotBaseURL = "https://pakirby1.github.io/images/XWing/pilots/"
+    
+    static var upgradeBaseURL = "https://pakirby1.github.io/images/XWing/upgrades/"
+    
     func buildURL() -> DownloadImageType<RemoteURL>? {
+        
         switch(self) {
             case .pilot(let xws):
                 if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
@@ -285,6 +321,21 @@ extension DownloadImageType where T == XWS {
             case .upgrade(let xws):
                 if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
                     return .upgrade(remoteURL)
+                }
+        }
+        
+        return nil
+    }
+    
+    func buildURL_New() -> DownloadImageType<RemoteURL>? {
+        switch(self) {
+            case .pilot(let xws):
+                if let url = URL(string: "\(DownloadImageType<XWS>.pilotBaseURL)\(xws).png") {
+                    return .pilot(url)
+                }
+            case .upgrade(let xws):
+                if let url = URL(string: "\(DownloadImageType<XWS>.upgradeBaseURL)\(xws).png") {
+                    return .upgrade(url)
                 }
         }
         
