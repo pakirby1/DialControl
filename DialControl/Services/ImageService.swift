@@ -36,10 +36,6 @@ class ImageService : ImageServiceProtocol {
         service = NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: RemoteStore())
     }
     
-    func downloadImage(at: URL) -> AnyPublisher<UIImage, URLError> {
-        downloadImage_old(at: at)
-    }
-    
     func downloadImage_old(at: URL) -> AnyPublisher<UIImage, URLError> {
         // NetworkCacheViewModel.loadImage(url: at)
         return URLSession.shared.dataTaskPublisher(for: at)
@@ -48,8 +44,12 @@ class ImageService : ImageServiceProtocol {
                 .eraseToAnyPublisher()
     }
     
-    func downloadImage_new(at: URL) -> AnyPublisher<UIImage, URLError> {
-        return Empty().eraseToAnyPublisher()
+    func downloadImage_new(at: URL) -> AnyPublisher<UIImage, Error> {
+        return service
+            .loadData(url: at.absoluteString)
+            .compactMap { UIImage(data: $0) }
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
     }
     
     func downloadAllImages() -> DownloadImageEventEnumStream {
@@ -57,7 +57,7 @@ class ImageService : ImageServiceProtocol {
                           index: Int,
                           total: Int) -> DownloadImageEventEnumStream
         {
-            return downloadImage(at: url)
+            return downloadImage_new(at: url)
                 .print()
                 .map{ _ -> Result<DownloadEventEnum, Error> in
                     let die = DownloadEvent(index: index,
