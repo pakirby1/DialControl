@@ -20,6 +20,6 @@ class DIContainer {
         self.squadService = SquadService(moc: moc)
         self.pilotStateService = PilotStateService(moc: moc)
         self.jsonService = JSONService()
-        self.imageService = ImageService()
+        self.imageService = ImageService(moc: moc)
     }
 }

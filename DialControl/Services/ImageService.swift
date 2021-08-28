@@ -11,6 +11,7 @@ import Combine
 import SwiftUI
 import TimelaneCombine
 import SwiftyJSON
+import CoreData
 
 // MARK:- protocol
 protocol ImageServiceProtocol : ObservableObject {
@@ -29,13 +30,26 @@ extension ImageServiceProtocol {
 class ImageService : ImageServiceProtocol {
     var urls: [String] = []
     var isCancelled: Bool = false
+    let service: INetworkCacheService
+    
+    init(moc: NSManagedObjectContext) {
+        service = NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: RemoteStore())
+    }
     
     func downloadImage(at: URL) -> AnyPublisher<UIImage, URLError> {
+        downloadImage_old(at: at)
+    }
+    
+    func downloadImage_old(at: URL) -> AnyPublisher<UIImage, URLError> {
         // NetworkCacheViewModel.loadImage(url: at)
         return URLSession.shared.dataTaskPublisher(for: at)
                 .compactMap { UIImage(data: $0.data) }
                 .receive(on: RunLoop.main)
                 .eraseToAnyPublisher()
+    }
+    
+    func downloadImage_new(at: URL) -> AnyPublisher<UIImage, URLError> {
+        return Empty().eraseToAnyPublisher()
     }
     
     func downloadAllImages() -> DownloadImageEventEnumStream {
