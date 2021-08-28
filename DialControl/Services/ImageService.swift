@@ -20,14 +20,6 @@ protocol ImageServiceProtocol : ObservableObject {
 }
 
 extension ImageServiceProtocol {
-    func downloadImage(at: URL) -> AnyPublisher<UIImage, URLError> {
-        // NetworkCacheViewModel.loadImage(url: at)
-        return URLSession.shared.dataTaskPublisher(for: at)
-                .compactMap { UIImage(data: $0.data) }
-                .receive(on: RunLoop.main)
-                .eraseToAnyPublisher()
-    }
-    
     func cancel() {
         self.isCancelled = true
     }
@@ -37,6 +29,14 @@ extension ImageServiceProtocol {
 class ImageService : ImageServiceProtocol {
     var urls: [String] = []
     var isCancelled: Bool = false
+    
+    func downloadImage(at: URL) -> AnyPublisher<UIImage, URLError> {
+        // NetworkCacheViewModel.loadImage(url: at)
+        return URLSession.shared.dataTaskPublisher(for: at)
+                .compactMap { UIImage(data: $0.data) }
+                .receive(on: RunLoop.main)
+                .eraseToAnyPublisher()
+    }
     
     func downloadAllImages() -> DownloadImageEventEnumStream {
         func processImage(url: URL,
