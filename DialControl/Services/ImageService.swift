@@ -27,6 +27,8 @@ extension ImageServiceProtocol {
 }
 
 // MARK:- service
+/// Service used to manage Images
+///
 class ImageService : ImageServiceProtocol {
     var urls: [String] = []
     var isCancelled: Bool = false
@@ -46,7 +48,7 @@ class ImageService : ImageServiceProtocol {
     
     func downloadImage_new(at: URL) -> AnyPublisher<UIImage, Error> {
         return service
-            .loadData(url: at.absoluteString)
+            .loadDataIgnoreCache(url: at.absoluteString)
             .compactMap { UIImage(data: $0) }
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
@@ -57,20 +59,26 @@ class ImageService : ImageServiceProtocol {
                           index: Int,
                           total: Int) -> DownloadImageEventEnumStream
         {
+            func buildDownloadEvent() -> Result<DownloadEventEnum, Error> {
+                let die = DownloadEvent(index: index,
+                                             total: total,
+                                             url: url.absoluteString)
+                
+                return DownloadEventEnum.inProgress(die).asResult()
+            }
+            
+            func buildError(error: Error) -> Just<Result<DownloadEventEnum, Error>> {
+                self.isCancelled = true
+                print("======= Failed =======")
+                return Just(.failure(error))
+            }
+            
             return downloadImage_new(at: url)
                 .print()
-                .map{ _ -> Result<DownloadEventEnum, Error> in
-                    let die = DownloadEvent(index: index,
-                                                 total: total,
-                                                 url: url.absoluteString)
-                    
-                    return DownloadEventEnum.inProgress(die).asResult()
+                .map{_ in
+                    buildDownloadEvent()
                 }
-                .catch{ [unowned self] error -> Just<Result<DownloadEventEnum, Error>> in
-                    self.isCancelled = true
-                    print("======= Failed =======")
-                    return Just(.failure(error))
-                }
+                .catch{ buildError(error: $0) }
                 .delay(for: RunLoop.SchedulerTimeType.Stride(TimeInterval(delay)),
                        scheduler: RunLoop.main)
                 .eraseToAnyPublisher()

@@ -40,8 +40,8 @@ enum DownloadEventEnum : CustomStringConvertible {
     
     var description: String {
         switch(self) {
-            case .inProgress(let die) :
-                return "\(die.index) of \(die.total): \(die.file)"
+            case .inProgress(let de) :
+                return "\(de.index) of \(de.total): \(de.file)"
             case .finished:
                 return "Download Finished"
             case .failed(let error):
