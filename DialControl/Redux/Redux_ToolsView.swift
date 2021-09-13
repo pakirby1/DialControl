@@ -90,7 +90,7 @@ struct Redux_ToolsView: View {
                 .environmentObject(store)
         }
         
-        func buildProgressControl_New() -> some View {
+        func buildProgressControl() -> some View {
             ProgressControl(size: 60,
                             onStart: self.downloadAllImages,
                             onStop: self.cancel)
@@ -99,12 +99,7 @@ struct Redux_ToolsView: View {
         }
         
         return ToolsCardNew(tool: tool) {
-            if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
-            {
-                buildProgressControl_New()
-            } else {
-                buildProgressControl_Old()
-            }
+            buildProgressControl()
         }
     }
     
@@ -310,7 +305,7 @@ struct ToolsCardNew<AccessoryView: View>: View {
             .foregroundColor(self.tool.titleColor)
     }
     
-    var statusView_New: AnyView {
+    var statusView: AnyView {
         return VStack {
             Button(action: {
                     self
@@ -333,12 +328,7 @@ struct ToolsCardNew<AccessoryView: View>: View {
                 background
                 VStack {
                     if (tool.displayStatus) {
-                        if FeaturesManager.shared.isFeatureEnabled(.DownloadAllImages)
-                        {
-                            statusView_New
-                        } else {
-                            statusView_Old
-                        }
+                        statusView
                     }
                 }
                 self.content().offset(x: 300, y: 0)

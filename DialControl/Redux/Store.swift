@@ -568,21 +568,19 @@ func factionReducer(state: inout MyAppState,
                 return squads.filter(filter)
             }
             
-            if FeaturesManager.shared.isFeatureEnabled(.FactionSquadList_DamagedPoints)
-            {
-                var squadPilotsCollection: Array<[ShipPilot]> = []
-                
-                state.faction.squadDataList.forEach{ squadData in
-                    if let json = squadData.json {
-                        let squad = Squad.serializeJSON(jsonString: json)
+            
+            var squadPilotsCollection: Array<[ShipPilot]> = []
+            
+            state.faction.squadDataList.forEach{ squadData in
+                if let json = squadData.json {
+                    let squad = Squad.serializeJSON(jsonString: json)
 //                        let squadPilots = SquadCardViewModel.getShips(squad: squad, squadData: squadData)
-                        let squadPilots = squadData.getShips()
-                        squadPilotsCollection.append(squadPilots)
-                    }
+                    let squadPilots = squadData.getShips()
+                    squadPilotsCollection.append(squadPilots)
                 }
-                
-                state.faction.shipPilotsCollection = squadPilotsCollection
             }
+            
+            state.faction.shipPilotsCollection = squadPilotsCollection
         }
         
 //        setSquads_Old(squads: squads)

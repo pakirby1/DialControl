@@ -114,31 +114,13 @@ struct Redux_FactionSquadList: View {
     }
     
     var shipsSection: some View {
-        if FeaturesManager.shared.isFeatureEnabled(.FactionSquadList_DamagedPoints)
-        {
-            let squadList: [Squad] = squadDataList.map{
-                var squad = Squad.loadSquad(jsonString: $0.json!)
-                return squad.getSquad(squadData: $0)
-            }
-            
-            return Section {
-                ForEach(squadDataList, id:\.self) { squadData in
-                    Redux_FactionSquadCard(squadData: squadData,
-                                           deleteCallback: self.deleteSquad,
-                                           updateCallback: self.updateSquad)
-                    .environmentObject(self.viewFactory)
-                    .environmentObject(self.store)
-                }
-            }
-        } else {
-            return Section {
-                ForEach(squadDataList, id:\.self) { squadData in
-                    Redux_FactionSquadCard(squadData: squadData,
-                                           deleteCallback: self.deleteSquad,
-                                           updateCallback: self.updateSquad)
-                    .environmentObject(self.viewFactory)
-                    .environmentObject(self.store)
-                }
+        return Section {
+            ForEach(squadDataList, id:\.self) { squadData in
+                Redux_FactionSquadCard(squadData: squadData,
+                                       deleteCallback: self.deleteSquad,
+                                       updateCallback: self.updateSquad)
+                .environmentObject(self.viewFactory)
+                .environmentObject(self.store)
             }
         }
     }
