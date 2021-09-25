@@ -564,10 +564,65 @@ enum GrantElement : Codable {
     case force(ForceGrant)
     case linkedAction(LinkedActionGrant)
     case arc(ArcGrant)
+    case unknown
+    
+    /// "type" element in JSON is decoded directly into this enum
+    enum StatType: String, Codable {
+        case stat, arc, action, force, slot
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case type
+    }
     
     init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
+        self = .unknown
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let type = try container.decode(GrantElement.StatType.self, forKey: CodingKeys.type)
         
+        switch(type) {
+            case .stat:
+                let typeContainer = try decoder.singleValueContainer()
+                if let x = try? typeContainer.decode(StatGrant.self) {
+                    self = .stat(x)
+                    return
+                }
+                
+            case .arc:
+                let typeContainer = try decoder.singleValueContainer()
+                if let x = try? typeContainer.decode(ArcGrant.self) {
+                    self = .arc(x)
+                    return
+                }
+            
+            case .action:
+                let typeContainer = try decoder.singleValueContainer()
+                if let x = try? typeContainer.decode(ActionGrant.self) {
+                    self = .action(x)
+                    return
+                }
+                
+            case .force:
+                let typeContainer = try decoder.singleValueContainer()
+                if let x = try? typeContainer.decode(ForceGrant.self) {
+                    self = .force(x)
+                    return
+                }
+                
+            case .slot:
+                let typeContainer = try decoder.singleValueContainer()
+                if let x = try? typeContainer.decode(SlotGrant.self) {
+                    self = .slot(x)
+                    return
+                }
+        }
+    }
+    
+    /*
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+//        let dictionary = try container.decode(Array<Any>.self)
+
         if let x = try? container.decode(LinkedActionGrant.self) {
             self = .linkedAction(x)
             return
@@ -578,10 +633,10 @@ enum GrantElement : Codable {
             return
         }
         
-        if let x = try? container.decode(ArcGrant.self) {
-            self = .arc(x)
-            return
-        }
+//        if let x = try? container.decode(ArcGrant.self) {
+//            self = .arc(x)
+//            return
+//        }
         
         if let x = try? container.decode(StatGrant.self) {
             self = .stat(x)
@@ -597,8 +652,7 @@ enum GrantElement : Codable {
             if x.type == "stat" {
                 self = .stat(StatGrant(type: x.type,
                                        value: x.value,
-                                       amount: x.amount,
-                                       arc: ""))
+                                       amount: x.amount))
             } else {
                 self = .slot(x)
             }
@@ -608,7 +662,8 @@ enum GrantElement : Codable {
     
         throw DecodingError.typeMismatch(GrantElement.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for ConfigDatumElement"))
     }
-
+    */
+    
     func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         switch self {
@@ -624,6 +679,8 @@ enum GrantElement : Codable {
             try container.encode(x)
         case .linkedAction(let x):
             try container.encode(x)
+        default:
+            return
         }
     }
 }
@@ -643,6 +700,8 @@ extension GrantElement: CustomStringConvertible {
                 return forceGrant.description
             case .linkedAction(let linkedActionGrant) :
                 return linkedActionGrant.description
+            default:
+                return "Unknown Grant Type"
         }
     }
 }
@@ -658,16 +717,35 @@ extension ArcGrant: CustomStringConvertible {
         return "ArcGrant type: \(type) value: { \(value) }"
     }
 }
-
-// MARK:- ActionGrant
-struct ActionGrant : Codable {
+// MARK:- TypeValueGrant
+struct TypeValueGrant : Codable {
     let type: String
     let value: GrantValue
 }
 
+extension TypeValueGrant: CustomStringConvertible {
+    var description: String {
+        return "TypeValueGrant type: \(type) value: { \(value) }"
+    }
+}
+
+
+
+
+// MARK:- ActionGrant
+struct ActionGrant : Codable {
+    let info: TypeValueGrant
+}
+
+//struct ActionGrant : Codable {
+//    let type: String
+//    let value: GrantValue
+//}
+
 extension ActionGrant: CustomStringConvertible {
     var description: String {
-        return "ActionGrant type: \(type) value: { \(value) }"
+//        return "ActionGrant type: \(type) value: { \(value) }"
+        return "ActionGrant info: \(info.description) }"
     }
 }
 
@@ -689,12 +767,12 @@ struct StatGrant : Codable {
     let type: String
     let value: String
     let amount: Int
-    let arc: String
+//    let arc: String
 }
 
 extension StatGrant : CustomStringConvertible {
     var description: String {
-        return "StatGrant type: \(type) value: \(value) amount: \(amount) arc: \(arc)\n"
+        return "StatGrant type: \(type) value: \(value) amount: \(amount)"
     }
 }
 

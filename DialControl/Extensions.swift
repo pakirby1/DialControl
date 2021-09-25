@@ -17,6 +17,16 @@ extension View {
     }
 }
 
+
+/// Creates a new `View` based on a condition.
+///
+/// `return myView.applyIf(condition: { self.hasWon == true }, apply: { return WinConditionView() })`
+///
+/// - Parameters:
+///   - condition: Closure that is to be evaluated
+///   - apply: Closure that returns a new `View`
+/// - Returns: a `View`
+///
 private extension View {
     @ViewBuilder func applyIf<T: View>(_ condition: @autoclosure () -> Bool, apply: (Self) -> T) -> some View {
         if condition() {
@@ -27,7 +37,8 @@ private extension View {
     }
 }
 
-/// Performs a side-effect
+/// Performs a side-effect.
+/// Use `map()` if you want to transform `Output`
 ///
 /// return URLSession.shared.dataTaskPublisher(for: at)
 ///     .compactMap { UIImage(data: $0.data) }
@@ -36,6 +47,7 @@ private extension View {
 /// - Parameters:
 ///   - handler: Closure that contains the side-effect logic
 /// - Returns: The publishers' output (as-is)
+///
 extension Publisher {
     func `do`(handler: @escaping (Output) -> ()) -> AnyPublisher<Output, Failure> {
         self.handleEvents(receiveOutput: { value in
@@ -45,6 +57,11 @@ extension Publisher {
 }
 
 extension Publisher {
+    
+    /// Converts the output into a `Result<Output, Failure>` type.
+    /// This catches any errors and stores them in the `Result`
+    /// - Parameters:
+    /// - Returns: the publishers' output converted to a `Result<Output, Failure>` object.
     func convertToResult() -> AnyPublisher<Result<Output, Failure>, Never> {
         self.map(Result.success)
             .catch { Just(.failure($0)) }
