@@ -163,7 +163,7 @@
          <BreakpointContent
             uuid = "795B59DC-6407-4674-B1CD-B87AF13C4DA9"
             shouldBeEnabled = "No"
-            condition = "upgradeName == &quot;shieldupgrade&quot;"
+            condition = "upgradeName == &quot;enhancedjammingsuite&quot;"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DialControl/UpgradeUtility.swift"

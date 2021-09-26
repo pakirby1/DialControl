@@ -32,7 +32,7 @@
         "ffg": 488
       }
     ],
-    "cost": { "value": 4 },
+    "cost": { "value": 3 },
     "restrictions": [{ "factions": ["Resistance"] }],
     "hyperspace": true
   },
@@ -92,7 +92,7 @@
         "ffg": 464
       }
     ],
-    "cost": { "value": 4 },
+    "cost": { "value": 3 },
     "hyperspace": true
   },
   {
@@ -152,7 +152,7 @@
         "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/c0e458b69076138e2408664be131f61e.png"
       }
     ],
-    "cost": { "value": 9 }
+    "cost": { "value": 8 }
   },
   {
     "sides": [
@@ -188,6 +188,27 @@
     "cost": { "value": 4 },
     "limited": 1,
     "xws": "sensorbuoysuite",
+    "hyperspace": true
+  },
+  {
+    "name": "Sensor Scramblers",
+    "limited": 0,
+    "xws": "sensorscramblers",
+    "sides": [
+      {
+        "title": "Sensor Scramblers",
+        "type": "Tech",
+        "ability": "Setup: Gain 1 cloak token. While you are cloaked, other ships cannot acquire locks on you. During the End Phase, if you are cloaked and there is an enemy ship at range 0-3, you must decloak. If you do and that decloak fails, lose 1 cloak token.",
+        "slots": ["Tech"],
+        "image": "???",
+        "artwork": "???",
+        "ffg": 939
+      }
+    ],
+    "cost": { "value": 1 },
+    "restrictions": [
+      { "ships": ["tiewiwhispermodifiedinterceptor", "tievnsilencer"] }
+    ],
     "hyperspace": true
   }
 ]
