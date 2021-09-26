@@ -198,3 +198,18 @@ struct ChargeType {
 }
 ```
 
+## Adding new Upgrades & Pilots
+When new pilots/upgrades are added to the game, do the following to update SquadManager
+
+1. Pull the latest from https://github.com/guidokessels/xwing-data2
+2. Pull the latest from https://github.com/CrazyVulcan/x-wing2.0-project-goldenrod
+
+The first pull will download the xws json files and the second will pull down the images.
+
+1. Copy the images to ~/Documents/github/pakirby1.github.io/images/XWing/pilots
+2. Copy the xws to ~/Documents/DialControl/Data/pilots
+3. Add & push the files to github
+ - git add .
+ - git commit -m "Message"
+ - git push
+
