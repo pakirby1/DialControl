@@ -41,7 +41,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                 .padding(.leading, 5)
                 .background(Color.black)
                 
-                Spacer()
+//                Spacer()
                 
                 // https://medium.com/swlh/swiftui-and-the-missing-environment-object-1a4bf8913ba7
                 
