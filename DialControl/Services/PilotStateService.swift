@@ -156,6 +156,7 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
             
             let arc = ship.arcStats
             let agility = ship.agilityStats
+            let firingArcs = ship.firingArcs
             var allUpgrades : [Upgrade] = []
             
             // Add the upgrades from SquadPilot.upgrades by iterating over the

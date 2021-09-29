@@ -25,23 +25,47 @@ struct LinkedViewNew: View {
     func buildTokenView(isActive: Bool) -> some View {
         ZStack {
             // have to use if instead of switch because it returns some View
-            if type == .charge {
-                TokenView(symbol: StatButtonType.charge.symbol,
-                          color: type.color,
-                          isActive: isActive)
-            } else if type == .force {
-                TokenView(symbol: StatButtonType.force.symbol,
-                          color: type.color,
-                          isActive: isActive)
-            } else if type == .shield {
-                TokenView(symbol: StatButtonType.shield.symbol,
-                          color: type.color,
-                          isActive: isActive)
-            } else {
-                TokenView(symbol: StatButtonType.hull.symbol,
-                          color: type.color,
-                          isActive: isActive)
+            switch(type) {
+                case .charge:
+                    TokenView(symbol: StatButtonType.charge.symbol,
+                              color: type.color,
+                              isActive: isActive)
+                case .force:
+                    TokenView(symbol: StatButtonType.force.symbol,
+                              color: type.color,
+                              isActive: isActive)
+                
+                case .shield:
+                    TokenView(symbol: StatButtonType.shield.symbol,
+                              color: type.color,
+                              isActive: isActive)
+                    
+                case .hull:
+                    TokenView(symbol: StatButtonType.hull.symbol,
+                              color: type.color,
+                              isActive: isActive)
+                    
+                default:
+                    EmptyView()
             }
+            
+//            if type == .charge {
+//                TokenView(symbol: StatButtonType.charge.symbol,
+//                          color: type.color,
+//                          isActive: isActive)
+//            } else if type == .force {
+//                TokenView(symbol: StatButtonType.force.symbol,
+//                          color: type.color,
+//                          isActive: isActive)
+//            } else if type == .shield {
+//                TokenView(symbol: StatButtonType.shield.symbol,
+//                          color: type.color,
+//                          isActive: isActive)
+//            } else {
+//                TokenView(symbol: StatButtonType.hull.symbol,
+//                          color: type.color,
+//                          isActive: isActive)
+//            }
         }
     }
     

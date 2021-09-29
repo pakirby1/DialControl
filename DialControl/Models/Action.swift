@@ -80,6 +80,7 @@ struct ChargeAction : ActionProtocol {
                 pilotStateData.force.decrement()
             case .charge:
                 pilotStateData.charge.decrement()
+            default: return
             }
         }
 
@@ -97,6 +98,7 @@ struct ChargeAction : ActionProtocol {
                     newPilotStateData = pilotStateData.force.increment()
                 case .charge:
                     newPilotStateData = pilotStateData.charge.increment()
+                default: return
             }
 
             // call updateState(newPilotStateData)

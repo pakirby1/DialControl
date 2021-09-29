@@ -159,6 +159,15 @@ protocol ShipProtocol {
 
 // Best way to handle missing keys in JSON
 /// https://stackoverflow.com/questions/44575293/with-jsondecoder-in-swift-4-can-missing-keys-use-a-default-value-instead-of-hav
+/*
+ "stats": [
+     { "type": "attack", "arc": "Bullseye Arc", "value": 3 },
+     { "type": "attack", "arc": "Front Arc", "value": 2 },
+     { "type": "agility", "value": 3 },
+     { "type": "hull", "value": 3 },
+     { "type": "shields", "value": 0 }
+   ]
+ */
 struct Stat: Codable {
     var arc: String { return _arc ?? "" }
     let type: String
@@ -166,7 +175,7 @@ struct Stat: Codable {
     private var _arc: String?
 
     enum CodingKeys: String, CodingKey {
-        case _arc = "name"
+        case _arc = "arc"
         case type
         case value
     }
@@ -347,7 +356,107 @@ extension Ship {
             }
     }
     
+    struct FiringArc {
+        let type: FiringArcType
+        let value: Int
+        
+        init(type: String, value: Int) {
+            self.type = FiringArcType(type)
+            self.value = value
+        }
+        
+        var healthStat: HealthStat {
+            return HealthStat(type: .attack(type), value: self.value)
+        }
+    }
+    
+    enum FiringArcType: String {
+        case frontArc = "Front Arc"
+        case singleTurretArc = "Single Turret Arc"
+        case bullseyeArc = "Bullseye Arc"
+        case fullFrontArc = "Full Front Arc"
+        case doubleTurretArc = "Double Turret Arc"
+        case rearArc = "Rear Arc"
+        case noArc
+        
+        init(_ from: String) {
+                switch(from) {
+                    case "Front Arc": self = .frontArc
+                    case "Single Turret Arc": self = .singleTurretArc
+                    case "Bullseye Arc": self = .bullseyeArc
+                    case "Full Front Arc": self = .fullFrontArc
+                    case "Double Turret Arc": self = .doubleTurretArc
+                    case "Rear Arc": self = .rearArc
+                    default: self = .noArc
+//                default: return nil
+                }
+            }
+        
+        mutating func set(from: String) {
+            switch(from) {
+                case "Front Arc": self = .frontArc
+                case "Single Turret Arc": self = .singleTurretArc
+                case "Bullseye Arc": self = .bullseyeArc
+                case "Full Front Arc": self = .fullFrontArc
+                case "Double Turret Arc": self = .doubleTurretArc
+                case "Rear Arc": self = .rearArc
+                default: self = .noArc
+            }
+        }
+        
+        var symbol: String {
+            get {
+                switch(self) {
+                    case .frontArc: return "{"
+                    case .singleTurretArc: return "p"
+                    case .bullseyeArc: return "}"
+                    case .fullFrontArc: return "~"
+                    case .doubleTurretArc: return "q"
+                    case .rearArc: return "|"
+                    case .noArc: return ""
+                }
+            }
+        }
+    }
+    
+    var firingArcs: [FiringArc] {
+        get {
+            let stats: [Stat] = self.stats.filter{ $0.type == "attack"}
+            
+            let arcs: [FiringArc] = stats.map{
+                let arc = $0.arc
+                let value = $0.value
+                let firingArc = FiringArc(type: arc, value: value)
+                return firingArc
+            }
+            
+            return arcs
+        }
+    }
     /*
+     ([DialControl.Stat]) $R2 = 4 values {
+       [0] = {
+         type = "attack"
+         value = 3
+         _arc = "Front Arc"
+       }
+       [1] = {
+         type = "agility"
+         value = 3
+         _arc = nil
+       }
+       [2] = {
+         type = "hull"
+         value = 2
+         _arc = nil
+       }
+       [3] = {
+         type = "shields"
+         value = 2
+         _arc = nil
+       }
+     }
+
      "Front Arc"
      "Single Turret Arc"
      "Bullseye Arc"
@@ -356,7 +465,7 @@ extension Ship {
      "Rear Arc"
      */
     var arcStats: Int {
-        let stats: [Stat] = self.stats.filter{ $0.type == "arc"}
+        let stats: [Stat] = self.stats.filter{ $0.type == "attack"}
             
             if (stats.count > 0) {
                 return stats[0].value

@@ -36,7 +36,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
 
                     Spacer()
                     
-                    healthStatus
+                    
                 }
                 .padding(.leading, 5)
                 .background(Color.black)
@@ -44,6 +44,8 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                 Spacer()
                 
                 // https://medium.com/swlh/swiftui-and-the-missing-environment-object-1a4bf8913ba7
+                
+                healthStatus
                 
                 buildPilotDetailsView()
                 
@@ -66,6 +68,10 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
         func buildStats(psd: PilotStateData) -> [HealthStat] {
             var stats: [HealthStat] = []
             
+            if psd.adjusted_defense > 0 {
+                stats.append(HealthStat(type: .agility, value: psd.adjusted_defense))
+            }
+            
             if psd.hullMax > 0 {
                 stats.append(HealthStat(type: .hull, value: psd.getActive(type: .hull)))
             }
@@ -85,8 +91,14 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             return stats
         }
         
+        func buildFiringArcStats() -> [HealthStat] {
+            return shipPilot.ship.firingArcs.map{
+                $0.healthStat
+            }
+        }
+        
         if let data = shipPilot.pilotStateData {
-            let stats: [HealthStat] = buildStats(psd: data)
+            let stats: [HealthStat] = buildFiringArcStats() + buildStats(psd: data)
             return HealthStatsView(healthStats: stats)
         }
         

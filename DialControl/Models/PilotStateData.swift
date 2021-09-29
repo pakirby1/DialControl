@@ -218,6 +218,7 @@ extension PilotStateData {
                 return charge.active
             case .shield:
                 return shield.active
+            default: return 0
         }
     }
     
@@ -231,6 +232,7 @@ extension PilotStateData {
                 return charge.inactive
             case .shield:
                 return shield.inactive
+            default: return 0
         }
     }
 }

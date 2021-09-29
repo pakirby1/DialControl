@@ -16,6 +16,8 @@ enum StatButtonType {
     case shield
     case charge
     case hull
+    case attack(Ship.FiringArcType)
+    case agility
     
     var color: Color {
         get {
@@ -24,6 +26,8 @@ enum StatButtonType {
             case .shield: return Color.blue
             case .charge: return Color.orange
             case .hull: return Color.yellow
+            case .attack( _): return Color.red
+            case .agility: return Color.green
             }
         }
     }
@@ -35,6 +39,8 @@ enum StatButtonType {
             case .shield: return "*"
             case .charge: return "g"
             case .hull: return "&"
+            case .attack(let firingArc): return firingArc.symbol
+            case .agility: return "\u{005E}"
             }
         }
     }
@@ -131,15 +137,31 @@ struct LinkedView: View {
     
     func buildTokenView(isActive: Bool) -> some View {
         ZStack {
-            if type == .charge {
-                chargeToken(color: type.color, isActive: isActive)
-            } else if type == .force {
-                forceToken(color: type.color, isActive: isActive)
-            } else if type == .shield {
-                shieldToken(color: type.color, isActive: isActive)
-            } else {
-                hullToken(color: type.color, isActive: isActive)
+            switch(type) {
+                case .charge:
+                    chargeToken(color: type.color, isActive: isActive)
+                    
+                case .force:
+                    forceToken(color: type.color, isActive: isActive)
+                    
+                case .shield:
+                    shieldToken(color: type.color, isActive: isActive)
+                    
+                case .hull:
+                    hullToken(color: type.color, isActive: isActive)
+                    
+                default: EmptyView()
             }
+            
+//            if type == .charge {
+//                chargeToken(color: type.color, isActive: isActive)
+//            } else if type == .force {
+//                forceToken(color: type.color, isActive: isActive)
+//            } else if type == .shield {
+//                shieldToken(color: type.color, isActive: isActive)
+//            } else {
+//                hullToken(color: type.color, isActive: isActive)
+//            }
         }
     }
     
