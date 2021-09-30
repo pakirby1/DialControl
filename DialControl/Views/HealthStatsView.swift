@@ -13,7 +13,7 @@ struct HealthStatsView: View {
     let healthStats: [HealthStat]
     
     var body: some View {
-        HStack(spacing: 5) {
+        HStack(spacing: 20) {
             ForEach(healthStats) { stat in
                 HealthStatView(stat: stat)
             }

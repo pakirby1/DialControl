@@ -24,7 +24,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(theme.BUTTONBACKGROUND)
 
-            VStack {
+            VStack(spacing: 0) {
                 HStack {
                     initiative
                     
@@ -36,16 +36,20 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
 
                     Spacer()
                     
-                    
+                    DamagedStatusView(shipPilot: shipPilot)
                 }
-                .padding(.leading, 5)
+                .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                 .background(Color.black)
                 
 //                Spacer()
                 
                 // https://medium.com/swlh/swiftui-and-the-missing-environment-object-1a4bf8913ba7
                 
-                healthStatus
+                HStack {
+                    Spacer()
+                    healthStatus
+                    Spacer()
+                }.background(Color.black)
                 
                 buildPilotDetailsView()
                 
@@ -218,7 +222,7 @@ struct Redux_PilotDetailsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            DamagedStatusView(shipPilot: shipPilot)
+            
             
             HStack {
                 buildPointsView()
