@@ -167,7 +167,7 @@ extension Redux_SquadView {
         }.alert(isPresented: $displayResetAllConfirmation) {
             Alert(
                 title: Text("Reset All"),
-                message: Text("Reset All Squads"),
+                message: Text("Reset All Pilots"),
                 primaryButton: Alert.Button.default(Text("Reset"), action: { self.resetAllShips() }),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
             )

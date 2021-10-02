@@ -584,8 +584,11 @@ func factionReducer(state: inout MyAppState,
         }
         
 //        setSquads_Old(squads: squads)
+        measure(name: "favoriteTapped.setSquads") {
         setSquads_New(squads: squads)
+        }
     }
+    print("favoriteTapped: \(action)")
     
     switch(action) {
         case let .getShips(squad, data):

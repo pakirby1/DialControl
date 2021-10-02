@@ -192,7 +192,7 @@ extension Redux_FactionSquadList {
 
     func updateSquad(squadData: SquadData) {
         self.store.send(.faction(action: .updateSquad(squadData)))
-        refreshSquadsList()
+//        refreshSquadsList()
     }
 
     func refreshSquadsList() {
@@ -260,10 +260,12 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
 //    }
     
     func favoriteTapped() {
-        logMessage("damagedPoints Redux_FactionSquadCardViewModel.favoriteTapped()")
-        squadData.favorite.toggle()
-        updateCallback(squadData)
-//        loadShips()
+        measure(name:"favoriteTapped") {
+            logMessage("damagedPoints Redux_FactionSquadCardViewModel.favoriteTapped()")
+            squadData.favorite.toggle()
+            updateCallback(squadData)
+    //        loadShips()
+        }
     }
     
     func deleteSquad() {
@@ -324,8 +326,9 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             logMessage("damagedPoints favoriteTapped")
             self.favoriteTapped()
             
-            let action: MyFactionSquadListAction = .favorite(self.squadData.favorite, self.squadData)
-            self.store.send(.faction(action: action))
+            //MARK :- Performance Issues
+//            let action: MyFactionSquadListAction = .favorite(self.squadData.favorite, self.squadData)
+//            self.store.send(.faction(action: action))
         }) {
             Image(systemName: self.squadData.favorite ? "star.fill" :
             "star")

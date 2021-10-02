@@ -271,9 +271,12 @@ class FactionSquadCardViewModel : ObservableObject, DamagedSquadRepresenting
     
     func loadShips() {
         logMessage("damagedPoints FactionSquadCardViewModel.loadShips() ")
-        self.shipPilots = SquadCardViewModel.getShips(
-            squad: self.squad,
-            squadData: self.squadData)
+        
+        measure(name: "loadShips") {
+            self.shipPilots = SquadCardViewModel.getShips(
+                squad: self.squad,
+                squadData: self.squadData)
+        }
         
         if self.shipPilots.count == 0 {
             print("No Ships in Squad")

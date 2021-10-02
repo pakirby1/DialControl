@@ -18,6 +18,7 @@ extension View {
 }
 
 
+
 /// Creates a new `View` based on a condition.
 ///
 /// `return myView.applyIf(condition: { self.hasWon == true }, apply: { return WinConditionView() })`
