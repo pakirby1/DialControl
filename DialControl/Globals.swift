@@ -347,3 +347,17 @@ func measure<A>(name: String = "", _ block: () -> A) -> A {
     print("Time: \(name) - \(timeElapsed)")
     return result
 }
+
+
+@discardableResult
+func measureThrows<A>(name: String = "", _ block: () throws -> A) throws -> A {
+    do {
+        let startTime = CACurrentMediaTime()
+        let result = try block()
+        let timeElapsed = CACurrentMediaTime() - startTime
+        print("Time: \(name) - \(timeElapsed)")
+        return result
+    } catch {
+        throw SquadServiceProtocolError.saveSquadError(error.localizedDescription)
+    }
+}

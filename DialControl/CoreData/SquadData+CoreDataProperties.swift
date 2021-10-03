@@ -95,25 +95,27 @@ extension SquadData {
         print("faction: \(squad.faction)")
         print("pilotStateId: \(String(describing: pilotState.id))")
         
-        shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
-        
-        var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-        let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
-
-        ship.pilots.removeAll()
-        ship.pilots.append(foundPilots)
-        
-        var allUpgrades : [Upgrade] = []
-        
-        // Add the upgrades from SquadPilot.upgrades by iterating over the
-        // UpgradeCardEnum cases and calling getUpgrade
-        if let upgrades = squadPilot.upgrades {
-            allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
+        return measure(name:"SquadData.getShip \(squadPilot.ship)") { () -> ShipPilot in
+            shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
+            
+            var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+            let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+            
+            ship.pilots.removeAll()
+            ship.pilots.append(foundPilots)
+            
+            var allUpgrades : [Upgrade] = []
+            
+            // Add the upgrades from SquadPilot.upgrades by iterating over the
+            // UpgradeCardEnum cases and calling getUpgrade
+            if let upgrades = squadPilot.upgrades {
+                allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+            }
+            
+            return ShipPilot(ship: ship,
+                             upgrades: allUpgrades,
+                             points: squadPilot.points,
+                             pilotState: pilotState)
         }
-       
-        return ShipPilot(ship: ship,
-                         upgrades: allUpgrades,
-                         points: squadPilot.points,
-                         pilotState: pilotState)
     }
 }
