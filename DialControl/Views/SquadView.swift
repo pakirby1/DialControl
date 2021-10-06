@@ -552,6 +552,25 @@ struct IndicatorView: View {
     }
 }
 
+struct ShipIDView: View {
+    let fill: Color
+    let stroke: Color
+    let size: CGFloat = 25
+    
+    init(fill: Color, stroke: Color = .white) {
+        self.fill = fill
+        self.stroke = stroke
+    }
+    
+    var body: some View {
+        //https://www.hackingwithswift.com/quick-start/swiftui/how-to-fill-and-stroke-shapes-at-the-same-time
+        Circle()
+            .strokeBorder(stroke, lineWidth: 2)
+            .background(Circle().fill(fill))
+            .frame(width: size, height: size)
+            .padding(.top, 5)
+    }
+}
 
 class PilotDetailsViewModel: ObservableObject {
     @Published var shipPilot: ShipPilot

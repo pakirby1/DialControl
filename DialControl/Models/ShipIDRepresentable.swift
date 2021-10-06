@@ -43,21 +43,24 @@ extension ShipIDRepresentable {
             } else {
                 switch(id) {
                     case "red":
-                        buildSmallIndicatorView(color: Color.red)
+//                        buildSmallIndicatorView(color: Color.red)
+                        ShipIDView(fill: Color.red)
                     case "green":
-                        buildSmallIndicatorView(color: Color.green)
+                        ShipIDView(fill:Color.green)
                     case "yellow":
-                        buildSmallIndicatorView(color: Color.yellow)
+                        ShipIDView(fill:Color.yellow)
                     case "blue":
-                        buildSmallIndicatorView(color: Color.blue)
+                        ShipIDView(fill:Color.blue)
                     case "orange":
-                        buildSmallIndicatorView(color: Color.orange)
+                        ShipIDView(fill:Color.orange)
                     case "purple":
-                        buildSmallIndicatorView(color: Color.purple)
+                        ShipIDView(fill:Color.purple)
                     case "pink":
-                        buildSmallIndicatorView(color: Color.pink)
+                        ShipIDView(fill:Color.pink)
                     case "gray", "grey":
-                        buildSmallIndicatorView(color: Color.gray)
+                        ShipIDView(fill:Color.gray)
+                    case "black":
+                        ShipIDView(fill: Color.black, stroke: Color.white)
                         
                     default:
                         Text(shipPilot.pilotStateData!.shipID).padding(5).foregroundColor(Color.white)
