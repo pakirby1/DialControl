@@ -66,7 +66,7 @@ struct FactionSquadListState {
     }
     
     var shipPilots: [ShipPilot] = []
-    var shipPilotsCollection: Array<[ShipPilot]> = []
+//    var shipPilotsCollection: Array<[ShipPilot]> = []
 }
 
 // MARK:- MyAppAction
@@ -509,6 +509,10 @@ func factionReducer(state: inout MyAppState,
                     action: MyFactionSquadListAction,
                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
+    var showFavoritesOnly: Bool {
+        get { UserDefaults.standard.bool(forKey: "displayFavoritesOnly") }
+        set { UserDefaults.standard.set(newValue, forKey: "displayFavoritesOnly") }
+    }
     
     func loadAllSquads() -> AnyPublisher<MyAppAction, Never> {
         return Just<MyAppAction>(.faction(action: .loadSquads)).eraseToAnyPublisher()
@@ -516,8 +520,6 @@ func factionReducer(state: inout MyAppState,
     
     func setSquads(squads: [SquadData]) {
         func filterByFavorites(_ isFavorite: Bool = true) {
-            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-            
             state.faction.squadDataList = state.faction.squadDataList.filter{ $0.favorite == showFavoritesOnly }
         }
         
@@ -549,10 +551,6 @@ func factionReducer(state: inout MyAppState,
         func setSquads_New(squads: [SquadData]) {
             var filters: [SquadDataFilter] = []
             
-            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-            
-            state.faction.squadDataList = squads
-            
             if showFavoritesOnly {
                 filters.append({ $0.favorite == showFavoritesOnly })
             }
@@ -564,30 +562,17 @@ func factionReducer(state: inout MyAppState,
                 filters.append(filter)
             }
             
-            state.faction.squadDataList = filters.reduce(state.faction.squadDataList) { squads, filter in
+            state.faction.squadDataList = filters.reduce(squads) { squads, filter in
                 return squads.filter(filter)
-            }
-            
-            
-            var squadPilotsCollection: Array<[ShipPilot]> = []
-            
-            measure(name: "favoriteTapped.setSquads_New") {
-                state.faction.squadDataList.forEach{ squadData in
-                    let squadPilots = measure(name:"favoriteTapped.setSquads_New.getShips") { squadData.getShips()
-                    }
-                    
-                    squadPilotsCollection.append(squadPilots)
-                }
-                
-                state.faction.shipPilotsCollection = squadPilotsCollection
             }
         }
         
 //        setSquads_Old(squads: squads)
         measure(name: "favoriteTapped.setSquads") {
-        setSquads_New(squads: squads)
+            setSquads_New(squads: squads)
         }
     }
+    
     print("favoriteTapped: \(action)")
     
     switch(action) {
@@ -601,7 +586,7 @@ func factionReducer(state: inout MyAppState,
             state.faction.shipPilots = x
         
         case .updateFavorites(let showFavorites):
-            UserDefaults.standard.set(showFavorites, forKey: "displayFavoritesOnly")
+            showFavoritesOnly = showFavorites
             return loadAllSquads()
         
         case .loadSquads:
