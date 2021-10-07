@@ -598,8 +598,10 @@ func factionReducer(state: inout MyAppState,
                 .eraseToAnyPublisher()
         
         case let .setSquads(squads):
+            measure(name: "factionReducer.setSquads") {
             setSquads(squads: squads)
-        
+            }
+            
         case .deleteAllSquads:
             state.faction.squadDataList.forEach {
                 environment
