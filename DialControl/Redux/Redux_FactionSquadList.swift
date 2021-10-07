@@ -100,7 +100,7 @@ struct Redux_FactionSquadList: View {
     }
     
     var squadCount: some View {
-        Text("Squads: \(squadDataList.count)")
+        Text("Squads: \(squadDataList.count)").font(.title)
     }
     
     var xwsImportButton: some View {
