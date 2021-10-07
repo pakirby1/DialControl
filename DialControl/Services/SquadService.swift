@@ -160,7 +160,6 @@ extension SquadServiceProtocol {
     }
     
     func loadSquadsListRx() -> AnyPublisher<[SquadData], Error> {
-        measure(name:"favoriteTapped.loadSquadsListRx") {
         let ret = Future<[SquadData], Error> { promise in
             do {
                 let fetchRequest = SquadData.fetchRequest()
@@ -172,10 +171,8 @@ extension SquadServiceProtocol {
             }
         }
 
-        
         return ret
             .eraseToAnyPublisher()
-        }
     }
 }
 
