@@ -91,10 +91,16 @@ struct Redux_FactionSquadList: View {
             
             titleView
             Spacer()
+            squadCount
+            Spacer()
             favoritesFilterView
             Spacer()
             xwsImportButton
         }
+    }
+    
+    var squadCount: some View {
+        Text("Squads: \(squadDataList.count)")
     }
     
     var xwsImportButton: some View {
