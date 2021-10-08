@@ -337,6 +337,7 @@ public struct CustomStyle : TextFieldStyle {
 
 func getJSONFor(ship: String, faction: String) -> String {
     var ret = ""
+    print("getJSONFor ship: \(ship) faction: \(faction)")
     
     if let pilotFileUrls = shipLookupTable[ship] {
         let matchingFaction = pilotFileUrls.filter({ $0.faction == faction })

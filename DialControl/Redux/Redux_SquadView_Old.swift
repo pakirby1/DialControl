@@ -330,7 +330,7 @@ extension Redux_SquadView {
     {
         self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
         
-        loadShips()
+//        loadShips()
     }
     
     private func processEngage() {

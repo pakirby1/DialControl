@@ -103,6 +103,7 @@ struct SquadCardViewModel {
         _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
 
         let ret = zipped.map{
+            // Making multiple calls to getShip
             getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
 
@@ -115,7 +116,7 @@ struct SquadCardViewModel {
 func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
     var shipJSON: String = ""
 
-    print("shipName: \(squadPilot.ship)")
+    print("getShip.shipName: \(squadPilot.ship)")
     print("pilotName: \(squadPilot.name)")
     print("faction: \(squad.faction)")
     print("pilotStateId: \(String(describing: pilotState.id))")
@@ -620,7 +621,7 @@ struct PilotDetailsView: View {
     let displayHeaders: Bool
     let displayDial: Bool
     let theme: Theme = WestworldUITheme()
-    @State var currentManeuver: String = ""
+//    @State var currentManeuver: String = ""
     
     func buildPointsView(half: Bool = false) -> AnyView {
         let points = half ? self.viewModel.shipPilot.halfPoints : self.viewModel.shipPilot.points

@@ -10,6 +10,8 @@ import Foundation
 
 struct UpgradeUtility {
     static func buildAllUpgrades(_ upgrades: SquadPilotUpgrade) -> [Upgrade] {
+        print("UpgradeUtility.buildAllUpgrades \(upgrades)")
+        
             func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
                 // Read json from file: forType.json
                 let jsonFileName = "\(forType)"
