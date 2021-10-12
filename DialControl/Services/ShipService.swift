@@ -21,7 +21,7 @@ class ShipService {
         
         let ret = zipped.map{
             // Global Function
-            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+            global_getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
         
         ret.printAll(tag: "PAK_DialStatus getShips()")

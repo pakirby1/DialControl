@@ -346,12 +346,6 @@ extension Redux_SquadView {
         logMessage("damagedPoints SquadCardView.loadShips")
         print("PAK_DialStatus SquadCardView.loadShips()")
         store.send(.squad(action: .getShips(self.squad, self.squadData)))
-        
-        self.shipPilots.printAll(tag: "PAK_DialStatus self.shipPilots")
-
-        self.shipPilots.forEach{ shipPilot in
-            print("PAK_DialStatus SquadCardView.loadShips() \(shipPilot.id) \(shipPilot.pilotState.json ?? "No JSON")")
-        }
     }
     
     private func resetAllShips() {

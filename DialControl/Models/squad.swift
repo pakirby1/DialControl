@@ -127,7 +127,8 @@ let New_squadJSON = """
   "version": "2.0.0"
 }
 """
-
+/// From xws
+/// upgrades":{"cannon":["jammingbeam"],"crew":["emperorpalpatine"],"modification":["shieldupgrade"],"title":["st321"]}}
 struct SquadPilotUpgrade: Codable {
     var astromechs: [String] { return _astromech ?? [] }
     var cannons: [String] { return _cannon ?? [] }

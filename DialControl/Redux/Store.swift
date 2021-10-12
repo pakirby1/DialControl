@@ -430,7 +430,7 @@ func shipReducer(state: inout MyShipViewState,
                 .jsonService
                 .loadShipFromJSON(shipName: shipName,
                                   pilotName: pilotName,
-                                  squad: squad).1.image
+                                  faction: squad.faction).1.image
         
         case let .updateHull(active, inactive):
             updateHull(active, inactive)

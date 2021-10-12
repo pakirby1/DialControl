@@ -11,21 +11,22 @@ import Foundation
 protocol JSONServiceProtocol {
     func loadShipFromJSON(shipName: String,
                           pilotName: String,
-                          squad: Squad) -> (Ship, Pilot)
+                          faction: String) -> (Ship, Pilot)
 }
 
 class JSONService : JSONServiceProtocol {
     /// What do we return if we encounter an error (empty file)?
     func loadShipFromJSON(shipName: String,
                           pilotName: String,
-                          squad: Squad) -> (Ship, Pilot)
+                          faction: String) -> (Ship, Pilot)
     {
         var shipJSON: String = ""
         
         print("shipName: \(shipName)")
         print("pilotName: \(pilotName)")
         
-        shipJSON = getJSONFor(ship: shipName, faction: squad.faction)
+        // check the `cache` for this ship, pilot combination
+        shipJSON = getJSONFor(ship: shipName, faction: faction)
         
         let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
         var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()

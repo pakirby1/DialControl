@@ -68,10 +68,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             .environmentObject(viewFactory)
             .environmentObject(store)
             
-        shipLookupTable = ShipLookupBuilder.buildShipLookupTable()
-        print(shipLookupTable)
+        // Execute this on a background queue
+        let concurrentQueue = DispatchQueue(label: "dialControl.concurrent.queue", attributes: .concurrent)
+
+        concurrentQueue.async {
+            // Build the lookup table on the background queue.
+            shipLookupTable = ShipLookupBuilder.buildShipLookupTable()
+//            print(shipLookupTable)
+
+//            DispatchQueue.main.async {
+//                /// Access and reload the UI back on the main queue.
+//                tableView.reloadData()
+//            }
+        }
         
-        ShipLookupBuilder.buildAllUpgradesText()
+        
+//        ShipLookupBuilder.buildAllUpgradesText()
         
         // Get a list of all font names
         print("===== FONTS =====")

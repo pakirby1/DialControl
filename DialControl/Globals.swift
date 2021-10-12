@@ -335,6 +335,7 @@ public struct CustomStyle : TextFieldStyle {
   }
 }
 
+// MARK :- JSON that everyone eventually calls
 func getJSONFor(ship: String, faction: String) -> String {
     var ret = ""
     print("getJSONFor ship: \(ship) faction: \(faction)")
@@ -354,7 +355,7 @@ func getJSONFor(ship: String, faction: String) -> String {
                 
                 do {
                     ret = try String(contentsOfFile: path)
-                    print("jsonData: \(shipJSON)")
+                    print("jsonData: \(ret)")
                 } catch {
                     print("error reading from \(path)")
                 }

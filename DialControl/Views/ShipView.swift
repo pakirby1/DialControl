@@ -89,6 +89,7 @@ class ShipViewModel: ObservableObject {
     }()
     
     /// What do we return if we encounter an error (empty file)?
+    /// This should be removed,  go through the JSONService, or better yet, the Store
     func loadShipFromJSON(shipName: String, pilotName: String) -> (Ship, Pilot) {
         var shipJSON: String = ""
         

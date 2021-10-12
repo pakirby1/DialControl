@@ -102,9 +102,9 @@ struct SquadCardViewModel {
 
         _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
 
-        let ret = zipped.map{
+        let ret: [ShipPilot] = zipped.map{
             // Making multiple calls to getShip
-            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+            global_getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
 
         ret.printAll(tag: "PAK_DialStatus getShips()")
@@ -113,7 +113,7 @@ struct SquadCardViewModel {
     }
 }
 
-func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
+func global_getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
     var shipJSON: String = ""
 
     print("getShip.shipName: \(squadPilot.ship)")
@@ -121,7 +121,14 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
     print("faction: \(squad.faction)")
     print("pilotStateId: \(String(describing: pilotState.id))")
 
-    return measure(name:"global.getShip") { () -> ShipPilot in
+    return measure(name:"global_getShip") { () -> ShipPilot in
+        /// use caching
+        /// - check if the `Ship` for this ship & faction exists in the cache keyed by (ship xws, faction xws),
+        /// - if so return the `Ship`
+        /// - if not...
+        ///     - read the JSON from disk
+        ///     - serialize the JSON into a `Ship`
+        ///     - store the `Ship` in the cache keyed by (ship xws, faction xws)
         shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
         
         var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
@@ -130,7 +137,13 @@ func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> Sh
         ship.pilots.removeAll()
         ship.pilots.append(foundPilots)
         
-        
+        /// use caching
+        /// - check if the `Upgrade` for this upgrade exists in the cache keyed by (upgrade xws
+        /// - if so return the `Upgrade`
+        /// - if not...
+        ///     - read the upgrade category (device.json) JSON from disk
+        ///     - serialize the JSON into ???
+        ///     - store the `[Upgrades]` in the cache keyed by (category xws)
         var allUpgrades : [Upgrade] = []
         
         // Add the upgrades from SquadPilot.upgrades by iterating over the
@@ -556,7 +569,7 @@ struct IndicatorView: View {
 struct ShipIDView: View {
     let fill: Color
     let stroke: Color
-    let size: CGFloat = 25
+    let size: CGFloat = 30
     
     init(fill: Color, stroke: Color = .white) {
         self.fill = fill
@@ -569,7 +582,6 @@ struct ShipIDView: View {
             .strokeBorder(stroke, lineWidth: 2)
             .background(Circle().fill(fill))
             .frame(width: size, height: size)
-            .padding(.top, 5)
     }
 }
 

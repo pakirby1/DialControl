@@ -9,6 +9,14 @@
 import Foundation
 
 struct UpgradeUtility {
+    /// We should refactor this
+    /// - The `getUpgrade()` will load the JSON file and serialize it for each upgrade the pilot has
+    /// - This means that if a pilot has `proximitymines` & `seismiccharges` then the `device.json`
+    ///   File is read from disk & serialized twice; once for `proximitymines` and once for `seismiccharges`.  The `device.json` should be read from disk & serialized one time
+    ///   into an `[Upgrade]`
+    ///   - Read from disk & seriallize into an `[Upgrade]` once per category `device, configuration`.
+    ///   - Store the upgrade array into a dictionary keyed by category name `["device": [Upgrade]]`
+    ///
     static func buildAllUpgrades(_ upgrades: SquadPilotUpgrade) -> [Upgrade] {
         print("UpgradeUtility.buildAllUpgrades \(upgrades)")
         
@@ -35,20 +43,50 @@ struct UpgradeUtility {
                 return upgradeJSON
             }
             
+            // getUpgrade(upgradeCategory: "device", upgradeName: "thermaldetonators")
             func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {
-                let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
-                
-                let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-                
+//                let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
+//
+//                let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+               
+                let upgrades = getUpgrades(upgradeCategory: upgradeCategory)
                 let matches: [Upgrade] = upgrades.filter({ $0.xws == upgradeName })
                 
                 let upgrade = matches[0]
                 
                 return upgrade
             }
+        
+            func getUpgrades(upgradeCategory: String) -> [Upgrade] {
+                let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
+                
+                let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+
+                return upgrades
+            }
             
+            func buildUpgradeDictionary() {
+                let allAstromechs : [Upgrade] = getUpgrades(upgradeCategory: "astromech")
+                var dict: [String: [Upgrade]] = [:]
+                
+                dict["astromech"] = allAstromechs
+                
+                /// upgrades.astromechs : [String]
+//                let astromechs: [Upgrade] = upgrades
+//                    .astromechs
+//                    .compactMap { astromech in
+//                        let x: [Upgrade]? = dict["astromech"]?.filter { $0.name == astromech}
+//
+//                        guard let u = x else {
+//                            return
+//                        }
+//                    }
+            }
+        
             var allUpgrades : [Upgrade] = []
             
+            
+        
             let astromechs : [Upgrade] = upgrades
                 .astromechs
                 .map{ getUpgrade(upgradeCategory: "astromech", upgradeName: $0) }
