@@ -13,7 +13,7 @@ import CoreData
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    var store: MyAppStore?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -27,7 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                                    ship: MyShipViewState(),
                                    xwsImport: MyXWSImportViewState(),
                                    factionFilter: FactionFilterState(),
-                                   tools: ToolsViewState())
+                                   tools: ToolsViewState(),
+                                   upgrades: UpgradesState())
         }
         
         func buildEnvironment() -> MyEnvironment {
@@ -58,6 +59,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             reducer: myAppReducer,
             environment: buildEnvironment()
         )
+        
+        self.store = store
         
         let viewFactory = ViewFactory(moc: moc,
                                       diContainer: diContainer,

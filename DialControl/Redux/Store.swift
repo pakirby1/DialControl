@@ -18,6 +18,11 @@ struct MyAppState {
     var xwsImport: MyXWSImportViewState
     var factionFilter: FactionFilterState
     var tools: ToolsViewState
+    var upgrades: UpgradesState
+}
+
+struct UpgradesState {
+    var upgrades: [String: Array<Upgrade>] = [:]
 }
 
 struct ToolsViewState {
@@ -77,6 +82,11 @@ enum MyAppAction {
     case xwsImport(action: MyXWSImportAction)
     case factionFilter(action: MyFactionFilterListAction)
     case tools(action: ToolsAction)
+    case upgrades(action: UpgradesAction)
+}
+
+enum UpgradesAction {
+    case setUpgrades(String, Array<Upgrade>)
 }
 
 enum ToolsAction {
@@ -162,6 +172,11 @@ func myAppReducer(
 ) -> AnyPublisher<MyAppAction, Never>
 {
     switch action {
+        case .upgrades(let action):
+            return upgradesReducer(state: &state.upgrades,
+                                action: action,
+                                environment: environment)
+            
         case .tools(let action):
             return toolsReducer(state: &state.tools,
                                 action: action,
@@ -208,6 +223,17 @@ func buildSetDownloadEvent(result: Result<DownloadEventEnum, Error>) -> MyAppAct
         case .failure(let error):
             let failureEvent = DownloadEventEnum.failed(error)
             return MyAppAction.tools(action:ToolsAction.setDownloadEvent(failureEvent))
+    }
+}
+
+func upgradesReducer(state: inout UpgradesState,
+                     action: UpgradesAction,
+                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
+{
+    switch(action) {
+        case let .setUpgrades(category, upgrades):
+            state.upgrades[category] = upgrades
+            return Empty().eraseToAnyPublisher()
     }
 }
 
