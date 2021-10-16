@@ -87,6 +87,7 @@ struct UpgradeUtility {
                 func setUpgradesInCache(upgradeCategory: String, upgrades: [Upgrade]) {
                     guard let store = store else { return }
                     
+                    logMessage("UpgradeUtility setUpgradesInCache(\(upgradeCategory))")
                     store.state.upgrades.upgrades[upgradeCategory] = upgrades
                 }
                 
@@ -102,8 +103,11 @@ struct UpgradeUtility {
                 
                 
                 if let upgrades = getUpgradesFromCache(upgradeCategory: upgradeCategory) {
+                    logMessage("UpgradeUtility getUpgradesFromCache(\(upgradeCategory))")
                     return upgrades
                 } else {
+                    logMessage("UpgradeUtility getUpgradesFromJSON(\(upgradeCategory))")
+
                     return getUpgradesFromJSON(upgradeCategory: upgradeCategory)
                 }
             }

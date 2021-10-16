@@ -9,6 +9,7 @@
 import Foundation
 import SwiftUI
 import CoreData
+import Combine
 
 struct Redux_FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
@@ -178,6 +179,7 @@ struct Redux_FactionSquadList: View {
         }
         .padding(10)
         .onAppear {
+            logMessage("Redux_FactionSquadList.squadList.onAppear()")
             self.refreshSquadsList()
         }
         .alert(isPresented: $displayDeleteAllConfirmation) {
@@ -236,6 +238,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     @State var displayDeleteConfirmation: Bool = false
     @State var refreshView: Bool = false
+    @State var damagedPointsState: Int = 0
     
     let printer: DeallocPrinter
     
@@ -279,7 +282,15 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     var shipPilots: [ShipPilot] {
         get {
-            self.squadData.shipPilots
+//            self.squadData.shipPilots
+            measure(name: "Redux_FactionSquadCard.shipPilots \(String(describing: self.squadData.name))") {
+//                self.squadData.getShips()
+//                self.store.state.faction.shipPilots
+//
+//                return []
+                return self.store.state.faction.shipPilots
+            }
+//            self.squadData.getShips(store)
         }
     }
     
@@ -305,9 +316,9 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     }
     
     var damagedPointsView: some View {
-        logMessage("PAK_Wrong_Damage damagedPointsView")
+        logMessage("Redux_FactionSquadCard.damagedPointsView")
         
-        return Text("\(damagedPoints)")
+        return Text("\(damagedPointsState)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -408,6 +419,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
                 firstPlayerView.offset(x: 260, y: 0)
                 favoriteView.offset(x: 300, y: 0)
                 deleteButton.offset(x: 350, y: 0)
+//                Text("\(damagedPointsState)").offset(x:360, y:0)
             }
         }
     }
@@ -448,6 +460,14 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
         }
     }
     
+    var myState: AnyPublisher<MyAppState, Never> {
+        self.store.$state.removeDuplicates { a, b in
+            return (a.faction.shipPilots.count == 0)
+        }
+        .print()
+        .eraseToAnyPublisher()
+    }
+    
     var body: some View {
         HStack {
             Spacer()
@@ -459,13 +479,24 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // view body needs to be recreated after onAppear
             // This can be done by updating an @State property, or
             // observing an @Published property.
-            logMessage("PAK_Wrong_Damage FactionSquadCard.onAppear()")
+            logMessage("Redux_FactionSquadCard.body.onAppear()")
             
+            self.store.send(.faction(action: .getShips(self.squad, self.squadData)))
+            self.refreshView.toggle()
             // Have to call in .onAppear because the @EnvironmentObject store
             // is not available until AFTER init() is called
             
             // inject the AppStore into the view model here since
             // @EnvironmentObject isn't accessible in the init()
         }
+        .onReceive(myState, perform: { state in
+            
+            logMessage("Redux_FactionSquadCard.body.onReceive()")
+            logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(state.faction.shipPilots.count)")
+            let x = self.damagedPoints
+            logMessage("Redux_FactionSquadCard.body.onReceive() damagedPoints: \(x)")
+            
+            self.damagedPointsState = x
+        })
     }
 }

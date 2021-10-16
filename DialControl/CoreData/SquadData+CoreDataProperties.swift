@@ -67,7 +67,7 @@ extension SquadData {
 }
 
 extension SquadData {
-    func getShips() -> [ShipPilot] {
+    func getShips(_ store: MyAppStore? = nil) -> [ShipPilot] {
         let pilotStates = self
             .pilotStateArray
             .sorted(by: { $0.pilotIndex < $1.pilotIndex })
@@ -79,7 +79,7 @@ extension SquadData {
         zipped.forEach{ print("\(String(describing: $0.0.name)): \($0.1)")}
         
         let ret = zipped.map{
-            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1, store: store)
         }
         
         ret.printAll(tag: "PAK_DialStatus getShips()")
@@ -87,7 +87,7 @@ extension SquadData {
         return ret
     }
     
-    private func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
+    private func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState, store: MyAppStore? = nil) -> ShipPilot {
         var shipJSON: String = ""
         
         print("shipName: \(squadPilot.ship)")
@@ -109,7 +109,7 @@ extension SquadData {
             // Add the upgrades from SquadPilot.upgrades by iterating over the
             // UpgradeCardEnum cases and calling getUpgrade
             if let upgrades = squadPilot.upgrades {
-                
+                allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades, store: store)
             }
             
             return ShipPilot(ship: ship,

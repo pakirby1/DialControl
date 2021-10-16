@@ -13,7 +13,8 @@ import CoreData
 
 public class SquadData: NSManagedObject {
     lazy var shipPilots: [ShipPilot] = {
-        return getShips()
+//        return getShips()
+        return SquadCardViewModel.getShips(squad: squad, squadData: self)
     }()
     
     lazy var squad: Squad = {

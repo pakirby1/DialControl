@@ -307,6 +307,10 @@ extension SquadData {
     }
     
     public var pilotStateArray: [PilotState] {
-        return Array(pilotState as! Set<PilotState>)
+        guard let pilotState = pilotState as? Set<PilotState> else {
+            return []
+        }
+        
+        return Array(pilotState)
     }
 }
