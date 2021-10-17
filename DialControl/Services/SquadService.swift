@@ -228,3 +228,13 @@ extension Array where Element == ShipPilot {
         return points.reduce(0, +)
     }
 }
+
+extension Array where Element == SquadData {
+    mutating func setShips(data: Element) {
+        if let index = firstIndex(where: { $0.id == data.id}) {
+            self[index].shipPilots = SquadCardViewModel.getShips(
+                squad: data.squad,
+                squadData: data)
+        }
+    }
+}

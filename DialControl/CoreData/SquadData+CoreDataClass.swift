@@ -12,12 +12,18 @@ import CoreData
 
 
 public class SquadData: NSManagedObject {
-    lazy var shipPilots: [ShipPilot] = {
-//        return getShips()
-        return SquadCardViewModel.getShips(squad: squad, squadData: self)
-    }()
+    var shipPilots: [ShipPilot] = []
+    
+//    lazy var shipPilots: [ShipPilot] = {
+////        return getShips()
+//        return SquadCardViewModel.getShips(squad: squad, squadData: self)
+//    }()
     
     lazy var squad: Squad = {
         return Squad.loadSquad(jsonString: self.json!)
     }()
+}
+
+extension SquadData: DamagedSquadRepresenting {
+    
 }

@@ -603,14 +603,12 @@ func factionReducer(state: inout MyAppState,
     
     switch(action) {
         case let .getShips(squad, data):
-            logMessage("PAK_damagedPoints .getShips() \(data)")
-            let x = SquadCardViewModel.getShips(
-                squad: squad,
-                squadData: data)
-            logMessage("PAK_damagedPoints .getShips() \(x)")
+            state.faction.squadDataList.setShips(data: data)
+//            let x = state.faction.squadDataList[0]
+//            logMessage("pilot count: \(x.shipPilots.count)")
+//            
+//            logMessage("PAK_damagedPoints .getShips() \(data)")
             
-            state.faction.shipPilots = x
-        
         case .updateFavorites(let showFavorites):
             showFavoritesOnly = showFavorites
             return loadAllSquads()

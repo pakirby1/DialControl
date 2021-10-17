@@ -250,7 +250,7 @@ extension Redux_SquadView {
 
                     Spacer()
 
-//                    damaged
+                    damaged
                 }.padding(20)
 
 //                HStack {

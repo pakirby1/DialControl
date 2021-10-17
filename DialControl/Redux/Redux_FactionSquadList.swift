@@ -461,11 +461,17 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     }
     
     var myState: AnyPublisher<MyAppState, Never> {
-        self.store.$state.removeDuplicates { a, b in
-            return (a.faction.shipPilots.count == 0)
-        }
-        .print()
-        .eraseToAnyPublisher()
+        self.store.$state
+            .do{ state in
+                print("myState.count \(state.faction.squadDataList.count)")
+                
+                print("myState.name \(state.faction.squadDataList[0].name)")
+            }
+            .removeDuplicates(by: { a, b in
+                return a.faction.squadDataList.count == b.faction.squadDataList.count
+            })
+            .print("myState")
+            .eraseToAnyPublisher()
     }
     
     var body: some View {
@@ -490,10 +496,10 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // @EnvironmentObject isn't accessible in the init()
         }
         .onReceive(myState, perform: { state in
-            
+            let squad = state.faction.squadDataList[0]
             logMessage("Redux_FactionSquadCard.body.onReceive()")
-            logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(state.faction.shipPilots.count)")
-            let x = self.damagedPoints
+            logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(squad.shipPilots.count)")
+            let x = squad.damagedPoints
             logMessage("Redux_FactionSquadCard.body.onReceive() damagedPoints: \(x)")
             
             self.damagedPointsState = x
