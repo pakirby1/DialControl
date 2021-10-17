@@ -55,16 +55,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E22D5488-6235-4569-9D88-D3DF823219E0"
-            shouldBeEnabled = "No"
+            uuid = "1440278B-EA1E-4BF1-9219-5567141DAD89"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DialControl/Redux/Redux_FactionSquadList.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "466"
-            endingLineNumber = "466"
-            landmarkName = "myState"
+            startingLineNumber = "502"
+            endingLineNumber = "502"
+            landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>

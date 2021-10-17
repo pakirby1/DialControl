@@ -460,16 +460,14 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
         }
     }
     
-    var myState: AnyPublisher<MyAppState, Never> {
+    var myState: AnyPublisher<[SquadData], Never> {
         self.store.$state
-            .do{ state in
-                print("myState.count \(state.faction.squadDataList.count)")
-                
-                print("myState.name \(state.faction.squadDataList[0].name)")
+            .map{ state -> [SquadData] in
+                return state.faction.squadDataList
             }
-            .removeDuplicates(by: { a, b in
-                return a.faction.squadDataList.count == b.faction.squadDataList.count
-            })
+//            .filter{ dataList -> Bool in
+//                dataList.filter{ $0.id == self.squadData.id }.first
+//            }
             .print("myState")
             .eraseToAnyPublisher()
     }
@@ -496,13 +494,16 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // @EnvironmentObject isn't accessible in the init()
         }
         .onReceive(myState, perform: { state in
-            let squad = state.faction.squadDataList[0]
-            logMessage("Redux_FactionSquadCard.body.onReceive()")
-            logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(squad.shipPilots.count)")
-            let x = squad.damagedPoints
-            logMessage("Redux_FactionSquadCard.body.onReceive() damagedPoints: \(x)")
-            
-            self.damagedPointsState = x
+            let targetSquads:[SquadData] = state
+            if let targetSquad = targetSquads.first(where:{ $0.id == self.squadData.id})
+            {
+                logMessage("Redux_FactionSquadCard.body.onReceive()")
+                logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(squad.shipPilots.count)")
+                let x = targetSquad.damagedPoints
+                logMessage("Redux_FactionSquadCard.body.onReceive() damagedPoints: \(x)")
+                
+                self.damagedPointsState = x
+            }
         })
     }
 }
