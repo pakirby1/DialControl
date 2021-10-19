@@ -9,7 +9,17 @@
 import Foundation
 import SwiftUI
 import Combine
+import os
 
+
+extension Publisher {
+    func os_log(message: String = "") -> Publishers.HandleEvents<Self> {
+        handleEvents(receiveOutput: { value in
+            os.os_log("[%@] value: %@", message, String(describing: value))
+        })
+    }
+}
+    
 // MARK :-
 /// property wrapper for data stored in UserDefaults
 /// @UserDefaultsBacked<Bool>(key: "mark-as-read") var autoMarkMessagesAsRead

@@ -752,6 +752,7 @@ extension Store {
         let nextAction = reducer(&state, action, environment)
 
         nextAction
+            .os_log(message: "Store.send")
             .print("Store.send")
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: send)

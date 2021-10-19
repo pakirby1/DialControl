@@ -249,6 +249,7 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
                 return 0
             }
             .print("myState Redux_FactionSquadCardViewModel.damagedPointsPublisher")
+            .os_log(message: "myState")
             .eraseToAnyPublisher()
     }
     
