@@ -232,9 +232,29 @@ extension Array where Element == ShipPilot {
 extension Array where Element == SquadData {
     mutating func setShips(data: Element) {
         if let index = firstIndex(where: { $0.id == data.id}) {
-            self[index].shipPilots = SquadCardViewModel.getShips(
+            self[index].shipPilots = SquadService.getShips(
                 squad: data.squad,
                 squadData: data)
         }
+    }
+}
+
+extension SquadService {
+    static func getShips(squad: Squad, squadData: SquadData) -> [ShipPilot] {
+        let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
+        _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
+
+        let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
+
+        _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
+
+        let ret: [ShipPilot] = zipped.map{
+            // Making multiple calls to getShip
+            global_getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+        }
+
+        ret.printAll(tag: "PAK_DialStatus getShips()")
+
+        return ret
     }
 }

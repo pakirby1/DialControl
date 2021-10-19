@@ -242,13 +242,13 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
                 if let targetSquad = squadDataList.first(where:{ $0.id == self.squadData.id})
                 {
                     let damagedPoints = targetSquad.damagedPoints
-                    logMessage("Redux_FactionSquadCard.body.onReceive() damagedPoints: \(damagedPoints)")
+//                    logMessage("Redux_FactionSquadCardViewModel.damagedPointsPublisher: \(damagedPoints)")
                     return damagedPoints
                 }
                 
                 return 0
             }
-            .print("myState")
+            .print("myState Redux_FactionSquadCardViewModel.damagedPointsPublisher")
             .eraseToAnyPublisher()
     }
     
@@ -268,7 +268,7 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
     }
     
     func getShips(squad: SquadData){
-        self.store.send(.faction(action: .getShips(self.squadData.squad, self.squadData)))
+        self.store.send(.faction(action: .getShips(self.squadData)))
     }
     
     let points: Int = 150
@@ -296,7 +296,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     @State var displayDeleteConfirmation: Bool = false
     @State var refreshView: Bool = false
-    @State var damagedPointsState: Int = 0
+//    @State var damagedPointsState: Int = 0
     
     let printer: DeallocPrinter
     
@@ -368,19 +368,12 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     
     var shipPilots: [ShipPilot] {
         get {
-//            self.squadData.shipPilots
             measure(name: "Redux_FactionSquadCard.shipPilots \(String(describing: self.squadData.name))") {
-//                self.squadData.getShips()
-//                self.store.state.faction.shipPilots
-//
-//                return []
                 return self.store.state.faction.shipPilots
             }
-//            self.squadData.getShips(store)
         }
     }
     
-    // get from SquadData
     var squad: Squad {
         squadData.squad
     }
@@ -402,9 +395,9 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     }
     
     var damagedPointsView: some View {
-        logMessage("Redux_FactionSquadCard.damagedPointsView")
+        logMessage("myState Redux_FactionSquadCard.damagedPointsView")
         
-        return Text("\(damagedPointsState)")
+        return Text("\(viewModel.damagedPoints)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -571,32 +564,13 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // observing an @Published property.
             logMessage("Redux_FactionSquadCard.body.onAppear()")
             
-            self.store.send(.faction(action: .getShips(self.squad, self.squadData)))
-            self.refreshView.toggle()
+            self.viewModel.getShips(squad: self.squadData)
+            
             // Have to call in .onAppear because the @EnvironmentObject store
             // is not available until AFTER init() is called
             
             // inject the AppStore into the view model here since
             // @EnvironmentObject isn't accessible in the init()
         }
-        .onReceive(myState, perform: { state in
-            func getDamagedPoints(dataList: [SquadData]) -> Int {
-                if let targetSquad = dataList.first(where:{ $0.id == self.squadData.id})
-                {
-                    logMessage("Redux_FactionSquadCard.body.onReceive()")
-                    logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(squad.shipPilots.count)")
-                    let x = targetSquad.damagedPoints
-                    
-                    logMessage("myState.Redux_FactionSquadCard.body.onReceive() damagedPoints: \(x)")
-                    
-                    return x
-                    
-                }
-                
-                return 0
-            }
-            
-            self.damagedPointsState = getDamagedPoints(dataList: state)
-        })
     }
 }
