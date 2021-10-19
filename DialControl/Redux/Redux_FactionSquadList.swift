@@ -124,6 +124,7 @@ struct Redux_FactionSquadList: View {
         return Section {
             ForEach(squadDataList, id:\.self) { squadData in
                 Redux_FactionSquadCard(squadData: squadData,
+                                       store: store,
                                        deleteCallback: self.deleteSquad,
                                        updateCallback: self.updateSquad)
                 .environmentObject(self.viewFactory)
@@ -212,8 +213,64 @@ extension Redux_FactionSquadList {
     }
 }
 
-struct Redux_FactionSquadCardViewModel
-{
+//struct Redux_FactionSquadCardViewModel
+//{
+//    let points: Int = 150
+//    let theme: Theme = WestworldUITheme()
+//    let symbolSize: CGFloat = 36.0
+//
+//    var buttonBackground: Color {
+//        theme.BUTTONBACKGROUND
+//    }
+//
+//    var textForeground: Color {
+//        theme.TEXT_FOREGROUND
+//    }
+//
+//    var border: Color {
+//        theme.BORDER_INACTIVE
+//    }
+//}
+
+class Redux_FactionSquadCardViewModel : ObservableObject {
+    private var damagedPointsPublisher : AnyPublisher<Int, Never> {
+        self.store.$state
+            .map{ state -> [SquadData] in
+                return state.faction.squadDataList
+            }
+            .map { squadDataList -> Int in
+                if let targetSquad = squadDataList.first(where:{ $0.id == self.squadData.id})
+                {
+                    let damagedPoints = targetSquad.damagedPoints
+                    logMessage("Redux_FactionSquadCard.body.onReceive() damagedPoints: \(damagedPoints)")
+                    return damagedPoints
+                }
+                
+                return 0
+            }
+            .print("myState")
+            .eraseToAnyPublisher()
+    }
+    
+    let store : MyAppStore
+    @Published var damagedPoints : Int = 0
+    private var cancellables = Set<AnyCancellable>()
+    let squadData: SquadData
+    
+    init(squadData: SquadData, store: MyAppStore) {
+        self.squadData = squadData
+        self.store = store
+        self.damagedPointsPublisher
+            .sink{
+                self.damagedPoints = $0
+            }
+            .store(in: &cancellables)
+    }
+    
+    func getShips(squad: SquadData){
+        self.store.send(.faction(action: .getShips(self.squadData.squad, self.squadData)))
+    }
+    
     let points: Int = 150
     let theme: Theme = WestworldUITheme()
     let symbolSize: CGFloat = 36.0
@@ -231,10 +288,11 @@ struct Redux_FactionSquadCardViewModel
     }
 }
 
+
 struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var store: MyAppStore
-    let viewModel: Redux_FactionSquadCardViewModel = Redux_FactionSquadCardViewModel()
+    let viewModel: Redux_FactionSquadCardViewModel
     
     @State var displayDeleteConfirmation: Bool = false
     @State var refreshView: Bool = false
@@ -247,13 +305,41 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     let squadData: SquadData
     var squadPilots: [ShipPilot] = []
     
+    /*
+     struct Parent: View {
+         @Environment
+         var store: MyAppStore
+
+         var body: some View {
+             Child(store: $store)
+         }
+     }
+
+
+     struct Redux_FactionSquadCard: View {
+         @Binding
+         var store: MyAppStore
+        @ObservedObject var viewModel: Redux_FactionSquadCardViewModel
+     
+         init(store: Binding<MyAppStore>) {
+             self._store = store
+             self.viewModel = Redux_FactionSquadCardViewModel(store: store)
+         }
+
+         var body: some View {
+             Text(viewModel.damagedPoints)
+         }
+     }
+     */
     init(squadData: SquadData,
+         store: MyAppStore,
          deleteCallback: @escaping (SquadData) -> (),
          updateCallback: @escaping (SquadData) -> ())
     {
         self.deleteCallback = deleteCallback
         self.updateCallback = updateCallback
         self.squadData = squadData
+        self.viewModel = Redux_FactionSquadCardViewModel(squadData: squadData, store: store)
         self.printer = DeallocPrinter("damagedPoints FactionSquadCard")
     }
     
@@ -494,16 +580,23 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // @EnvironmentObject isn't accessible in the init()
         }
         .onReceive(myState, perform: { state in
-            let targetSquads:[SquadData] = state
-            if let targetSquad = targetSquads.first(where:{ $0.id == self.squadData.id})
-            {
-                logMessage("Redux_FactionSquadCard.body.onReceive()")
-                logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(squad.shipPilots.count)")
-                let x = targetSquad.damagedPoints
-                logMessage("Redux_FactionSquadCard.body.onReceive() damagedPoints: \(x)")
+            func getDamagedPoints(dataList: [SquadData]) -> Int {
+                if let targetSquad = dataList.first(where:{ $0.id == self.squadData.id})
+                {
+                    logMessage("Redux_FactionSquadCard.body.onReceive()")
+                    logMessage("Redux_FactionSquadCard.body.onReceive() shipPilots Count: \(squad.shipPilots.count)")
+                    let x = targetSquad.damagedPoints
+                    
+                    logMessage("myState.Redux_FactionSquadCard.body.onReceive() damagedPoints: \(x)")
+                    
+                    return x
+                    
+                }
                 
-                self.damagedPointsState = x
+                return 0
             }
+            
+            self.damagedPointsState = getDamagedPoints(dataList: state)
         })
     }
 }
