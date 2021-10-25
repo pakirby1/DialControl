@@ -231,10 +231,21 @@ extension Array where Element == ShipPilot {
 
 extension Array where Element == SquadData {
     mutating func setShips(data: Element) {
+        return setShips(data: data) {
+            return SquadService.getShips(squad: $0, squadData: $1)
+        }
+        
+//        if let index = firstIndex(where: { $0.id == data.id}) {
+//            self[index].shipPilots = SquadService.getShips(
+//                squad: data.squad,
+//                squadData: data)
+//        }
+    }
+    
+    // setShips(data: x) { return SquadService.getShips(squad: $0, squadData: $1) }
+    mutating func setShips(data: Element, handler: (Squad, SquadData) -> [ShipPilot]) {
         if let index = firstIndex(where: { $0.id == data.id}) {
-            self[index].shipPilots = SquadService.getShips(
-                squad: data.squad,
-                squadData: data)
+            self[index].shipPilots = handler(data.squad, data)
         }
     }
 }

@@ -122,13 +122,17 @@ func global_getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState
     print("pilotStateId: \(String(describing: pilotState.id))")
 
     return measure(name:"global_getShip") { () -> ShipPilot in
-        /// use caching
-        /// - check if the `Ship` for this ship & faction exists in the cache keyed by (ship xws, faction xws),
-        /// - if so return the `Ship`
+        /// use CacheService.shipCache property
+        /// - NetworkCacheService.loadData(...)
+            /// - check if the `Ship` for this ship & faction exists in the cache keyed by (ship xws, faction xws) ShipKey,
+                /// - if so return the `Ship`
+                /// - This is implemented by LocalCache<>.loadData(...)
         /// - if not...
         ///     - read the JSON from disk
         ///     - serialize the JSON into a `Ship`
-        ///     - store the `Ship` in the cache keyed by (ship xws, faction xws)
+        ///     - This is implemented by RemoteCache<>.loadData(...)
+        ///  - store the `Ship` in the local cache keyed by (ship xws, faction xws)
+        ///     - localCache.save(ShipKey, Ship)
         shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
         
         var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
