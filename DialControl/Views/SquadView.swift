@@ -113,6 +113,7 @@ struct SquadCardViewModel {
     }
 }
 
+
 func global_getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot {
     var shipJSON: String = ""
 

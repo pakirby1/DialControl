@@ -269,3 +269,11 @@ extension SquadService {
         return ret
     }
 }
+
+extension SquadService {
+    func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot
+    {
+        /// return shipCache.loadData(...)
+        global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
+    }
+}

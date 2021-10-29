@@ -61,6 +61,7 @@
 		AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E08DD243B547800E7899A /* LinkedView.swift */; };
 		AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */; };
 		AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */; };
+		AE713D18272BF42300A44912 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE713D17272BF42300A44912 /* CacheService.swift */; };
 		AE741B7424EE92E700B0531D /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */; };
 		AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */; };
 		AE7E5B3F2646A78C00BBEA15 /* Redux_FactionFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7E5B3E2646A78C00BBEA15 /* Redux_FactionFilterView.swift */; };
@@ -179,6 +180,7 @@
 		AE4E08DD243B547800E7899A /* LinkedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedView.swift; sourceTree = "<group>"; };
 		AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures-ships.ttf"; sourceTree = "<group>"; };
 		AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures.ttf"; sourceTree = "<group>"; };
+		AE713D17272BF42300A44912 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AE7E5B3E2646A78C00BBEA15 /* Redux_FactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_FactionFilterView.swift; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 				AEF5676F25DFCD17006DCD4C /* ShipService.swift */,
 				AEE6551D261D9F8F00AFAE6A /* JSONService.swift */,
 				AE2ADE8026809A9100142419 /* ImageService.swift */,
+				AE713D17272BF42300A44912 /* CacheService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -628,6 +631,7 @@
 				AE028C5F24A2C6D300DF689B /* DialControl.xcdatamodeld in Sources */,
 				AE93ADDD2452A45C0017AEE8 /* MultilineTextView.swift in Sources */,
 				AE1FBE6224166830005C54F5 /* PathNode.swift in Sources */,
+				AE713D18272BF42300A44912 /* CacheService.swift in Sources */,
 				AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */,
 				AEE65516260DFBBF00AFAE6A /* Redux_ShipView.swift in Sources */,
 				AEE98B4C24B5BD9F00E60128 /* CustomDivider.swift in Sources */,
