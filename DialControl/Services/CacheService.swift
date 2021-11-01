@@ -11,41 +11,41 @@ import Combine
 
 protocol ICacheService {
     associatedtype Key
-    func loadData(url: Key) -> AnyPublisher<Data, Error>
+    associatedtype Value
+    func loadData(key: Key) -> AnyPublisher<Value, Error>
 }
 
-class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheService where Local.Key == Remote.Key
+class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheService where Local.Key == Remote.Key, Local.LocalObject == Remote.RemoteObject
 {
     let localStore: Local
     let remoteStore: Remote
     
-    func loadData(url: Local.Key) -> AnyPublisher<Data, Error> {
+    func loadData(key: Local.Key) -> AnyPublisher<Remote.RemoteObject, Error> {
         var localData: Bool = false
         
         // see if the image is in the local store
         return self.localStore
-            .loadData(key: url as! Local.Key)
+            .loadData(key: key)
             .map { data in
                 print("local data")
                 localData = true
-                return data as! Remote.RemoteObject
+                return data
             }
             .catch { error in
                 /// If an error was encountered reading from the local store, eat the error and attempt to read from the remote store
                 /// we will return a new publisher (Future<Data, Error>) that contains either the data or a remote error
                 /// what if we get a 404 Not Found response, it will think it succeeded and will return
                 /// the html as the data, so we need to catch the 404 error
-                self.remoteStore.loadData(key: url)
+                self.remoteStore.loadData(key: key)
             }
             .print()
-            .map { result -> Data in
+            .map { data -> Remote.RemoteObject in
                 /// Did the result come from the local or Remote Store??  I can't tell...
-                print("Success: \(result)")
-                let data = result as! Data
+                print("Success: \(data)")
                 
                 // write to the cache, only if it was sourced from the remoteStore
                 if (!localData) {
-                    self.localStore.saveData(key: url, value: data as! Local.LocalObject)
+                    self.localStore.saveData(key: key, value: data)
                 }
                 
                 return data
@@ -60,15 +60,104 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
     }
 }
 
-class CacheService<Ship: ICacheService, Upgrade: ICacheService> {
-    let shipCache : Ship
-    let upgradeCache: Upgrade
+class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
+    let shipCache : ShipCache
+    let upgradeCache: UpgradeCache
     
     init() {
         self.shipCache = CacheUtility(localStore: LocalCache<ShipKey, Ship>(),
-                                      remoteStore: ShipRemoteCache<ShipKey, Ship>()) as! Ship
+                                      remoteStore: ShipRemoteCache<ShipKey, Ship>()) as! ShipCache
         self.upgradeCache = CacheUtility(localStore: LocalCache<UpgradeKey, Upgrade>(),
-                                         remoteStore: UpgradeRemoteCache<UpgradeKey, Upgrade>()) as! Upgrade
+                                         remoteStore: UpgradeRemoteCache<UpgradeKey, Upgrade>()) as! UpgradeCache
+    }
+    
+    func getShip(squad: Squad,
+                 squadPilot: SquadPilot,
+                 pilotState: PilotState) -> ShipPilot
+    {
+        func getShipPilot() -> ShipPilot {
+            var shipJSON: String = ""
+            
+            print("CacheService.getShip.shipName: \(squadPilot.ship)")
+            print("pilotName: \(squadPilot.name)")
+            print("faction: \(squad.faction)")
+            print("pilotStateId: \(String(describing: pilotState.id))")
+            
+            /// use CacheService.shipCache property
+            /// - NetworkCacheService.loadData(...)
+            /// - check if the `Ship` for this ship & faction exists in the cache keyed by (ship xws, faction xws) ShipKey,
+            /// - if so return the `Ship`
+            /// - This is implemented by LocalCache<>.loadData(...)
+            /// - if not...
+            ///     - read the JSON from disk
+            ///     - serialize the JSON into a `Ship`
+            ///     - This is implemented by RemoteCache<>.loadData(...)
+            ///  - store the `Ship` in the local cache keyed by (ship xws, faction xws)
+            ///     - localCache.save(ShipKey, Ship)
+            shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
+            
+            var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+            let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+            
+            ship.pilots.removeAll()
+            ship.pilots.append(foundPilots)
+            
+            /// use caching
+            /// - check if the `Upgrade` for this upgrade exists in the cache keyed by (upgrade xws
+            /// - if so return the `Upgrade`
+            /// - if not...
+            ///     - read the upgrade category (device.json) JSON from disk
+            ///     - serialize the JSON into ???
+            ///     - store the `[Upgrades]` in the cache keyed by (category xws)
+            var allUpgrades : [Upgrade] = []
+            
+            // Add the upgrades from SquadPilot.upgrades by iterating over the
+            // UpgradeCardEnum cases and calling getUpgrade
+            if let upgrades = squadPilot.upgrades {
+                allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+            }
+            
+            return ShipPilot(ship: ship,
+                             upgrades: allUpgrades,
+                             points: squadPilot.points,
+                             pilotState: pilotState)
+        }
+        
+        func getShipPilotUsingCache() -> AnyPublisher<ShipPilot, Error> {
+            func getUpgrades() -> [Upgrade] {
+                var allUpgrades : [Upgrade] = []
+                
+                if let upgrades = squadPilot.upgrades {
+                    allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+                }
+                
+                return allUpgrades
+            }
+            
+            func getUpgradesFromCache() -> [Upgrade] {
+                return []
+            }
+            
+            let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
+            return shipCache
+                .loadData(key: shipKey as! ShipCache.Key)
+                .map{ value in
+                    var ship = value as! Ship
+                    let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+                    
+                    ship.pilots.removeAll()
+                    ship.pilots.append(foundPilots)
+                    let upgrades = getUpgrades()
+                    
+                    return ShipPilot(ship: ship,
+                                     upgrades: upgrades,
+                                     points: squadPilot.points,
+                                     pilotState: pilotState)
+                }
+                .eraseToAnyPublisher()
+        }
+        
+        return getShipPilot()
     }
 }
 
