@@ -10,14 +10,21 @@ import Foundation
 import CoreData
 import Combine
 
+typealias SquadServiceCache = CacheService<
+    CacheUtility<LocalCache<ShipKey, Ship>, ShipRemoteCache<ShipKey, Ship>>,
+    CacheUtility<LocalCache<ShipKey, Ship>, ShipRemoteCache<ShipKey, Ship>>
+    >
+
 class SquadService: SquadServiceProtocol, ObservableObject {
     var alertText: String = ""
     var showAlert: Bool = false
     
     let moc: NSManagedObjectContext
+    let cacheService: SquadServiceCache
     
-    init(moc: NSManagedObjectContext) {
+    init(moc: NSManagedObjectContext, cacheService: SquadServiceCache) {
         self.moc = moc
+        self.cacheService = cacheService
     }
 }
 
@@ -230,22 +237,9 @@ extension Array where Element == ShipPilot {
 }
 
 extension Array where Element == SquadData {
-    mutating func setShips(data: Element) {
-        return setShips(data: data) {
-            return SquadService.getShips(squad: $0, squadData: $1)
-        }
-        
-//        if let index = firstIndex(where: { $0.id == data.id}) {
-//            self[index].shipPilots = SquadService.getShips(
-//                squad: data.squad,
-//                squadData: data)
-//        }
-    }
-    
-    // setShips(data: x) { return SquadService.getShips(squad: $0, squadData: $1) }
-    mutating func setShips(data: Element, handler: (Squad, SquadData) -> [ShipPilot]) {
-        if let index = firstIndex(where: { $0.id == data.id}) {
-            self[index].shipPilots = handler(data.squad, data)
+    mutating func setShips(data: Element, shipPilots: [ShipPilot]) {
+        if let index = firstIndex(where: { $0.id == data.id }) {
+            self[index].shipPilots = shipPilots
         }
     }
 }
@@ -271,9 +265,35 @@ extension SquadService {
 }
 
 extension SquadService {
-    func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot
+    /// Store reducers call this...
+    func getShips(squad: Squad, squadData: SquadData) -> AnyPublisher<[ShipPilot], Error>
     {
-        /// return shipCache.loadData(...)
-        global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
+        func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot
+        {
+            /// return shipCache.loadData(...)
+            global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
+        }
+        
+        func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Error>
+        {
+            /// return shipCache.loadData(...)
+            return Empty().eraseToAnyPublisher()
+        }
+        
+        let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
+        _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
+
+        let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
+
+        _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
+
+        let ret: [ShipPilot] = zipped.map{
+            // Making multiple calls to getShip
+            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+        }
+
+        ret.printAll(tag: "PAK_DialStatus getShips()")
+
+        return Empty().eraseToAnyPublisher()
     }
 }

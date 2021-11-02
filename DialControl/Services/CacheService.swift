@@ -61,8 +61,8 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
 }
 
 class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
-    let shipCache : ShipCache
-    let upgradeCache: UpgradeCache
+    private let shipCache : ShipCache
+    private let upgradeCache: UpgradeCache
     
     init() {
         self.shipCache = CacheUtility(localStore: LocalCache<ShipKey, Ship>(),
@@ -73,7 +73,7 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
     
     func getShip(squad: Squad,
                  squadPilot: SquadPilot,
-                 pilotState: PilotState) -> ShipPilot
+                 pilotState: PilotState) -> AnyPublisher<ShipPilot, Error>
     {
         func getShipPilot() -> ShipPilot {
             var shipJSON: String = ""
@@ -134,30 +134,64 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
                 return allUpgrades
             }
             
-            func getUpgradesFromCache() -> [Upgrade] {
-                return []
+            func getUpgradesFromCache() -> AnyPublisher<[UpgradeCache.Value], Error> {
+                
+                if let upgrades = squadPilot.upgrades {
+                    let allUpgradeKyes = upgrades.allUpgradeKeys
+                    let publishers = allUpgradeKyes.map { upgradeCache.loadData(key: $0 as! UpgradeCache.Key) }
+                    
+                    return Publishers.MergeMany(publishers)
+                            .collect()
+                            .eraseToAnyPublisher()
+                }
+                
+                return Empty().eraseToAnyPublisher()
             }
             
-            let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
-            return shipCache
-                .loadData(key: shipKey as! ShipCache.Key)
-                .map{ value in
-                    var ship = value as! Ship
-                    let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
-                    
-                    ship.pilots.removeAll()
-                    ship.pilots.append(foundPilots)
-                    let upgrades = getUpgrades()
-                    
-                    return ShipPilot(ship: ship,
-                                     upgrades: upgrades,
-                                     points: squadPilot.points,
-                                     pilotState: pilotState)
-                }
-                .eraseToAnyPublisher()
+            func getShipFromCache() -> AnyPublisher<Ship, Error> {
+                let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
+                
+                let shipStream: AnyPublisher<Ship, Error> = shipCache
+                    .loadData(key: shipKey as! ShipCache.Key)
+                    .map { value -> Ship in
+                        var ship = value as! Ship
+                        let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+                        
+                        ship.pilots.removeAll()
+                        ship.pilots.append(foundPilots)
+                        
+                        return ship
+                    }
+                    .eraseToAnyPublisher()
+                
+                return shipStream
+            }
+            
+            let shipStream = getShipFromCache()
+            let upgradesStream = getUpgradesFromCache()
+            
+            let shipPilotStream = Publishers.CombineLatest(shipStream, upgradesStream).map { shipAndUpgrades -> ShipPilot in
+                let ship = shipAndUpgrades.0
+                let upgrades = shipAndUpgrades.1 as! [Upgrade]
+                let shipPilot = ShipPilot(ship: ship, upgrades: upgrades, points: squadPilot.points, pilotState: pilotState)
+                return shipPilot
+            }.eraseToAnyPublisher()
+            
+//            let shipPilotStream = shipStream
+//                .map { ship -> ShipPilot in
+//                    let upgrades = getUpgrades()
+//
+//                    return ShipPilot(ship: ship,
+//                                     upgrades: upgrades,
+//                                     points: squadPilot.points,
+//                                     pilotState: pilotState)
+//                }.eraseToAnyPublisher()
+            
+            
+            return shipPilotStream
         }
         
-        return getShipPilot()
+        return getShipPilotUsingCache()
     }
 }
 
@@ -179,26 +213,6 @@ class LocalCache<Key, Value> : ILocalCacheStore where Key : CustomStringConverti
     
     func saveData(key: Key, value: Value) {
         self.cache[key] = value
-    }
-}
-
-class RemoteCache<Key, Value> : IRemoteCacheStore where Key : CustomStringConvertible & Hashable
-{
-    private var cache = [Key:Value]()
-    
-    func loadData(key: Key) -> Future<Value, Error> {
-        Future<Value, Error> { promise in
-            /// Load from File or Network
-            /// - If the key is ShipKey type then global_getShip(....)
-            /// - If the key is String type then getAllUpgrades(...)
-            if let keyValue = self.cache.first(where: { tuple -> Bool in
-                return tuple.key == key ? true : false
-            }) {
-                promise(.success(keyValue.value))
-            } else {
-                promise(.failure(CacheStoreError.cacheMiss(key.description)))
-            }
-        }
     }
 }
 
@@ -281,7 +295,7 @@ struct UpgradeKey : CustomStringConvertible, Hashable {
     let upgrade: String
     
     var description: String {
-        return "\(category).upgrade"
+        return "\(category).\(upgrade)"
     }
 }
 

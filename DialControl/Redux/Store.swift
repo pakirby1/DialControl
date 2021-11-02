@@ -155,6 +155,7 @@ enum MyFactionSquadListAction {
     case favorite(Bool, SquadData)
     case updateFavorites(Bool)
     case getShips(SquadData)
+    case setShips(SquadData, [ShipPilot])
 }
 
 struct MyEnvironment {
@@ -602,8 +603,18 @@ func factionReducer(state: inout MyAppState,
     print("favoriteTapped: \(action)")
     
     switch(action) {
+        case let .setShips(data, shipPilots):
+            state.faction.squadDataList.setShips(data: data, shipPilots: shipPilots)
+            
         case let .getShips(data):
-            state.faction.squadDataList.setShips(data: data)
+            return environment
+                .squadService
+                .getShips(squad: data.squad, squadData: data)
+                .replaceError(with: [])
+                .map { .faction(action: .setShips(data, $0)) }
+                .eraseToAnyPublisher()
+            
+//            state.faction.squadDataList.setShips(data: data)
 //            let x = state.faction.squadDataList[0]
 //            logMessage("pilot count: \(x.shipPilots.count)")
 //            

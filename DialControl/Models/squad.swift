@@ -199,6 +199,140 @@ struct SquadPilotUpgrade: Codable {
     }
 }
 
+extension SquadPilotUpgrade {
+    var allUpgrades: [String] {
+        return astromechs +
+            cannons +
+            cargos +
+            commands +
+            configurations +
+            crews +
+            devices +
+            forcepowers +
+            gunners +
+            hardpoints +
+            illicits +
+            missiles +
+            modifications +
+            sensors +
+            tacticalrelays +
+            talents +
+            teams +
+            techs +
+            titles +
+            torpedos +
+            turrets
+    }
+    
+    var allUpgradeKeys: [UpgradeKey] {
+        return astromechKeys +
+            cannonsKeys +
+            cargosKeys +
+            commandsKeys +
+            configurationsKeys +
+            crewsKeys +
+            devicesKeys +
+            forcepowersKeys +
+            gunnersKeys +
+            hardpointsKeys +
+            illicitsKeys +
+            missilesKeys +
+            modificationsKeys +
+            sensorsKeys +
+            tacticalrelaysKeys +
+            talentsKeys +
+            teamsKeys +
+            techsKeys +
+            titlesKeys +
+            torpedosKeys +
+            turretsKeys
+    }
+    
+    var astromechKeys: [UpgradeKey] {
+        astromechs.map { UpgradeKey(category: "astromechs", upgrade: $0) }
+    }
+    
+    var cannonsKeys: [UpgradeKey] {
+        cannons.map { UpgradeKey(category: "cannons", upgrade: $0) }
+    }
+    
+    var cargosKeys: [UpgradeKey] {
+        cargos.map { UpgradeKey(category: "cargos", upgrade: $0) }
+    }
+    
+    var commandsKeys: [UpgradeKey] {
+        commands.map { UpgradeKey(category: "commands", upgrade: $0) }
+    }
+    
+    var configurationsKeys: [UpgradeKey] {
+        configurations.map { UpgradeKey(category: "configurations", upgrade: $0) }
+    }
+    
+    var crewsKeys: [UpgradeKey] {
+        crews.map { UpgradeKey(category: "crews", upgrade: $0) }
+    }
+    
+    var devicesKeys: [UpgradeKey] {
+        devices.map { UpgradeKey(category: "devices", upgrade: $0) }
+    }
+    
+    var forcepowersKeys: [UpgradeKey] {
+        forcepowers.map { UpgradeKey(category: "forcepowers", upgrade: $0) }
+    }
+    
+    var gunnersKeys: [UpgradeKey] {
+        gunners.map { UpgradeKey(category: "gunners", upgrade: $0) }
+    }
+    
+    var hardpointsKeys: [UpgradeKey] {
+        hardpoints.map { UpgradeKey(category: "hardpoints", upgrade: $0) }
+    }
+    
+    var illicitsKeys: [UpgradeKey] {
+        illicits.map { UpgradeKey(category: "illicits", upgrade: $0) }
+    }
+    
+    var missilesKeys: [UpgradeKey] {
+        missiles.map { UpgradeKey(category: "missiles", upgrade: $0) }
+    }
+    
+    var modificationsKeys: [UpgradeKey] {
+        modifications.map { UpgradeKey(category: "modifications", upgrade: $0) }
+    }
+    
+    var sensorsKeys: [UpgradeKey] {
+        sensors.map { UpgradeKey(category: "sensors", upgrade: $0) }
+    }
+    
+    var tacticalrelaysKeys: [UpgradeKey] {
+        tacticalrelays.map { UpgradeKey(category: "tacticalrelays", upgrade: $0) }
+    }
+    
+    var talentsKeys: [UpgradeKey] {
+        talents.map { UpgradeKey(category: "talents", upgrade: $0) }
+    }
+    
+    var teamsKeys: [UpgradeKey] {
+        teams.map { UpgradeKey(category: "teams", upgrade: $0) }
+    }
+    
+    var techsKeys: [UpgradeKey] {
+        techs.map { UpgradeKey(category: "techs", upgrade: $0) }
+    }
+    
+    var titlesKeys: [UpgradeKey] {
+        titles.map { UpgradeKey(category: "titles", upgrade: $0) }
+    }
+    
+    var torpedosKeys: [UpgradeKey] {
+        torpedos.map { UpgradeKey(category: "torpedos", upgrade: $0) }
+    }
+    
+    var turretsKeys: [UpgradeKey] {
+        turrets.map { UpgradeKey(category: "turrets", upgrade: $0) }
+    }
+}
+
 struct SquadPilot: Codable, Identifiable {
     let id: String
     let points: Int
