@@ -12,7 +12,7 @@ import Combine
 
 typealias SquadServiceCache = CacheService<
     CacheUtility<LocalCache<ShipKey, Ship>, ShipRemoteCache<ShipKey, Ship>>,
-    CacheUtility<LocalCache<ShipKey, Ship>, ShipRemoteCache<ShipKey, Ship>>
+    CacheUtility<LocalCache<UpgradeKey, Upgrade>, UpgradeRemoteCache<UpgradeKey, Upgrade>>
     >
 
 class SquadService: SquadServiceProtocol, ObservableObject {
@@ -21,6 +21,7 @@ class SquadService: SquadServiceProtocol, ObservableObject {
     
     let moc: NSManagedObjectContext
     let cacheService: SquadServiceCache
+    private var cancellables = Set<AnyCancellable>()
     
     init(moc: NSManagedObjectContext, cacheService: SquadServiceCache) {
         self.moc = moc
@@ -238,9 +239,11 @@ extension Array where Element == ShipPilot {
 
 extension Array where Element == SquadData {
     mutating func setShips(data: Element, shipPilots: [ShipPilot]) {
+        global_os_log("Array.setShips count=", "\(shipPilots.count)")
         if let index = firstIndex(where: { $0.id == data.id }) {
             self[index].shipPilots = shipPilots
         }
+        
     }
 }
 
@@ -277,7 +280,11 @@ extension SquadService {
         func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Error>
         {
             /// return shipCache.loadData(...)
-            return Empty().eraseToAnyPublisher()
+            return cacheService.getShip(squad: squad,
+                                 squadPilot: squadPilot,
+                                 pilotState: pilotState)
+            
+//            return Empty().eraseToAnyPublisher()
         }
         
         let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
@@ -285,14 +292,60 @@ extension SquadService {
 
         let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
 
-        _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
-
-        let ret: [ShipPilot] = zipped.map{
-            // Making multiple calls to getShip
-            getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+        _ = zipped.map{
+            let value = "\(String(describing: $0.0.name)): \($0.1)"
+            let message = "Store.send zipped.map"
+            global_os_log(message, value)
         }
 
-        ret.printAll(tag: "PAK_DialStatus getShips()")
+        var x: [AnyPublisher<ShipPilot, Error>] = []
+        
+        zipped.forEach{
+            x.append(getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1))
+        }
+        
+        global_os_log("SquadService.getShips", "x.count :\(x.count)")
+
+        var publishers = x.map {
+          $0
+            .map {
+                global_os_log("SquadService.getShips.publishers Result.success")
+                return Result<ShipPilot, Error>.success($0)
+            }
+            .catch {
+                return Just<Result<ShipPilot, Error>>(.failure($0))
+            }
+//            .sink(
+//                receiveCompletion: {
+//                    print("complete", $0)
+//                },
+//                receiveValue: {
+//                    print("value", $0)
+//                })
+//            .store(in: &cancellables)
+            .eraseToAnyPublisher()
+        }
+        
+        
+        Publishers.MergeMany(publishers)
+            .sink(
+                receiveCompletion: {
+                    print("complete", $0)
+                },
+                receiveValue: {
+                    print("value", $0)
+                })
+            .store(in: &cancellables)
+
+        let mergedPublishers = Publishers.MergeMany(x)
+            .os_log(message: "SquadService.getShips.Publishers.MergeMany")
+
+        return mergedPublishers
+                .collect()
+                .os_log(message: "SquadService.getShips.collect")
+                .eraseToAnyPublisher()
+        
+//        ret.printAll(tag: "PAK_DialStatus getShips()")
 
         return Empty().eraseToAnyPublisher()
     }

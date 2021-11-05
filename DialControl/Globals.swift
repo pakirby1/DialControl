@@ -11,6 +11,9 @@ import SwiftUI
 import Combine
 import os
 
+func global_os_log(_ message: String = "", _ value: String = "") {
+    os.os_log("[%@] value: %@", message, value)
+}
 
 extension Publisher {
     func os_log(message: String = "") -> Publishers.HandleEvents<Self> {

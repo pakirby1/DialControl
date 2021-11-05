@@ -604,14 +604,22 @@ func factionReducer(state: inout MyAppState,
     
     switch(action) {
         case let .setShips(data, shipPilots):
-            state.faction.squadDataList.setShips(data: data, shipPilots: shipPilots)
+            global_os_log("Store.send factionReducer.setShips", "shipPilots.count \(shipPilots.count)")
+            state
+                .faction
+                .squadDataList
+                .setShips(data: data, shipPilots: shipPilots)
             
         case let .getShips(data):
+            global_os_log("Store.send factionReducer.getShips", data.description)
+            
             return environment
                 .squadService
                 .getShips(squad: data.squad, squadData: data)
+                .os_log(message: "Store.send MyFactionSquadListAction.getShips")
                 .replaceError(with: [])
                 .map { .faction(action: .setShips(data, $0)) }
+                .os_log(message: "Store.send MyFactionSquadListAction.getShips.map")
                 .eraseToAnyPublisher()
             
 //            state.faction.squadDataList.setShips(data: data)

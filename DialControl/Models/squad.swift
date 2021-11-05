@@ -249,87 +249,87 @@ extension SquadPilotUpgrade {
     }
     
     var astromechKeys: [UpgradeKey] {
-        astromechs.map { UpgradeKey(category: "astromechs", upgrade: $0) }
+        astromechs.map { UpgradeKey(category: "astromech", upgrade: $0) }
     }
     
     var cannonsKeys: [UpgradeKey] {
-        cannons.map { UpgradeKey(category: "cannons", upgrade: $0) }
+        cannons.map { UpgradeKey(category: "cannon", upgrade: $0) }
     }
     
     var cargosKeys: [UpgradeKey] {
-        cargos.map { UpgradeKey(category: "cargos", upgrade: $0) }
+        cargos.map { UpgradeKey(category: "cargo", upgrade: $0) }
     }
     
     var commandsKeys: [UpgradeKey] {
-        commands.map { UpgradeKey(category: "commands", upgrade: $0) }
+        commands.map { UpgradeKey(category: "command", upgrade: $0) }
     }
     
     var configurationsKeys: [UpgradeKey] {
-        configurations.map { UpgradeKey(category: "configurations", upgrade: $0) }
+        configurations.map { UpgradeKey(category: "configuration", upgrade: $0) }
     }
     
     var crewsKeys: [UpgradeKey] {
-        crews.map { UpgradeKey(category: "crews", upgrade: $0) }
+        crews.map { UpgradeKey(category: "crew", upgrade: $0) }
     }
     
     var devicesKeys: [UpgradeKey] {
-        devices.map { UpgradeKey(category: "devices", upgrade: $0) }
+        devices.map { UpgradeKey(category: "device", upgrade: $0) }
     }
     
     var forcepowersKeys: [UpgradeKey] {
-        forcepowers.map { UpgradeKey(category: "forcepowers", upgrade: $0) }
+        forcepowers.map { UpgradeKey(category: "forcepower", upgrade: $0) }
     }
     
     var gunnersKeys: [UpgradeKey] {
-        gunners.map { UpgradeKey(category: "gunners", upgrade: $0) }
+        gunners.map { UpgradeKey(category: "gunner", upgrade: $0) }
     }
     
     var hardpointsKeys: [UpgradeKey] {
-        hardpoints.map { UpgradeKey(category: "hardpoints", upgrade: $0) }
+        hardpoints.map { UpgradeKey(category: "hardpoint", upgrade: $0) }
     }
     
     var illicitsKeys: [UpgradeKey] {
-        illicits.map { UpgradeKey(category: "illicits", upgrade: $0) }
+        illicits.map { UpgradeKey(category: "illicit", upgrade: $0) }
     }
     
     var missilesKeys: [UpgradeKey] {
-        missiles.map { UpgradeKey(category: "missiles", upgrade: $0) }
+        missiles.map { UpgradeKey(category: "missile", upgrade: $0) }
     }
     
     var modificationsKeys: [UpgradeKey] {
-        modifications.map { UpgradeKey(category: "modifications", upgrade: $0) }
+        modifications.map { UpgradeKey(category: "modification", upgrade: $0) }
     }
     
     var sensorsKeys: [UpgradeKey] {
-        sensors.map { UpgradeKey(category: "sensors", upgrade: $0) }
+        sensors.map { UpgradeKey(category: "sensor", upgrade: $0) }
     }
     
     var tacticalrelaysKeys: [UpgradeKey] {
-        tacticalrelays.map { UpgradeKey(category: "tacticalrelays", upgrade: $0) }
+        tacticalrelays.map { UpgradeKey(category: "tacticalrelay", upgrade: $0) }
     }
     
     var talentsKeys: [UpgradeKey] {
-        talents.map { UpgradeKey(category: "talents", upgrade: $0) }
+        talents.map { UpgradeKey(category: "talent", upgrade: $0) }
     }
     
     var teamsKeys: [UpgradeKey] {
-        teams.map { UpgradeKey(category: "teams", upgrade: $0) }
+        teams.map { UpgradeKey(category: "team", upgrade: $0) }
     }
     
     var techsKeys: [UpgradeKey] {
-        techs.map { UpgradeKey(category: "techs", upgrade: $0) }
+        techs.map { UpgradeKey(category: "tech", upgrade: $0) }
     }
     
     var titlesKeys: [UpgradeKey] {
-        titles.map { UpgradeKey(category: "titles", upgrade: $0) }
+        titles.map { UpgradeKey(category: "title", upgrade: $0) }
     }
     
     var torpedosKeys: [UpgradeKey] {
-        torpedos.map { UpgradeKey(category: "torpedos", upgrade: $0) }
+        torpedos.map { UpgradeKey(category: "torpedo", upgrade: $0) }
     }
     
     var turretsKeys: [UpgradeKey] {
-        turrets.map { UpgradeKey(category: "turrets", upgrade: $0) }
+        turrets.map { UpgradeKey(category: "turret", upgrade: $0) }
     }
 }
 

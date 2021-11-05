@@ -249,7 +249,6 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
                 return 0
             }
             .print("myState Redux_FactionSquadCardViewModel.damagedPointsPublisher")
-            .os_log(message: "myState")
             .eraseToAnyPublisher()
     }
     
@@ -268,7 +267,7 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
             .store(in: &cancellables)
     }
     
-    func getShips(squad: SquadData){
+    func getShips(squad: SquadData) {
         self.store.send(.faction(action: .getShips(self.squadData)))
     }
     
@@ -563,7 +562,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             // view body needs to be recreated after onAppear
             // This can be done by updating an @State property, or
             // observing an @Published property.
-            logMessage("Redux_FactionSquadCard.body.onAppear()")
+            global_os_log("Redux_FactionSquadCard.body.onAppear()")
             
             self.viewModel.getShips(squad: self.squadData)
             

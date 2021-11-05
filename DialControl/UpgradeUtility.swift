@@ -9,6 +9,37 @@
 import Foundation
 
 struct UpgradeUtility {
+    static func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
+        // Read json from file: forType.json
+        let jsonFileName = "\(forType)"
+        var upgradeJSON = ""
+        
+        if let path = Bundle.main.path(forResource: jsonFileName,
+                                       ofType: "json",
+                                       inDirectory: inDirectory)
+        {
+            print("path: \(path)")
+            
+            do {
+                upgradeJSON = try String(contentsOfFile: path)
+                print("upgradeJSON: \(upgradeJSON)")
+            } catch {
+                print("error reading from \(path)")
+            }
+        }
+        
+        //            return modificationsUpgradesJSON
+        return upgradeJSON
+    }
+    
+    static func getUpgrades(upgradeCategory: String) -> [Upgrade] {
+        let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
+        
+        let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+
+        return upgrades
+    }
+    
     /// We should refactor this
     /// - The `getUpgrade()` will load the JSON file and serialize it for each upgrade the pilot has
     /// - This means that if a pilot has `proximitymines` & `seismiccharges` then the `device.json`
@@ -21,28 +52,7 @@ struct UpgradeUtility {
                                  store: MyAppStore? = nil) -> [Upgrade] {
         print("UpgradeUtility.buildAllUpgrades \(upgrades)")
         
-            func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
-                // Read json from file: forType.json
-                let jsonFileName = "\(forType)"
-                var upgradeJSON = ""
-                
-                if let path = Bundle.main.path(forResource: jsonFileName,
-                                               ofType: "json",
-                                               inDirectory: inDirectory)
-                {
-                    print("path: \(path)")
-                    
-                    do {
-                        upgradeJSON = try String(contentsOfFile: path)
-                        print("upgradeJSON: \(upgradeJSON)")
-                    } catch {
-                        print("error reading from \(path)")
-                    }
-                }
-                
-                //            return modificationsUpgradesJSON
-                return upgradeJSON
-            }
+            
             
             // getUpgrade(upgradeCategory: "device", upgradeName: "thermaldetonators")
             func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {

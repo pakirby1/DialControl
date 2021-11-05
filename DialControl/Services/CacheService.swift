@@ -26,8 +26,9 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
         // see if the image is in the local store
         return self.localStore
             .loadData(key: key)
+            .os_log(message: "Store.send CacheUtility.loadData")
             .map { data in
-                print("local data")
+                global_os_log("Store.send CacheUtility.loadData", "found data")
                 localData = true
                 return data
             }
@@ -36,9 +37,9 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
                 /// we will return a new publisher (Future<Data, Error>) that contains either the data or a remote error
                 /// what if we get a 404 Not Found response, it will think it succeeded and will return
                 /// the html as the data, so we need to catch the 404 error
+//                global_os_log("Store.send CacheUtility.loadData.catch")
                 self.remoteStore.loadData(key: key)
             }
-            .print()
             .map { data -> Remote.RemoteObject in
                 /// Did the result come from the local or Remote Store??  I can't tell...
                 print("Success: \(data)")
@@ -50,7 +51,7 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
                 
                 return data
             }
-            .print()
+            .os_log(message: "Store.send CacheUtility.loadData")
             .eraseToAnyPublisher()
     }
     
@@ -69,12 +70,15 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
                                       remoteStore: ShipRemoteCache<ShipKey, Ship>()) as! ShipCache
         self.upgradeCache = CacheUtility(localStore: LocalCache<UpgradeKey, Upgrade>(),
                                          remoteStore: UpgradeRemoteCache<UpgradeKey, Upgrade>()) as! UpgradeCache
+        global_os_log("CacheService.init()")
     }
     
     func getShip(squad: Squad,
                  squadPilot: SquadPilot,
                  pilotState: PilotState) -> AnyPublisher<ShipPilot, Error>
     {
+        global_os_log("CacheService.getShip", squadPilot.ship)
+        
         func getShipPilot() -> ShipPilot {
             var shipJSON: String = ""
             
@@ -153,6 +157,8 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
                 
                 let shipStream: AnyPublisher<Ship, Error> = shipCache
                     .loadData(key: shipKey as! ShipCache.Key)
+                    .os_log(message: "Store.send getShipFromCache.shipStream.loadData")
+                    .print("PAK_Cache.getShipFromCache loadData")
                     .map { value -> Ship in
                         var ship = value as! Ship
                         let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
@@ -162,6 +168,7 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
                         
                         return ship
                     }
+                    .os_log(message: "Store.send getShipFromCache.shipStream.map")
                     .eraseToAnyPublisher()
                 
                 return shipStream
@@ -197,22 +204,36 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
 
 class LocalCache<Key, Value> : ILocalCacheStore where Key : CustomStringConvertible,Key: Hashable
 {
-    private var cache = [Key:Value]()
+    private var cache = [String:Value]()
     
     func loadData(key: Key) -> Future<Value, Error> {
-        Future<Value, Error> { promise in
-            if let keyValue = self.cache.first(where: { tuple -> Bool in
-                return tuple.key == key ? true : false
-            }) {
-                promise(.success(keyValue.value))
+//        self.cache.enumerated().forEach { tuple in
+//            logMessage("PAK_Cache.loadData self.cache \(tuple.element.key.description)")
+//        }
+        
+        return Future<Value, Error> { promise in
+            if key.description == "talent.disciplined" {
+                logMessage("PAK_Cache.loadData looking for \(key) in \(self.cache[key.description])")
+            }
+            
+            global_os_log("LocalCache.loadData", "cache count: \(self.cache.count)")
+            if let keyValue = self.cache[key.description] {
+                global_os_log("LocalCache.loadData hit: \(key.description)")
+                promise(.success(keyValue))
             } else {
+                global_os_log("LocalCache.loadData miss: \(key.description)")
                 promise(.failure(CacheStoreError.cacheMiss(key.description)))
             }
         }
     }
     
     func saveData(key: Key, value: Value) {
-        self.cache[key] = value
+        if key.description == "talent.disciplined" {
+            logMessage("PAK_Cache.saveData \(key.description)")
+        }
+        
+        self.cache[key.description] = value
+        global_os_log("LocalCache.saveData added: \(key.description)")
     }
 }
 
@@ -250,8 +271,13 @@ class ShipRemoteCache<Key, Value> : IRemoteCacheStore where Key : CustomStringCo
 {
     private var cache = [Key:Value]()
     
-    func getShip(ship: ShipKey) -> String? {
-        return "test"
+    func getShip(key: ShipKey) -> Ship {
+        let shipJSON = getJSONFor(ship: key.ship, faction: key.faction)
+        
+        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+        global_os_log("ShipRemoteCache.getShip", shipJSON)
+        
+        return ship
     }
     
     func loadData(key: ShipKey) -> Future<Value, Error> {
@@ -259,12 +285,10 @@ class ShipRemoteCache<Key, Value> : IRemoteCacheStore where Key : CustomStringCo
             /// Load from File or Network
             /// - If the key is ShipKey type then global_getShip(....)
             
-            if let ship = self.getShip(ship: key) {
-                promise(.success(ship as! Value))
-            } else {
-                promise(.failure(CacheStoreError.cacheMiss(key.description)))
-            }
+            let ship = self.getShip(key: key)
+            promise(.success(ship as! Value))
         }
+        
     }
 }
 
@@ -272,10 +296,12 @@ class UpgradeRemoteCache<Key, Value> : IRemoteCacheStore where Key : CustomStrin
 {
     private var cache = [Key:Value]()
     
-    func getUpgrade(key: UpgradeKey) -> String? {
+    func getUpgrade(key: UpgradeKey) -> Upgrade? {
         /// Get upgrade from JSON
+        logMessage("PAK_Cache.getUpgrade: \(key)")
+        let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: key.category)
         
-        return "afterburners"
+        return upgrades.filter{ $0.xws == key.upgrade }.first
     }
     
     func loadData(key: UpgradeKey) -> Future<Value, Error> {
