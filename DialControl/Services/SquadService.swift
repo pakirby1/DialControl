@@ -269,7 +269,7 @@ extension SquadService {
 
 extension SquadService {
     /// Store reducers call this...
-    func getShips(squad: Squad, squadData: SquadData) -> AnyPublisher<[ShipPilot], Error>
+    func getShips(squad: Squad, squadData: SquadData) -> AnyPublisher<[ShipPilot], Never>
     {
         func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot
         {
@@ -277,7 +277,7 @@ extension SquadService {
             global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
         }
         
-        func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Error>
+        func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
         {
             /// return shipCache.loadData(...)
             return cacheService.getShip(squad: squad,
@@ -298,7 +298,7 @@ extension SquadService {
             global_os_log(message, value)
         }
 
-        var x: [AnyPublisher<ShipPilot, Error>] = []
+        var x: [AnyPublisher<ShipPilot, Never>] = []
         
         zipped.forEach{
             x.append(getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1))

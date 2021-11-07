@@ -12,7 +12,7 @@ import Combine
 protocol ICacheService {
     associatedtype Key
     associatedtype Value
-    func loadData(key: Key) -> AnyPublisher<Value, Error>
+    func loadData(key: Key) -> AnyPublisher<Value, Never>
 }
 
 class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheService where Local.Key == Remote.Key, Local.LocalObject == Remote.RemoteObject
@@ -20,12 +20,41 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
     let localStore: Local
     let remoteStore: Remote
     
-    func loadData(key: Local.Key) -> AnyPublisher<Remote.RemoteObject, Error> {
+    func loadData(key: Local.Key) -> AnyPublisher<Remote.RemoteObject, Never> {
         var localData: Bool = false
         
         // see if the image is in the local store
         return self.localStore
+            .loadDataNew(key: key)
+            .print("Store.send CacheUtility.loadData")
+            .os_log(message: "Store.send CacheUtility.loadData")
+            .flatMap { data -> AnyPublisher<Remote.RemoteObject, Never> in
+                if let d = data {
+                    global_os_log("Store.send CacheUtility.loadData", "found data")
+                    localData = true
+                    return Just(d).eraseToAnyPublisher()
+                }
+                
+                return self.remoteStore.loadDataNew(key: key)
+            }
+            .map { data -> Remote.RemoteObject in
+                /// Did the result come from the local or Remote Store??  I can't tell...
+                print("Success: \(data)")
+                
+                // write to the cache, only if it was sourced from the remoteStore
+                if (!localData) {
+                    self.localStore.saveData(key: key, value: data)
+                }
+                
+                return data
+            }
+            .os_log(message: "Store.send CacheUtility.loadData")
+            .eraseToAnyPublisher()
+        
+        /*
+        return self.localStore
             .loadData(key: key)
+            .print("Store.send CacheUtility.loadData")
             .os_log(message: "Store.send CacheUtility.loadData")
             .map { data in
                 global_os_log("Store.send CacheUtility.loadData", "found data")
@@ -53,6 +82,7 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
             }
             .os_log(message: "Store.send CacheUtility.loadData")
             .eraseToAnyPublisher()
+        */
     }
     
     init(localStore: Local, remoteStore: Remote) {
@@ -75,7 +105,7 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
     
     func getShip(squad: Squad,
                  squadPilot: SquadPilot,
-                 pilotState: PilotState) -> AnyPublisher<ShipPilot, Error>
+                 pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
     {
         global_os_log("CacheService.getShip", squadPilot.ship)
         
@@ -127,7 +157,7 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
                              pilotState: pilotState)
         }
         
-        func getShipPilotUsingCache() -> AnyPublisher<ShipPilot, Error> {
+        func getShipPilotUsingCache() -> AnyPublisher<ShipPilot, Never> {
             func getUpgrades() -> [Upgrade] {
                 var allUpgrades : [Upgrade] = []
                 
@@ -138,7 +168,7 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
                 return allUpgrades
             }
             
-            func getUpgradesFromCache() -> AnyPublisher<[UpgradeCache.Value], Error> {
+            func getUpgradesFromCache() -> AnyPublisher<[UpgradeCache.Value], Never> {
                 
                 if let upgrades = squadPilot.upgrades {
                     let allUpgradeKyes = upgrades.allUpgradeKeys
@@ -152,10 +182,10 @@ class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
                 return Empty().eraseToAnyPublisher()
             }
             
-            func getShipFromCache() -> AnyPublisher<Ship, Error> {
+            func getShipFromCache() -> AnyPublisher<Ship, Never> {
                 let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
                 
-                let shipStream: AnyPublisher<Ship, Error> = shipCache
+                let shipStream: AnyPublisher<Ship, Never> = shipCache
                     .loadData(key: shipKey as! ShipCache.Key)
                     .os_log(message: "Store.send getShipFromCache.shipStream.loadData")
                     .print("PAK_Cache.getShipFromCache loadData")
@@ -206,6 +236,39 @@ class LocalCache<Key, Value> : ILocalCacheStore where Key : CustomStringConverti
 {
     private var cache = [String:Value]()
     
+    /*
+     loadData(key).map { result -> ??? in
+        switch(result) {
+            case .success(value):
+                return value
+            case .failure(Error)
+                return RemoteCache.loadData(???)
+        }
+     }
+        
+     */
+    func loadData(key: Key) -> AnyPublisher<Value?, Error> {
+        Result<Value?, Error> {
+            if let keyValue = self.cache[key.description] {
+                return keyValue
+            } else {
+                return nil
+            }
+        }
+        .publisher
+        .eraseToAnyPublisher()
+    }
+
+    func loadDataNew(key: Key) -> AnyPublisher<Value?, Never> {
+        if let value = self.cache[key.description] {
+            global_os_log("LocalCache.loadData hit: \(key.description)")
+            return Just(value).eraseToAnyPublisher()
+        } else {
+            global_os_log("LocalCache.loadData miss: \(key.description)")
+            return Just(nil).eraseToAnyPublisher()
+        }
+    }
+    
     func loadData(key: Key) -> Future<Value, Error> {
 //        self.cache.enumerated().forEach { tuple in
 //            logMessage("PAK_Cache.loadData self.cache \(tuple.element.key.description)")
@@ -242,12 +305,14 @@ protocol ILocalCacheStore {
     associatedtype Key
     func loadData(key: Key) -> Future<LocalObject, Error>
     func saveData(key: Key, value: LocalObject)
+    func loadDataNew(key: Key) -> AnyPublisher<LocalObject?, Never>
 }
 
 protocol IRemoteCacheStore {
     associatedtype Key
     associatedtype RemoteObject
     func loadData(key: Key) -> Future<RemoteObject, Error>
+    func loadDataNew(key: Key) -> AnyPublisher<RemoteObject, Never>
 }
 
 enum CacheStoreError : Error {
@@ -288,7 +353,11 @@ class ShipRemoteCache<Key, Value> : IRemoteCacheStore where Key : CustomStringCo
             let ship = self.getShip(key: key)
             promise(.success(ship as! Value))
         }
-        
+    }
+    
+    func loadDataNew(key: ShipKey) -> AnyPublisher<Value, Never> {
+        let ship = self.getShip(key: key)
+        return Just(ship as! Value).eraseToAnyPublisher()
     }
 }
 
@@ -312,6 +381,14 @@ class UpgradeRemoteCache<Key, Value> : IRemoteCacheStore where Key : CustomStrin
             } else {
                 promise(.failure(CacheStoreError.cacheMiss(key.description)))
             }
+        }
+    }
+    
+    func loadDataNew(key: UpgradeKey) -> AnyPublisher<Value, Never> {
+        if let upgrade = self.getUpgrade(key: key) {
+            return Just(upgrade as! Value).eraseToAnyPublisher()
+        } else {
+            return Empty().eraseToAnyPublisher()
         }
     }
 }
