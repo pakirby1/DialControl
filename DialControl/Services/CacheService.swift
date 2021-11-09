@@ -9,6 +9,12 @@
 import Foundation
 import Combine
 
+protocol CacheServiceProtocol {
+    func getShip(squad: Squad,
+                 squadPilot: SquadPilot,
+                 pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
+}
+
 protocol ICacheService {
     associatedtype Key
     associatedtype Value
@@ -91,7 +97,77 @@ class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheS
     }
 }
 
-class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> {
+class CacheServiceNew : CacheServiceProtocol {
+    private var shipCache = [ShipKey:Ship]()
+    
+    func getShip(squad: Squad,
+                 squadPilot: SquadPilot,
+                 pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
+    {
+        global_os_log("CacheServiceNew.getShip")
+        
+        func getShipFromFile(shipKey: ShipKey) -> Ship {
+            global_os_log("CacheServiceNew.getShipFromFile")
+            var shipJSON: String = ""
+            
+            shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
+            
+            var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+            let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+            
+            ship.pilots.removeAll()
+            ship.pilots.append(foundPilots)
+            
+            // Save to cache
+            shipCache[shipKey] = ship
+            global_os_log("CacheServiceNew.getShipFromFile.shipCache count: \(shipCache.count)")
+            
+            return ship
+        }
+        
+        func getShipFromCache() -> Ship? {
+            global_os_log("CacheServiceNew.getShip.getShipFromCache")
+            let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
+            
+            if let ship = shipCache[shipKey] {
+                global_os_log("CacheServiceNew.getShip.getShipFromCache hit")
+                return ship
+            } else {
+                global_os_log("CacheServiceNew.getShip.getShipFromCache miss")
+                return getShipFromFile(shipKey: shipKey)
+            }
+        }
+        
+        func getPilot(ship: Ship) -> ShipPilot {
+            global_os_log("CacheServiceNew.getShip.getPilot")
+            var allUpgrades : [Upgrade] = []
+            
+            // Add the upgrades from SquadPilot.upgrades by iterating over the
+            // UpgradeCardEnum cases and calling getUpgrade
+            if let upgrades = squadPilot.upgrades {
+                allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
+            }
+            
+            return ShipPilot(ship: ship,
+                             upgrades: allUpgrades,
+                             points: squadPilot.points,
+                             pilotState: pilotState)
+        }
+        
+        guard let ship = getShipFromCache() else {
+            return Empty().eraseToAnyPublisher()
+        }
+        
+        let shipPilot = getPilot(ship: ship)
+        
+        return Just(shipPilot).eraseToAnyPublisher()
+        
+//        return Empty().eraseToAnyPublisher()
+    }
+}
+
+class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> : CacheServiceProtocol
+{
     private let shipCache : ShipCache
     private let upgradeCache: UpgradeCache
     

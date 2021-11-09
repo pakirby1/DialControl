@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import Combine
+import TimelaneCombine
 
 typealias SquadServiceCache = CacheService<
     CacheUtility<LocalCache<ShipKey, Ship>, ShipRemoteCache<ShipKey, Ship>>,
@@ -20,10 +21,10 @@ class SquadService: SquadServiceProtocol, ObservableObject {
     var showAlert: Bool = false
     
     let moc: NSManagedObjectContext
-    let cacheService: SquadServiceCache
+    let cacheService: CacheServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    init(moc: NSManagedObjectContext, cacheService: SquadServiceCache) {
+    init(moc: NSManagedObjectContext, cacheService: CacheServiceProtocol) {
         self.moc = moc
         self.cacheService = cacheService
     }
@@ -287,6 +288,14 @@ extension SquadService {
 //            return Empty().eraseToAnyPublisher()
         }
         
+        func getShipID(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<String, Never>
+        {
+            /// return shipCache.loadData(...)
+//            return cacheService.getShipID(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
+            
+            return Empty().eraseToAnyPublisher()
+        }
+        
         let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
         _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
 
@@ -298,23 +307,27 @@ extension SquadService {
             global_os_log(message, value)
         }
 
-        var x: [AnyPublisher<ShipPilot, Never>] = []
+//        var x: [AnyPublisher<ShipPilot, Never>] = []
         
-        zipped.forEach{
-            x.append(getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1))
+        let x: [AnyPublisher<ShipPilot, Never>] = zipped.map{
+//            Just($0.0.id).eraseToAnyPublisher()
+            return getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+//            return getShipID(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
         
         global_os_log("SquadService.getShips", "x.count :\(x.count)")
 
-        var publishers = x.map {
-          $0
-            .map {
-                global_os_log("SquadService.getShips.publishers Result.success")
-                return Result<ShipPilot, Error>.success($0)
-            }
-            .catch {
-                return Just<Result<ShipPilot, Error>>(.failure($0))
-            }
+        print("Found \(x.count) publishers")
+        
+//        var publishers = x.map {
+//          $0
+//            .map {
+//                global_os_log("SquadService.getShips.publishers Result.success")
+//                return Result<ShipPilot, Error>.success($0)
+//            }
+//            .catch {
+//                return Just<Result<ShipPilot, Error>>(.failure($0))
+//            }
 //            .sink(
 //                receiveCompletion: {
 //                    print("complete", $0)
@@ -323,30 +336,49 @@ extension SquadService {
 //                    print("value", $0)
 //                })
 //            .store(in: &cancellables)
-            .eraseToAnyPublisher()
-        }
+//            .eraseToAnyPublisher()
+//        }
         
         
-        Publishers.MergeMany(publishers)
-            .sink(
-                receiveCompletion: {
-                    print("complete", $0)
-                },
-                receiveValue: {
-                    print("value", $0)
-                })
-            .store(in: &cancellables)
+        let shipPilotsStream = Publishers.MergeMany(x)
+            .lane("Publishers.MergeMany")
+            .collect()
+            .lane("Publishers.MergeMany.collect")
+            .map { arr in
+                print("ShipPilot.id = \(arr)")
+            }
+            
 
-        let mergedPublishers = Publishers.MergeMany(x)
-            .os_log(message: "SquadService.getShips.Publishers.MergeMany")
-
-        return mergedPublishers
-                .collect()
-                .os_log(message: "SquadService.getShips.collect")
-                .eraseToAnyPublisher()
+//        let mergedPublishers = Publishers.MergeMany(x)
+//            .lane("Publishers.MergeMany")
+//            .os_log(message: "SquadService.getShips.Publishers.MergeMany")
+//            .sink(
+//                receiveCompletion: {
+//                    print("Publishers.MergeMany complete", $0)
+//                },
+//                receiveValue: {
+//                    print("Publishers.MergeMany value", $0)
+//                })
+//            .store(in: &cancellables)
+        
+//        return mergedPublishers
+//                .lane("mergedPublishers")
+//                .collect()
+//                .lane("mergedPublishers.collect")
+//                .os_log(message: "SquadService.getShips.collect")
+//                .eraseToAnyPublisher()
         
 //        ret.printAll(tag: "PAK_DialStatus getShips()")
 
+        shipPilotsStream.sink(
+                receiveCompletion: {
+                    print("Publishers.MergeMany complete", $0)
+                },
+                receiveValue: {
+                    print("Publishers.MergeMany value", $0)
+                })
+            .store(in: &cancellables)
+        
         return Empty().eraseToAnyPublisher()
     }
 }
