@@ -46,8 +46,8 @@
             filePath = "DialControl/Services/CacheService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "221"
-            endingLineNumber = "221"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "getShipPilot()"
             landmarkType = "9">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "DialControl/Services/CacheService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
+            startingLineNumber = "302"
+            endingLineNumber = "302"
             landmarkName = "getShipPilot()"
             landmarkType = "9">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "DialControl/Services/CacheService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "460"
-            endingLineNumber = "460"
+            startingLineNumber = "531"
+            endingLineNumber = "531"
             landmarkName = "loadData(key:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "DialControl/Services/CacheService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "getShip(squad:squadPilot:pilotState:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,24 @@
             filePath = "DialControl/Services/CacheService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "getShip(squad:squadPilot:pilotState:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "499BD2C7-1B93-4D44-9536-8EEA7A68530D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControl/Services/CacheService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "getShip(squad:squadPilot:pilotState:)"
             landmarkType = "7">
          </BreakpointContent>
