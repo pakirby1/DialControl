@@ -17,7 +17,7 @@ class DIContainer {
     var imageService: ImageService!
     
     func registerServices(moc: NSManagedObjectContext) {
-        self.squadService = SquadService(moc: moc, cacheService: CacheServiceV2())
+        self.squadService = SquadService(moc: moc, cacheService: CacheService())
         self.pilotStateService = PilotStateService(moc: moc)
         self.jsonService = JSONService()
         self.imageService = ImageService(moc: moc)
