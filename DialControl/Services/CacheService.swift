@@ -21,82 +21,6 @@ protocol ICacheService {
     func loadData(key: Key) -> AnyPublisher<Value, Never>
 }
 
-class CacheUtility<Local: ILocalCacheStore, Remote: IRemoteCacheStore> : ICacheService where Local.Key == Remote.Key, Local.LocalObject == Remote.RemoteObject
-{
-    let localStore: Local
-    let remoteStore: Remote
-    
-    func loadData(key: Local.Key) -> AnyPublisher<Remote.RemoteObject, Never> {
-        var localData: Bool = false
-        
-        // see if the image is in the local store
-        return self.localStore
-            .loadDataNew(key: key)
-            .print("Store.send CacheUtility.loadData")
-            .os_log(message: "Store.send CacheUtility.loadData")
-            .flatMap { data -> AnyPublisher<Remote.RemoteObject, Never> in
-                if let d = data {
-                    global_os_log("Store.send CacheUtility.loadData", "found data")
-                    localData = true
-                    return Just(d).eraseToAnyPublisher()
-                }
-                
-                return self.remoteStore.loadDataNew(key: key)
-            }
-            .map { data -> Remote.RemoteObject in
-                /// Did the result come from the local or Remote Store??  I can't tell...
-                print("Success: \(data)")
-                
-                // write to the cache, only if it was sourced from the remoteStore
-                if (!localData) {
-                    self.localStore.saveData(key: key, value: data)
-                }
-                
-                return data
-            }
-            .os_log(message: "Store.send CacheUtility.loadData")
-            .eraseToAnyPublisher()
-        
-        /*
-        return self.localStore
-            .loadData(key: key)
-            .print("Store.send CacheUtility.loadData")
-            .os_log(message: "Store.send CacheUtility.loadData")
-            .map { data in
-                global_os_log("Store.send CacheUtility.loadData", "found data")
-                localData = true
-                return data
-            }
-            .catch { error in
-                /// If an error was encountered reading from the local store, eat the error and attempt to read from the remote store
-                /// we will return a new publisher (Future<Data, Error>) that contains either the data or a remote error
-                /// what if we get a 404 Not Found response, it will think it succeeded and will return
-                /// the html as the data, so we need to catch the 404 error
-//                global_os_log("Store.send CacheUtility.loadData.catch")
-                self.remoteStore.loadData(key: key)
-            }
-            .map { data -> Remote.RemoteObject in
-                /// Did the result come from the local or Remote Store??  I can't tell...
-                print("Success: \(data)")
-                
-                // write to the cache, only if it was sourced from the remoteStore
-                if (!localData) {
-                    self.localStore.saveData(key: key, value: data)
-                }
-                
-                return data
-            }
-            .os_log(message: "Store.send CacheUtility.loadData")
-            .eraseToAnyPublisher()
-        */
-    }
-    
-    init(localStore: Local, remoteStore: Remote) {
-        self.localStore = localStore
-        self.remoteStore = remoteStore
-    }
-}
-
 class CacheServiceNewRx : CacheServiceProtocol {
     private var shipCache = [ShipKey:Ship]()
     
@@ -127,7 +51,7 @@ class CacheServiceNewRx : CacheServiceProtocol {
             }
             
             global_os_log("CacheServiceNewRx.getShip.getShipFromCache")
-            let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
+            let shipKey = ShipKey(faction: squad.faction, xws: squadPilot.ship)
             
             if let ship = shipCache[shipKey] {
                 global_os_log("CacheServiceNewRx.getShip.getShipFromCache hit")
@@ -167,15 +91,18 @@ class CacheServiceNewRx : CacheServiceProtocol {
     }
 }
 
-class CacheNew<Key: Hashable, Value> {
+class CacheNew<Key: Hashable & CustomStringConvertible, Value> {
     private var store = [Key: Value]()
 
     func getValue(key: Key, factory: @escaping (Key) -> Value) -> Value {
         if let value = store[key] {
+            global_os_log("CacheNew.getValue cache hit", "\(key.description)")
             return value
         } else {
+            global_os_log("CacheNew.getValue cache miss", "\(key.description)")
             let value = factory(key)
             store[key] = value
+            global_os_log("CacheNew.getValue inserted: ", "\(key.description)")
             global_os_log("CacheNew.getValue store count: ", "\(store.count)")
             return value
         }
@@ -194,7 +121,7 @@ class CacheServiceV2 : CacheServiceProtocol {
         
         func getShipFromCache() -> Ship? {
             func getShipFromFile(shipKey: ShipKey) -> Ship {
-                global_os_log("CacheServiceV2.getShipFromCache.getShipFromFile")
+                global_os_log("CacheServiceV2.getShipFromCache.getShipFromFile", shipKey.description)
                 var shipJSON: String = ""
                 
                 shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
@@ -208,7 +135,7 @@ class CacheServiceV2 : CacheServiceProtocol {
                 return ship
             }
             
-            let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
+            let shipKey = ShipKey(faction: squad.faction, xws: squadPilot.ship)
             global_os_log("CacheServiceV2.getShip.getShipFromCache", shipKey.description)
             
             return shipCache.getValue(key: shipKey, factory: getShipFromFile)
@@ -302,7 +229,7 @@ class CacheServiceNew : CacheServiceProtocol {
             }
             
             global_os_log("CacheServiceNew.getShip.getShipFromCacheNew")
-            let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
+            let shipKey = ShipKey(faction: squad.faction, xws: squadPilot.ship)
             
             return cache.getValue(key: shipKey, factory: getShipFromFile)
         }
@@ -328,7 +255,7 @@ class CacheServiceNew : CacheServiceProtocol {
             }
             
             global_os_log("CacheServiceNew.getShip.getShipFromCache")
-            let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
+            let shipKey = ShipKey(faction: squad.faction, xws: squadPilot.ship)
             
             if let ship = shipCache[shipKey] {
                 global_os_log("CacheServiceNew.getShip.getShipFromCache hit")
@@ -367,147 +294,6 @@ class CacheServiceNew : CacheServiceProtocol {
     }
 }
 
-class CacheService<ShipCache: ICacheService, UpgradeCache: ICacheService> : CacheServiceProtocol
-{
-    private let shipCache : ShipCache
-    private let upgradeCache: UpgradeCache
-    
-    init() {
-        self.shipCache = CacheUtility(localStore: LocalCache<ShipKey, Ship>(),
-                                      remoteStore: ShipRemoteCache<ShipKey, Ship>()) as! ShipCache
-        self.upgradeCache = CacheUtility(localStore: LocalCache<UpgradeKey, Upgrade>(),
-                                         remoteStore: UpgradeRemoteCache<UpgradeKey, Upgrade>()) as! UpgradeCache
-        global_os_log("CacheService.init()")
-    }
-    
-    func getShip(squad: Squad,
-                 squadPilot: SquadPilot,
-                 pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
-    {
-        global_os_log("CacheService.getShip", squadPilot.ship)
-        
-        func getShipPilot() -> ShipPilot {
-            var shipJSON: String = ""
-            
-            print("CacheService.getShip.shipName: \(squadPilot.ship)")
-            print("pilotName: \(squadPilot.name)")
-            print("faction: \(squad.faction)")
-            print("pilotStateId: \(String(describing: pilotState.id))")
-            
-            /// use CacheService.shipCache property
-            /// - NetworkCacheService.loadData(...)
-            /// - check if the `Ship` for this ship & faction exists in the cache keyed by (ship xws, faction xws) ShipKey,
-            /// - if so return the `Ship`
-            /// - This is implemented by LocalCache<>.loadData(...)
-            /// - if not...
-            ///     - read the JSON from disk
-            ///     - serialize the JSON into a `Ship`
-            ///     - This is implemented by RemoteCache<>.loadData(...)
-            ///  - store the `Ship` in the local cache keyed by (ship xws, faction xws)
-            ///     - localCache.save(ShipKey, Ship)
-            shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
-            
-            var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
-            
-            ship.pilots.removeAll()
-            ship.pilots.append(foundPilots)
-            
-            /// use caching
-            /// - check if the `Upgrade` for this upgrade exists in the cache keyed by (upgrade xws
-            /// - if so return the `Upgrade`
-            /// - if not...
-            ///     - read the upgrade category (device.json) JSON from disk
-            ///     - serialize the JSON into ???
-            ///     - store the `[Upgrades]` in the cache keyed by (category xws)
-            var allUpgrades : [Upgrade] = []
-            
-            // Add the upgrades from SquadPilot.upgrades by iterating over the
-            // UpgradeCardEnum cases and calling getUpgrade
-            if let upgrades = squadPilot.upgrades {
-                allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
-            }
-            
-            return ShipPilot(ship: ship,
-                             upgrades: allUpgrades,
-                             points: squadPilot.points,
-                             pilotState: pilotState)
-        }
-        
-        func getShipPilotUsingCache() -> AnyPublisher<ShipPilot, Never> {
-            func getUpgrades() -> [Upgrade] {
-                var allUpgrades : [Upgrade] = []
-                
-                if let upgrades = squadPilot.upgrades {
-                    allUpgrades = UpgradeUtility.buildAllUpgrades(upgrades)
-                }
-                
-                return allUpgrades
-            }
-            
-            func getUpgradesFromCache() -> AnyPublisher<[UpgradeCache.Value], Never> {
-                
-                if let upgrades = squadPilot.upgrades {
-                    let allUpgradeKyes = upgrades.allUpgradeKeys
-                    let publishers = allUpgradeKyes.map { upgradeCache.loadData(key: $0 as! UpgradeCache.Key) }
-                    
-                    return Publishers.MergeMany(publishers)
-                            .collect()
-                            .eraseToAnyPublisher()
-                }
-                
-                return Empty().eraseToAnyPublisher()
-            }
-            
-            func getShipFromCache() -> AnyPublisher<Ship, Never> {
-                let shipKey = ShipKey(faction: squad.faction, ship: squadPilot.ship)
-                
-                let shipStream: AnyPublisher<Ship, Never> = shipCache
-                    .loadData(key: shipKey as! ShipCache.Key)
-                    .os_log(message: "Store.send getShipFromCache.shipStream.loadData")
-                    .print("PAK_Cache.getShipFromCache loadData")
-                    .map { value -> Ship in
-                        var ship = value as! Ship
-                        let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
-                        
-                        ship.pilots.removeAll()
-                        ship.pilots.append(foundPilots)
-                        
-                        return ship
-                    }
-                    .os_log(message: "Store.send getShipFromCache.shipStream.map")
-                    .eraseToAnyPublisher()
-                
-                return shipStream
-            }
-            
-            let shipStream = getShipFromCache()
-            let upgradesStream = getUpgradesFromCache()
-            
-            let shipPilotStream = Publishers.CombineLatest(shipStream, upgradesStream).map { shipAndUpgrades -> ShipPilot in
-                let ship = shipAndUpgrades.0
-                let upgrades = shipAndUpgrades.1 as! [Upgrade]
-                let shipPilot = ShipPilot(ship: ship, upgrades: upgrades, points: squadPilot.points, pilotState: pilotState)
-                return shipPilot
-            }.eraseToAnyPublisher()
-            
-//            let shipPilotStream = shipStream
-//                .map { ship -> ShipPilot in
-//                    let upgrades = getUpgrades()
-//
-//                    return ShipPilot(ship: ship,
-//                                     upgrades: upgrades,
-//                                     points: squadPilot.points,
-//                                     pilotState: pilotState)
-//                }.eraseToAnyPublisher()
-            
-            
-            return shipPilotStream
-        }
-        
-        return getShipPilotUsingCache()
-    }
-}
 
 class LocalCache<Key, Value> : ILocalCacheStore where Key : CustomStringConvertible,Key: Hashable
 {
@@ -602,10 +388,10 @@ struct ShipKey: CustomStringConvertible, Hashable {
     let faction: String
     
     // ship xws: "tielnfighter"
-    let ship: String
+    let xws: String
     
     var description: String {
-        return "\(faction).\(ship)"
+        return "\(faction).\(xws)"
     }
 }
 
@@ -614,7 +400,7 @@ class ShipRemoteCache<Key, Value> : IRemoteCacheStore where Key : CustomStringCo
     private var cache = [Key:Value]()
     
     func getShip(key: ShipKey) -> Ship {
-        let shipJSON = getJSONFor(ship: key.ship, faction: key.faction)
+        let shipJSON = getJSONFor(ship: key.xws, faction: key.faction)
         
         let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
         global_os_log("ShipRemoteCache.getShip", shipJSON)

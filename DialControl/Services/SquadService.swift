@@ -11,11 +11,6 @@ import CoreData
 import Combine
 import TimelaneCombine
 
-typealias SquadServiceCache = CacheService<
-    CacheUtility<LocalCache<ShipKey, Ship>, ShipRemoteCache<ShipKey, Ship>>,
-    CacheUtility<LocalCache<UpgradeKey, Upgrade>, UpgradeRemoteCache<UpgradeKey, Upgrade>>
-    >
-
 class SquadService: SquadServiceProtocol, ObservableObject {
     var alertText: String = ""
     var showAlert: Bool = false
