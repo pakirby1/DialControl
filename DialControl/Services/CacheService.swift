@@ -184,7 +184,7 @@ class CacheNew<Key: Hashable, Value> {
 
 class CacheServiceV2 : CacheServiceProtocol {
     private var shipCache = CacheNew<ShipKey, Ship>()
-    private var upgradesCache = CacheNew<UpgradeKey, Upgrade>()
+    private var upgradeCache = CacheNew<String, [Upgrade]>()
     
     func getShip(squad: Squad,
                  squadPilot: SquadPilot,
@@ -235,8 +235,8 @@ class CacheServiceV2 : CacheServiceProtocol {
                 func getUpgradesFromCache() -> [Upgrade] {
                     func getUpgrade(key: UpgradeKey) -> Upgrade? {
                         /// Get upgrade from JSON
-                        logMessage("PAK_Cache.getUpgrade: \(key)")
-                        let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: key.category)
+                        logMessage("getPilotV2.getUpgradesFromCache.getUpgrade: \(key)")
+                        let upgrades = upgradeCache.getValue(key: key.category, factory: UpgradeUtility.getUpgrades(upgradeCategory:))
                         
                         return upgrades.filter{ $0.xws == key.upgrade }.first
                     }
@@ -261,7 +261,7 @@ class CacheServiceV2 : CacheServiceProtocol {
                                  pilotState: pilotState)
             }
             
-            return getPilotV1(ship: ship)
+            return getPilotV2(ship: ship)
         }
         
         guard let ship = getShipFromCache() else {
