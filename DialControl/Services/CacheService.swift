@@ -228,7 +228,8 @@ class CacheService : CacheServiceProtocol {
         let shipResult = getShipFromCache()
         
         let shipPilotResult: Result<ShipPilot, Error> = shipResult.map{
-            getPilot(ship: $0)
+            ship -> ShipPilot in
+            getPilot(ship: ship)
         }
         
         return buildReturn(shipPilotResult)
