@@ -49,6 +49,7 @@
 		AE390EF326D6DBCB007D054A /* AsyncObjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE390EF226D6DBCB007D054A /* AsyncObjectView.swift */; };
 		AE3B2AF62602241A00451C9F /* Redux_SquadView_Old.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF52602241A00451C9F /* Redux_SquadView_Old.swift */; };
 		AE3B2AF82603851F00451C9F /* Redux_PilotCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE3B2AF72603851F00451C9F /* Redux_PilotCardView.swift */; };
+		AE4293822747B3A300142C64 /* CombineExt in Frameworks */ = {isa = PBXBuildFile; productRef = AE4293812747B3A300142C64 /* CombineExt */; };
 		AE4A3EEC2442E4DC00C10C0F /* FeaturesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4A3EEB2442E4DC00C10C0F /* FeaturesManager.swift */; };
 		AE4D58C323F8087C00C66136 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C223F8087C00C66136 /* AppDelegate.swift */; };
 		AE4D58C523F8087C00C66136 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4D58C423F8087C00C66136 /* SceneDelegate.swift */; };
@@ -230,6 +231,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE390EEF26D6D0D0007D054A /* SwiftyJSON in Frameworks */,
+				AE4293822747B3A300142C64 /* CombineExt in Frameworks */,
 				AE1FBE562416608D005C54F5 /* TimelaneCombine in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,6 +490,7 @@
 			packageProductDependencies = (
 				AE1FBE552416608D005C54F5 /* TimelaneCombine */,
 				AE390EEE26D6D0D0007D054A /* SwiftyJSON */,
+				AE4293812747B3A300142C64 /* CombineExt */,
 			);
 			productName = DialControl;
 			productReference = AE4D58BF23F8087C00C66136 /* DialControl.app */;
@@ -564,6 +567,7 @@
 			packageReferences = (
 				AE1FBE542416608D005C54F5 /* XCRemoteSwiftPackageReference "TimelaneCombine" */,
 				AE390EED26D6D0D0007D054A /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				AE4293802747B3A300142C64 /* XCRemoteSwiftPackageReference "CombineExt" */,
 			);
 			productRefGroup = AE4D58C023F8087C00C66136 /* Products */;
 			projectDirPath = "";
@@ -1038,6 +1042,14 @@
 				minimumVersion = 5.0.1;
 			};
 		};
+		AE4293802747B3A300142C64 /* XCRemoteSwiftPackageReference "CombineExt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/CombineCommunity/CombineExt.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1050,6 +1062,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AE390EED26D6D0D0007D054A /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		AE4293812747B3A300142C64 /* CombineExt */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE4293802747B3A300142C64 /* XCRemoteSwiftPackageReference "CombineExt" */;
+			productName = CombineExt;
 		};
 /* End XCSwiftPackageProductDependency section */
 

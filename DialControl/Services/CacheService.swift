@@ -62,7 +62,7 @@ class CacheService : CacheServiceProtocol {
             let shipKey = ShipKey(faction: squad.faction, xws: squadPilot.ship)
             global_os_log("CacheService.getShip.getShipFromCache", shipKey.description)
             
-            return shipCache.getValue(key: shipKey, factory: getShipFromFile)
+            return shipCache.getValue(key: shipKey, factory: getShipFromFile(shipKey:))
         }
             
         func getPilot(ship: Ship) -> ShipPilot {
