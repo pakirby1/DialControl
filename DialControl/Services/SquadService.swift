@@ -269,26 +269,14 @@ extension SquadService {
     {
         func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot
         {
-            /// return shipCache.loadData(...)
             global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
         }
         
         func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
         {
-            /// return shipCache.loadData(...)
             return cacheService.getShip(squad: squad,
                                  squadPilot: squadPilot,
                                  pilotState: pilotState)
-            
-//            return Empty().eraseToAnyPublisher()
-        }
-        
-        func getShipID(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<String, Never>
-        {
-            /// return shipCache.loadData(...)
-//            return cacheService.getShipID(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
-            
-            return Empty().eraseToAnyPublisher()
         }
         
         let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
@@ -302,38 +290,13 @@ extension SquadService {
             global_os_log(message, value)
         }
 
-//        var x: [AnyPublisher<ShipPilot, Never>] = []
-        
         let x: [AnyPublisher<ShipPilot, Never>] = zipped.map{
-//            Just($0.0.id).eraseToAnyPublisher()
             return getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
-//            return getShipID(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
         
         global_os_log("SquadService.getShips", "x.count :\(x.count)")
 
         print("Found \(x.count) publishers")
-        
-//        var publishers = x.map {
-//          $0
-//            .map {
-//                global_os_log("SquadService.getShips.publishers Result.success")
-//                return Result<ShipPilot, Error>.success($0)
-//            }
-//            .catch {
-//                return Just<Result<ShipPilot, Error>>(.failure($0))
-//            }
-//            .sink(
-//                receiveCompletion: {
-//                    print("complete", $0)
-//                },
-//                receiveValue: {
-//                    print("value", $0)
-//                })
-//            .store(in: &cancellables)
-//            .eraseToAnyPublisher()
-//        }
-        
         
         let shipPilotsStream = Publishers.MergeMany(x)
             .lane("Publishers.MergeMany")
@@ -343,28 +306,6 @@ extension SquadService {
                 print("ShipPilot.id = \(arr)")
             }
             
-
-//        let mergedPublishers = Publishers.MergeMany(x)
-//            .lane("Publishers.MergeMany")
-//            .os_log(message: "SquadService.getShips.Publishers.MergeMany")
-//            .sink(
-//                receiveCompletion: {
-//                    print("Publishers.MergeMany complete", $0)
-//                },
-//                receiveValue: {
-//                    print("Publishers.MergeMany value", $0)
-//                })
-//            .store(in: &cancellables)
-        
-//        return mergedPublishers
-//                .lane("mergedPublishers")
-//                .collect()
-//                .lane("mergedPublishers.collect")
-//                .os_log(message: "SquadService.getShips.collect")
-//                .eraseToAnyPublisher()
-        
-//        ret.printAll(tag: "PAK_DialStatus getShips()")
-
         shipPilotsStream.sink(
                 receiveCompletion: {
                     print("Publishers.MergeMany complete", $0)
