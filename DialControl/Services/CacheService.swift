@@ -55,6 +55,9 @@ class CacheNew<Key: Hashable & CustomStringConvertible, Value> {
     }
 }
 
+typealias ShipPilotResult = Result<ShipPilot, Error>
+typealias ShipResult = Result<Ship, Error>
+
 class CacheService : CacheServiceProtocol {
     private var shipCache = CacheNew<ShipKey, Ship>()
     private var upgradeCache = CacheNew<String, [Upgrade]>()
@@ -136,20 +139,22 @@ class CacheService : CacheServiceProtocol {
         
         let shipPilot = getPilot(ship: ship)
         
+        global_os_log("CacheService.getShip shipPilot", shipPilot.pilotName)
+        
         return Just(shipPilot).eraseToAnyPublisher()
     }
     
     private func getShipV2(squad: Squad,
                  squadPilot: SquadPilot,
-                 pilotState: PilotState) -> AnyPublisher<Result<ShipPilot, Error>, Never>
+                 pilotState: PilotState) -> AnyPublisher<ShipPilotResult, Never>
     {
         global_os_log("CacheService.getShip")
         
         /// Error conditions:
         /// - Ship not found
         /// .success(Ship) or .failure(CacheError.FactoryFailure("..."))
-        func getShipFromCache() -> Result<Ship, Error> {
-            func getShipFromFile(shipKey: ShipKey) -> Result<Ship, Error> {
+        func getShipFromCache() -> ShipResult {
+            func getShipFromFile(shipKey: ShipKey) -> ShipResult {
                 global_os_log("CacheService.getShipFromCache.getShipFromFile", shipKey.description)
                 var shipJSON: String = ""
                 
@@ -213,7 +218,7 @@ class CacheService : CacheServiceProtocol {
                              pilotState: pilotState)
         }
         
-        func buildReturn(_ shipPilotResult: Result<ShipPilot, Error>) -> AnyPublisher<Result<ShipPilot, Error>, Never>
+        func buildReturn(_ shipPilotResult: ShipPilotResult) -> AnyPublisher<Result<ShipPilot, Error>, Never>
         {
             /// Using CombineExt.mapToResult()
             shipPilotResult.publisher.mapToResult()
@@ -227,7 +232,8 @@ class CacheService : CacheServiceProtocol {
         /// }
         let shipResult = getShipFromCache()
         
-        let shipPilotResult: Result<ShipPilot, Error> = shipResult.map{
+        /// builds a ShipPilotResult from ShipResult
+        let shipPilotResult: ShipPilotResult = shipResult.map{
             ship -> ShipPilot in
             getPilot(ship: ship)
         }

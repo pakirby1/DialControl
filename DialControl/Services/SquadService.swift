@@ -239,7 +239,6 @@ extension Array where Element == SquadData {
         if let index = firstIndex(where: { $0.id == data.id }) {
             self[index].shipPilots = shipPilots
         }
-        
     }
 }
 
@@ -279,42 +278,28 @@ extension SquadService {
                                  pilotState: pilotState)
         }
         
-        let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
-        _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
+        func buildReturn() -> AnyPublisher<[ShipPilot], Never> {
+            let pilotStates: [PilotState] = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
+            _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
 
-        let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
+            let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
 
-        _ = zipped.map{
-            let value = "\(String(describing: $0.0.name)): \($0.1)"
-            let message = "Store.send zipped.map"
-            global_os_log(message, value)
-        }
-
-        let x: [AnyPublisher<ShipPilot, Never>] = zipped.map{
-            return getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
-        }
-        
-        global_os_log("SquadService.getShips", "x.count :\(x.count)")
-
-        print("Found \(x.count) publishers")
-        
-        let shipPilotsStream = Publishers.MergeMany(x)
-            .lane("Publishers.MergeMany")
-            .collect()
-            .lane("Publishers.MergeMany.collect")
-            .map { arr in
-                print("ShipPilot.id = \(arr)")
+            let publisherArray: [AnyPublisher<ShipPilot, Never>] = zipped.map{
+                return getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
             }
             
-        shipPilotsStream.sink(
-                receiveCompletion: {
-                    print("Publishers.MergeMany complete", $0)
-                },
-                receiveValue: {
-                    print("Publishers.MergeMany value", $0)
-                })
-            .store(in: &cancellables)
+            global_os_log("SquadService.getShips", "x.count :\(publisherArray.count)")
+
+            let mergedPublishers: AnyPublisher<AnyPublisher<ShipPilot, Never>.Output, AnyPublisher<ShipPilot, Never>.Failure> = Publishers.MergeMany(publisherArray)
+                .eraseToAnyPublisher()
+            
+            let shipPilotsStream: AnyPublisher<[ShipPilot], Never> = mergedPublishers
+                .collect()
+                .eraseToAnyPublisher()
+            
+            return shipPilotsStream
+        }
         
-        return Empty().eraseToAnyPublisher()
+        return buildReturn()
     }
 }

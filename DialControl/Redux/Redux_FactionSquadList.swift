@@ -213,6 +213,11 @@ extension Redux_FactionSquadList {
     }
 }
 
+enum SquadCardState {
+    case success(SquadData)
+    case failure(Error)
+}
+
 //struct Redux_FactionSquadCardViewModel
 //{
 //    let points: Int = 150
@@ -289,7 +294,7 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
 }
 
 
-struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
+struct Redux_FactionSquadCard: View  {
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var store: MyAppStore
     let viewModel: Redux_FactionSquadCardViewModel
@@ -303,7 +308,7 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
     let deleteCallback: (SquadData) -> ()
     let updateCallback: (SquadData) -> ()
     let squadData: SquadData
-    var squadPilots: [ShipPilot] = []
+//    var squadPilots: [ShipPilot] = []
     
     /*
      struct Parent: View {
@@ -366,13 +371,15 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
         deleteCallback(squadData)
     }
     
-    var shipPilots: [ShipPilot] {
-        get {
-            measure(name: "Redux_FactionSquadCard.shipPilots \(String(describing: self.squadData.name))") {
-                return self.store.state.faction.shipPilots
-            }
-        }
-    }
+//    var shipPilots: [ShipPilot] {
+//        get {
+//            measure(name: "Redux_FactionSquadCard.shipPilots \(String(describing: self.squadData.name))") {
+//                /// shouldn't this be squadData.shipPilots???
+////                return squadData.shipPilots
+//                return self.store.state.faction.shipPilots
+//            }
+//        }
+//    }
     
     var squad: Squad {
         squadData.squad
@@ -537,18 +544,6 @@ struct Redux_FactionSquadCard: View, DamagedSquadRepresenting  {
             print("Cancelled \(title)")
             callback()
         }
-    }
-    
-    var myState: AnyPublisher<[SquadData], Never> {
-        self.store.$state
-            .map{ state -> [SquadData] in
-                return state.faction.squadDataList
-            }
-//            .filter{ dataList -> Bool in
-//                dataList.filter{ $0.id == self.squadData.id }.first
-//            }
-            .print("myState")
-            .eraseToAnyPublisher()
     }
     
     var body: some View {
