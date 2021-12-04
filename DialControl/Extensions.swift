@@ -331,22 +331,50 @@ enum FlipCard {
     }
 }
 
-protocol RevealAllFlippable : AnyObject {
+protocol FlipManageable : AnyObject {
     var flippableAssets: [FlippableAsset] { get set }
     
     func addAsset(asset: FlippableAsset)
-    func setAllTo(isFront: Bool)
 }
 
-extension RevealAllFlippable {
+extension FlipManageable {
+    // Atomic operations
+    func addAsset(asset: FlippableAsset) {
+        flippableAssets.append(asset)
+    }
+    
+    func setToFront(id: UUID) {
+        if var asset = getAsset(by: id) {
+            backToFrontCommand.execute(asset: &asset)
+        }
+    }
+    
+    func setToBack(id: UUID) {
+        if var asset = getAsset(by: id) {
+            backToFrontCommand.execute(asset: &asset)
+        }
+    }
+    
+    private func getAsset(by id: UUID) -> FlippableAsset? {
+        return (flippableAssets.filter{ $0.id == id }.first)
+    }
+    
+    func flip(id: UUID) {
+        // Find the asset
+        if var asset = getAsset(by: id) {
+            if asset.frontSide == true {
+                frontToBackCommand.execute(asset: &asset)
+            } else {
+                backToFrontCommand.execute(asset: &asset)
+            }
+        }
+    }
+
+    // Batch operations
     func flip_all() {
         flippableAssets.mutateEach{ card in
             card.flip()
         }
-    }
-    
-    func addAsset(asset: FlippableAsset) {
-        flippableAssets.append(asset)
     }
     
     func setAllTo(isFront: Bool) {
@@ -370,23 +398,13 @@ extension RevealAllFlippable {
     func hideAll() {
         self.setToBack()
     }
-    
-    func flip(id: UUID) {
-        // Find the asset
-        if var asset = (flippableAssets.filter{ $0.id == id }.first) {
-            if asset.frontSide == true {
-                frontToBackCommand.execute(asset: &asset)
-            } else {
-                backToFrontCommand.execute(asset: &asset)
-            }
-        }
-    }
-    
+
+    // Commands
     var frontToBackCommand: FlipCard { FlipCard.frontToBack }
     var backToFrontCommand: FlipCard  { FlipCard.backToFront }
 }
 
-class UpgradeFlipCardViewModel: RevealAllFlippable {
+class UpgradeFlipCardViewModel: FlipManageable {
     var flippableAssets : [FlippableAsset] = []
     var frontSide: Bool = true
     
@@ -399,7 +417,7 @@ class UpgradeFlipCardViewModel: RevealAllFlippable {
     }
 }
 
-class ShipFlipCardViewModel : RevealAllFlippable {
+class ShipFlipCardViewModel : FlipManageable {
     var flippableAssets : [FlippableAsset] = []
 }
 
