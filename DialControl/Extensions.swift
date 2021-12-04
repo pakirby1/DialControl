@@ -314,3 +314,130 @@ extension SquadData {
         return Array(pilotState)
     }
 }
+
+/// Flips multiple different types of assets
+/// Card, Manuever Dial
+enum FlipCard {
+    case frontToBack    // Display the back
+    case backToFront    // Display the front
+    
+    func execute(asset: inout FlippableAsset) {
+        switch(self) {
+            case .frontToBack :
+                asset.flip()
+            case .backToFront :
+                asset.flip()
+        }
+    }
+}
+
+protocol RevealAllFlippable : AnyObject {
+    var flippableAssets: [FlippableAsset] { get set }
+    
+    func addAsset(asset: FlippableAsset)
+    func setAllTo(isFront: Bool)
+}
+
+extension RevealAllFlippable {
+    func flip_all() {
+        flippableAssets.mutateEach{ card in
+            card.flip()
+        }
+    }
+    
+    func addAsset(asset: FlippableAsset) {
+        flippableAssets.append(asset)
+    }
+    
+    func setAllTo(isFront: Bool) {
+        flippableAssets.mutateEach{ card in
+            card.frontSide = isFront
+        }
+    }
+    
+    func setToFront() {
+        self.setAllTo(isFront: true)
+    }
+    
+    func setToBack() {
+        self.setAllTo(isFront: false)
+    }
+    
+    func reveal_all() {
+        self.setToFront()
+    }
+    
+    func hideAll() {
+        self.setToBack()
+    }
+    
+    func flip(id: UUID) {
+        // Find the asset
+        if var asset = (flippableAssets.filter{ $0.id == id }.first) {
+            if asset.frontSide == true {
+                frontToBackCommand.execute(asset: &asset)
+            } else {
+                backToFrontCommand.execute(asset: &asset)
+            }
+        }
+    }
+    
+    var frontToBackCommand: FlipCard { FlipCard.frontToBack }
+    var backToFrontCommand: FlipCard  { FlipCard.backToFront }
+}
+
+class UpgradeFlipCardViewModel: RevealAllFlippable {
+    var flippableAssets : [FlippableAsset] = []
+    var frontSide: Bool = true
+    
+    func addUpgradeCard() {
+        self.addAsset(asset: UpgradeCard(frontSide: true))
+    }
+    
+    func flipCard(id: UUID) {
+        flip(id: id)
+    }
+}
+
+class ShipFlipCardViewModel : RevealAllFlippable {
+    var flippableAssets : [FlippableAsset] = []
+}
+
+class UpgradeCard : FlippableAsset, Identifiable {
+    var id = UUID()
+    var frontSide: Bool
+    
+    init(frontSide: Bool) {
+        self.frontSide = frontSide
+    }
+}
+
+class ManeuverDial : FlippableAsset, Identifiable  {
+    var id = UUID()
+    var frontSide: Bool
+    
+    init(frontSide: Bool) {
+        self.frontSide = frontSide
+    }
+}
+
+protocol FlippableAsset {
+    var id: UUID { get set }
+    var frontSide: Bool { get set }
+}
+
+extension FlippableAsset {
+    mutating func flip() { frontSide.toggle() }
+}
+
+///https://stackoverflow.com/questions/29777891/swift-how-to-mutate-a-struct-object-when-iterating-over-it
+extension Array {
+    mutating func mutateEach(by transform: (inout Element) throws -> Void) rethrows {
+        self = try map { el in
+            var el = el
+            try transform(&el)
+            return el
+        }
+     }
+}
+
