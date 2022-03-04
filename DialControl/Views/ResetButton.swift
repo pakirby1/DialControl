@@ -9,7 +9,8 @@
 import Foundation
 import SwiftUI
 
-struct ResetButton: View {
+struct VectorImageButton: View {
+    let imageName: String
     let action: () -> Void
     
     var body: some View {
@@ -18,7 +19,11 @@ struct ResetButton: View {
         })
         {
             HStack {
-                Image(uiImage: UIImage(named: "Reset") ?? UIImage())
+                Image(uiImage: UIImage(named: imageName) ?? UIImage())
+                    .resizable()
+                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
+                    .frame(width: 60, height: 60, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    
             }
             .padding(5)
             .overlay(

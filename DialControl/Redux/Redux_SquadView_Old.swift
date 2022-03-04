@@ -123,6 +123,10 @@ extension Redux_SquadView {
         HStack {
             BackButtonView().environmentObject(viewFactory)
            
+            Spacer()
+            ObjectiveScoreView().environmentObject(viewFactory)
+            Spacer()
+            
             Toggle(isOn: self.$isFirstPlayer.didSet{
                 // Hack because swift thinks I don't want to perform
                 // an assignment (=) vs. a boolean check (==)
@@ -394,6 +398,14 @@ extension Redux_SquadView {
                         print("PAK_DialStatus updateAllDials $0.dial_status = \($0.dial_status)")
                     })
                 }
+            }
+        }
+    }
+    
+    struct ObjectiveScoreView : View {
+        var body: some View {
+            VectorImageButton(imageName: "Victory") {
+                
             }
         }
     }

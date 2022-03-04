@@ -529,7 +529,7 @@ struct Redux_ShipView: View, ShipIDRepresentable {
                         .padding(2)
                     //                .border(Color.green, width: 2)
                     
-                    ResetButton{
+                    VectorImageButton(imageName: "Reset"){
                         self.viewModel.update(type: .reset,
                                               active: 0,
                                               inactive: 0)
