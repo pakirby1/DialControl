@@ -287,7 +287,6 @@ extension PilotStateData {
         reset(activeKeyPath: \.force_active, inactiveKeyPath: \.force_inactive)
         reset(activeKeyPath: \.charge_active, inactiveKeyPath: \.charge_inactive)
         self.dial_status = .hidden
-        self.shipID = ""
         
         var updatedUpgradeStates: [UpgradeStateData] = []
         

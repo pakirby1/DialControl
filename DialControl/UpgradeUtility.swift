@@ -10,8 +10,16 @@ import Foundation
 
 struct UpgradeUtility {
     static func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
+        func buildFileName() -> String {
+            if forType == "forcepower" {
+                return "force-power"
+            }
+            
+            return forType
+        }
+        
         // Read json from file: forType.json
-        let jsonFileName = "\(forType)"
+        let jsonFileName = buildFileName()
         var upgradeJSON = ""
         
         if let path = Bundle.main.path(forResource: jsonFileName,

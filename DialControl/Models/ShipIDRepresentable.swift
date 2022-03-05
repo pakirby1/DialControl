@@ -55,12 +55,12 @@ extension ShipIDRepresentable {
                         ShipIDView(fill:Color.orange)
                     case "purple":
                         ShipIDView(fill:Color.purple)
-                    case "pink":
-                        ShipIDView(fill:Color.pink)
                     case "gray", "grey":
                         ShipIDView(fill:Color.gray)
                     case "black":
                         ShipIDView(fill: Color.black, stroke: Color.white)
+                    case "white":
+                        ShipIDView(fill: Color.white)
                         
                     default:
                         Text(shipPilot.pilotStateData!.shipID).padding(5).foregroundColor(Color.white)

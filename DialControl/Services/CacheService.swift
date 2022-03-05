@@ -107,13 +107,16 @@ class CacheService : CacheServiceProtocol {
                     global_os_log("getPilotV2.getUpgradesFromCache.getUpgrade: \(key)")
                     let upgrades = upgradeCache.getValue(key: key.category, factory: UpgradeUtility.getUpgrades(upgradeCategory:))
                     
-                    let ret = upgrades.filter{ $0.xws == key.xws }.first
-                    global_os_log("getPilotV2.getUpgradesFromCache.getUpgrade", ret?.xws ?? "Upgrade Not Found")
+                    guard let ret = upgrades.filter({ $0.xws == key.xws }).first else {
+                    global_os_log("getPilotV2.getUpgradesFromCache.getUpgrade","\(key) Upgrade Not Found")
+                        return nil
+                    }
                     
                     return ret
                 }
                 
                 if let upgradeKeys = squadPilot.upgrades?.allUpgradeKeys {
+                    global_os_log("getPilot(ship:) upgradeKeys.count = \(upgradeKeys.count)")
                     return upgradeKeys.compactMap(getUpgrade)
                 }
                 

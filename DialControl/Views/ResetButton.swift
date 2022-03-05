@@ -11,7 +11,9 @@ import SwiftUI
 
 struct VectorImageButton: View {
     let imageName: String
+    let size: CGSize
     let action: () -> Void
+    
     
     var body: some View {
         Button(action: {
@@ -21,8 +23,9 @@ struct VectorImageButton: View {
             HStack {
                 Image(uiImage: UIImage(named: imageName) ?? UIImage())
                     .resizable()
-                    .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    .frame(width: 60, height: 60, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .frame(width: size.width, height: size.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(.red)
+                    
                     
             }
             .padding(5)

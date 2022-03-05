@@ -404,8 +404,14 @@ extension Redux_SquadView {
     
     struct ObjectiveScoreView : View {
         var body: some View {
-            VectorImageButton(imageName: "Victory") {
+            HStack {
+                VectorImageButton(imageName: "VictoryYellow", size: CGSize(width: 40, height: 40)) {
+                    
+                }
                 
+                VectorImageButton(imageName: "VictoryRed2", size: CGSize(width: 40, height: 40)) {
+                    
+                }
             }
         }
     }
