@@ -121,24 +121,24 @@ extension Redux_SquadView {
     
     var header: some View {
         HStack {
-            BackButtonView().environmentObject(viewFactory)
+            BackButtonView()
+                .environmentObject(viewFactory)
            
             Spacer()
-            ObjectiveScoreView().environmentObject(viewFactory)
+            ObjectiveScoreView(squadData: self.squadData)
+                .environmentObject(viewFactory)
             Spacer()
             
-            Toggle(isOn: self.$isFirstPlayer.didSet{
-                // Hack because swift thinks I don't want to perform
-                // an assignment (=) vs. a boolean check (==)
-                let x = $0
-                self.squadData.firstPlayer = x
-                self.updateSquad(squadData: self.squadData)
-            }){
-                Text("First Player")
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-            }
-            
-        }.padding(10)
+            CustomToggleView(label: "First Player", isFirstPlayer: $isFirstPlayer)
+        }
+        .padding(10)
+        .onChange(of: isFirstPlayer, perform: {
+            // Hack because swift thinks I don't want to perform
+            // an assignment (=) vs. a boolean check (==)
+            let x = $0
+            self.squadData.firstPlayer = x
+            self.updateSquad(squadData: self.squadData)
+        })
     }
     
     var content: some View {
@@ -403,16 +403,44 @@ extension Redux_SquadView {
     }
     
     struct ObjectiveScoreView : View {
+        let squadData: SquadData
+        
         var body: some View {
             HStack {
                 VectorImageButton(imageName: "VictoryYellow", size: CGSize(width: 40, height: 40)) {
-                    
+                    /*
+                    var currentPoints = self.squadData.victoryPoints
+                    currentPoints += 1
+                    self.squadData.victoryPoints = currentPoints
+                    self.updateSquad(squadData: self.squadData)
+                    */
                 }
                 
                 VectorImageButton(imageName: "VictoryRed2", size: CGSize(width: 40, height: 40)) {
-                    
+                    /*
+                    var currentPoints = self.squadData.victoryPoints
+                    currentPoints -= 1
+                     
+                    self.squadData.victoryPoints = (currentPoints < 0 ? 0 : currentPoints)
+                     
+                    self.updateSquad(squadData: self.squadData)
+                    */
                 }
+                
+                Text("Score: \(self.squadData.favorite.description)")
             }
+        }
+    }
+}
+
+struct CustomToggleView : View {
+    let label: String
+    @Binding var isFirstPlayer : Bool
+    
+    var body: some View {
+        HStack {
+            Text(label)
+            Toggle("", isOn: self.$isFirstPlayer).labelsHidden()
         }
     }
 }
