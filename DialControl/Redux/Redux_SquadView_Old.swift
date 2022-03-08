@@ -125,11 +125,16 @@ extension Redux_SquadView {
                 .environmentObject(viewFactory)
            
             Spacer()
-            ObjectiveScoreView(currentPoints: self.squadData.squad.points ?? 0)
+            ObjectiveScoreView(currentPoints: self.squadData.victoryPoints,
+                               action: {
+                                    print("victory points = \($0)")
+                                setVictoryPoints(points: $0)
+                               })
                 .environmentObject(viewFactory)
+            
             Spacer()
             
-            CustomToggleView(label: "First Player", isFirstPlayer: $isFirstPlayer)
+            CustomToggleView(label: "First Player", binding: $isFirstPlayer)
         }
         .padding(10)
         .onChange(of: isFirstPlayer, perform: {
@@ -139,6 +144,11 @@ extension Redux_SquadView {
             self.squadData.firstPlayer = x
             self.updateSquad(squadData: self.squadData)
         })
+    }
+    
+    func setVictoryPoints(points: Int32) {
+        self.squadData.victoryPoints = Int32(points)
+        self.updateSquad(squadData: self.squadData)
     }
     
     var content: some View {
@@ -363,6 +373,9 @@ extension Redux_SquadView {
                 })
             }
         }
+        
+        setVictoryPoints(points: 0)
+        self.loadShips()
     }
     
     private func updateAllDials() {
@@ -403,16 +416,21 @@ extension Redux_SquadView {
     }
     
     struct ObjectiveScoreView : View {
-        @State var currentPoints: Int
+        @State var currentPoints: Int32
+        let action: (Int32) -> Void
+        let size = CGSize(width: 40, height: 40 * 1.55)
+        @State var resetPoints: Bool = false
         
-        init(currentPoints: Int) {
-            _currentPoints = State<Int>(initialValue: currentPoints)
+        init(currentPoints: Int32, action: @escaping (Int32) -> Void) {
+            _currentPoints = State<Int32>(initialValue: currentPoints)
+            self.action = action
         }
         
         var body: some View {
             HStack {
-                VectorImageButton(imageName: "VictoryYellow", size: CGSize(width: 40, height: 40)) {
+                VectorImageButton(imageName: "VictoryYellow", size: size) {
                     currentPoints += 1
+                    action(currentPoints)
                     /*
                     var currentPoints = self.squadData.victoryPoints
                     currentPoints += 1
@@ -421,8 +439,11 @@ extension Redux_SquadView {
                     */
                 }
                 
-                VectorImageButton(imageName: "VictoryRed2", size: CGSize(width: 40, height: 40)) {
+                VectorImageButton(imageName: "VictoryRed2", size: size) {
                     currentPoints -= 1
+                    let newPoints = (currentPoints < 0 ? 0 : currentPoints)
+                    currentPoints = newPoints
+                    action(newPoints)
                     /*
                     var currentPoints = self.squadData.victoryPoints
                     currentPoints -= 1
@@ -433,20 +454,40 @@ extension Redux_SquadView {
                     */
                 }
                 
-                Text("Score: \(self.currentPoints)")
+                IndicatorView(label: "\(self.currentPoints)",
+                    bgColor: Color.green,
+                    fgColor: Color.white)
+                
+                CustomToggleView(label: "Reset Points", binding: $resetPoints)
             }
+            .onChange(of: resetPoints, perform: { _ in
+                currentPoints = 0
+                action(currentPoints)
+            })
         }
     }
 }
 
 struct CustomToggleView : View {
     let label: String
-    @Binding var isFirstPlayer : Bool
+    @Binding var binding : Bool
     
     var body: some View {
         HStack {
             Text(label)
-            Toggle("", isOn: self.$isFirstPlayer).labelsHidden()
+            Toggle("", isOn: self.$binding).labelsHidden()
         }
+    }
+}
+
+protocol VictoryPointsRepresentable {
+    var squadData: SquadData { get set }
+    var store: MyAppStore { get set }
+    func updateSquad(squadData: SquadData)
+}
+
+extension VictoryPointsRepresentable {
+    func updateSquad(squadData: SquadData) {
+        self.store.send(.squad(action: .updateSquad(squadData)))
     }
 }

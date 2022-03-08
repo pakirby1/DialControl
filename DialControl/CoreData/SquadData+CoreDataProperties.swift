@@ -24,6 +24,7 @@ extension SquadData {
     @NSManaged public var engaged: Bool
     @NSManaged public var revealed: Bool
     @NSManaged public var firstPlayer: Bool
+    @NSManaged public var victoryPoints: Int32
     
     /// way easier to use:
 //    @NSManaged public var pilotState: Set<PilotState>
