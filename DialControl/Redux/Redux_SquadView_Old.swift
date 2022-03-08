@@ -125,7 +125,7 @@ extension Redux_SquadView {
                 .environmentObject(viewFactory)
            
             Spacer()
-            ObjectiveScoreView(squadData: self.squadData)
+            ObjectiveScoreView(currentPoints: self.squadData.squad.points ?? 0)
                 .environmentObject(viewFactory)
             Spacer()
             
@@ -403,11 +403,16 @@ extension Redux_SquadView {
     }
     
     struct ObjectiveScoreView : View {
-        let squadData: SquadData
+        @State var currentPoints: Int
+        
+        init(currentPoints: Int) {
+            _currentPoints = State<Int>(initialValue: currentPoints)
+        }
         
         var body: some View {
             HStack {
                 VectorImageButton(imageName: "VictoryYellow", size: CGSize(width: 40, height: 40)) {
+                    currentPoints += 1
                     /*
                     var currentPoints = self.squadData.victoryPoints
                     currentPoints += 1
@@ -417,6 +422,7 @@ extension Redux_SquadView {
                 }
                 
                 VectorImageButton(imageName: "VictoryRed2", size: CGSize(width: 40, height: 40)) {
+                    currentPoints -= 1
                     /*
                     var currentPoints = self.squadData.victoryPoints
                     currentPoints -= 1
@@ -427,7 +433,7 @@ extension Redux_SquadView {
                     */
                 }
                 
-                Text("Score: \(self.squadData.favorite.description)")
+                Text("Score: \(self.currentPoints)")
             }
         }
     }
