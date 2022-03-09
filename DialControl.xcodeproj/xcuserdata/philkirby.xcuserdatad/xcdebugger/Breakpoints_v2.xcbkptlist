@@ -3,40 +3,4 @@
    uuid = "F61D3432-AD29-4011-B65B-D243988A0D93"
    type = "1"
    version = "2.0">
-   <Breakpoints>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2A87769C-1D4C-4596-8D84-B79D79B463C4"
-            shouldBeEnabled = "No"
-            condition = "upgradeCategory == &quot;astromech&quot;"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/UpgradeUtility.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
-            landmarkName = "getUpgrade(upgradeCategory:upgradeName:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "651AC9E7-3FE0-4F79-B53C-AEE4E6485AEE"
-            shouldBeEnabled = "No"
-            condition = "upgradeCategory == &quot;astromech&quot;"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/UpgradeUtility.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
-            landmarkName = "getUpgradesFromJSON(upgradeCategory:)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-   </Breakpoints>
 </Bucket>

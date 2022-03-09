@@ -19,6 +19,7 @@ struct Redux_SquadView: View, DamagedSquadRepresenting {
     @State private var revealAllDials: Bool = false
     @State private var displayResetAllConfirmation: Bool = false
     @State var isFirstPlayer: Bool = false
+    @State var victoryPoints: Int32 = 0
     
     let theme: Theme = WestworldUITheme()
     let squad: Squad
@@ -125,7 +126,7 @@ extension Redux_SquadView {
                 .environmentObject(viewFactory)
            
             Spacer()
-            ObjectiveScoreView(currentPoints: self.squadData.victoryPoints,
+            ObjectiveScoreView(currentPoints: self.$victoryPoints,
                                action: {
                                     print("victory points = \($0)")
                                 setVictoryPoints(points: $0)
@@ -147,8 +148,12 @@ extension Redux_SquadView {
     }
     
     func setVictoryPoints(points: Int32) {
+        // Mutate & Persist
         self.squadData.victoryPoints = Int32(points)
         self.updateSquad(squadData: self.squadData)
+        
+        // Update the local @State
+        self.victoryPoints = points
     }
     
     var content: some View {
@@ -307,6 +312,7 @@ extension Redux_SquadView {
         }
         .onAppear() {
             self.isFirstPlayer = self.squadData.firstPlayer
+            self.victoryPoints = self.squadData.victoryPoints
         }
     }
 }
@@ -416,13 +422,13 @@ extension Redux_SquadView {
     }
     
     struct ObjectiveScoreView : View {
-        @State var currentPoints: Int32
+        @Binding var currentPoints: Int32
         let action: (Int32) -> Void
         let size = CGSize(width: 40, height: 40 * 1.55)
         @State var resetPoints: Bool = false
         
-        init(currentPoints: Int32, action: @escaping (Int32) -> Void) {
-            _currentPoints = State<Int32>(initialValue: currentPoints)
+        init(currentPoints: Binding<Int32>, action: @escaping (Int32) -> Void) {
+            _currentPoints = currentPoints
             self.action = action
         }
         
