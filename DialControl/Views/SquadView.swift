@@ -785,6 +785,23 @@ struct PilotDetailsView: View {
         }
     }
     
+    var upgrades_grid: some View {
+        let columns = [GridItem(.flexible()), GridItem(.flexible())]
+        
+        return ScrollView {
+            LazyVGrid(columns: columns) {
+                if (displayUpgrades) {
+                    ForEach(self.viewModel.shipPilot.upgrades) { upgrade in
+                        Text("\(upgrade.name)")
+//                            .frame(minWidth: 0, maxWidth: 200)
+                            .foregroundColor(Color.white)
+//                            .border(Color.red, width: 1)
+                    }
+                }
+            }
+        }.frame(minWidth: 100, maxWidth: 400)
+    }
+    
     var body: some View {
         HStack {
             buildPointsView()
@@ -801,9 +818,10 @@ struct PilotDetailsView: View {
             Spacer()
             
             // Upgrades
-            upgrades
+//            upgrades
+            upgrades_grid.border(Color.white, width: 1)
             
-            Spacer()
+//            Spacer()
             
 //            dialView
             if (displayDial) {

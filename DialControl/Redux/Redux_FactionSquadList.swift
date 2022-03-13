@@ -404,7 +404,7 @@ struct Redux_FactionSquadCard: View  {
     var damagedPointsView: some View {
         logMessage("myState Redux_FactionSquadCard.damagedPointsView")
         
-        return Text("\(viewModel.damagedPoints)")
+        return Text("\(squadData.victoryPoints)")
             .font(.title)
             .foregroundColor(viewModel.textForeground)
             .padding()
@@ -492,6 +492,18 @@ struct Redux_FactionSquadCard: View  {
         }
     }
     
+    private var victoryPointsView: some View {
+        HStack {
+            IndicatorView(label: "\(3)",
+                bgColor: Color.red,
+                fgColor: Color.white)
+            
+            Image(uiImage: UIImage(named: "VictoryYellow") ?? UIImage())
+                .resizable()
+                .frame(width: 40, height: 55, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+        }
+    }
+    
     var squadButton: some View {
         Button(action: {
             self.viewFactory.viewType = .squadViewPAK(self.squad, self.squadData)
@@ -505,7 +517,6 @@ struct Redux_FactionSquadCard: View  {
                 firstPlayerView.offset(x: 260, y: 0)
                 favoriteView.offset(x: 300, y: 0)
                 deleteButton.offset(x: 350, y: 0)
-//                Text("\(damagedPointsState)").offset(x:360, y:0)
             }
         }
     }
