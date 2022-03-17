@@ -180,7 +180,8 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                 selected_maneuver: "",
                 shipID: "",
                 upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
-                dial_status: DialStatus.hidden
+                dial_status: DialStatus.hidden,
+                hasSystemPhaseAction: false
             )
             
             let json = PilotStateData.serialize(type: pilotStateData)
@@ -382,7 +383,8 @@ extension PilotStateService {
                     selected_maneuver: "",
                     shipID: "",
                     upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
-                    dial_status: DialStatus.hidden
+                    dial_status: DialStatus.hidden,
+                    hasSystemPhaseAction: false
                 )
                 
                 let json = try PilotStateData.serialize_throws(type: pilotStateData)

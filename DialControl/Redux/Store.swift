@@ -510,7 +510,7 @@ func squadReducer(state: inout MySquadViewState,
                 
                 print("\(Date()) PAK_\(#function) after pilotStateData id: \(String(describing: pilotState.id)) dial_status: \(newPSD.dial_status)")
             })
-                            
+        
         case let .updateSquad(squad):
             environment
                 .squadService

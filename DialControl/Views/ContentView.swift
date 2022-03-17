@@ -328,7 +328,9 @@ struct ContentView: View {
     var body: some View {
         VStack {
 //            viewFactory.buildView(type: viewFactory.viewType)
-            viewFactory.buildView()
+            measure(name:"ContentView.body") {
+                viewFactory.buildView()
+            }
         }.onAppear() {
             print("ContentView.onAppear")
         }

@@ -237,6 +237,7 @@ class Redux_ShipViewModel: ObservableObject {
                     self.store.send(.ship(action: .updateUpgradeCharge(upgrade, active, inactive)))
                 case .selectedSide(var upgrade, let side):
                     self.store.send(.ship(action: .updateUpgradeSelectedSide(upgrade, side)))
+
                 case .reset:
                     self.store.send(.ship(action: .reset))
             }

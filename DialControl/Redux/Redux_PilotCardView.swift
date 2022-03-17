@@ -18,6 +18,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
     @State var dialStatus: DialStatus
     let updatePilotStateCallback: (PilotStateData, PilotState) -> ()
     @EnvironmentObject var store: MyAppStore
+    @State var hasSystemPhaseAction: Bool = false
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -35,6 +36,14 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                     pilotShipNames
 
                     Spacer()
+                    
+                    systemPhaseToggle
+                        .onAppear() {
+                            self.hasSystemPhaseAction = self.shipPilot.pilotStateData?.hasSystemPhaseAction ?? false
+                        }
+                        .onChange(of: hasSystemPhaseAction, perform: { value in
+                            self.setSystemPhaseState(state: value)
+                        })
                     
                     DamagedStatusView(shipPilot: shipPilot)
                 }
@@ -66,6 +75,17 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(theme.BORDER_ACTIVE, lineWidth: 2)
         )
+    }
+    
+    var systemPhaseToggle: some View {
+        Toggle(isOn: self.$hasSystemPhaseAction){
+            EmptyView()
+        }
+        .labelsHidden() // Label takes up too much space, so just hide it.
+        .onTapGesture {
+            // Necessary to receive tap events while in a ZStack
+            withAnimation { hasSystemPhaseAction.toggle() }
+        }
     }
     
     var healthStatus: some View {
@@ -152,6 +172,21 @@ extension Redux_PilotCardView {
                                       displayUpgrades: true,
                                       displayHeaders: false,
                                       displayDial: true).environmentObject(self.store)
+    }
+    
+    func setSystemPhaseState(state: Bool) {
+        if let data = shipPilot.pilotStateData {
+            let name = shipPilot.pilotName
+            data.change(update: {
+                print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
+
+                $0.hasSystemPhaseAction = state
+                
+                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
+                
+                print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: $0.hasSystemPhaseAction))")
+            })
+        }
     }
 }
 

@@ -359,6 +359,7 @@ enum PilotStatePropertyType_New {
     case shipIDMarker(String)
     case selectedManeuver(String)
     case revealAllDials(Bool)
+    case hasSystemPhaseAction(Bool)
 }
 
 // MARK:- ShipView

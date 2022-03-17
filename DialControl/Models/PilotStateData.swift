@@ -153,6 +153,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var shipID: String
     var upgradeStates : [UpgradeStateData]? // nil if no upgrades present
     var dial_status: DialStatus
+    var hasSystemPhaseAction: Bool? // nil if we haven't set the system phase state yet
     
     var id = UUID()
     
@@ -179,6 +180,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
         }
         
         arr.append("dial_status: \(dial_status)")
+        arr.append("hasSystemPhaseAction: \(hasSystemPhaseAction)")
         return arr.joined(separator: "\n")
     }
     
@@ -203,6 +205,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
         case shipID
         case upgradeStates
         case dial_status
+        case hasSystemPhaseAction
     }
     
 }
@@ -257,6 +260,8 @@ extension PilotStateData {
             return change{ $0.updateManeuver(maneuver: maneuver) }
         case .revealAllDials(let revealed):
             return change{ $0.updateDialRevealed(revealed: revealed)}
+        case .hasSystemPhaseAction(let state):
+            return change{ $0.updateSystemPhaseAction(state: state)}
         }
     }
     
@@ -337,6 +342,10 @@ extension PilotStateData {
     
     mutating func updateDialRevealed(revealed: Bool) {
         self.dial_status = (revealed ? .revealed : .hidden)
+    }
+    
+    mutating func updateSystemPhaseAction(state: Bool) {
+        self.hasSystemPhaseAction = state
     }
     
     var health: Int {
