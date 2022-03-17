@@ -799,7 +799,7 @@ struct PilotDetailsView: View {
                     }
                 }
             }
-        }.frame(minWidth: 100, maxWidth: 400)
+        }.frame(minWidth: 100, maxWidth: 600)
     }
     
     var body: some View {

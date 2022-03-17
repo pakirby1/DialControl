@@ -445,6 +445,10 @@ extension Redux_SquadView {
                     */
                 }
                 
+                IndicatorView(label: "\(self.currentPoints)",
+                    bgColor: Color.green,
+                    fgColor: Color.white)
+                
                 VectorImageButton(imageName: "VictoryRed2", size: size) {
                     currentPoints -= 1
                     let newPoints = (currentPoints < 0 ? 0 : currentPoints)
@@ -459,10 +463,6 @@ extension Redux_SquadView {
                     self.updateSquad(squadData: self.squadData)
                     */
                 }
-                
-                IndicatorView(label: "\(self.currentPoints)",
-                    bgColor: Color.green,
-                    fgColor: Color.white)
                 
                 CustomToggleView(label: "Reset Points", binding: $resetPoints)
             }

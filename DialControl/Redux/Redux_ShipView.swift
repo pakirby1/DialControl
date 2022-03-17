@@ -520,6 +520,7 @@ struct Redux_ShipView: View, ShipIDRepresentable {
                     .frame(width: 150, height: 50, alignment: .leading)
                     //            .border(Color.blue, width: 2)
                     
+                    setShipID
                     shipID
                     
                     PilotDetailsView(viewModel: PilotDetailsViewModel(shipPilot: self.viewModel.shipPilot, pilotStateService: self.viewModel.pilotStateService),
@@ -527,6 +528,18 @@ struct Redux_ShipView: View, ShipIDRepresentable {
                              displayHeaders: false,
                              displayDial: false)
                         .padding(2)
+                }
+            }
+            
+            var setShipID: some View {
+                let shipID = self.viewModel.shipPilot.pilotStateData?.shipID ?? "None"
+                let text = (shipID == "") ? "None" : shipID
+                
+                return VStack {
+                    Button("Set Ship ID") {
+                        self.displaySetShipID.toggle()
+                    }
+                    Text("Ship ID: \(text)")
                 }
             }
             
@@ -734,12 +747,7 @@ extension Redux_ShipView {
                 
                 Text("Dial Status: \(dialStatusText)")
                 
-                VStack {
-                    Button("Set Ship ID") {
-                        self.displaySetShipID.toggle()
-                    }
-                    Text("Ship ID: \(textEntered)")
-                }
+                
             }.padding(.top, 20)
             //                    .border(Color.green, width: 2)
         }
