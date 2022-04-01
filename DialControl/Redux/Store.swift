@@ -72,6 +72,7 @@ struct FactionSquadListState {
     
     var shipPilots: [ShipPilot] = []
 //    var shipPilotsCollection: Array<[ShipPilot]> = []
+    var currentRound: Int = 0
 }
 
 // MARK:- MyAppAction
@@ -156,6 +157,7 @@ enum MyFactionSquadListAction {
     case updateFavorites(Bool)
     case getShips(SquadData)
     case setShips(SquadData, [ShipPilot])
+    case setRound(Int)
 }
 
 struct MyEnvironment {
@@ -674,6 +676,10 @@ func factionReducer(state: inout MyAppState,
                 .updateSquad(squadData: x)
             
             return loadAllSquads()
+            
+        case let .setRound(round):
+            // Persist to CoreData
+            state.faction.currentRound = round
     }
     
     return Empty().eraseToAnyPublisher()

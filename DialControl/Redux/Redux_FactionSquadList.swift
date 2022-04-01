@@ -17,6 +17,8 @@ struct Redux_FactionSquadList: View {
     
     @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
+//    @State var currentRound: Int = 0
+    @State var displayResetRoundCounter: Bool = false
     
     let faction: String
     
@@ -75,7 +77,10 @@ struct Redux_FactionSquadList: View {
             self.displayFavoritesOnly.toggle()
             self.updateFavorites(showFavoritesOnly: self.displayFavoritesOnly)
         }) {
-            self.displayFavoritesOnly ? Text("Show All") : Text("Favorites Only")
+            Image(systemName: self.displayFavoritesOnly ? "star.fill" :
+            "star")
+                .font(.title)
+                .foregroundColor(Color.yellow)
         }
     }
     
@@ -96,7 +101,51 @@ struct Redux_FactionSquadList: View {
             Spacer()
             favoritesFilterView
             Spacer()
+            roundCount
+            Spacer()
             xwsImportButton
+        }
+    }
+    
+    var roundCount: some View {
+        func setRound(newRound: Int) {
+            store.send(.faction(action: .setRound(newRound)))
+        }
+        
+        func increment() {
+            let newRound = store.state.faction.currentRound + 1
+            
+            setRound(newRound: newRound)
+        }
+        
+        func decrement() {
+            var newRound = store.state.faction.currentRound - 1
+            
+            if newRound < 0 { newRound = 0 }
+            
+            setRound(newRound: newRound)
+        }
+        
+        func reset() {
+            setRound(newRound: 0)
+        }
+        
+        return HStack {
+            Button(action:{ increment() }) { Image(systemName: "plus.circle.fill").font(.largeTitle) }
+            
+            Text("Round: \(store.state.faction.currentRound)")
+                .font(.title)
+            
+            Button(action:{ decrement() }) { Image(systemName: "minus.circle.fill").font(.largeTitle) }
+            
+            Button(action:{ displayResetRoundCounter = true }) { Image(systemName: "xmark.octagon.fill").foregroundColor(.red).font(.title) }
+        }.alert(isPresented: $displayResetRoundCounter) {
+            Alert(
+                title: Text("Reset"),
+                message: Text("Reset Round Counter?"),
+                primaryButton: Alert.Button.default(Text("Reset"), action: { reset() }),
+                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
+            )
         }
     }
     

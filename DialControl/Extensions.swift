@@ -459,3 +459,18 @@ extension Array {
      }
 }
 
+func executionTimeInterval(block: () -> ()) -> CFTimeInterval {
+    let start = CACurrentMediaTime()
+    block();
+    let end = CACurrentMediaTime()
+    return end - start
+}
+
+func executionTime(_ label: String, block: () -> ()) {
+    let start = CFAbsoluteTimeGetCurrent()
+    // run your work
+    block();
+    let diff = CFAbsoluteTimeGetCurrent() - start
+    print("\(label) Took \(diff) seconds")
+}
+

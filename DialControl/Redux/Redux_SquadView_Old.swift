@@ -299,20 +299,30 @@ extension Redux_SquadView {
         .onAppear{
             print("PAK_DialStatus SquadCardView.onAppear()")
             // TODO: Switch & AppStore
-            self.loadShips()
-            self.activationOrder = self.squadData.engaged
-            print("PAKshipPilots \(Date()) .onAppear")
+            executionTime("Perf Redux_SquadView.content.onAppear()") {
+                self.loadShips()
+                self.activationOrder = self.squadData.engaged
+                print("PAKshipPilots \(Date()) .onAppear")
+            }
         }
     }
     
+    
+    
     var body: some View {
+        func onAppearBlock() {
+            self.isFirstPlayer = self.squadData.firstPlayer
+            self.victoryPoints = self.squadData.victoryPoints
+        }
+        
         return VStack {
             header
             content
         }
         .onAppear() {
-            self.isFirstPlayer = self.squadData.firstPlayer
-            self.victoryPoints = self.squadData.victoryPoints
+            executionTime("Redux_SquadView.body.onAppear()") {
+                onAppearBlock()
+            }
         }
     }
 }
