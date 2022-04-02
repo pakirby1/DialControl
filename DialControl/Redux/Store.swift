@@ -158,6 +158,7 @@ enum MyFactionSquadListAction {
     case getShips(SquadData)
     case setShips(SquadData, [ShipPilot])
     case setRound(Int)
+    case loadRound
 }
 
 struct MyEnvironment {
@@ -538,6 +539,8 @@ func factionReducer(state: inout MyAppState,
                     action: MyFactionSquadListAction,
                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
+    @UserDefaultsBacked<Int>(key: "currentRound") var currentRound = 0
+    
     var showFavoritesOnly: Bool {
         get { UserDefaults.standard.bool(forKey: "displayFavoritesOnly") }
         set { UserDefaults.standard.set(newValue, forKey: "displayFavoritesOnly") }
@@ -678,8 +681,12 @@ func factionReducer(state: inout MyAppState,
             return loadAllSquads()
             
         case let .setRound(round):
-            // Persist to CoreData
-            state.faction.currentRound = round
+            // Persist to UserDefaults
+            currentRound = round
+            return Just(.faction(action: .loadRound)).eraseToAnyPublisher()
+            
+        case .loadRound:
+            state.faction.currentRound = currentRound
     }
     
     return Empty().eraseToAnyPublisher()

@@ -146,7 +146,9 @@ struct Redux_FactionSquadList: View {
                 primaryButton: Alert.Button.default(Text("Reset"), action: { reset() }),
                 secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
             )
-        }
+        }.onAppear(perform: {
+            store.send(.faction(action: .loadRound))
+        })
     }
     
     var squadCount: some View {
