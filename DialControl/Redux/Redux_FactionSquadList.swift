@@ -17,7 +17,6 @@ struct Redux_FactionSquadList: View {
     
     @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-//    @State var currentRound: Int = 0
     @State var displayResetRoundCounter: Bool = false
     
     let faction: String

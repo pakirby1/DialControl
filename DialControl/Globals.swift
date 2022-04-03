@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 import Combine
 import os
+import CoreData
 
 func global_os_log(_ message: String = "", _ value: String = "") {
     os.os_log("[%@] value: %@", message, value)
@@ -26,6 +27,7 @@ extension Publisher {
 // MARK :-
 /// property wrapper for data stored in UserDefaults
 /// @UserDefaultsBacked<Bool>(key: "mark-as-read") var autoMarkMessagesAsRead
+/// @CoreDataBacked<GameData> var gameData? = nil
 @propertyWrapper struct UserDefaultsBacked<Value> {
     var wrappedValue: Value {
         get {
@@ -48,6 +50,50 @@ extension Publisher {
         self.key = key
         self.storage = storage
     }
+}
+
+/// @DataBacked(key: "roundCount", storage: CoreDataStorage(self.moc)) var roundCount: Int
+@propertyWrapper struct DataBacked<Storage: IDataStorage, Value> where Storage.Value == Value
+{
+    var wrappedValue: Value {
+        get {
+            let value = storage.value(forKey: key) as? Value
+            return value ?? defaultValue
+        }
+        set {
+            storage.setValue(newValue: newValue, forKey: key)
+        }
+    }
+
+    private let key: String
+    private let defaultValue: Value
+    private let storage: Storage
+
+    init(wrappedValue defaultValue: Value,
+         key: String,
+         storage: Storage)
+    {
+        self.defaultValue = defaultValue
+        self.key = key
+        self.storage = storage
+    }
+}
+
+class CoreDataStorage<T:NSManagedObject> : IDataStorage {
+    func value(forKey: String) -> T {
+        return T()
+    }
+    
+    func setValue(newValue: T, forKey: String) {
+        
+    }
+}
+
+protocol IDataStorage {
+    associatedtype Value
+    
+    func value(forKey: String) -> Value
+    func setValue(newValue: Value, forKey: String)
 }
 
 public extension View {
