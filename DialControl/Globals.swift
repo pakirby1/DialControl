@@ -54,6 +54,24 @@ extension Publisher {
     }
 }
 
+@propertyWrapper
+struct Input<Value> {
+    var wrappedValue: Value {
+        get { subject.value }
+        set { subject.send(newValue) }
+    }
+
+    var projectedValue: AnyPublisher<Value, Never> {
+        subject.eraseToAnyPublisher()
+    }
+
+    private let subject: CurrentValueSubject<Value, Never>
+
+    init(wrappedValue: Value) {
+        subject = CurrentValueSubject(wrappedValue)
+    }
+}
+
 /// @DataBacked(key: "roundCount", storage: CoreDataStorage(self.moc)) var roundCount: Int
 @propertyWrapper struct DataBacked<Storage: IDataStorage, Value> where Storage.Value == Value
 {
@@ -94,12 +112,29 @@ struct UserDefaultsStorage<T> : IDataStorage {
 }
 
 class CoreDataStorage<T:NSManagedObject> : IDataStorage {
+    
     func value(forKey: String) -> T? {
         return nil
     }
     
     func setValue(newValue: T, forKey: String) {
         
+    }
+}
+
+struct CombineStorage<T> : IDataStorage {
+    private let subject: CurrentValueSubject<T, Never>
+    
+    func value(forKey: String) -> T? {
+        return subject.value
+    }
+    
+    func setValue(newValue: T, forKey: String) {
+        subject.value = newValue
+    }
+    
+    init(initialValue: T) {
+        self.subject = CurrentValueSubject(initialValue)
     }
 }
 

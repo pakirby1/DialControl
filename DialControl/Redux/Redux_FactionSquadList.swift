@@ -23,6 +23,8 @@ struct Redux_FactionSquadList: View {
     
     @DataBacked(key: "UserDefaultsTest", storage: UserDefaultsStorage()) var currentRoud : Int = 0
     
+    @DataBacked(key: "UserDefaultsTest", storage: CombineStorage(initialValue: 0)) var combineTest : Int = 0
+    
     let faction: String
     
     // Dealloc tracker
