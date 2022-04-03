@@ -19,6 +19,10 @@ struct Redux_FactionSquadList: View {
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
     @State var displayResetRoundCounter: Bool = false
     
+    @DataBacked(key: "CoreDataTest", storage: CoreDataStorage()) var test: SquadData = SquadData.init()
+    
+    @DataBacked(key: "UserDefaultsTest", storage: UserDefaultsStorage()) var currentRoud : Int = 0
+    
     let faction: String
     
     // Dealloc tracker

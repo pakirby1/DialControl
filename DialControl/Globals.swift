@@ -26,7 +26,9 @@ extension Publisher {
     
 // MARK :-
 /// property wrapper for data stored in UserDefaults
-/// @UserDefaultsBacked<Bool>(key: "mark-as-read") var autoMarkMessagesAsRead
+/// @UserDefaultsBacked<Int>(key: "currentRound") var currentRound = 0
+/// @DataBacked(key: "currentRound", storage: UserDefaultsStorage()) var currentRoud : Int = 0
+/// @DataBacked(key: "test", storage: CoreDataStorage()) var test: SquadData = SquadData.init()
 /// @CoreDataBacked<GameData> var gameData? = nil
 @propertyWrapper struct UserDefaultsBacked<Value> {
     var wrappedValue: Value {
@@ -57,7 +59,7 @@ extension Publisher {
 {
     var wrappedValue: Value {
         get {
-            let value = storage.value(forKey: key) as? Value
+            let value = storage.value(forKey: key)
             return value ?? defaultValue
         }
         set {
@@ -79,9 +81,21 @@ extension Publisher {
     }
 }
 
+struct UserDefaultsStorage<T> : IDataStorage {
+    func value(forKey: String) -> T? {
+        return backed.value(forKey: forKey) as? T
+    }
+    
+    func setValue(newValue: T, forKey: String) {
+        backed.setValue(newValue, forKey: forKey)
+    }
+    
+    let backed = UserDefaults()
+}
+
 class CoreDataStorage<T:NSManagedObject> : IDataStorage {
-    func value(forKey: String) -> T {
-        return T()
+    func value(forKey: String) -> T? {
+        return nil
     }
     
     func setValue(newValue: T, forKey: String) {
@@ -92,7 +106,7 @@ class CoreDataStorage<T:NSManagedObject> : IDataStorage {
 protocol IDataStorage {
     associatedtype Value
     
-    func value(forKey: String) -> Value
+    func value(forKey: String) -> Value?
     func setValue(newValue: Value, forKey: String)
 }
 
