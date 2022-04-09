@@ -520,9 +520,11 @@ func squadReducer(state: inout MySquadViewState,
                 .updateSquad(squadData: squad)
         
         case let .updatePilotState(pilotStateData, pilotState):
-            environment
-                .pilotStateService
-                .updateState(newData: pilotStateData, state: pilotState)
+            measure(name: "setSystemPhaseState store.send.updatePilotState", {
+                environment
+                    .pilotStateService
+                    .updateState(newData: pilotStateData, state: pilotState)
+            })
         
         case let .getShips(squad, data):
             state.squad = squad
