@@ -22,7 +22,7 @@ class StoreTests: XCTestCase {
                                    ship: MyShipViewState(),
                                    xwsImport: MyXWSImportViewState(),
                                    factionFilter: FactionFilterState(),
-                                   tools: ToolsViewState())
+                                   tools: ToolsViewState(), upgrades: UpgradesState())
         }
         
         func buildEnvironment() -> MyEnvironment {
@@ -48,6 +48,7 @@ class StoreTests: XCTestCase {
         )
     }
     
+    /// <#Description#>
     func testDownloadAllImages() {
         func handleCompletion(completion: Subscribers.Completion<Never>) {
             print(".sink() received the completion", String(describing: completion))
@@ -84,5 +85,53 @@ class StoreTests: XCTestCase {
         wait(for: [expectation], timeout: 60.0)
         XCTAssertNotNil(cancellable)
         XCTAssertEqual(receiveCount, 6)
+    }
+
+    func testStorePerformance() {
+        measure {
+            func handleCompletion(completion: Subscribers.Completion<Never>) {
+                print(".sink() received the completion", String(describing: completion))
+                
+                switch completion {
+                    case .finished:
+                        print("finished")
+                        break
+                    case .failure(let anError):
+                        XCTFail("No failure should be received from empty")
+                        print("received error: ", anError)
+                        break
+                }
+                expectation.fulfill()
+            }
+        
+            func handleValue(value: MyAppState) {
+                let currentRound = value.faction.currentRound
+                receiveCount += 1
+                collectedSequence.append(currentRound)
+                print(".sink() data received \(currentRound)")
+            }
+            
+            let expectation = XCTestExpectation(description: self.debugDescription)
+            var receiveCount = 0
+            var collectedSequence: [Int] = []
+            
+            let cancellable = store?.$state
+                .sink(receiveCompletion: handleCompletion,
+                receiveValue: handleValue)
+            
+            store?.$state.sink { state in
+                XCTAssertEqual(state.faction.currentRound, 0)
+//                        XCTAssertEqual(state, .populated)
+                        expectation.fulfill()
+            }.store(in: &cancellables)
+
+            
+            let currentRound = collectedSequence.last ?? 0
+            store?.send(MyAppAction.faction(action: .setRound(3)))
+            
+            wait(for: [expectation], timeout: 60.0)
+            XCTAssertNotNil(cancellable)
+        }
+        
     }
 }

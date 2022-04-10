@@ -25,7 +25,7 @@ class DialControlTests: XCTestCase {
                                    ship: MyShipViewState(),
                                    xwsImport: MyXWSImportViewState(),
                                    factionFilter: FactionFilterState(),
-                                   tools: ToolsViewState())
+                                   tools: ToolsViewState(), upgrades: UpgradesState())
         }
         
         func buildEnvironment() -> MyEnvironment {

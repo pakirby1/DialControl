@@ -195,9 +195,9 @@ extension Redux_PilotCardView {
                     print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
 
                     psd.hasSystemPhaseAction = state
-                    
+//
                     self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
-                    
+
     //                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
                     print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
                 })

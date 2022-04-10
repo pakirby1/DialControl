@@ -8,6 +8,7 @@
 
 import XCTest
 import Combine
+import CoreData
 @testable import DialControl
 
 class ImageServiceTests: XCTestCase {
@@ -16,9 +17,15 @@ class ImageServiceTests: XCTestCase {
         let expectation = XCTestExpectation(description: self.debugDescription)
 
         var receiveCount = 0
-        var collectedSequence: [ImageService.DownloadImageEventResult] = []
+        var collectedSequence: [Result<DownloadEventEnum, Error>] = []
         
-        let service = ImageService()
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        // Used only if we have a unique constraint on our CoreData entity?
+        moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
+        let service = ImageService(moc: moc)
         
         let cancellable = service
             .downloadAllImages()

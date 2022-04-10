@@ -175,38 +175,46 @@ func myAppReducer(
     environment: MyEnvironment
 ) -> AnyPublisher<MyAppAction, Never>
 {
+    
     switch action {
         case .upgrades(let action):
+            print(action)
             return upgradesReducer(state: &state.upgrades,
                                 action: action,
                                 environment: environment)
             
         case .tools(let action):
+            print(action)
             return toolsReducer(state: &state.tools,
                                 action: action,
                                 environment: environment)
             
         case .faction(let action):
+            print("MyAppAction.faction \(action)")
             return factionReducer(state: &state,
                            action: action,
                            environment: environment)
         
         case .squad(let action):
+            print("setSystemPhaseState \(action)")
             return squadReducer(state: &state.squad,
                                   action: action,
                                   environment: environment)
         
         case .ship(let action):
+            print("MyAppAction.ship \(action)")
             return shipReducer(state: &state.ship,
                               action: action,
                               environment: environment)
         
         case .xwsImport(let action):
+            print("MyAppAction.xwsImport \(action)")
             return xwsImportReducer(state: &state.xwsImport,
                                action: action,
                                environment: environment)
         
         case .factionFilter(let action):
+            print("MyAppAction.factionFilter \(action)")
             return factionFilterReducer(state: &state.factionFilter,
                                         action: action,
                                         environment: environment)
@@ -753,6 +761,7 @@ class Store<State, Action, Environment> : ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     @Published var navigateBack: Void?
+    private(set) var publisher = PassthroughSubject<Action, Never>()
     
     init(state: State,
          reducer: @escaping Reducer<State, Action, Environment>,
@@ -761,6 +770,12 @@ class Store<State, Action, Environment> : ObservableObject {
         self.state = state
         self.reducer = reducer
         self.environment = environment
+        
+        publisher
+            .print("Store.send")
+            .receive(on: DispatchQueue.main)
+            .sink(receiveValue: send)
+            .store(in: &cancellables)
     }
 }
 
@@ -783,13 +798,37 @@ extension Store {
 
 extension Store {
     func send(_ action: Action) {
-        let nextAction = reducer(&state, action, environment)
+//        send_old(action)
+        send_new(action)
+    }
+    
+    func send_old(_ action: Action) {
+        measure(name: "setSystemPhaseState store.send")
+        {
+            let nextAction = reducer(&state, action, environment)
 
-        nextAction
-            .os_log(message: "Store.send")
+            nextAction
+                .eraseToAnyPublisher()
+                .print("Store.send")
+                .receive(on: DispatchQueue.main)
+                .sink(receiveValue: {
+                    self.publisher.send($0)
+                })
+                .store(in: &cancellables)
+        }
+    }
+    
+    func send_new(_ action: Action) {
+        Just(action)
             .print("Store.send")
+            .flatMap{
+                return self.reducer(&self.state, $0, self.environment)
+            }
+            .eraseToAnyPublisher()
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: send)
+            .sink(receiveValue: {
+                self.publisher.send($0)
+            })
             .store(in: &cancellables)
     }
     
