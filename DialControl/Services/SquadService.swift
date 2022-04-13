@@ -271,35 +271,55 @@ extension SquadService {
             global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
         }
         
-        func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
-        {
-            return cacheService.getShip(squad: squad,
-                                 squadPilot: squadPilot,
-                                 pilotState: pilotState)
-        }
-        
         func buildReturn() -> AnyPublisher<[ShipPilot], Never> {
-            let pilotStates: [PilotState] = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
+            func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
+            {
+                return cacheService.getShip(squad: squad,
+                                     squadPilot: squadPilot,
+                                     pilotState: pilotState)
+            }
+            
+            let pilotStates: [PilotState] = measure("Performance", name: "SquadService.getShips.buildReturn().pilotStates")
+            {
+                return squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
+            }
+            
             _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
 
-            let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
+            let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = measure("Performance", name: "SquadService.getShips.buildReturn().zipped")
+            {
+                return zip(squad.pilots, pilotStates)
+            }
 
-            let publisherArray: [AnyPublisher<ShipPilot, Never>] = zipped.map{
-                return getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+            let publisherArray: [AnyPublisher<ShipPilot, Never>] = measure("Performance", name: "SquadService.getShips.buildReturn().publisherArray")
+            {
+                return zipped.map{
+                    return getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+                }
             }
             
             global_os_log("SquadService.getShips", "x.count :\(publisherArray.count)")
 
-            let mergedPublishers: AnyPublisher<AnyPublisher<ShipPilot, Never>.Output, AnyPublisher<ShipPilot, Never>.Failure> = Publishers.MergeMany(publisherArray)
-                .eraseToAnyPublisher()
+            let mergedPublishers: AnyPublisher<AnyPublisher<ShipPilot, Never>.Output, AnyPublisher<ShipPilot, Never>.Failure> =
+                measure("Performance", name: "SquadService.getShips.buildReturn().mergedPublishers") {
+                    Publishers.MergeMany(publisherArray)
+                    .eraseToAnyPublisher()
+                }
+                
             
-            let shipPilotsStream: AnyPublisher<[ShipPilot], Never> = mergedPublishers
-                .collect()
-                .eraseToAnyPublisher()
+            let shipPilotsStream: AnyPublisher<[ShipPilot], Never> =
+                measure("Performance", name: "SquadService.getShips.buildReturn().shipPilotsStream")
+                {
+                    mergedPublishers
+                        .collect()
+                        .eraseToAnyPublisher()
+                }
             
             return shipPilotsStream
         }
         
-        return buildReturn()
+        return measure("Performance", name: "SquadService.getShips.buildReturn()") {
+            return buildReturn()
+        }
     }
 }

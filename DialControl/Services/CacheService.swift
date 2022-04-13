@@ -69,14 +69,16 @@ class CacheService : CacheServiceProtocol {
     func getShip(squad: Squad,
                  squadPilot: SquadPilot,
                  pilotState: PilotState) -> AnyPublisher<ShipPilot, Never> {
-        getShipV1(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
+        measure("Performance", name: "CacheService.getShip(...).getShipV1(...)") {
+            getShipV1(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
+        }
     }
     
     private func getShipV1(squad: Squad,
                  squadPilot: SquadPilot,
                  pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
     {
-        global_os_log("CacheService.getShip")
+        global_os_log("CacheService.getShipV1")
         
         func getShipFromCache() -> Ship? {
             func getShipFromFile(shipKey: ShipKey) -> Ship {
@@ -136,11 +138,15 @@ class CacheService : CacheServiceProtocol {
                              pilotState: pilotState)
         }
         
-        guard let ship = getShipFromCache() else {
+        let ship = measure("Performance", name: "CacheService.getShipV1(...).getShipFromCache()") { getShipFromCache() }
+        
+        guard let ship = ship else {
             return Empty().eraseToAnyPublisher()
         }
         
-        let shipPilot = getPilot(ship: ship)
+        let shipPilot = measure("Performance", name: "CacheService.getShipV1(...).getPilot()") {
+            return getPilot(ship: ship)
+        }
         
         global_os_log("CacheService.getShip shipPilot", shipPilot.pilotName)
         

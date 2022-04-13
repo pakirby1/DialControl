@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import CoreData
+import TimelaneCombine
 
 // MARK:- MyAppState
 struct MyAppState {
@@ -84,6 +85,7 @@ enum MyAppAction {
     case factionFilter(action: MyFactionFilterListAction)
     case tools(action: ToolsAction)
     case upgrades(action: UpgradesAction)
+    case none
 }
 
 enum UpgradesAction {
@@ -147,6 +149,22 @@ enum MySquadAction {
     case flipDial(PilotStateData, PilotState)
 }
 
+extension MySquadAction : CustomStringConvertible {
+    var description: String {
+        switch(self) {
+            case let .getShips(squad, _):
+                return "MySquadAction.getShips( \(String(describing: squad.name)), )"
+            case let .updatePilotState(psd, _):
+                let shipColor = psd.shipID
+                return "hasSystemPhaseAction \(shipColor) \(String(describing: psd.hasSystemPhaseAction))"
+            case let .updateSquad(squadData) :
+                return "MySquadAction.updateSquad( \(String(describing: squadData.name)) )"
+            case let .flipDial(psd, _):
+                return "MySquadAction.flipDial( \(psd.pilot_index) )"
+        }
+    }
+}
+
 enum MyFactionSquadListAction {
     case loadSquads
     case setSquads(squads: [SquadData])
@@ -161,6 +179,56 @@ enum MyFactionSquadListAction {
     case loadRound
 }
 
+protocol NameDescribable {
+    var typeName: String { get }
+    static var typeName: String { get }
+}
+
+extension NameDescribable {
+    var typeName: String {
+        return String(describing: type(of: self))
+    }
+
+    static var typeName: String {
+        return String(describing: self)
+    }
+}
+
+var noAction : AnyPublisher<MyAppAction, Never> {
+//    return Just(.none).eraseToAnyPublisher()
+    return Empty().eraseToAnyPublisher()
+}
+
+extension MyFactionSquadListAction : CustomStringConvertible, NameDescribable {
+    var description: String {
+        switch(self) {
+            case .loadSquads:
+                return "\(self.typeName).loadSquads"
+            case let .setSquads(squads):
+                return "\(self.typeName).setSquads \(squads.count)"
+            case .deleteAllSquads:
+                return "\(self.typeName).deleteAllSquads"
+            case let .deleteSquad(squadData):
+                return "\(self.typeName).deleteSquad(\(String(describing: squadData.name)))"
+            case let .updateSquad(squadData):
+                return "\(self.typeName).updateSquad(\(String(describing: squadData.name)))"
+            case let .favorite(isFavorite, squadData):
+                return "\(self.typeName).favorite(\(isFavorite) \(String(describing: squadData.name)))"
+            case let .updateFavorites(isFavorite):
+                return "\(self.typeName).updateFavorites(\(isFavorite))"
+            case let .getShips(squadData):
+                return "\(self.typeName).getShips(\(String(describing: squadData.name)))"
+            case let .setShips(squadData, shipPilots):
+                return "\(self.typeName).setShips(\(String(describing: squadData.name)), \(shipPilots) pilots"
+            case let .setRound(round):
+                return "\(self.typeName).setRound(\(round))"
+            case .loadRound:
+                return "\(self.typeName).loadRound"
+        }
+    }
+    
+    
+}
 struct MyEnvironment {
     var squadService: SquadService
     var pilotStateService: PilotStateService
@@ -218,9 +286,10 @@ func myAppReducer(
             return factionFilterReducer(state: &state.factionFilter,
                                         action: action,
                                         environment: environment)
+        case .none:
+            print("MyAppAction.none")
+            return noAction
     }
-    
-//    return Empty().eraseToAnyPublisher()
 }
 
 func toolReducerFactory(isMock: Bool = false) -> (inout ToolsViewState, ToolsAction, MyEnvironment) -> AnyPublisher<MyAppAction, Never>
@@ -245,7 +314,7 @@ func upgradesReducer(state: inout UpgradesState,
     switch(action) {
         case let .setUpgrades(category, upgrades):
             state.upgrades[category] = upgrades
-            return Empty().eraseToAnyPublisher()
+            return noAction
     }
 }
 
@@ -255,7 +324,7 @@ func toolsReducer(state: inout ToolsViewState,
 {
     switch(action) {
         case .deleteImageCache:
-            return Empty().eraseToAnyPublisher()
+            return noAction
         
         case .downloadAllImages:
             state.message = ""
@@ -266,18 +335,18 @@ func toolsReducer(state: inout ToolsViewState,
                 .eraseToAnyPublisher()
  
         case .cancelDownloadAllImages:
-            return Empty().eraseToAnyPublisher()
+            return noAction
             
         case .setCancelDownloadAllImages(let event):
             state.message = event.description
-            return Empty().eraseToAnyPublisher()
+            return noAction
             
         case .setDownloadEvent(let event):
             state.currentImage = event
-            return Empty().eraseToAnyPublisher()
+            return noAction
             
         default:
-            return Empty().eraseToAnyPublisher()
+            return noAction
     }
 }
 
@@ -287,7 +356,7 @@ func factionFilterReducer(state: inout FactionFilterState,
 {
     switch(action) {
         case .loadFactions:
-            return Empty().eraseToAnyPublisher()
+            return noAction
             
         case .selectFaction(let faction):
             if faction == .none {
@@ -301,15 +370,15 @@ func factionFilterReducer(state: inout FactionFilterState,
                 }
             }
 
-            return Empty().eraseToAnyPublisher()
+            return noAction
             
         case .deselectFaction(let faction):
-            return Empty().eraseToAnyPublisher()
+            return noAction
         case .deselectAll:
-            return Empty().eraseToAnyPublisher()
+            return noAction
     }
     
-    return Empty().eraseToAnyPublisher()
+    return noAction
 }
 
 func xwsImportReducer(state: inout MyXWSImportViewState,
@@ -353,7 +422,7 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
             state.alertText = message
     }
     
-    return Empty().eraseToAnyPublisher()
+    return noAction
 }
 
 func shipReducer(state: inout MyShipViewState,
@@ -501,7 +570,7 @@ func shipReducer(state: inout MyShipViewState,
             updateDialStatus(status: status)
     }
     
-    return Empty().eraseToAnyPublisher()
+    return noAction
 }
 
 func squadReducer(state: inout MySquadViewState,
@@ -542,7 +611,7 @@ func squadReducer(state: inout MySquadViewState,
                 squadData: data)
     }
     
-    return Empty().eraseToAnyPublisher()
+    return noAction
 }
 
 func factionReducer(state: inout MyAppState,
@@ -617,6 +686,10 @@ func factionReducer(state: inout MyAppState,
     
     print("favoriteTapped: \(action)")
     
+    var loadRoundAction : AnyPublisher<MyAppAction, Never> {
+        Just(.faction(action: .loadRound)).eraseToAnyPublisher()
+    }
+    
     switch(action) {
         case let .setShips(data, shipPilots):
             global_os_log("Store.send factionReducer.setShips", "shipPilots.count \(shipPilots.count)")
@@ -628,14 +701,16 @@ func factionReducer(state: inout MyAppState,
         case let .getShips(data):
             global_os_log("Store.send factionReducer.getShips", data.description)
             
-            return environment
-                .squadService
-                .getShips(squad: data.squad, squadData: data)
-                .os_log(message: "Store.send MyFactionSquadListAction.getShips")
-                .replaceError(with: [])
-                .map { .faction(action: .setShips(data, $0)) }
-                .os_log(message: "Store.send MyFactionSquadListAction.getShips.map")
-                .eraseToAnyPublisher()
+            measure("Performance", name: "factionReducer .getShips") {
+                return environment
+                    .squadService
+                    .getShips(squad: data.squad, squadData: data)
+                    .os_log(message: "Store.send MyFactionSquadListAction.getShips")
+                    .replaceError(with: [])
+                    .map { MyAppAction.faction(action: .setShips(data, $0)) }
+                    .os_log(message: "Store.send MyFactionSquadListAction.getShips.map")
+                    .eraseToAnyPublisher()
+            }
             
 //            state.faction.squadDataList.setShips(data: data)
 //            let x = state.faction.squadDataList[0]
@@ -693,13 +768,13 @@ func factionReducer(state: inout MyAppState,
         case let .setRound(round):
             // Persist to UserDefaults
             currentRound = round
-            return Just(.faction(action: .loadRound)).eraseToAnyPublisher()
+            return loadRoundAction
             
         case .loadRound:
             state.faction.currentRound = currentRound
     }
     
-    return Empty().eraseToAnyPublisher()
+    return noAction
 }
 
 typealias MyAppStore = Store<MyAppState, MyAppAction, MyEnvironment>
@@ -772,7 +847,7 @@ class Store<State, Action, Environment> : ObservableObject {
         self.environment = environment
         
         publisher
-            .print("Store.send")
+            .lane("Store.publisher", transformValue: transform(action:))
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: send)
             .store(in: &cancellables)
@@ -817,14 +892,37 @@ extension Store {
                 .store(in: &cancellables)
         }
     }
+    func transform(action: Action) -> String {
+        let x = action as! MyAppAction
+        
+        switch(x) {
+            case .faction(let act):
+                return act.description
+            case .squad(let act):
+                return act.description
+            case .ship(let act):
+                return "MyShipAction \(act)"
+            case .upgrades(let act):
+                return "UpgradesAction \(act)"
+            case .xwsImport(let act):
+                return "MyXWSImportAction \(act)"
+            case .tools(let act):
+                return "ToolsAction \(act)"
+            case .factionFilter(let act):
+                return "MyFactionFilterListAction \(act)"
+            default:
+                return "Action is: \(action)"
+        }
+    }
     
     func send_new(_ action: Action) {
         Just(action)
-            .print("Store.send")
+            .lane("send_new Just", filter: [.event], transformValue: transform(action:))
             .flatMap{
                 return self.reducer(&self.state, $0, self.environment)
             }
             .eraseToAnyPublisher()
+            .lane("send_new flatMap", filter: [.event], transformValue: transform(action:))
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: {
                 self.publisher.send($0)

@@ -477,22 +477,22 @@ func getJSONFor(ship: String, faction: String) -> String {
 }
 
 @discardableResult
-func measure<A>(name: String = "", _ block: () -> A) -> A {
+func measure<A>(_ feature: String = "", name: String = "", _ block: () -> A) -> A {
     let startTime = CACurrentMediaTime()
     let result = block()
     let timeElapsed = CACurrentMediaTime() - startTime
-    print("Time: \(name) - \(timeElapsed)")
+    print("\(feature) Time: \(name) - \(timeElapsed)")
     return result
 }
 
 
 @discardableResult
-func measureThrows<A>(name: String = "", _ block: () throws -> A) throws -> A {
+func measureThrows<A>(_ feature: String = "", name: String = "", _ block: () throws -> A) throws -> A {
     do {
         let startTime = CACurrentMediaTime()
         let result = try block()
         let timeElapsed = CACurrentMediaTime() - startTime
-        print("Time: \(name) - \(timeElapsed)")
+        print("\(feature) Time: \(name) - \(timeElapsed)")
         return result
     } catch {
         throw SquadServiceProtocolError.saveSquadError(error.localizedDescription)
