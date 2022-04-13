@@ -132,6 +132,7 @@ class CacheService : CacheServiceProtocol {
             // UpgradeCardEnum cases and calling getUpgrade
             allUpgrades = getUpgradesFromCache()
             
+            // Why not cache the ShipPilot since we are also caching the Ship
             return ShipPilot(ship: ship,
                              upgrades: allUpgrades,
                              points: squadPilot.points,

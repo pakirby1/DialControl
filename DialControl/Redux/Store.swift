@@ -711,7 +711,7 @@ func factionReducer(state: inout MyAppState,
                     .os_log(message: "Store.send MyFactionSquadListAction.getShips.map")
                     .eraseToAnyPublisher()
             }
-            
+
 //            state.faction.squadDataList.setShips(data: data)
 //            let x = state.faction.squadDataList[0]
 //            logMessage("pilot count: \(x.shipPilots.count)")
