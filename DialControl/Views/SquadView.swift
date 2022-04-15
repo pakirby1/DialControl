@@ -95,21 +95,23 @@ struct SquadView: View {
 
 struct SquadCardViewModel {
     static func getShips(squad: Squad, squadData: SquadData) -> [ShipPilot] {
-        let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
-        _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
+        measure(name: "SquadCardViewModel getShips(...)") {
+            let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
+            _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
 
-        let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
+            let zipped: Zip2Sequence<[SquadPilot], [PilotState]> = zip(squad.pilots, pilotStates)
 
-        _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
+            _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
 
-        let ret: [ShipPilot] = zipped.map{
-            // Making multiple calls to getShip
-            global_getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+            let ret: [ShipPilot] = zipped.map{
+                // Making multiple calls to getShip
+                global_getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
+            }
+
+            ret.printAll(tag: "PAK_DialStatus getShips()")
+
+            return ret
         }
-
-        ret.printAll(tag: "PAK_DialStatus getShips()")
-
-        return ret
     }
 }
 
@@ -122,7 +124,13 @@ func global_getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState
     print("faction: \(squad.faction)")
     print("pilotStateId: \(String(describing: pilotState.id))")
 
-    return measure(name:"global_getShip") { () -> ShipPilot in
+    return measure("Performace", name:"global_getShip") { () -> ShipPilot in
+        /*
+         func CacheSerivce.getShip(squad: Squad,
+                      squadPilot: SquadPilot,
+                      pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
+         */
+        
         /// use CacheService.shipCache property
         /// - NetworkCacheService.loadData(...)
             /// - check if the `Ship` for this ship & faction exists in the cache keyed by (ship xws, faction xws) ShipKey,

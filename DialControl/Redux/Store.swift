@@ -604,11 +604,13 @@ func squadReducer(state: inout MySquadViewState,
             })
         
         case let .getShips(squad, data):
-            state.squad = squad
-            state.squadData = data
-            state.shipPilots = SquadCardViewModel.getShips(
-                squad: squad,
-                squadData: data)
+            measure(name: "Performance squadReducer .getShips") {
+                state.squad = squad
+                state.squadData = data
+                state.shipPilots = SquadCardViewModel.getShips(
+                    squad: squad,
+                    squadData: data)
+            }
     }
     
     return noAction
@@ -692,11 +694,13 @@ func factionReducer(state: inout MyAppState,
     
     switch(action) {
         case let .setShips(data, shipPilots):
-            global_os_log("Store.send factionReducer.setShips", "shipPilots.count \(shipPilots.count)")
-            state
-                .faction
-                .squadDataList
-                .setShips(data: data, shipPilots: shipPilots)
+            measure("Performance", name: "factionReducer .setShips") {
+                global_os_log("Store.send factionReducer.setShips", "shipPilots.count \(shipPilots.count)")
+                state
+                    .faction
+                    .squadDataList
+                    .setShips(data: data, shipPilots: shipPilots)
+            }
             
         case let .getShips(data):
             global_os_log("Store.send factionReducer.getShips", data.description)
@@ -707,7 +711,9 @@ func factionReducer(state: inout MyAppState,
                     .getShips(squad: data.squad, squadData: data)
                     .os_log(message: "Store.send MyFactionSquadListAction.getShips")
                     .replaceError(with: [])
-                    .map { MyAppAction.faction(action: .setShips(data, $0)) }
+                    .map {
+                        MyAppAction.faction(action: .setShips(data, $0))
+                    }
                     .os_log(message: "Store.send MyFactionSquadListAction.getShips.map")
                     .eraseToAnyPublisher()
             }
