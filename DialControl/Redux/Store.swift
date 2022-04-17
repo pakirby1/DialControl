@@ -146,6 +146,7 @@ enum MySquadAction {
     case updateSquad(SquadData)
     case updatePilotState(PilotStateData, PilotState)
     case getShips(Squad, SquadData)
+    case setShips([ShipPilot])
     case flipDial(PilotStateData, PilotState)
 }
 
@@ -161,6 +162,8 @@ extension MySquadAction : CustomStringConvertible {
                 return "MySquadAction.updateSquad( \(String(describing: squadData.name)) )"
             case let .flipDial(psd, _):
                 return "MySquadAction.flipDial( \(psd.pilot_index) )"
+            case let .setShips(shipPilots):
+                return "MySquadAction.setShips( \(String(describing: shipPilots.count)) )"
         }
     }
 }
@@ -604,13 +607,18 @@ func squadReducer(state: inout MySquadViewState,
             })
         
         case let .getShips(squad, data):
-            measure(name: "Performance squadReducer .getShips") {
+            measure(name: "Performance squadReducer .getShips") { () -> MySquadAction in 
                 state.squad = squad
                 state.squadData = data
-                state.shipPilots = SquadCardViewModel.getShips(
+                let shipPilots = SquadCardViewModel.getShips(
                     squad: squad,
                     squadData: data)
+                
+                return MySquadAction.setShips(shipPilots)
             }
+            
+        case let .setShips(shipPilots):
+            state.shipPilots = shipPilots
     }
     
     return noAction

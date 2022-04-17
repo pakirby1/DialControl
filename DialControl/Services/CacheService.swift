@@ -58,6 +58,7 @@ class CacheNew<Key: Hashable & CustomStringConvertible, Value> {
 typealias ShipPilotResult = Result<ShipPilot, Error>
 typealias ShipResult = Result<Ship, Error>
 
+/// <#Description#>
 class CacheService : CacheServiceProtocol {
     private var shipCache = CacheNew<ShipKey, Ship>()
     private var upgradeCache = CacheNew<String, [Upgrade]>()
