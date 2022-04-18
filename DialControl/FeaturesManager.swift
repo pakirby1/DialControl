@@ -34,20 +34,22 @@ class FeaturesManager {
     static let shared = FeaturesManager()
     
     func configureFeatures() {
-        add(DefaultFeature(id: FeatureId.MyRedux, enabled: true))
+        add(Feature(id: FeatureId.MyRedux, enabled: true))
+        add(Feature(id: FeatureId.getShips, enabled: true))
     }
 }
 
 enum FeatureId : String {
     case MyRedux
+    case getShips
 }
 
-protocol Feature {
+protocol IFeature {
     var id: FeatureId { get }
     var enabled: Bool { get }
 }
 
-struct DefaultFeature: Feature {
+struct Feature: IFeature {
     let id: FeatureId
     let enabled: Bool
 }

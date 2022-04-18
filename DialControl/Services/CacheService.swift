@@ -49,6 +49,7 @@ class CacheNew<Key: Hashable & CustomStringConvertible, Value> {
                     return value
                     
                 case .failure( _):
+                    // FIXME : return an error...
                     return value
             }
         }

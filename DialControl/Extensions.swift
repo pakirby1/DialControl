@@ -474,3 +474,21 @@ func executionTime(_ label: String, block: () -> ()) {
     print("\(label) Took \(diff) seconds")
 }
 
+extension Array where Element: Publisher {
+
+    
+    /// Combines an array of publishers with a shared type and error type.
+    /// - Returns: <#description#>
+    /// – Jonathan Crooke
+    /// https://stackoverflow.com/questions/65397556/swift-combine-how-to-combine-publishers-and-sink-when-only-one-publishers-valu
+    func combineAll() -> AnyPublisher<[Element.Output], Element.Failure>? {         guard let first = first else { return nil }
+        
+        return dropFirst()
+            .reduce(into: AnyPublisher(first.map { [$0] })) {
+                $0 = $0.combineLatest($1) { $0 + [$1] }                     .eraseToAnyPublisher()
+                }
+    }
+}
+
+
+

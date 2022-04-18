@@ -271,12 +271,22 @@ extension SquadService {
             global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
         }
         
-        func buildReturn() -> AnyPublisher<[ShipPilot], Never> {
+        func getShipsStream() -> AnyPublisher<[ShipPilot], Never> {
             func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
             {
-                return cacheService.getShip(squad: squad,
-                                     squadPilot: squadPilot,
-                                     pilotState: pilotState)
+                if FeaturesManager.shared.isFeatureEnabled(.getShips)
+                {
+                    return measure("Performance", name: "SquadService.getShips(...).getShipsStream(). cacheService.getShip(...)") {
+                        return cacheService.getShip(squad: squad,
+                                             squadPilot: squadPilot,
+                                             pilotState: pilotState)
+                    }
+                } else {
+                    return measure("Performance", name: "SquadService.getShips(...).getShipsStream(). global_getShip(...)") {
+                        let shipPilot: ShipPilot = global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
+                        return Just(shipPilot).eraseToAnyPublisher()
+                    }
+                }
             }
             
             let pilotStates: [PilotState] = measure("Performance", name: "SquadService.getShips.buildReturn().pilotStates")
@@ -318,8 +328,8 @@ extension SquadService {
             return shipPilotsStream
         }
         
-        return measure("Performance", name: "SquadService.getShips.buildReturn()") {
-            return buildReturn()
+        return measure("Performance", name: "SquadService.getShips.getShipsStream()") {
+            return getShipsStream()
         }
     }
 }

@@ -229,9 +229,8 @@ extension MyFactionSquadListAction : CustomStringConvertible, NameDescribable {
                 return "\(self.typeName).loadRound"
         }
     }
-    
-    
 }
+
 struct MyEnvironment {
     var squadService: SquadService
     var pilotStateService: PilotStateService
@@ -246,7 +245,6 @@ func myAppReducer(
     environment: MyEnvironment
 ) -> AnyPublisher<MyAppAction, Never>
 {
-    
     switch action {
         case .upgrades(let action):
             print(action)
@@ -614,6 +612,8 @@ func squadReducer(state: inout MySquadViewState,
                     squad: squad,
                     squadData: data)
                 
+                state.shipPilots = shipPilots
+                
                 return MySquadAction.setShips(shipPilots)
             }
             
@@ -906,6 +906,7 @@ extension Store {
                 .store(in: &cancellables)
         }
     }
+    
     func transform(action: Action) -> String {
         let x = action as! MyAppAction
         
