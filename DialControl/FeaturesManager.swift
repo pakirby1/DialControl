@@ -8,6 +8,19 @@
 
 import Foundation
 
+/*
+ fm.isFeatureEnabled(FeatureId.getShips) { isTrue in
+    if (isTrue) {
+        // foo()
+    } else {
+        // bar()
+    }
+ }
+ 
+ fm.isFeatureEnabled(FeatrueId.getShips, enabled: {}, disabled: {})
+ 
+ func isFeatureEnabled(_ id: FeatureId
+ */
 class FeaturesManager {
     var features: [FeatureId: Feature] = [:]
     
@@ -36,6 +49,25 @@ class FeaturesManager {
     func configureFeatures() {
         add(Feature(id: FeatureId.MyRedux, enabled: true))
         add(Feature(id: FeatureId.getShips, enabled: true))
+    }
+}
+
+extension FeaturesManager {
+    func isFeatureEnabled<T>(_ id: FeatureId, completion: (Bool) -> T) -> T {
+        let status = isFeatureEnabled(id)
+        return completion(status)
+    }
+}
+
+extension FeaturesManager {
+    func isFeatureEnabled(_ id: FeatureId, enabled: () -> (), disabled: () -> ()) {
+        let status = isFeatureEnabled(id)
+        
+        if status {
+            enabled()
+        } else {
+            disabled()
+        }
     }
 }
 

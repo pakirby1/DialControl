@@ -14,8 +14,8 @@
             filePath = "DialControl/Services/SquadService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "332"
-            endingLineNumber = "332"
+            startingLineNumber = "353"
+            endingLineNumber = "353"
             landmarkName = "getShips(squad:squadData:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,8 +30,8 @@
             filePath = "DialControl/Services/SquadService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
+            startingLineNumber = "301"
+            endingLineNumber = "301"
             landmarkName = "getShip(squad:squadPilot:pilotState:)"
             landmarkType = "9">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "DialControl/Services/SquadService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
+            startingLineNumber = "307"
+            endingLineNumber = "307"
             landmarkName = "getShip(squad:squadPilot:pilotState:)"
             landmarkType = "9">
          </BreakpointContent>
