@@ -272,41 +272,12 @@ extension SquadService {
         }
         
         func getShipsStream() -> AnyPublisher<[ShipPilot], Never> {
-            func getShip_PAK(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
-            {
-                func measureGetShips(_ status: Bool) -> AnyPublisher<ShipPilot, Never> {
-                    if status
-                    {
-                        return measure("Performance", name: "SquadService.getShips(...).getShipsStream(). cacheService.getShip(...)") {
-                            return cacheService.getShip(squad: squad,
-                                                 squadPilot: squadPilot,
-                                                 pilotState: pilotState)
-                        }
-                    } else {
-                        return measure("Performance", name: "SquadService.getShips(...).getShipsStream(). global_getShip(...)") {
-                            let shipPilot: ShipPilot = global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
-                            return Just(shipPilot).eraseToAnyPublisher()
-                        }
-                    }
-                }
-                
-                return FeaturesManager.shared.isFeatureEnabled(.getShips, completion: measureGetShips(_:))
-            }
-            
             func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
             {
-                if FeaturesManager.shared.isFeatureEnabled(.getShips)
-                {
-                    return measure("Performance", name: "SquadService.getShips(...).getShipsStream(). cacheService.getShip(...)") {
-                        return cacheService.getShip(squad: squad,
-                                             squadPilot: squadPilot,
-                                             pilotState: pilotState)
-                    }
-                } else {
-                    return measure("Performance", name: "SquadService.getShips(...).getShipsStream(). global_getShip(...)") {
-                        let shipPilot: ShipPilot = global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
-                        return Just(shipPilot).eraseToAnyPublisher()
-                    }
+                return measure("Performance", name: "SquadService.getShips(...).getShipsStream(). cacheService.getShip(...)") {
+                    return cacheService.getShip(squad: squad,
+                                                squadPilot: squadPilot,
+                                                pilotState: pilotState)
                 }
             }
             

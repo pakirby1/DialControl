@@ -48,7 +48,6 @@ class FeaturesManager {
     
     func configureFeatures() {
         add(Feature(id: FeatureId.MyRedux, enabled: true))
-        add(Feature(id: FeatureId.getShips, enabled: true))
     }
 }
 
@@ -73,7 +72,6 @@ extension FeaturesManager {
 
 enum FeatureId : String {
     case MyRedux
-    case getShips
 }
 
 protocol IFeature {
