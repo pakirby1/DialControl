@@ -1542,6 +1542,7 @@
         "title": "Aayla Secura",
         "type": "Crew",
         "slots": ["Crew"],
+        "force": { "value": 1, "recovers": 1 },
         "grants": [
           {
             "type": "action",

@@ -16,7 +16,7 @@ protocol CacheServiceProtocol {
                  pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
 }
 
-class CacheNew<Key: Hashable & CustomStringConvertible, Value> {
+class Cache<Key: Hashable & CustomStringConvertible, Value> {
     private var store = [Key: Value]()
 
     func getValue(key: Key, factory: @escaping (Key) -> Value) -> Value {
@@ -61,8 +61,8 @@ typealias ShipResult = Result<Ship, Error>
 
 /// <#Description#>
 class CacheService : CacheServiceProtocol {
-    private var shipCache = CacheNew<ShipKey, Ship>()
-    private var upgradeCache = CacheNew<String, [Upgrade]>()
+    private var shipCache = Cache<ShipKey, Ship>()
+    private var upgradeCache = Cache<String, [Upgrade]>()
     
     enum CacheError : Error {
         case FactoryFailure(String)
