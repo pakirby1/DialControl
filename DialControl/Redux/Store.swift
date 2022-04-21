@@ -629,7 +629,7 @@ func factionReducer(state: inout MyAppState,
                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
     @UserDefaultsBacked<Int>(key: "currentRound") var currentRound = 0
-    
+
     var showFavoritesOnly: Bool {
         get { UserDefaults.standard.bool(forKey: "displayFavoritesOnly") }
         set { UserDefaults.standard.set(newValue, forKey: "displayFavoritesOnly") }
@@ -659,17 +659,7 @@ func factionReducer(state: inout MyAppState,
             }
         }
 
-        func setSquads_Old(squads: [SquadData]) {
-            let showFavoritesOnly = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
-            
-            if showFavoritesOnly {
-                filterByFavorites()
-            } else {
-                state.faction.squadDataList = squads
-            }
-        }
-        
-        func setSquads_New(squads: [SquadData]) {
+        measure(name: "favoriteTapped.setSquads") {
             var filters: [SquadDataFilter] = []
             
             if showFavoritesOnly {
@@ -686,11 +676,6 @@ func factionReducer(state: inout MyAppState,
             state.faction.squadDataList = filters.reduce(squads) { squads, filter in
                 return squads.filter(filter)
             }
-        }
-        
-//        setSquads_Old(squads: squads)
-        measure(name: "favoriteTapped.setSquads") {
-            setSquads_New(squads: squads)
         }
     }
     

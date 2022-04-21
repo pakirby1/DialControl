@@ -266,11 +266,6 @@ extension SquadService {
     /// Store reducers call this...
     func getShips(squad: Squad, squadData: SquadData) -> AnyPublisher<[ShipPilot], Never>
     {
-        func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> ShipPilot
-        {
-            global_getShip(squad: squad, squadPilot: squadPilot, pilotState: pilotState)
-        }
-        
         func getShipsStream() -> AnyPublisher<[ShipPilot], Never> {
             func getShip(squad: Squad, squadPilot: SquadPilot, pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
             {
