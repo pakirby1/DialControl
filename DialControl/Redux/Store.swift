@@ -61,6 +61,7 @@ struct MySquadViewState {
     var shipPilots: [ShipPilot] = []
     var squad: Squad?
     var squadData: SquadData?
+    var cancellables = Set<AnyCancellable>()
 }
 
 struct FactionSquadListState {
@@ -605,17 +606,64 @@ func squadReducer(state: inout MySquadViewState,
             })
         
         case let .getShips(squad, data):
-            measure(name: "Performance squadReducer .getShips") { () -> MySquadAction in 
-                state.squad = squad
-                state.squadData = data
-                let shipPilots = SquadCardViewModel.getShips(
-                    squad: squad,
-                    squadData: data)
+            global_os_log("Store.send squadReducer.getShips", data.description)
+            state.squad = squad
+            state.squadData = data
+            
+            measure("Performance", name: "squadReducer .getShips") { () -> AnyPublisher<[ShipPilot], Never> in
+                environment
+                    .squadService
+                    .getShips(squad: data.squad, squadData: data)
+                    .map {
+                        MyAppAction.squad(action: .setShips($0))
+                        //                        MyAppAction.faction(action: .setShips(data, $0))
+                    }
+                    .sink(receiveCompletion: { completion in
+                        switch completion {
+                            case .finished:
+                                // no associated data, but you can react to knowing the
+                                // request has been completed
+                                global_os_log("Store.send squadReducer.getShips", "completion: .finished")
+                                break
+                            case .failure(let anError):
+                                // do what you want with the error details, presenting,
+                                // logging, or hiding as appropriate
+                                global_os_log("Store.send squadReducer.getShips", "completion: .failure(\(anError))")
+                                break
+                            }
+                    }, receiveValue: { action in
+                        global_os_log("Store.send squadReducer.getShips", "action: \(action)")
+                    })
+                    .store(in: &state.cancellables)
+                    
+//                    .do(handler: { _ in
+//                        global_os_log("squadReducer.getShips.squadService.getShips output")
+//                    })
+//                    .os_log(message: "Store.send MySquadAction.getShips")
+//                    .replaceError(with: [])
+//                    .os_log(message: "Store.send MySquadAction.getShips.replaceError(with): [])")
+//                    .map {
+//                        MyAppAction.squad(action: .setShips($0))
+////                        MyAppAction.faction(action: .setShips(data, $0))
+//                    }
+//                    .os_log(message: "Store.send MySquadAction.getShips.map")
+//                    .eraseToAnyPublisher()
                 
-                state.shipPilots = shipPilots
-                
-                return MySquadAction.setShips(shipPilots)
+                return Empty().eraseToAnyPublisher()
             }
+
+//        case let .getShips(squad, data):
+//            measure(name: "Performance squadReducer .getShips") { () -> MySquadAction in
+//                state.squad = squad
+//                state.squadData = data
+//                let shipPilots = SquadCardViewModel.getShips(
+//                    squad: squad,
+//                    squadData: data)
+//
+//                state.shipPilots = shipPilots
+//
+//                return MySquadAction.setShips(shipPilots)
+//            }
             
         case let .setShips(shipPilots):
             state.shipPilots = shipPilots

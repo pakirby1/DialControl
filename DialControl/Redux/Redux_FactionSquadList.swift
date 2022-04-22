@@ -329,7 +329,7 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
     }
     
     func getShips(squad: SquadData) {
-        self.store.send(.faction(action: .getShips(self.squadData)))
+//        self.store.send(.faction(action: .getShips(self.squadData)))
     }
     
     let points: Int = 150

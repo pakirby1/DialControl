@@ -99,11 +99,13 @@ class ViewFactory: ObservableObject {
                             .environmentObject(store))
                 
         case .squadViewPAK(let squad, let squadData):
-            return AnyView(Redux_SquadView(squad: squad,
-                                     squadData: squadData)
-                .environmentObject(self)
-                .environmentObject(store)
-            )
+            return measure("Performance", name: "ViewFactory.Redux_buildView().squadViewPAK") {
+                return AnyView(Redux_SquadView(squad: squad,
+                                               squadData: squadData)
+                                .environmentObject(self)
+                                .environmentObject(store)
+                )
+            }
             
         case .shipViewNew(let shipPilot, let squad):
             return buildShipView(shipPilot: shipPilot, squad: squad)
@@ -118,9 +120,11 @@ class ViewFactory: ObservableObject {
             return AnyView(MultilineTextView_ContentView())
         
         case .factionSquadList(let faction):
-            return AnyView(Redux_FactionSquadList(faction: faction.rawValue)
-                .environmentObject(self)
-                .environmentObject(store))
+            return measure("Performance", name: "ViewFactory.Redux_buildView().factionSquadList") {
+                return AnyView(Redux_FactionSquadList(faction: faction.rawValue)
+                                .environmentObject(self)
+                                .environmentObject(store))
+            }
             
         case .factionFilterView:
             return AnyView(Redux_FactionFilterView()
