@@ -314,22 +314,7 @@ extension SquadService {
             
 //            let ret: AnyPublisher<[ShipPilot], Never> =
             shipPilotsStream
-                .sink(receiveCompletion: { completion in
-                    switch completion {
-                        case .finished:
-                            // no associated data, but you can react to knowing the
-                            // request has been completed
-                            global_os_log("SquadService.getShips.getShipsStream.shipPilotsStream", "completion: .finished")
-                            break
-                        case .failure(let anError):
-                            // do what you want with the error details, presenting,
-                            // logging, or hiding as appropriate
-                            global_os_log("SquadService.getShips.getShipsStream.shipPilotsStream", "completion: .failure(\(anError))")
-                            break
-                        }
-                }, receiveValue: { shipPilots in
-                    global_os_log("SquadService.getShips.getShipsStream.shipPilotsStream", "shipPilots.count: \(shipPilots.count)")
-                })
+                .compactSink(id: "SquadService.getShips.buildReturn()")
                 .store(in: &cancellables)
 
             return shipPilotsStream.eraseToAnyPublisher()

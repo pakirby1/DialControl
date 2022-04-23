@@ -27,3 +27,12 @@ public class SquadData: NSManagedObject {
 extension SquadData: DamagedSquadRepresenting {
     
 }
+
+extension Array where Element == ShipPilot {
+    var shortDescription: String {
+        let shipCount = self.count
+        let pilotNames: String = self.map(\.pilotName).joined(separator: ",")
+        
+        return "\(shipCount) ships with \(pilotNames) pilots"
+    }
+}

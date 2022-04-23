@@ -490,5 +490,33 @@ extension Array where Element: Publisher {
     }
 }
 
+public extension Publisher {
+    /// Performs a sink operation
+    ///
+    /// - note: Reduces boilerplate code
+    ///
+    /// - returns: A cancellable
+    func compactSink(id: String) -> AnyCancellable {
+        let logValue : (Self.Output) -> Void = { value in
+            global_os_log(id, "value: \(value)")
+        }
+        
+        return self.sink(receiveCompletion: { completion in
+            switch completion {
+                case .finished:
+                    // no associated data, but you can react to knowing the
+                    // request has been completed
+                    global_os_log(id, "completion: .finished")
+                    break
+                case .failure(let anError):
+                    // do what you want with the error details, presenting,
+                    // logging, or hiding as appropriate
+                    global_os_log(id, "completion: .failure(\(anError))")
+                    break
+                }
+        }, receiveValue: logValue)
+    }
+}
+
 
 

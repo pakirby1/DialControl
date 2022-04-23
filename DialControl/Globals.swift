@@ -16,11 +16,42 @@ func global_os_log(_ message: String = "", _ value: String = "") {
     os.os_log("[%@] value: %@", message, value)
 }
 
+func global_os_log(_ message: String = "", _ valueFactory: () -> String) {
+    os.os_log("[%@] value: %@", message, valueFactory())
+}
+
 extension Publisher {
+    
+    /// Logs to the console
+    /// .os_log(message: "Store.send MySquadAction.getShips")
+    /// - Parameter message: <#message description#>
+    /// - Returns: <#description#>
     func os_log(message: String = "") -> Publishers.HandleEvents<Self> {
         handleEvents(receiveOutput: { value in
             os.os_log("[%@] value: %@", message, String(describing: value))
         })
+    }
+    
+    
+    /// Logs to the console
+    /// - Parameters:
+    ///   - message: identifier
+    ///   - valueFactory: builds a string vs using the default type.description.
+    /// - Returns: new publisher
+    func os_log(message: String = "", valueFactory: @escaping (Self.Output) -> String ) -> Publishers.HandleEvents<Self>
+    {
+        handleEvents(receiveOutput: { value in
+            os.os_log("[%@] value: %@", message, valueFactory(value))
+        })
+    }
+}
+
+// Domain specific Publisher extensions
+extension Publisher where Output == [ShipPilot] {
+    func logShips(squadName: String) -> Publishers.HandleEvents<Self> {
+        return self.os_log(message: "Store.send MySquadAction.getShips") { shipPilots in
+            "\(String(describing: squadName)) : \(shipPilots.shortDescription)"
+        }
     }
 }
     
