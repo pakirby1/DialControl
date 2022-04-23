@@ -624,7 +624,7 @@ struct Redux_FactionSquadCard: View  {
             // view body needs to be recreated after onAppear
             // This can be done by updating an @State property, or
             // observing an @Published property.
-            global_os_log("Redux_FactionSquadCard.body.onAppear()")
+            global_os_log("Redux_FactionSquadCard.body.onAppear() for \(String(describing: self.squadData.squad.name))")
             
             self.viewModel.getShips(squad: self.squadData)
             
