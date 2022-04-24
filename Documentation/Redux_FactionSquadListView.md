@@ -2,6 +2,7 @@
 
 Update to use a view model.
 
+![Redux Architecture](https://pakirby1.github.io/images/CacheService-Redux_FactionSquadList.png)
 
 ### Redux_FactionSquadListView
 
