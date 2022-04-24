@@ -62,6 +62,9 @@
 		AE4E08DE243B547800E7899A /* LinkedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE4E08DD243B547800E7899A /* LinkedView.swift */; };
 		AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */; };
 		AE5E326C24DB4D1A0023E063 /* xwing-miniatures.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */; };
+		AE5FEDAC28155AFF00978FD3 /* Redux_FactionSquadCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5FEDAB28155AFF00978FD3 /* Redux_FactionSquadCard.swift */; };
+		AE5FEDAF2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf in Resources */ = {isa = PBXBuildFile; fileRef = AE5FEDAE2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf */; };
+		AE5FEDB3281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg in Resources */ = {isa = PBXBuildFile; fileRef = AE5FEDB2281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg */; };
 		AE713D18272BF42300A44912 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE713D17272BF42300A44912 /* CacheService.swift */; };
 		AE741B7424EE92E700B0531D /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */; };
 		AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */; };
@@ -181,6 +184,10 @@
 		AE4E08DD243B547800E7899A /* LinkedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkedView.swift; sourceTree = "<group>"; };
 		AE5E326924DB4D1A0023E063 /* xwing-miniatures-ships.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures-ships.ttf"; sourceTree = "<group>"; };
 		AE5E326A24DB4D1A0023E063 /* xwing-miniatures.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "xwing-miniatures.ttf"; sourceTree = "<group>"; };
+		AE5FEDAB28155AFF00978FD3 /* Redux_FactionSquadCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_FactionSquadCard.swift; sourceTree = "<group>"; };
+		AE5FEDAD281575C900978FD3 /* Redux_FactionSquadListView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Redux_FactionSquadListView.md; sourceTree = "<group>"; };
+		AE5FEDAE2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "CacheService-Redux_FactionSquadList.pdf"; sourceTree = "<group>"; };
+		AE5FEDB2281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "CacheService-Redux_FactionSquadList.svg"; sourceTree = "<group>"; };
 		AE713D17272BF42300A44912 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -434,6 +441,7 @@
 				AE7E5B3E2646A78C00BBEA15 /* Redux_FactionFilterView.swift */,
 				AEC76F90264BD9CD00449A56 /* Redux_ToolsView.swift */,
 				AE2ADE822683142400142419 /* ProgressControl.swift */,
+				AE5FEDAB28155AFF00978FD3 /* Redux_FactionSquadCard.swift */,
 			);
 			path = Redux;
 			sourceTree = "<group>";
@@ -466,7 +474,10 @@
 		AECF88C7253AB68800AAA23B /* Documentation */ = {
 			isa = PBXGroup;
 			children = (
+				AE5FEDB2281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg */,
+				AE5FEDAE2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf */,
 				AECF88C8253AB6AD00AAA23B /* README.md */,
+				AE5FEDAD281575C900978FD3 /* Redux_FactionSquadListView.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
@@ -591,10 +602,12 @@
 				AE2C0EC9243CA52A00042318 /* pilots in Resources */,
 				AE4D58D223F8087D00C66136 /* LaunchScreen.storyboard in Resources */,
 				AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */,
+				AE5FEDAF2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf in Resources */,
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
 				AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */,
 				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
 				AE4D58CC23F8087D00C66136 /* Assets.xcassets in Resources */,
+				AE5FEDB3281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg in Resources */,
 				AE2D80EC24277F0100248CA4 /* squad.json in Resources */,
 				AE2C0F0A24408AE400042318 /* upgrades in Resources */,
 			);
@@ -658,6 +671,7 @@
 				AE15E78B241D00120002F696 /* Ship.swift in Sources */,
 				AEF3B4622439B83100A49717 /* SelectionIndicator.swift in Sources */,
 				AE390EF326D6DBCB007D054A /* AsyncObjectView.swift in Sources */,
+				AE5FEDAC28155AFF00978FD3 /* Redux_FactionSquadCard.swift in Sources */,
 				AEB3A82625FA3B8F00F3C68D /* Redux_FactionSquadList.swift in Sources */,
 				AE1FBE5E24166675005C54F5 /* Extensions.swift in Sources */,
 				AEF5677025DFCD17006DCD4C /* ShipService.swift in Sources */,
