@@ -65,6 +65,7 @@
 		AE5FEDAC28155AFF00978FD3 /* Redux_FactionSquadCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5FEDAB28155AFF00978FD3 /* Redux_FactionSquadCard.swift */; };
 		AE5FEDAF2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf in Resources */ = {isa = PBXBuildFile; fileRef = AE5FEDAE2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf */; };
 		AE5FEDB3281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg in Resources */ = {isa = PBXBuildFile; fileRef = AE5FEDB2281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg */; };
+		AE5FEDB52816BF8400978FD3 /* ViewPropertiesRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE5FEDB42816BF8400978FD3 /* ViewPropertiesRepresentable.swift */; };
 		AE713D18272BF42300A44912 /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE713D17272BF42300A44912 /* CacheService.swift */; };
 		AE741B7424EE92E700B0531D /* PilotState+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */; };
 		AE741B7524EE92E700B0531D /* PilotState+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */; };
@@ -188,6 +189,7 @@
 		AE5FEDAD281575C900978FD3 /* Redux_FactionSquadListView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Redux_FactionSquadListView.md; sourceTree = "<group>"; };
 		AE5FEDAE2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "CacheService-Redux_FactionSquadList.pdf"; sourceTree = "<group>"; };
 		AE5FEDB2281579A100978FD3 /* CacheService-Redux_FactionSquadList.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = "CacheService-Redux_FactionSquadList.svg"; sourceTree = "<group>"; };
+		AE5FEDB42816BF8400978FD3 /* ViewPropertiesRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPropertiesRepresentable.swift; sourceTree = "<group>"; };
 		AE713D17272BF42300A44912 /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		AE741B7024EE92E700B0531D /* PilotState+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AE741B7124EE92E700B0531D /* PilotState+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PilotState+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -297,6 +299,7 @@
 		AE1FBE5724166422005C54F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AE5FEDB42816BF8400978FD3 /* ViewPropertiesRepresentable.swift */,
 				AEE65513260DE22D00AFAE6A /* HealthStatsView.swift */,
 				AE1DF8F024B5E0CD00B84D38 /* CardView.swift */,
 				AE4D58C923F8087C00C66136 /* ContentView.swift */,
@@ -696,6 +699,7 @@
 				AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */,
 				AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
+				AE5FEDB52816BF8400978FD3 /* ViewPropertiesRepresentable.swift in Sources */,
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
 				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,
 				AE4D58CA23F8087C00C66136 /* ContentView.swift in Sources */,

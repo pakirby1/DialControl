@@ -265,3 +265,40 @@ extension Redux_FactionSquadList {
         self.store.send(.faction(action: .updateFavorites(showFavoritesOnly)))
     }
 }
+
+class Redux_FactionSquadListViewModel {
+    var store: MyAppStore
+    var cancellables = Set<AnyCancellable>()
+    @Published var viewProperties: Redux_FactionSquadListViewProperties
+    
+    init(store: MyAppStore) {
+        self.store = store
+        self.viewProperties = Redux_FactionSquadListViewProperties.none
+        configureViewProperties()
+    }
+}
+
+struct Redux_FactionSquadListViewProperties {
+    let faction: String
+    let squadDataList: [SquadData]
+}
+
+extension Redux_FactionSquadListViewProperties {
+    static var none : Redux_FactionSquadListViewProperties {
+        return Redux_FactionSquadListViewProperties(faction: "", squadDataList: [])
+    }
+}
+
+extension Redux_FactionSquadListViewModel : ViewPropertyRepresentable {
+    var viewPropertiesPublished: Published<Redux_FactionSquadListViewProperties> {
+        self._viewProperties
+    }
+    
+    var viewPropertiesPublisher: Published<Redux_FactionSquadListViewProperties>.Publisher {
+        self.$viewProperties
+    }
+    
+    func buildViewProperties(state: MyAppState) -> Redux_FactionSquadListViewProperties {
+        return Redux_FactionSquadListViewProperties(faction: "", squadDataList: state.faction.squadDataList)
+    }
+}
