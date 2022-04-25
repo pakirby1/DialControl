@@ -121,7 +121,7 @@ class ViewFactory: ObservableObject {
         
         case .factionSquadList(let faction):
             return measure("Performance", name: "ViewFactory.Redux_buildView().factionSquadList") {
-                return AnyView(Redux_FactionSquadList(faction: faction.rawValue)
+                return AnyView(Redux_FactionSquadList(faction: faction.rawValue, store: store)
                                 .environmentObject(self)
                                 .environmentObject(store))
             }

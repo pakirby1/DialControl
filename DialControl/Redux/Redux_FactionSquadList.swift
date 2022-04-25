@@ -13,7 +13,7 @@ import Combine
 
 struct Redux_FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
-    @EnvironmentObject var store: MyAppStore
+    var store: MyAppStore
     
     @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
@@ -28,9 +28,22 @@ struct Redux_FactionSquadList: View {
     // Dealloc tracker
     let printer: DeallocPrinter
     
-    init(faction: String) {
+    @ObservedObject var viewModel: Redux_FactionSquadListViewModel
+    
+    init(faction: String, store: MyAppStore) {
+        self.store = store
         self.faction = faction
+        self.viewModel = Redux_FactionSquadListViewModel(store: store)
         self.printer = DeallocPrinter("damagedPoints FactionSquadList")
+    }
+    
+    var progressView : some View {
+        switch(self.viewModel.viewProperties.loadingState) {
+            case .pending:
+                return Text("Pending")
+            default:
+                return Text("")
+        }
     }
     
     var squadDataList : [SquadData] {
@@ -79,9 +92,7 @@ struct Redux_FactionSquadList: View {
             }
             
             var roundCount: some View {
-                func setRound(newRound: Int) {
-                    store.send(.faction(action: .setRound(newRound)))
-                }
+                
                 
                 func increment() {
                     let newRound = store.state.faction.currentRound + 1
@@ -118,7 +129,7 @@ struct Redux_FactionSquadList: View {
                         secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
                     )
                 }.onAppear(perform: {
-                    store.send(.faction(action: .loadRound))
+                    self.loadRound()
                 })
             }
             
@@ -167,7 +178,7 @@ struct Redux_FactionSquadList: View {
                     }
                     
                     func new() {
-                        self.store.send(.faction(action: .deleteAllSquads))
+                        deleteAllSquads()
                     }
                     
                     return {
@@ -230,6 +241,8 @@ struct Redux_FactionSquadList: View {
         }
         
         return VStack {
+            progressView
+            
             headerView
                 .padding(5)
             
@@ -248,25 +261,90 @@ struct Redux_FactionSquadList: View {
 }
 
 extension Redux_FactionSquadList {
+    func pak() {
+        func new() {
+            self.viewModel.send(.deleteAllSquads)
+        }
+
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList) {
+            new()
+            return
+        }
+        
+        self.store.send(.faction(action: .deleteAllSquads))
+
+    }
+        
+    func deleteAllSquads() {
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+        {
+            self.viewModel.send(.deleteAllSquads)
+        } else {
+            self.store.send(.faction(action: .deleteAllSquads))
+        }
+    }
+    
+    func loadRound() {
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+        {
+            self.viewModel.send(.loadRound)
+        }
+        else {
+            store.send(.faction(action: .loadRound))
+        }
+    }
+    
+    func setRound(newRound: Int) {
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+        {
+            self.viewModel.send(.setRound(newRound))
+        }
+        else {
+            store.send(.faction(action: .setRound(newRound)))
+        }
+    }
+    
     func deleteSquad(squadData: SquadData) {
-        self.store.send(.faction(action: .deleteSquad(squadData)))
-        refreshSquadsList()
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+        {
+            self.viewModel.send(.deleteSquad(squadData))
+            refreshSquadsList()
+        } else {
+            self.store.send(.faction(action: .deleteSquad(squadData)))
+            refreshSquadsList()
+        }
     }
 
     func updateSquad(squadData: SquadData) {
-        self.store.send(.faction(action: .updateSquad(squadData)))
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+        {
+            self.viewModel.send(.updateSquad(squadData))
+        } else {
+            self.store.send(.faction(action: .updateSquad(squadData)))
+        }
     }
 
     func refreshSquadsList() {
-        self.store.send(.faction(action: .loadSquads))
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+        {
+            self.viewModel.send(.refreshSquadsList)
+        } else {
+            self.store.send(.faction(action: .loadSquads))
+        }
     }
 
     func updateFavorites(showFavoritesOnly: Bool) {
-        self.store.send(.faction(action: .updateFavorites(showFavoritesOnly)))
+        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+        {
+            self.viewModel.send(.updateFavorites(showFavoritesOnly))
+        } else {
+            self.store.send(.faction(action: .updateFavorites(showFavoritesOnly)))
+        }
     }
 }
 
-class Redux_FactionSquadListViewModel {
+// MARK:- Redux_FactionSquadListViewModel
+class Redux_FactionSquadListViewModel : ObservableObject {
     var store: MyAppStore
     var cancellables = Set<AnyCancellable>()
     @Published var viewProperties: Redux_FactionSquadListViewProperties
@@ -278,14 +356,37 @@ class Redux_FactionSquadListViewModel {
     }
 }
 
-struct Redux_FactionSquadListViewProperties {
-    let faction: String
-    let squadDataList: [SquadData]
-}
-
-extension Redux_FactionSquadListViewProperties {
-    static var none : Redux_FactionSquadListViewProperties {
-        return Redux_FactionSquadListViewProperties(faction: "", squadDataList: [])
+extension Redux_FactionSquadListViewModel {
+    enum Redux_FactionSquadListViewModelAction {
+        case deleteSquad(SquadData)
+        case updateSquad(SquadData)
+        case updateFavorites(Bool)
+        case refreshSquadsList
+        case deleteAllSquads
+        case setRound(Int)
+        case loadRound
+    }
+    
+    func send(_ action: Redux_FactionSquadListViewModelAction) {
+        switch(action) {
+            case .refreshSquadsList:
+                // Update viewProperties to instruct the view to
+                // display a progress control
+                displayProgressControl()
+                self.store.send(.faction(action: .loadSquads))
+                
+            default :
+                return
+        }
+    }
+    
+    func displayProgressControl() {
+        let pendingViewProperties = Redux_FactionSquadListViewProperties(
+            faction: self.viewProperties.faction,
+            squadDataList: self.viewProperties.squadDataList,
+            loadingState: .pending)
+        
+        self.viewProperties = pendingViewProperties
     }
 }
 
@@ -299,6 +400,29 @@ extension Redux_FactionSquadListViewModel : ViewPropertyRepresentable {
     }
     
     func buildViewProperties(state: MyAppState) -> Redux_FactionSquadListViewProperties {
-        return Redux_FactionSquadListViewProperties(faction: "", squadDataList: state.faction.squadDataList)
+        return Redux_FactionSquadListViewProperties(
+            faction: "",
+            squadDataList: state.faction.squadDataList,
+            loadingState: .loaded)
     }
 }
+
+// MARK:- Redux_FactionSquadListViewProperties
+struct Redux_FactionSquadListViewProperties {
+    enum ViewLoadingState {
+        case idle
+        case pending
+        case loaded
+    }
+    
+    let faction: String
+    let squadDataList: [SquadData]
+    let loadingState: ViewLoadingState
+}
+
+extension Redux_FactionSquadListViewProperties {
+    static var none : Redux_FactionSquadListViewProperties {
+        return Redux_FactionSquadListViewProperties(faction: "", squadDataList: [], loadingState: .idle)
+    }
+}
+

@@ -48,6 +48,7 @@ class FeaturesManager {
     
     func configureFeatures() {
         add(Feature(id: FeatureId.MyRedux, enabled: true))
+        add(Feature(id: FeatureId.Redux_FactionSquadList, enabled: true))
     }
 }
 
@@ -59,7 +60,10 @@ extension FeaturesManager {
 }
 
 extension FeaturesManager {
-    func isFeatureEnabled(_ id: FeatureId, enabled: () -> (), disabled: () -> ()) {
+    func isFeatureEnabled(_ id: FeatureId,
+        enabled: () -> (),
+        disabled: () -> ())
+    {
         let status = isFeatureEnabled(id)
         
         if status {
@@ -72,6 +76,7 @@ extension FeaturesManager {
 
 enum FeatureId : String {
     case MyRedux
+    case Redux_FactionSquadList
 }
 
 protocol IFeature {
