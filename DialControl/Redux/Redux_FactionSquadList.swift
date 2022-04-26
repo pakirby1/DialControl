@@ -28,12 +28,12 @@ struct Redux_FactionSquadList: View {
     // Dealloc tracker
     let printer: DeallocPrinter
     
-    @ObservedObject var viewModel: Redux_FactionSquadListViewModel
+    @StateObject var viewModel: Redux_FactionSquadListViewModel
     
     init(faction: String, store: MyAppStore) {
         self.store = store
         self.faction = faction
-        self.viewModel = Redux_FactionSquadListViewModel(store: store)
+        self._viewModel = StateObject(wrappedValue: Redux_FactionSquadListViewModel(store: store))
         self.printer = DeallocPrinter("damagedPoints FactionSquadList")
     }
     
@@ -92,8 +92,6 @@ struct Redux_FactionSquadList: View {
             }
             
             var roundCount: some View {
-                
-                
                 func increment() {
                     let newRound = store.state.faction.currentRound + 1
                     
@@ -374,9 +372,24 @@ extension Redux_FactionSquadListViewModel {
                 // display a progress control
                 displayProgressControl()
                 self.store.send(.faction(action: .loadSquads))
+            
+            case let .deleteSquad(squadData):
+                self.store.send(.faction(action: .deleteSquad(squadData)))
+            
+            case let .updateSquad(squadData):
+                self.store.send(.faction(action: .updateSquad(squadData)))
                 
-            default :
-                return
+            case let .updateFavorites(showFavoritesOnly):
+                self.store.send(.faction(action: .updateFavorites(showFavoritesOnly)))
+            
+            case .deleteAllSquads:
+                self.store.send(.faction(action: .deleteAllSquads))
+                
+            case let .setRound(newRound):
+                store.send(.faction(action: .setRound(newRound)))
+                
+            case .loadRound:
+                store.send(.faction(action: .loadRound))
         }
     }
     
@@ -384,7 +397,7 @@ extension Redux_FactionSquadListViewModel {
         let pendingViewProperties = Redux_FactionSquadListViewProperties(
             faction: self.viewProperties.faction,
             squadDataList: self.viewProperties.squadDataList,
-            loadingState: .pending)
+            loadingState: .pending(0.1))
         
         self.viewProperties = pendingViewProperties
     }
@@ -411,7 +424,7 @@ extension Redux_FactionSquadListViewModel : ViewPropertyRepresentable {
 struct Redux_FactionSquadListViewProperties {
     enum ViewLoadingState {
         case idle
-        case pending
+        case pending(Double)
         case loaded
     }
     
