@@ -18,7 +18,6 @@ Update to use a view model.
 struct Redux_FactionSquadListView : View {
   @EnvironmentObject var viewFactory: ViewFactory
   @ObservedObject var viewModel: Redux_FactionSquadListViewModel
-  @State var displayDeleteAllConfirmation: Bool = false
   @State var displayFavoritesOnly: Bool
   @State var displayResetRoundCounterConfirmation: Bool
   let printer: DeallocPrinter

@@ -15,7 +15,6 @@ struct Redux_FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
     var store: MyAppStore
     
-    @State var displayDeleteAllConfirmation: Bool = false
     @State var displayFavoritesOnly: Bool = UserDefaults.standard.bool(forKey: "displayFavoritesOnly")
     @State var displayResetRoundCounter: Bool = false
     
@@ -41,8 +40,10 @@ struct Redux_FactionSquadList: View {
         switch(self.viewModel.viewProperties.loadingState) {
             case .pending:
                 return Text("Pending")
+            case .idle:
+                return Text("Idle")
             default:
-                return Text("")
+                return Text("Squad Lists")
         }
     }
     
@@ -168,36 +169,6 @@ struct Redux_FactionSquadList: View {
         }
         
         var squadList: some View {
-            var deleteAllAlertAction: () -> Void {
-                get {
-                    func old() {
-                        _ = squadDataList.map { self.deleteSquad(squadData: $0)
-                        }
-                    }
-                    
-                    func new() {
-                        deleteAllSquads()
-                    }
-                    
-                    return {
-                        if FeaturesManager.shared.isFeatureEnabled(.MyRedux)
-                        {
-                            new()
-                        } else {
-                            old()
-                        }
-                    }
-                }
-            }
-            
-            var cancelAlertAction: () -> Void {
-                get {
-                    return self.cancelAction(title: "Delete") {
-                        self.displayDeleteAllConfirmation = false
-                    }
-                }
-            }
-            
             var emptySection: some View {
                 Section {
                     Text("No squads found")
@@ -228,13 +199,6 @@ struct Redux_FactionSquadList: View {
             .onAppear {
                 logMessage("Redux_FactionSquadList.squadList.onAppear()")
                 self.refreshSquadsList()
-            }
-            .alert(isPresented: $displayDeleteAllConfirmation) {
-                Alert(title: Text("Delete"),
-                      message: Text("All Squads?"),
-                    primaryButton: Alert.Button.default(Text("Delete"), action: deleteAllAlertAction),
-                    secondaryButton: Alert.Button.cancel(Text("Cancel"), action: cancelAlertAction)
-                )
             }
         }
         
@@ -271,15 +235,6 @@ extension Redux_FactionSquadList {
         
         self.store.send(.faction(action: .deleteAllSquads))
 
-    }
-        
-    func deleteAllSquads() {
-        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
-        {
-            self.viewModel.send(.deleteAllSquads)
-        } else {
-            self.store.send(.faction(action: .deleteAllSquads))
-        }
     }
     
     func loadRound() {
@@ -370,7 +325,7 @@ extension Redux_FactionSquadListViewModel {
             case .refreshSquadsList:
                 // Update viewProperties to instruct the view to
                 // display a progress control
-                displayProgressControl()
+//                displayProgressControl()
                 self.store.send(.faction(action: .loadSquads))
             
             case let .deleteSquad(squadData):
@@ -412,11 +367,18 @@ extension Redux_FactionSquadListViewModel : ViewPropertyRepresentable {
         self.$viewProperties
     }
     
-    func buildViewProperties(state: MyAppState) -> Redux_FactionSquadListViewProperties {
-        return Redux_FactionSquadListViewProperties(
+    func buildViewProperties(state: MyAppState) -> Redux_FactionSquadListViewProperties
+    {
+        let ret = Redux_FactionSquadListViewProperties(
             faction: "",
             squadDataList: state.faction.squadDataList,
             loadingState: .loaded)
+        
+        global_os_log("buildViewProperties") {
+            return "\(ret.squadDataList.count) squads, loadingState: \(ret.loadingState)"
+        }
+        
+        return ret
     }
 }
 

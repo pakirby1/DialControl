@@ -241,7 +241,14 @@ struct Redux_FactionSquadCard: View  {
             }
             
             func new() {
-                self.store.send(.faction(action: .deleteSquad(self.squadData)))
+                if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
+                {
+                    old()
+                }
+                else {
+                    self.store.send(.faction(action: .deleteSquad(self.squadData)))
+                }
+                
             }
             
             return {
