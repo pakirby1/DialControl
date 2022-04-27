@@ -24,7 +24,7 @@ struct Redux_FactionSquadList: View {
     
     let faction: String
     
-    // Dealloc tracker
+    // Dealloc tracker (strong ref)
     let printer: DeallocPrinter
     
     @StateObject var viewModel: Redux_FactionSquadListViewModel
@@ -33,7 +33,7 @@ struct Redux_FactionSquadList: View {
         self.store = store
         self.faction = faction
         self._viewModel = StateObject(wrappedValue: Redux_FactionSquadListViewModel(store: store))
-        self.printer = DeallocPrinter("damagedPoints FactionSquadList")
+        self.printer = DeallocPrinter("Redux_FactionSquadList.init")
     }
     
     var progressView : some View {
@@ -298,14 +298,45 @@ extension Redux_FactionSquadList {
 
 // MARK:- Redux_FactionSquadListViewModel
 class Redux_FactionSquadListViewModel : ObservableObject {
+    let id = UUID()
     var store: MyAppStore
     var cancellables = Set<AnyCancellable>()
     @Published var viewProperties: Redux_FactionSquadListViewProperties
     
-    init(store: MyAppStore) {
+    init(store: MyAppStore)
+    {
         self.store = store
         self.viewProperties = Redux_FactionSquadListViewProperties.none
         configureViewProperties()
+        global_os_log("Redux_FactionSquadListViewModel.init \(id)")
+    }
+    
+    deinit {
+        global_os_log("Redux_FactionSquadListViewModel.deinit \(id)")
+    }
+    
+    func configureViewProperties() {
+        let stateSink = store.statePublisher
+            .lane("configureViewProperties() statePublisher")
+            .os_log(message: "configureViewProperties() statePublisher")
+            .map { state in
+                self.buildViewProperties(state: state)
+            }
+            .print()
+            .removeDuplicates { (prev, current) -> Bool in
+                    // Considers points to be duplicate if the x coordinate
+                    // is equal, and ignores the y coordinate
+                prev.squadDataList == current.squadDataList
+            }
+            //.lane("configureViewProperties() buildViewProperties")
+            .os_log(message: "configureViewProperties() buildViewProperties")
+            .sink { viewProperties in
+                self.viewProperties = viewProperties
+            }
+        
+        self.cancellables.insert(AnyCancellable(stateSink))
+        
+        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
     }
 }
 

@@ -343,18 +343,25 @@ protocol IDeallocPrinter {
 }
 
 class DeallocPrinter {
+    let id: UUID
     let label: String
     
     init(_ label: String) {
         self.label = label
-        print("allocated \(label)")
+        self.id = UUID()
+        print("allocated \(id) \(label)")
     }
     
     deinit {
-        print("deallocated \(label)")
+        print("deallocated \(id) \(label)")
     }
 }
 
+extension DeallocPrinter : CustomStringConvertible {
+    var description: String {
+        " \(id) \(label) "
+    }
+}
 /*
 func asyncMethod(completion: ((String) -> Void)) {
     //...

@@ -70,6 +70,17 @@ extension Publisher {
     }
 }
 
+@available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
+extension Publisher where Self.Output : Equatable {
+    public func distinct() -> AnyPublisher<Self.Output, Self.Failure> {
+        self.scan(([], nil)) {
+            $0.0.contains($1) ? ($0.0, nil) : ($0.0 + [$1], $1)
+        }
+        .compactMap { $0.1 }
+        .eraseToAnyPublisher()
+    }
+}
+
 extension View {
     func eraseToAnyView() -> AnyView {
         AnyView(self)
