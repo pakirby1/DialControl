@@ -28,12 +28,15 @@ struct Redux_FactionSquadList: View {
     let printer: DeallocPrinter
     
     @ObservedObject var viewModel: Redux_FactionSquadListViewModel
+    @ObservedObject var testViewModel: Test_Redux_FactionSquadListViewModel
     
     init(faction: String, store: MyAppStore) {
+        
         self.store = store
         self.faction = faction
         self.printer = DeallocPrinter("Redux_FactionSquadList.init")
         self.viewModel = Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
+        self.testViewModel = Test_Redux_FactionSquadListViewModel(viewID: self.printer.id)
     }
     
     var progressView : some View {
@@ -321,6 +324,19 @@ class Mock_Redux_FactionSquadListViewModel : ObservableObject {
     }
 }
 
+class Test_Redux_FactionSquadListViewModel : ObservableObject {
+    let id = UUID()
+    let viewID: UUID
+    
+    init(viewID: UUID) {
+        self.viewID = viewID
+        global_os_log("allocated Test_Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
+    }
+    
+    deinit {
+        global_os_log("deallocated Test_Redux_FactionSquadListViewModel.deinit \(id)  for view :\(viewID)")
+    }
+}
 // MARK:- Redux_FactionSquadListViewModel
 class Redux_FactionSquadListViewModel : ObservableObject {
     let id = UUID()
@@ -337,7 +353,6 @@ class Redux_FactionSquadListViewModel : ObservableObject {
     }
     
     deinit {
-        print("deallocated Redux_FactionSquadListViewModel.deinit \(id)  for view :\(id)")
         global_os_log("deallocated Redux_FactionSquadListViewModel.deinit \(id)  for view :\(id)")
     }
     
