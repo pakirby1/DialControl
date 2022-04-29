@@ -27,13 +27,13 @@ struct Redux_FactionSquadList: View {
     // Dealloc tracker (strong ref)
     let printer: DeallocPrinter
     
-    @StateObject var viewModel: Redux_FactionSquadListViewModel
+    @ObservedObject var viewModel: Redux_FactionSquadListViewModel
     
     init(faction: String, store: MyAppStore) {
         self.store = store
         self.faction = faction
-        self._viewModel = StateObject(wrappedValue: Redux_FactionSquadListViewModel(store: store))
         self.printer = DeallocPrinter("Redux_FactionSquadList.init")
+        self.viewModel = Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
     }
     
     var progressView : some View {
@@ -296,23 +296,49 @@ extension Redux_FactionSquadList {
     }
 }
 
+// MARK:- Mock_Redux_FactionSquadListViewModel
+class Mock_Redux_FactionSquadListViewModel : ObservableObject {
+    let id = UUID()
+    let viewID: UUID
+    @Published var viewProperties: Redux_FactionSquadListViewProperties = Redux_FactionSquadListViewProperties.none
+    
+    init(store: MyAppStore, viewID: UUID)
+    {
+        self.viewID = viewID
+        global_os_log("Mock_Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
+    }
+    
+    deinit {
+        print("Mock_Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
+        global_os_log("Mock_Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
+    }
+    
+    func send(_ action: Redux_FactionSquadListViewModelAction) {
+        switch(action) {
+            default:
+                print(action)
+        }
+    }
+}
+
 // MARK:- Redux_FactionSquadListViewModel
 class Redux_FactionSquadListViewModel : ObservableObject {
     let id = UUID()
     var store: MyAppStore
-    var cancellables = Set<AnyCancellable>()
+    internal var cancellables = Set<AnyCancellable>()
     @Published var viewProperties: Redux_FactionSquadListViewProperties
     
-    init(store: MyAppStore)
+    init(store: MyAppStore, viewID: UUID)
     {
         self.store = store
         self.viewProperties = Redux_FactionSquadListViewProperties.none
         configureViewProperties()
-        global_os_log("Redux_FactionSquadListViewModel.init \(id)")
+        global_os_log("allocated Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
     }
     
     deinit {
-        global_os_log("Redux_FactionSquadListViewModel.deinit \(id)")
+        print("deallocated Redux_FactionSquadListViewModel.deinit \(id)  for view :\(id)")
+        global_os_log("deallocated Redux_FactionSquadListViewModel.deinit \(id)  for view :\(id)")
     }
     
     func configureViewProperties() {
@@ -340,17 +366,17 @@ class Redux_FactionSquadListViewModel : ObservableObject {
     }
 }
 
+enum Redux_FactionSquadListViewModelAction {
+    case deleteSquad(SquadData)
+    case updateSquad(SquadData)
+    case updateFavorites(Bool)
+    case refreshSquadsList
+    case deleteAllSquads
+    case setRound(Int)
+    case loadRound
+}
+
 extension Redux_FactionSquadListViewModel {
-    enum Redux_FactionSquadListViewModelAction {
-        case deleteSquad(SquadData)
-        case updateSquad(SquadData)
-        case updateFavorites(Bool)
-        case refreshSquadsList
-        case deleteAllSquads
-        case setRound(Int)
-        case loadRound
-    }
-    
     func send(_ action: Redux_FactionSquadListViewModelAction) {
         switch(action) {
             case .refreshSquadsList:
