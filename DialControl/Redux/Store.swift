@@ -920,6 +920,8 @@ extension Store {
     }
     
     func send_new(_ action: Action) {
+        global_os_log("Store.send_new(\(action))")
+        
         Just(action)
             .lane("send_new Just", filter: [.event], transformValue: transform(action:))
             .flatMap{
@@ -929,6 +931,7 @@ extension Store {
             .lane("send_new flatMap", filter: [.event], transformValue: transform(action:))
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: {
+                global_os_log("Store.send_new sink(\(action))")
                 self.publisher.send($0)
             })
             .store(in: &cancellables)

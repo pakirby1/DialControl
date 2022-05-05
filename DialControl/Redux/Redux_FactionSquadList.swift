@@ -427,20 +427,8 @@ class Redux_FactionSquadListViewModel : ObservableObject {
     }
     
     func configureViewProperties() {
-//        configureViewProperties_retains()
-        configureViewProperties_test()
-    }
-    
-    func configureViewProperties_test() {
-        let stateSink = Timer.publish(
-            every: 3,
-            on: .main,
-            in: .default
-        )
-        .autoconnect()
-        .combineLatest(store.statePublisher)
-        .map { $0.1 }
-        .lane("configureViewProperties_test() statePublisher")
+        let stateSink = store.statePublisher
+        .lane("configureViewProperties() statePublisher")
         .map { [weak self] state in
             self?.buildViewProperties(state: state) ?? Redux_FactionSquadListViewProperties.none
         }
@@ -452,87 +440,30 @@ class Redux_FactionSquadListViewModel : ObservableObject {
         }
         .handleEvents(receiveSubscription: { [weak self] sub in
             guard let self = self else { return }
-            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) subscribed")
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) subscribed")
         },
         receiveCompletion: { [weak self] completion in
             guard let self = self else { return }
-            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) completion")
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) completion")
         },
         receiveCancel: { [weak self] in
-            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(String(describing: self?.id)) cancel")
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(String(describing: self?.id)) cancel")
             guard let self = self else { return }
             
-            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(String(describing: self.id)) cancel")
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(String(describing: self.id)) cancel")
         })
         .sink(receiveCompletion: { [weak self] value in
             guard let self = self else { return }
             switch(value) {
                 case .finished:
-                    global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) finished")
+                    global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) finished")
                 case .failure:
-                    global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) failure")
+                    global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) failure")
             }
         }, receiveValue: { [weak self] viewProperties in
             guard let self = self else { return }
             self.viewProperties = viewProperties
         })
-//        .onCancel{ [weak self] in
-//            guard let self = self else { return }
-//            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) cance onCancel()")
-//        }
-        
-        self.cancellable = AnyCancellable(stateSink)
-        
-        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(id) 1 subscriptions")
-    }
-    
-    func configureViewProperties_retains() {
-        // Cancel the previous subscription
-        cancellable?.cancel()
-        
-        let stateSink = store.statePublisher
-//            .share()
-            .lane("configureViewProperties_retains() statePublisher")
-//            .os_log(message: "configureViewProperties_retains() statePublisher")
-            .map { [weak self] state in
-                self?.buildViewProperties(state: state) ?? Redux_FactionSquadListViewProperties.none
-            }
-            .print()
-            .removeDuplicates { (prev, current) -> Bool in
-                    // Considers points to be duplicate if the x coordinate
-                    // is equal, and ignores the y coordinate
-                prev.squadDataList == current.squadDataList
-            }
-            //.lane("configureViewProperties() buildViewProperties")
-//            .os_log(message: "configureViewProperties_retains() buildViewProperties")
-            .handleEvents(receiveSubscription: { [weak self] sub in
-                guard let self = self else { return }
-                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) subscribed")
-            },
-            receiveCompletion: { [weak self] completion in
-                guard let self = self else { return }
-                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) completion")
-            },
-            receiveCancel: { [weak self] in
-                guard let self = self else { return }
-                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) cancel")
-            })
-            .sink(receiveCompletion: { [weak self] value in
-                guard let self = self else { return }
-                switch(value) {
-                    case .finished:
-                        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) finished")
-                    case .failure:
-                        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) failure")
-                }
-            }, receiveValue: { [weak self] viewProperties in
-                guard let self = self else { return }
-                self.viewProperties = viewProperties
-            })
-            .onCancel{ [weak self] in
-                guard let self = self else { return }
-                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) cance onCancel()")
-            }
         
         self.cancellable = AnyCancellable(stateSink)
         
