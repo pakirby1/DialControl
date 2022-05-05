@@ -350,10 +350,12 @@ class DeallocPrinter {
         self.label = label
         self.id = UUID()
         print("allocated \(id) \(label)")
+        global_os_log("allocated \(id) \(label)")
     }
     
     deinit {
         print("deallocated \(id) \(label)")
+        global_os_log("deallocated \(id) \(label)")
     }
 }
 

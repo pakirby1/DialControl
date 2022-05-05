@@ -81,6 +81,15 @@ extension Publisher where Self.Output : Equatable {
     }
 }
 
+public extension Cancellable {
+    func onCancel(_ block: @escaping () -> Void) -> AnyCancellable {
+        AnyCancellable {
+            self.cancel()
+            block()
+        }
+    }
+}
+
 extension View {
     func eraseToAnyView() -> AnyView {
         AnyView(self)

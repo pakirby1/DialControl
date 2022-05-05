@@ -28,15 +28,14 @@ struct Redux_FactionSquadList: View {
     let printer: DeallocPrinter
     
     @ObservedObject var viewModel: Redux_FactionSquadListViewModel
-    @ObservedObject var testViewModel: Test_Redux_FactionSquadListViewModel
+//    @ObservedObject var testViewModel: Test_Redux_FactionSquadListViewModel
     
     init(faction: String, store: MyAppStore) {
-        
         self.store = store
         self.faction = faction
         self.printer = DeallocPrinter("Redux_FactionSquadList.init")
         self.viewModel = Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
-        self.testViewModel = Test_Redux_FactionSquadListViewModel(viewID: self.printer.id)
+//        self.testViewModel = Test_Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
     }
     
     var progressView : some View {
@@ -243,6 +242,7 @@ extension Redux_FactionSquadList {
     func loadRound() {
         if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
         {
+            
             self.viewModel.send(.loadRound)
         }
         else {
@@ -327,36 +327,37 @@ class Mock_Redux_FactionSquadListViewModel : ObservableObject {
 class Test_Redux_FactionSquadListViewModel : ObservableObject {
     let id = UUID()
     let viewID: UUID
+    internal var cancellables = Set<AnyCancellable>()
+    @Published var viewProperties: Redux_FactionSquadListViewProperties
+    var store: MyAppStore
     
-    init(viewID: UUID) {
+    init(store: MyAppStore, viewID: UUID) {
+        self.store = store
         self.viewID = viewID
+        self.viewProperties = Redux_FactionSquadListViewProperties.none
+        configureViewProperties()
         global_os_log("allocated Test_Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
     }
     
-    deinit {
-        global_os_log("deallocated Test_Redux_FactionSquadListViewModel.deinit \(id)  for view :\(viewID)")
-    }
-}
-// MARK:- Redux_FactionSquadListViewModel
-class Redux_FactionSquadListViewModel : ObservableObject {
-    let id = UUID()
-    var store: MyAppStore
-    internal var cancellables = Set<AnyCancellable>()
-    @Published var viewProperties: Redux_FactionSquadListViewProperties
-    
-    init(store: MyAppStore, viewID: UUID)
+    func buildViewProperties(state: MyAppState) -> Redux_FactionSquadListViewProperties
     {
-        self.store = store
-        self.viewProperties = Redux_FactionSquadListViewProperties.none
-        configureViewProperties()
-        global_os_log("allocated Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
-    }
-    
-    deinit {
-        global_os_log("deallocated Redux_FactionSquadListViewModel.deinit \(id)  for view :\(id)")
+        let ret = Redux_FactionSquadListViewProperties(
+            faction: "",
+            squadDataList: state.faction.squadDataList,
+            loadingState: .loaded)
+        
+        global_os_log("buildViewProperties") {
+            return "\(ret.squadDataList.count) squads, loadingState: \(ret.loadingState)"
+        }
+        
+        return ret
     }
     
     func configureViewProperties() {
+        configureViewProperties_new()
+    }
+    
+    func configureViewProperties_old() {
         let stateSink = store.statePublisher
             .lane("configureViewProperties() statePublisher")
             .os_log(message: "configureViewProperties() statePublisher")
@@ -371,13 +372,171 @@ class Redux_FactionSquadListViewModel : ObservableObject {
             }
             //.lane("configureViewProperties() buildViewProperties")
             .os_log(message: "configureViewProperties() buildViewProperties")
-            .sink { viewProperties in
-                self.viewProperties = viewProperties
+            .sink { [weak self] viewProperties in
+                self?.viewProperties = viewProperties
             }
         
         self.cancellables.insert(AnyCancellable(stateSink))
         
-        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
+        global_os_log("Test_Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
+    }
+
+    func configureViewProperties_new() {
+        store.statePublisher
+            .lane("configureViewProperties() statePublisher")
+            .os_log(message: "configureViewProperties() statePublisher")
+            .map { state in
+                self.buildViewProperties(state: state)
+            }
+            .print()
+            .removeDuplicates { (prev, current) -> Bool in
+                    // Considers points to be duplicate if the x coordinate
+                    // is equal, and ignores the y coordinate
+                prev.squadDataList == current.squadDataList
+            }
+            //.lane("configureViewProperties() buildViewProperties")
+            .os_log(message: "configureViewProperties() buildViewProperties")
+            .assign(to: &$viewProperties)
+        
+        global_os_log("Test_Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
+    }
+    
+    deinit {
+        global_os_log("deallocated Test_Redux_FactionSquadListViewModel.deinit \(id)  for view :\(viewID)")
+    }
+}
+// MARK:- Redux_FactionSquadListViewModel
+class Redux_FactionSquadListViewModel : ObservableObject {
+    let id = UUID()
+    var store: MyAppStore
+    var cancellable: AnyCancellable?
+    @Published var viewProperties: Redux_FactionSquadListViewProperties
+    
+    init(store: MyAppStore, viewID: UUID)
+    {
+        self.store = store
+        self.viewProperties = Redux_FactionSquadListViewProperties.none
+        configureViewProperties()
+        global_os_log("allocated Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
+//        cancellable?.cancel()
+    }
+    
+    deinit {
+//        cancellable?.cancel()
+        global_os_log("deallocated Redux_FactionSquadListViewModel.deinit \(id)  for view :\(id)")
+    }
+    
+    func configureViewProperties() {
+//        configureViewProperties_retains()
+        configureViewProperties_test()
+    }
+    
+    func configureViewProperties_test() {
+        let stateSink = Timer.publish(
+            every: 3,
+            on: .main,
+            in: .default
+        )
+        .autoconnect()
+        .combineLatest(store.statePublisher)
+        .map { $0.1 }
+        .lane("configureViewProperties_test() statePublisher")
+        .map { [weak self] state in
+            self?.buildViewProperties(state: state) ?? Redux_FactionSquadListViewProperties.none
+        }
+        .print()
+        .removeDuplicates { (prev, current) -> Bool in
+            // Considers points to be duplicate if the x coordinate
+            // is equal, and ignores the y coordinate
+            prev.squadDataList == current.squadDataList
+        }
+        .handleEvents(receiveSubscription: { [weak self] sub in
+            guard let self = self else { return }
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) subscribed")
+        },
+        receiveCompletion: { [weak self] completion in
+            guard let self = self else { return }
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) completion")
+        },
+        receiveCancel: { [weak self] in
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(String(describing: self?.id)) cancel")
+            guard let self = self else { return }
+            
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(String(describing: self.id)) cancel")
+        })
+        .sink(receiveCompletion: { [weak self] value in
+            guard let self = self else { return }
+            switch(value) {
+                case .finished:
+                    global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) finished")
+                case .failure:
+                    global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) failure")
+            }
+        }, receiveValue: { [weak self] viewProperties in
+            guard let self = self else { return }
+            self.viewProperties = viewProperties
+        })
+//        .onCancel{ [weak self] in
+//            guard let self = self else { return }
+//            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(self.id) cance onCancel()")
+//        }
+        
+        self.cancellable = AnyCancellable(stateSink)
+        
+        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties_test() \(id) 1 subscriptions")
+    }
+    
+    func configureViewProperties_retains() {
+        // Cancel the previous subscription
+        cancellable?.cancel()
+        
+        let stateSink = store.statePublisher
+//            .share()
+            .lane("configureViewProperties_retains() statePublisher")
+//            .os_log(message: "configureViewProperties_retains() statePublisher")
+            .map { [weak self] state in
+                self?.buildViewProperties(state: state) ?? Redux_FactionSquadListViewProperties.none
+            }
+            .print()
+            .removeDuplicates { (prev, current) -> Bool in
+                    // Considers points to be duplicate if the x coordinate
+                    // is equal, and ignores the y coordinate
+                prev.squadDataList == current.squadDataList
+            }
+            //.lane("configureViewProperties() buildViewProperties")
+//            .os_log(message: "configureViewProperties_retains() buildViewProperties")
+            .handleEvents(receiveSubscription: { [weak self] sub in
+                guard let self = self else { return }
+                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) subscribed")
+            },
+            receiveCompletion: { [weak self] completion in
+                guard let self = self else { return }
+                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) completion")
+            },
+            receiveCancel: { [weak self] in
+                guard let self = self else { return }
+                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) cancel")
+            })
+            .sink(receiveCompletion: { [weak self] value in
+                guard let self = self else { return }
+                switch(value) {
+                    case .finished:
+                        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) finished")
+                    case .failure:
+                        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) failure")
+                }
+            }, receiveValue: { [weak self] viewProperties in
+                guard let self = self else { return }
+                self.viewProperties = viewProperties
+            })
+            .onCancel{ [weak self] in
+                guard let self = self else { return }
+                global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(self.id) cance onCancel()")
+            }
+        
+        self.cancellable = AnyCancellable(stateSink)
+        
+        global_os_log("Redux_FactionSquadListViewModel.configureViewProperties() \(id) 1 subscriptions")
     }
 }
 

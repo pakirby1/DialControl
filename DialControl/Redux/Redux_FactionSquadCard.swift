@@ -17,7 +17,8 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
             .map{ state -> [SquadData] in
                 return state.faction.squadDataList
             }
-            .map { squadDataList -> Int in
+            .map { [weak self] squadDataList -> Int in
+                guard let self = self else { return 0 }
                 if let targetSquad = squadDataList.first(where:{ $0.id == self.squadData.id})
                 {
                     let damagedPoints = targetSquad.damagedPoints
@@ -39,8 +40,8 @@ class Redux_FactionSquadCardViewModel : ObservableObject {
         self.squadData = squadData
         self.store = store
         self.damagedPointsPublisher
-            .sink{
-                self.damagedPoints = $0
+            .sink{ [weak self] in
+                self?.damagedPoints = $0
             }
             .store(in: &cancellables)
     }
