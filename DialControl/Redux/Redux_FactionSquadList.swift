@@ -51,7 +51,8 @@ struct Redux_FactionSquadList: View {
     
     var squadDataList : [SquadData] {
         get {
-            let list = self.store.state.faction.squadDataList
+            let list = self.viewModel.viewProperties.squadDataList
+//            let list = self.store.state.faction.squadDataList
             logMessage("damagedPoints list \(list)")
             return list
         }
@@ -116,7 +117,7 @@ struct Redux_FactionSquadList: View {
                 return HStack {
                     Button(action:{ increment() }) { Image(systemName: "plus.circle.fill").font(.largeTitle) }
                     
-                    Text("Round: \(store.state.faction.currentRound)")
+                    Text("Round: \(viewModel.viewProperties.currentRound)")
                         .font(.title)
                     
                     Button(action:{ decrement() }) { Image(systemName: "minus.circle.fill").font(.largeTitle) }
@@ -244,6 +245,7 @@ extension Redux_FactionSquadList {
         {
             
             self.viewModel.send(.loadRound)
+            global_os_log("Redux_FactionSquadList.loadRound()")
         }
         else {
             store.send(.faction(action: .loadRound))
@@ -254,6 +256,7 @@ extension Redux_FactionSquadList {
         if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
         {
             self.viewModel.send(.setRound(newRound))
+            global_os_log("Redux_FactionSquadList.setRound(newRound)", "newRound = \(newRound)")
         }
         else {
             store.send(.faction(action: .setRound(newRound)))
@@ -344,7 +347,8 @@ class Test_Redux_FactionSquadListViewModel : ObservableObject {
         let ret = Redux_FactionSquadListViewProperties(
             faction: "",
             squadDataList: state.faction.squadDataList,
-            loadingState: .loaded)
+            loadingState: .loaded,
+            currentRound: self.viewProperties.currentRound)
         
         global_os_log("buildViewProperties") {
             return "\(ret.squadDataList.count) squads, loadingState: \(ret.loadingState)"
@@ -365,11 +369,11 @@ class Test_Redux_FactionSquadListViewModel : ObservableObject {
                 self.buildViewProperties(state: state)
             }
             .print()
-            .removeDuplicates { (prev, current) -> Bool in
-                    // Considers points to be duplicate if the x coordinate
-                    // is equal, and ignores the y coordinate
-                prev.squadDataList == current.squadDataList
-            }
+//            .removeDuplicates { (prev, current) -> Bool in
+//                    // Considers points to be duplicate if the x coordinate
+//                    // is equal, and ignores the y coordinate
+//                prev.squadDataList == current.squadDataList
+//            }
             //.lane("configureViewProperties() buildViewProperties")
             .os_log(message: "configureViewProperties() buildViewProperties")
             .sink { [weak self] viewProperties in
@@ -434,9 +438,9 @@ class Redux_FactionSquadListViewModel : ObservableObject {
         }
         .print()
         .removeDuplicates { (prev, current) -> Bool in
-            // Considers points to be duplicate if the x coordinate
-            // is equal, and ignores the y coordinate
-            prev.squadDataList == current.squadDataList
+            let squadDuplicate = (prev.squadDataList == current.squadDataList)
+            let currentRoundDuplicate = (prev.currentRound == current.currentRound)
+            return squadDuplicate && currentRoundDuplicate
         }
         .handleEvents(receiveSubscription: { [weak self] sub in
             guard let self = self else { return }
@@ -462,6 +466,7 @@ class Redux_FactionSquadListViewModel : ObservableObject {
             }
         }, receiveValue: { [weak self] viewProperties in
             guard let self = self else { return }
+            global_os_log("Redux_FactionSquadListViewModel.configureViewProperties()", "\(self.viewProperties)")
             self.viewProperties = viewProperties
         })
         
@@ -514,7 +519,8 @@ extension Redux_FactionSquadListViewModel {
         let pendingViewProperties = Redux_FactionSquadListViewProperties(
             faction: self.viewProperties.faction,
             squadDataList: self.viewProperties.squadDataList,
-            loadingState: .pending(0.1))
+            loadingState: .pending(0.1),
+            currentRound: self.viewProperties.currentRound)
         
         self.viewProperties = pendingViewProperties
     }
@@ -534,10 +540,11 @@ extension Redux_FactionSquadListViewModel : ViewPropertyRepresentable {
         let ret = Redux_FactionSquadListViewProperties(
             faction: "",
             squadDataList: state.faction.squadDataList,
-            loadingState: .loaded)
+            loadingState: .loaded,
+            currentRound: state.faction.currentRound)
         
         global_os_log("buildViewProperties") {
-            return "\(ret.squadDataList.count) squads, loadingState: \(ret.loadingState)"
+            return ret.description
         }
         
         return ret
@@ -555,11 +562,22 @@ struct Redux_FactionSquadListViewProperties {
     let faction: String
     let squadDataList: [SquadData]
     let loadingState: ViewLoadingState
+    let currentRound: Int
+}
+
+extension Redux_FactionSquadListViewProperties: CustomStringConvertible {
+    var description: String {
+        "faction: \(faction) loadingState: \(loadingState) currentRound: \(currentRound) squadDataList: \(squadDataList)"
+    }
 }
 
 extension Redux_FactionSquadListViewProperties {
     static var none : Redux_FactionSquadListViewProperties {
-        return Redux_FactionSquadListViewProperties(faction: "", squadDataList: [], loadingState: .idle)
+        return Redux_FactionSquadListViewProperties(
+            faction: "",
+            squadDataList: [],
+            loadingState: .idle,
+            currentRound: 0)
     }
 }
 

@@ -771,10 +771,12 @@ func factionReducer(state: inout MyAppState,
         case let .setRound(round):
             // Persist to UserDefaults
             currentRound = round
+            global_os_log("factionReducer.setRound(round)", "\(currentRound)")
             return loadRoundAction
             
         case .loadRound:
             state.faction.currentRound = currentRound
+            global_os_log("factionReducer.loadRound", "\(currentRound)")
     }
     
     return noAction
