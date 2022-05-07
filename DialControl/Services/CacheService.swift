@@ -90,10 +90,6 @@ class CacheService : CacheServiceProtocol {
                 shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
                 
                 var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-                let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
-                
-                ship.pilots.removeAll()
-                ship.pilots.append(foundPilots)
                 
                 return ship
             }
@@ -104,7 +100,7 @@ class CacheService : CacheServiceProtocol {
             return shipCache.getValue(key: shipKey, factory: getShipFromFile(shipKey:))
         }
             
-        func getPilot(ship: Ship) -> ShipPilot {
+        func getPilot(ship: inout Ship) -> ShipPilot {
             func getUpgradesFromCache() -> [Upgrade] {
                 func getUpgrade(key: UpgradeKey) -> Upgrade? {
                     /// Get upgrade from JSON
@@ -119,6 +115,8 @@ class CacheService : CacheServiceProtocol {
                     return ret
                 }
                 
+                global_os_log("CacheService.getShip.getPilot", squadPilot.id )
+                
                 if let upgradeKeys = squadPilot.upgrades?.allUpgradeKeys {
                     global_os_log("getPilot(ship:) upgradeKeys.count = \(upgradeKeys.count)")
                     return upgradeKeys.compactMap(getUpgrade)
@@ -127,12 +125,16 @@ class CacheService : CacheServiceProtocol {
                 return []
             }
             
-            global_os_log("CacheService.getShip.getPilot")
             var allUpgrades : [Upgrade] = []
             
             // Add the upgrades from SquadPilot.upgrades by iterating over the
             // UpgradeCardEnum cases and calling getUpgrade
             allUpgrades = getUpgradesFromCache()
+            
+            let foundPilots: PilotDTO = ship.pilots.filter{ $0.xws == squadPilot.id }[0]
+            
+            ship.pilots.removeAll()
+            ship.pilots.append(foundPilots)
             
             // Why not cache the ShipPilot since we are also caching the Ship
             return ShipPilot(ship: ship,
@@ -143,12 +145,12 @@ class CacheService : CacheServiceProtocol {
         
         let ship = measure("Performance", name: "CacheService.getShipV1(...).getShipFromCache()") { getShipFromCache() }
         
-        guard let ship = ship else {
+        guard var ship = ship else {
             return Empty().eraseToAnyPublisher()
         }
         
         let shipPilot = measure("Performance", name: "CacheService.getShipV1(...).getPilot()") {
-            return getPilot(ship: ship)
+            return getPilot(ship: &ship)
         }
         
         global_os_log("CacheService.getShip shipPilot", shipPilot.pilotName)

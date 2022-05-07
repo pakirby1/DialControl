@@ -70,6 +70,17 @@ extension Publisher {
     }
 }
 
+extension Publisher where Failure == Never {
+    func weakAssign<T: AnyObject>(
+        to keyPath: ReferenceWritableKeyPath<T, Output>,
+        on object: T
+    ) -> AnyCancellable {
+        sink { [weak object] value in
+            object?[keyPath: keyPath] = value
+        }
+    }
+}
+
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension Publisher where Self.Output : Equatable {
     public func distinct() -> AnyPublisher<Self.Output, Self.Failure> {
