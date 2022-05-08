@@ -280,9 +280,9 @@ struct Redux_PilotDetailsView: View {
                 
                 buildPointsView(half: true)
                 
-                IndicatorView(label: "\(self.shipPilot.threshold)",
-                    bgColor: Color.yellow,
-                    fgColor: Color.black)
+//                IndicatorView(label: "\(self.shipPilot.threshold)",
+//                    bgColor: Color.yellow,
+//                    fgColor: Color.black)
                 
                 Spacer()
                 

@@ -156,6 +156,16 @@ extension Redux_SquadView {
         self.victoryPoints = points
     }
     
+    func setFirstPlayer(_ isFirstPlayer: Bool) {
+        // Mutate & Persist
+        self.squadData.firstPlayer = isFirstPlayer
+        self.updateSquad(squadData: self.squadData)
+        
+        // Update the local @State
+        self.isFirstPlayer = isFirstPlayer
+    }
+    
+    
     var content: some View {
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
