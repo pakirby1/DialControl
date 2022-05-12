@@ -28,7 +28,6 @@ struct Redux_FactionSquadList: View {
     let printer: DeallocPrinter
     
     @StateObject var viewModel: Redux_FactionSquadListViewModel
-//    @ObservedObject var testViewModel: Test_Redux_FactionSquadListViewModel
     
     init(faction: String, store: MyAppStore) {
         self.store = store
@@ -36,8 +35,6 @@ struct Redux_FactionSquadList: View {
         self.printer = DeallocPrinter("Redux_FactionSquadList.init")
         let vm = Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
         self._viewModel = StateObject(wrappedValue: vm)
-//        self._viewModel = StateObject(wrappedValue: )
-//        self.testViewModel = Test_Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
     }
     
     var progressView : some View {
