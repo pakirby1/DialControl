@@ -105,7 +105,6 @@ extension Redux_SquadView {
         }
     }
     
-    
     var shipsGrid: some View {
         ScrollView(.vertical, showsIndicators: false) {
             ForEach(chunkedShips, id: \.self) { index in
@@ -146,26 +145,7 @@ extension Redux_SquadView {
             self.updateSquad(squadData: self.squadData)
         })
     }
-    
-    func setVictoryPoints(points: Int32) {
-        // Mutate & Persist
-        self.squadData.victoryPoints = Int32(points)
-        self.updateSquad(squadData: self.squadData)
-        
-        // Update the local @State
-        self.victoryPoints = points
-    }
-    
-    func setFirstPlayer(_ isFirstPlayer: Bool) {
-        // Mutate & Persist
-        self.squadData.firstPlayer = isFirstPlayer
-        self.updateSquad(squadData: self.squadData)
-        
-        // Update the local @State
-        self.isFirstPlayer = isFirstPlayer
-    }
-    
-    
+
     var content: some View {
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
@@ -317,8 +297,6 @@ extension Redux_SquadView {
         }
     }
     
-    
-    
     var body: some View {
         func onAppearBlock() {
             self.isFirstPlayer = self.squadData.firstPlayer
@@ -335,14 +313,7 @@ extension Redux_SquadView {
             }
         }
     }
-}
-
-//MARK:- Behavior
-extension Redux_SquadView {
-    func updateSquad(squadData: SquadData) {
-        self.store.send(.squad(action: .updateSquad(squadData)))
-    }
-
+    
     private func buildShipButton(shipPilot: ShipPilot) -> some View {
         func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
             // Get the dial status from the pilot state
@@ -363,6 +334,83 @@ extension Redux_SquadView {
         }) {
             buildPilotCardView(shipPilot: shipPilot)
         }
+    }
+    
+    struct ObjectiveScoreView : View {
+        @Binding var currentPoints: Int32
+        let action: (Int32) -> Void
+        let size = CGSize(width: 40, height: 40 * 1.55)
+        @State var resetPoints: Bool = false
+        
+        init(currentPoints: Binding<Int32>, action: @escaping (Int32) -> Void) {
+            _currentPoints = currentPoints
+            self.action = action
+        }
+        
+        var body: some View {
+            HStack {
+                VectorImageButton(imageName: "VictoryYellow", size: size) {
+                    currentPoints += 1
+                    action(currentPoints)
+                    /*
+                    var currentPoints = self.squadData.victoryPoints
+                    currentPoints += 1
+                    self.squadData.victoryPoints = currentPoints
+                    self.updateSquad(squadData: self.squadData)
+                    */
+                }
+                
+                IndicatorView(label: "\(self.currentPoints)",
+                    bgColor: Color.green,
+                    fgColor: Color.white)
+                
+                VectorImageButton(imageName: "VictoryRed2", size: size) {
+                    currentPoints -= 1
+                    let newPoints = (currentPoints < 0 ? 0 : currentPoints)
+                    currentPoints = newPoints
+                    action(newPoints)
+                    /*
+                    var currentPoints = self.squadData.victoryPoints
+                    currentPoints -= 1
+                     
+                    self.squadData.victoryPoints = (currentPoints < 0 ? 0 : currentPoints)
+                     
+                    self.updateSquad(squadData: self.squadData)
+                    */
+                }
+                
+                CustomToggleView(label: "Reset Points", binding: $resetPoints)
+            }
+            .onChange(of: resetPoints, perform: { _ in
+                currentPoints = 0
+                action(currentPoints)
+            })
+        }
+    }
+}
+
+//MARK:- Behavior
+extension Redux_SquadView {
+    func setVictoryPoints(points: Int32) {
+        // Mutate & Persist
+        self.squadData.victoryPoints = Int32(points)
+        self.updateSquad(squadData: self.squadData)
+        
+        // Update the local @State
+        self.victoryPoints = points
+    }
+    
+    func setFirstPlayer(_ isFirstPlayer: Bool) {
+        // Mutate & Persist
+        self.squadData.firstPlayer = isFirstPlayer
+        self.updateSquad(squadData: self.squadData)
+        
+        // Update the local @State
+        self.isFirstPlayer = isFirstPlayer
+    }
+    
+    func updateSquad(squadData: SquadData) {
+        self.store.send(.squad(action: .updateSquad(squadData)))
     }
     
     func updatePilotState(pilotStateData: PilotStateData,
@@ -438,58 +486,6 @@ extension Redux_SquadView {
                     })
                 }
             }
-        }
-    }
-    
-    struct ObjectiveScoreView : View {
-        @Binding var currentPoints: Int32
-        let action: (Int32) -> Void
-        let size = CGSize(width: 40, height: 40 * 1.55)
-        @State var resetPoints: Bool = false
-        
-        init(currentPoints: Binding<Int32>, action: @escaping (Int32) -> Void) {
-            _currentPoints = currentPoints
-            self.action = action
-        }
-        
-        var body: some View {
-            HStack {
-                VectorImageButton(imageName: "VictoryYellow", size: size) {
-                    currentPoints += 1
-                    action(currentPoints)
-                    /*
-                    var currentPoints = self.squadData.victoryPoints
-                    currentPoints += 1
-                    self.squadData.victoryPoints = currentPoints
-                    self.updateSquad(squadData: self.squadData)
-                    */
-                }
-                
-                IndicatorView(label: "\(self.currentPoints)",
-                    bgColor: Color.green,
-                    fgColor: Color.white)
-                
-                VectorImageButton(imageName: "VictoryRed2", size: size) {
-                    currentPoints -= 1
-                    let newPoints = (currentPoints < 0 ? 0 : currentPoints)
-                    currentPoints = newPoints
-                    action(newPoints)
-                    /*
-                    var currentPoints = self.squadData.victoryPoints
-                    currentPoints -= 1
-                     
-                    self.squadData.victoryPoints = (currentPoints < 0 ? 0 : currentPoints)
-                     
-                    self.updateSquad(squadData: self.squadData)
-                    */
-                }
-                
-                CustomToggleView(label: "Reset Points", binding: $resetPoints)
-            }
-            .onChange(of: resetPoints, perform: { _ in
-                currentPoints = 0
-                action(currentPoints)
-            })
         }
     }
 }

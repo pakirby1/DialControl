@@ -27,14 +27,16 @@ struct Redux_FactionSquadList: View {
     // Dealloc tracker (strong ref)
     let printer: DeallocPrinter
     
-    @ObservedObject var viewModel: Redux_FactionSquadListViewModel
+    @StateObject var viewModel: Redux_FactionSquadListViewModel
 //    @ObservedObject var testViewModel: Test_Redux_FactionSquadListViewModel
     
     init(faction: String, store: MyAppStore) {
         self.store = store
         self.faction = faction
         self.printer = DeallocPrinter("Redux_FactionSquadList.init")
-        self.viewModel = Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
+        let vm = Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
+        self._viewModel = StateObject(wrappedValue: vm)
+//        self._viewModel = StateObject(wrappedValue: )
 //        self.testViewModel = Test_Redux_FactionSquadListViewModel(store: store, viewID: self.printer.id)
     }
     
