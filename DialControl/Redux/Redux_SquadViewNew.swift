@@ -32,7 +32,6 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     }
     
     var shipPilots: [ShipPilot] {
-//        loadShips()
         print("PAKshipPilots \(Date()) count: \(self.viewModel.viewProperties.shipPilots.count)")
         self.viewModel.viewProperties.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
 
