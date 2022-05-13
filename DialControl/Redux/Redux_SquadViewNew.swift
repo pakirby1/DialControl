@@ -508,7 +508,23 @@ class Redux_SquadViewNewViewModel : ObservableObject {
     init(store: MyAppStore) {
         self.store = store
         self.viewProperties = Redux_SquadViewNewViewProperties.none
-        
+        configureViewProperties()
+    }
+}
+
+struct Redux_SquadViewNewViewProperties {
+    let shipPilots: [ShipPilot]
+}
+
+extension Redux_SquadViewNewViewProperties {
+    static var none : Redux_SquadViewNewViewProperties {
+        return Redux_SquadViewNewViewProperties(
+            shipPilots: [])
+    }
+}
+
+extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
+    func configureViewProperties() {
         let stateSink = self.store.statePublisher.sink{ [weak self] state in
             guard let self = self else { return }
             self.viewProperties = Redux_SquadViewNewViewProperties(shipPilots: state.squad.shipPilots)
@@ -516,17 +532,30 @@ class Redux_SquadViewNewViewModel : ObservableObject {
         
         self.cancellable = AnyCancellable(stateSink)
     }
-}
-
-struct Redux_SquadViewNewViewProperties {
-    let shipPilots: [ShipPilot]
     
+    var viewPropertiesPublished: Published<Redux_SquadViewNewViewProperties> {
+        self._viewProperties
+    }
     
-}
-
-extension Redux_SquadViewNewViewProperties {
-    static var none : Redux_SquadViewNewViewProperties {
-        return Redux_SquadViewNewViewProperties(
+    var viewPropertiesPublisher: Published<Redux_SquadViewNewViewProperties>.Publisher {
+        self.$viewProperties
+    }
+    
+    func buildViewProperties(state: MyAppState) -> Redux_SquadViewNewViewProperties
+    {
+        let ret = Redux_SquadViewNewViewProperties(
             shipPilots: [])
+        
+        global_os_log("buildViewProperties") {
+            return ret.description
+        }
+        
+        return ret
+    }
+}
+
+extension Redux_SquadViewNewViewProperties: CustomStringConvertible {
+    var description: String {
+        "shipPilots"
     }
 }
