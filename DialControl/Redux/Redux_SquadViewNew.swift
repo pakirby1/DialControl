@@ -37,7 +37,7 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
 //        loadShips()
         print("PAKshipPilots \(Date()) count: \(self.viewModel.viewProperties.shipPilots.count)")
         self.viewModel.viewProperties.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
-        
+
         return self.viewModel.viewProperties.shipPilots
     }
     
@@ -48,7 +48,7 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     var sortedShipPilots: [ShipPilot] {
         // TODO: Switch & AppStore
         
-        var copy = self.shipPilots
+        var copy = self.viewModel.viewProperties.shipPilots
         
         if (activationOrder) {
             copy.sort(by: { $0.ship.pilots[0].initiative < $1.ship.pilots[0].initiative })
@@ -60,19 +60,19 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     }
     
     var revealedDialCount: Int {
-        self.shipPilots.filter{
+        self.viewModel.viewProperties.shipPilots.filter{
             guard let status = $0.pilotStateData?.dial_status else { return false }
             return status == .revealed
         }.count
     }
     
     var hiddenDialCount: Int {
-        self.shipPilots.count - revealedDialCount
+        self.viewModel.viewProperties.shipPilots.count - revealedDialCount
     }
     
     var dialsState : SquadDialsState {
         get {
-            if revealedDialCount == self.shipPilots.count {
+            if revealedDialCount == self.viewModel.viewProperties.shipPilots.count {
                 return .revealed
             } else {
                 return .hidden
@@ -213,7 +213,7 @@ extension Redux_SquadViewNew {
                 row(label: "dialsState", text: self.dialsState.description)
                 row(label: "revealedDialCount", text: self.revealedDialCount.description)
                 row(label: "hiddenDialCount", text: self.hiddenDialCount.description)
-                row(label: "shipPilots Count", text: self.shipPilots.count.description)
+                row(label: "shipPilots Count", text: self.viewModel.viewProperties.shipPilots.count.description)
             }
         }
         
@@ -225,7 +225,7 @@ extension Redux_SquadViewNew {
                     func logDetails() {
                         print("PAK_Redux_SquadView dialsState: \(self.dialsState)")
                         print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
-                        print("PAK_Redux_SquadView shipPilots Count: \(self.shipPilots.count)")
+                        print("PAK_Redux_SquadView shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
                     }
                     
                     logDetails()
@@ -419,7 +419,6 @@ extension Redux_SquadViewNew {
     }
     
     func updateSquad(squadData: SquadData) {
-//        self.store.send(.squad(action: .updateSquad(squadData)))
         self.viewModel.updateSquad(squadData: squadData)
     }
     
@@ -494,7 +493,6 @@ extension Redux_SquadViewNew {
 
 class Redux_SquadViewNewViewModel : ObservableObject {
     var store: MyAppStore
-//    @Published private(set) var shipPilots: [ShipPilot] = []
     @Published var viewProperties: Redux_SquadViewNewViewProperties
     var cancellable: AnyCancellable?
     
