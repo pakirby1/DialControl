@@ -49,7 +49,7 @@ class FeaturesManager {
     func configureFeatures() {
         add(Feature(id: FeatureId.MyRedux, enabled: true))
         add(Feature(id: FeatureId.Redux_FactionSquadList, enabled: true))
-        add(Feature(id: FeatureId.Redux_SquadView, enabled: false))
+        add(Feature(id: FeatureId.Redux_SquadView, enabled: true))
     }
 }
 
