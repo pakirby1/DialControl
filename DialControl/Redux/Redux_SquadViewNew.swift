@@ -35,7 +35,7 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     
     var shipPilots: [ShipPilot] {
 //        loadShips()
-        print("PAKshipPilots \(Date()) count: \(self.store.state.squad.shipPilots.count)")
+        print("PAKshipPilots \(Date()) count: \(self.viewModel.viewProperties.shipPilots.count)")
         self.viewModel.viewProperties.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
         
         return self.viewModel.viewProperties.shipPilots
@@ -299,7 +299,7 @@ extension Redux_SquadViewNew {
             print("PAK_DialStatus SquadCardView.onAppear()")
             // TODO: Switch & AppStore
             executionTime("Perf Redux_SquadView.content.onAppear()") {
-                self.loadShips()
+                self.viewModel.loadShips(squad: squad, squadData: squadData)
                 self.activationOrder = self.squadData.engaged
                 print("PAKshipPilots \(Date()) .onAppear")
             }
@@ -419,15 +419,14 @@ extension Redux_SquadViewNew {
     }
     
     func updateSquad(squadData: SquadData) {
-        self.store.send(.squad(action: .updateSquad(squadData)))
+//        self.store.send(.squad(action: .updateSquad(squadData)))
+        self.viewModel.updateSquad(squadData: squadData)
     }
     
     func updatePilotState(pilotStateData: PilotStateData,
                                   pilotState: PilotState)
     {
-        self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
-        
-//        loadShips()
+        self.viewModel.updatePilotState(pilotStateData: pilotStateData, pilotState: pilotState)
     }
     
     private func processEngage() {
@@ -437,13 +436,7 @@ extension Redux_SquadViewNew {
     }
     
     // TODO: Switch & AppStore
-    private func loadShips() {
-        // Make request to store to build the store.shipPilots
-        
-        logMessage("damagedPoints SquadCardView.loadShips")
-        print("PAK_DialStatus SquadCardView.loadShips()")
-        store.send(.squad(action: .getShips(self.squad, self.squadData)))
-    }
+    
     
     private func resetAllShips() {
         sortedShipPilots.forEach{ shipPilot in
@@ -458,7 +451,7 @@ extension Redux_SquadViewNew {
         }
         
         setVictoryPoints(points: 0)
-        self.loadShips()
+        self.viewModel.loadShips(squad: self.squad, squadData: self.squadData)
     }
     
     private func updateAllDials() {
@@ -512,18 +505,25 @@ class Redux_SquadViewNewViewModel : ObservableObject {
     }
 }
 
-struct Redux_SquadViewNewViewProperties {
-    let shipPilots: [ShipPilot]
-}
-
-extension Redux_SquadViewNewViewProperties {
-    static var none : Redux_SquadViewNewViewProperties {
-        return Redux_SquadViewNewViewProperties(
-            shipPilots: [])
-    }
-}
-
 extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
+    func loadShips(squad: Squad, squadData: SquadData) {
+        // Make request to store to build the store.shipPilots
+        
+        logMessage("damagedPoints SquadCardView.loadShips")
+        print("PAK_DialStatus SquadCardView.loadShips()")
+        self.store.send(.squad(action: .getShips(squad, squadData)))
+    }
+    
+    func updateSquad(squadData: SquadData) {
+        self.store.send(.squad(action: .updateSquad(squadData)))
+    }
+    
+    func updatePilotState(pilotStateData: PilotStateData,
+                                  pilotState: PilotState)
+    {
+        self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
+    }
+    
     func configureViewProperties() {
         let stateSink = self.store.statePublisher.sink{ [weak self] state in
             guard let self = self else { return }
@@ -554,8 +554,22 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
     }
 }
 
-extension Redux_SquadViewNewViewProperties: CustomStringConvertible {
-    var description: String {
-        "shipPilots"
+struct Redux_SquadViewNewViewProperties {
+    let shipPilots: [ShipPilot]
+}
+
+extension Redux_SquadViewNewViewProperties {
+    static var none : Redux_SquadViewNewViewProperties {
+        return Redux_SquadViewNewViewProperties(
+            shipPilots: [])
     }
 }
+
+extension Redux_SquadViewNewViewProperties: CustomStringConvertible {
+    var description: String {
+        "shipPilots \(self.shipPilots.count)"
+    }
+}
+
+
+
