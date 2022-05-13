@@ -13,7 +13,7 @@ import TimelaneCombine
 
 struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @EnvironmentObject var viewFactory: ViewFactory
-    @EnvironmentObject var store: MyAppStore
+    var store: MyAppStore
     
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
@@ -24,19 +24,21 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     let theme: Theme = WestworldUITheme()
     let squad: Squad
     let squadData: SquadData
+    @StateObject var viewModel: Redux_SquadViewNewViewModel
     
-//    init(store: MyAppStore, squad: Squad, squadData: SquadData) {
-//        self.store = store
-//        self.squad = squad
-//        self.squadData = squadData
-//    }
+    init(store: MyAppStore, squad: Squad, squadData: SquadData) {
+        self.store = store
+        self.squad = squad
+        self.squadData = squadData
+        self._viewModel = StateObject(wrappedValue: Redux_SquadViewNewViewModel(store: store))
+    }
     
     var shipPilots: [ShipPilot] {
 //        loadShips()
         print("PAKshipPilots \(Date()) count: \(self.store.state.squad.shipPilots.count)")
-        self.store.state.squad.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
+        self.viewModel.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
         
-        return self.store.state.squad.shipPilots
+        return self.viewModel.shipPilots
     }
     
     var chunkedShips : [[ShipPilot]] {
@@ -494,5 +496,22 @@ extension Redux_SquadViewNew {
                 }
             }
         }
+    }
+}
+
+class Redux_SquadViewNewViewModel : ObservableObject {
+    var store: MyAppStore
+    @Published private(set) var shipPilots: [ShipPilot] = []
+    var cancellable: AnyCancellable?
+    
+    init(store: MyAppStore) {
+        self.store = store
+        
+        let stateSink = self.store.statePublisher.sink{ [weak self] state in
+            guard let self = self else { return }
+            self.shipPilots = state.squad.shipPilots
+        }
+        
+        self.cancellable = AnyCancellable(stateSink)
     }
 }
