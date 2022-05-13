@@ -13,7 +13,6 @@ import TimelaneCombine
 
 struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @EnvironmentObject var viewFactory: ViewFactory
-    var store: MyAppStore
     
     @State var activationOrder: Bool = true
     @State private var revealAllDials: Bool = false
@@ -27,7 +26,6 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @StateObject var viewModel: Redux_SquadViewNewViewModel
     
     init(store: MyAppStore, squad: Squad, squadData: SquadData) {
-        self.store = store
         self.squad = squad
         self.squadData = squadData
         self._viewModel = StateObject(wrappedValue: Redux_SquadViewNewViewModel(store: store))
@@ -57,39 +55,6 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
         }
         
         return copy
-    }
-    
-    var revealedDialCount: Int {
-        self.viewModel.viewProperties.shipPilots.filter{
-            guard let status = $0.pilotStateData?.dial_status else { return false }
-            return status == .revealed
-        }.count
-    }
-    
-    var hiddenDialCount: Int {
-        self.viewModel.viewProperties.shipPilots.count - revealedDialCount
-    }
-    
-    var dialsState : SquadDialsState {
-        get {
-            if revealedDialCount == self.viewModel.viewProperties.shipPilots.count {
-                return .revealed
-            } else {
-                return .hidden
-            }
-        }
-    }
-    
-    enum SquadDialsState: CustomStringConvertible {
-        case revealed
-        case hidden
-        
-        var description: String {
-            switch(self) {
-                case .hidden: return "Hidden"
-                case .revealed: return "Revealed"
-            }
-        }
     }
 }
 
@@ -210,9 +175,9 @@ extension Redux_SquadViewNew {
             }
             
             return VStack {
-                row(label: "dialsState", text: self.dialsState.description)
-                row(label: "revealedDialCount", text: self.revealedDialCount.description)
-                row(label: "hiddenDialCount", text: self.hiddenDialCount.description)
+                row(label: "dialsState", text: self.viewModel.viewProperties.dialsState.description)
+                row(label: "revealedDialCount", text: self.viewModel.viewProperties.revealedDialCount.description)
+                row(label: "hiddenDialCount", text: self.viewModel.viewProperties.hiddenDialCount.description)
                 row(label: "shipPilots Count", text: self.viewModel.viewProperties.shipPilots.count.description)
             }
         }
@@ -223,8 +188,8 @@ extension Redux_SquadViewNew {
                 
                 return Button(action: {
                     func logDetails() {
-                        print("PAK_Redux_SquadView dialsState: \(self.dialsState)")
-                        print("PAK_Redux_SquadView revealedDialCount: \(self.revealedDialCount)")
+                        print("PAK_Redux_SquadView dialsState: \(self.viewModel.viewProperties.dialsState)")
+                        print("PAK_Redux_SquadView revealedDialCount: \(self.viewModel.viewProperties.revealedDialCount)")
                         print("PAK_Redux_SquadView shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
                     }
                     
@@ -235,13 +200,13 @@ extension Redux_SquadViewNew {
 
                     logDetails()
 
-                    print("PAK_DialStatus_New Button: \(self.dialsState)")
+                    print("PAK_DialStatus_New Button: \(self.viewModel.viewProperties.dialsState)")
                 }) {
                     Text(title).foregroundColor(Color.white)
                 }
             }
             
-            return (self.dialsState == .hidden) ? buildButton(.revealed) : buildButton(.hidden)
+            return (self.viewModel.viewProperties.dialsState == .hidden) ? buildButton(.revealed) : buildButton(.hidden)
         }
     
         return ZStack {
@@ -332,7 +297,7 @@ extension Redux_SquadViewNew {
                                                    dialStatus: data.dial_status,
                                                    updatePilotStateCallback: self.updatePilotState, hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
                     .environmentObject(self.viewFactory)
-                    .environmentObject(self.store))
+                                .environmentObject(self.viewModel.store))
             }
             
             return AnyView(EmptyView())
@@ -459,7 +424,7 @@ extension Redux_SquadViewNew {
                 if data.dial_status != .destroyed {
                     data.change(update: {
                         print("PAK_DialStatus pilotStateData.id: \($0)")
-                        let revealAllDialsStatus: DialStatus = (self.dialsState == .revealed) ? .revealed : .hidden
+                        let revealAllDialsStatus: DialStatus = (self.viewModel.viewProperties.dialsState == .revealed) ? .revealed : .hidden
                         $0.dial_status = revealAllDialsStatus
                         
                         self.updatePilotState(pilotStateData: $0,
@@ -561,6 +526,27 @@ extension Redux_SquadViewNewViewProperties {
         return Redux_SquadViewNewViewProperties(
             shipPilots: [])
     }
+    
+    var revealedDialCount: Int {
+        self.shipPilots.filter{
+            guard let status = $0.pilotStateData?.dial_status else { return false }
+            return status == .revealed
+        }.count
+    }
+    
+    var hiddenDialCount: Int {
+        self.shipPilots.count - self.revealedDialCount
+    }
+    
+    var dialsState : SquadDialsState {
+        get {
+            if self.revealedDialCount == self.shipPilots.count {
+                return .revealed
+            } else {
+                return .hidden
+            }
+        }
+    }
 }
 
 extension Redux_SquadViewNewViewProperties: CustomStringConvertible {
@@ -569,5 +555,15 @@ extension Redux_SquadViewNewViewProperties: CustomStringConvertible {
     }
 }
 
-
+enum SquadDialsState: CustomStringConvertible {
+    case revealed
+    case hidden
+    
+    var description: String {
+        switch(self) {
+            case .hidden: return "Hidden"
+            case .revealed: return "Revealed"
+        }
+    }
+}
 
