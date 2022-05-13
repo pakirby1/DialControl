@@ -106,7 +106,8 @@ class ViewFactory: ObservableObject {
             func buildSquadViewNew(squad: Squad, squadData: SquadData) -> AnyView {
                 return measure("Performance", name: "ViewFactory.Redux_buildView().squadViewPAK") {
                     return AnyView(Redux_SquadViewNew(squad: squad,
-                                                   squadData: squadData)
+                                                      squadData: squadData
+                                                      )
                                     .environmentObject(self)
                                     .environmentObject(store)
                     )

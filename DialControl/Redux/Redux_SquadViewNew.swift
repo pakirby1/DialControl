@@ -25,6 +25,12 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     let squad: Squad
     let squadData: SquadData
     
+//    init(store: MyAppStore, squad: Squad, squadData: SquadData) {
+//        self.store = store
+//        self.squad = squad
+//        self.squadData = squadData
+//    }
+    
     var shipPilots: [ShipPilot] {
 //        loadShips()
         print("PAKshipPilots \(Date()) count: \(self.store.state.squad.shipPilots.count)")
@@ -165,8 +171,6 @@ extension Redux_SquadViewNew {
             .font(.title)
             .lineLimit(1)
             .foregroundColor(theme.TEXT_FOREGROUND)
-        
-        
         
         let reset = Button(action: {
             self.displayResetAllConfirmation = true
