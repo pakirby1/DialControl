@@ -36,9 +36,9 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     var shipPilots: [ShipPilot] {
 //        loadShips()
         print("PAKshipPilots \(Date()) count: \(self.store.state.squad.shipPilots.count)")
-        self.viewModel.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
+        self.viewModel.viewProperties.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
         
-        return self.viewModel.shipPilots
+        return self.viewModel.viewProperties.shipPilots
     }
     
     var chunkedShips : [[ShipPilot]] {
@@ -501,17 +501,32 @@ extension Redux_SquadViewNew {
 
 class Redux_SquadViewNewViewModel : ObservableObject {
     var store: MyAppStore
-    @Published private(set) var shipPilots: [ShipPilot] = []
+//    @Published private(set) var shipPilots: [ShipPilot] = []
+    @Published var viewProperties: Redux_SquadViewNewViewProperties
     var cancellable: AnyCancellable?
     
     init(store: MyAppStore) {
         self.store = store
+        self.viewProperties = Redux_SquadViewNewViewProperties.none
         
         let stateSink = self.store.statePublisher.sink{ [weak self] state in
             guard let self = self else { return }
-            self.shipPilots = state.squad.shipPilots
+            self.viewProperties = Redux_SquadViewNewViewProperties(shipPilots: state.squad.shipPilots)
         }
         
         self.cancellable = AnyCancellable(stateSink)
+    }
+}
+
+struct Redux_SquadViewNewViewProperties {
+    let shipPilots: [ShipPilot]
+    
+    
+}
+
+extension Redux_SquadViewNewViewProperties {
+    static var none : Redux_SquadViewNewViewProperties {
+        return Redux_SquadViewNewViewProperties(
+            shipPilots: [])
     }
 }
