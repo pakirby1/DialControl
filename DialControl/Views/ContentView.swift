@@ -92,6 +92,24 @@ class ViewFactory: ObservableObject {
             )
         }
         
+        func buildSquadView(squad: Squad, squadData: SquadData) -> AnyView {
+            func buildSquadViewOld(squad: Squad, squadData: SquadData) -> AnyView {
+                return measure("Performance", name: "ViewFactory.Redux_buildView().squadViewPAK") {
+                    return AnyView(Redux_SquadView(squad: squad,
+                                                   squadData: squadData)
+                                    .environmentObject(self)
+                                    .environmentObject(store)
+                    )
+                }
+            }
+            
+            if (FeaturesManager.shared.isFeatureEnabled(.Redux_SquadView)) {
+                return AnyView(EmptyView())
+            } else {
+                return buildSquadViewOld(squad: squad, squadData: squadData)
+            }
+        }
+        
         switch(type) {
         case .toolsView:
             return AnyView(Redux_ToolsView()
@@ -99,13 +117,7 @@ class ViewFactory: ObservableObject {
                             .environmentObject(store))
                 
         case .squadViewPAK(let squad, let squadData):
-            return measure("Performance", name: "ViewFactory.Redux_buildView().squadViewPAK") {
-                return AnyView(Redux_SquadView(squad: squad,
-                                               squadData: squadData)
-                                .environmentObject(self)
-                                .environmentObject(store)
-                )
-            }
+            return buildSquadView(squad: squad, squadData: squadData)
             
         case .shipViewNew(let shipPilot, let squad):
             return buildShipView(shipPilot: shipPilot, squad: squad)
