@@ -11,11 +11,11 @@ import SwiftUI
 import Combine
 import TimelaneCombine
 
+//MARK:- View
 struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @EnvironmentObject var viewFactory: ViewFactory
     
     @State var activationOrder: Bool = true
-    @State private var revealAllDials: Bool = false
     @State private var displayResetAllConfirmation: Bool = false
     @State var isFirstPlayer: Bool = false
     @State var victoryPoints: Int32 = 0
@@ -57,7 +57,6 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     }
 }
 
-//MARK:- View
 extension Redux_SquadViewNew {
     var emptySection: some View {
         Section {
@@ -105,7 +104,6 @@ extension Redux_SquadViewNew {
                 .environmentObject(viewFactory)
             
             Spacer()
-            
             
             CustomToggleView(label: "First Player", binding: $isFirstPlayer)
         }
@@ -242,7 +240,6 @@ extension Redux_SquadViewNew {
 //                }
                 
                 // Body
-                // TODO: Switch & AppStore
                 if shipPilots.isEmpty {
                     emptySection
                 } else {
@@ -261,7 +258,6 @@ extension Redux_SquadViewNew {
         }
         .onAppear{
             print("PAK_DialStatus SquadCardView.onAppear()")
-            // TODO: Switch & AppStore
             executionTime("Perf Redux_SquadView.content.onAppear()") {
                 self.viewModel.loadShips(squad: squad, squadData: squadData)
                 self.activationOrder = self.squadData.engaged
@@ -414,6 +410,7 @@ extension Redux_SquadViewNew {
         }
         
         setVictoryPoints(points: 0)
+        setFirstPlayer(false)
         self.viewModel.loadShips(squad: self.squad, squadData: self.squadData)
     }
     
@@ -429,7 +426,7 @@ extension Redux_SquadViewNew {
                         self.updatePilotState(pilotStateData: $0,
                                                            pilotState: shipPilot.pilotState)
                         print("PAK_DialStatus updateAllDials $0.dial_status = \(revealAllDialsStatus)")
-                        print("PAK_DialStatus updateAllDials $0.dial_revealed = \(self.revealAllDials)")
+                        print("PAK_DialStatus updateAllDials $0.dial_revealed = \($0.dial_status)")
                     })
                 }
             }
@@ -455,6 +452,7 @@ extension Redux_SquadViewNew {
     }
 }
 
+//MARK:- View Model
 class Redux_SquadViewNewViewModel : ObservableObject {
     var store: MyAppStore
     @Published var viewProperties: Redux_SquadViewNewViewProperties
@@ -466,8 +464,7 @@ class Redux_SquadViewNewViewModel : ObservableObject {
         configureViewProperties()
     }
 }
-
-extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
+extension Redux_SquadViewNewViewModel {
     func loadShips(squad: Squad, squadData: SquadData) {
         // Make request to store to build the store.shipPilots
         
@@ -485,12 +482,17 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
     {
         self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
     }
-    
+}
+
+extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
     func configureViewProperties() {
-        let stateSink = self.store.statePublisher.sink{ [weak self] state in
-            guard let self = self else { return }
-            self.viewProperties = Redux_SquadViewNewViewProperties(shipPilots: state.squad.shipPilots)
-        }
+        let stateSink = self
+            .store
+            .statePublisher
+            .sink{ [weak self] state in
+                guard let self = self else { return }
+                self.viewProperties = self.buildViewProperties(state: state)
+            }
         
         self.cancellable = AnyCancellable(stateSink)
     }
@@ -505,17 +507,11 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
     
     func buildViewProperties(state: MyAppState) -> Redux_SquadViewNewViewProperties
     {
-        let ret = Redux_SquadViewNewViewProperties(
-            shipPilots: [])
-        
-        global_os_log("buildViewProperties") {
-            return ret.description
-        }
-        
-        return ret
+        return Redux_SquadViewNewViewProperties(shipPilots: state.squad.shipPilots)
     }
 }
 
+//MARK:- View Properties
 struct Redux_SquadViewNewViewProperties {
     let shipPilots: [ShipPilot]
 }
