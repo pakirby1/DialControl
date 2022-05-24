@@ -464,6 +464,7 @@ class Redux_SquadViewNewViewModel : ObservableObject {
         configureViewProperties()
     }
 }
+
 extension Redux_SquadViewNewViewModel {
     func loadShips(squad: Squad, squadData: SquadData) {
         // Make request to store to build the store.shipPilots
