@@ -872,25 +872,13 @@ struct Cost: Codable {
     }
 }
 
-//struct Force: Codable {
-//    var value: Int { return _value ?? 0 }
-//    
-//    private var _value: Int?
-//    
-//    enum CodingKeys: String, CodingKey {
-//        case _value = "value"
-//    }
-//}
-
 struct Upgrade: Codable, Identifiable {
     let id = UUID()
     let name: String
     let limited: Int
     let sides: [Side]
     let cost: Cost?
-    let hyperspace: Bool
     let xws: String
-//    let type: String?   // Doesn't exist in json but has to be optional to set it later
 }
 
 struct Upgrades: Codable, JSONSerialization {

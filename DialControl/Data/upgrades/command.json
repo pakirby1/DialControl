@@ -616,7 +616,7 @@
         "artwork": "https://infinitearenas.com/xw2/images/upgrades/combatboardingtube.png"
       }
     ],
-    "cost": { "value": "?" },
+    "cost": { "value": 0 },
     "restrictions": [
       { "ships": ["gauntletfighter"] }
     ]

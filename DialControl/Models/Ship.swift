@@ -237,8 +237,6 @@ struct PilotDTO: Codable {
     var shipAbility: ShipAbility? { return _shipAbility ?? nil }
     var slots: [Slot]? { return _slots ?? [] }
     let artwork: String
-    let ffg: Int
-    let hyperspace: Bool
     var force: Force? { return _force ?? nil }
     var charges: Charges? { return _charges ?? nil }
     
@@ -258,8 +256,6 @@ struct PilotDTO: Codable {
         case _shipAbility = "shipAbility"
         case _slots = "slots"
         case artwork
-        case ffg
-        case hyperspace
         case _force = "force"
         case _charges = "charges"
     }
@@ -278,8 +274,6 @@ extension PilotDTO {
             shipAbility: self.shipAbility,
             slots: self.slots,
             artwork: self.artwork,
-            ffg: self.ffg,
-            hyperspace: self.hyperspace,
             force: self.force,
             charges: self.charges
         )
@@ -297,8 +291,6 @@ struct Pilot {
     var shipAbility: ShipAbility?
     var slots: [Slot]?
     let artwork: String
-    let ffg: Int
-    let hyperspace: Bool
     var force: Force?
     var charges: Charges?
 }
@@ -306,7 +298,6 @@ struct Pilot {
 struct Ship: Codable, JSONSerialization {
     let name: String
     var xws: String { return _xws ?? "" }
-    var ffg: Int { return _ffg ?? 0 }
     var size: String { return _size ?? "" }
     var dial: [String] { return _dial ?? [] }
     var dialCodes: [String] { return _dialCodes ?? [] }
@@ -317,7 +308,6 @@ struct Ship: Codable, JSONSerialization {
     var pilots: [PilotDTO]
     
     private var _xws: String?
-    private var _ffg: Int?
     private var _size: String?
     private var _dial: [String]?
     private var _dialCodes: [String]?
@@ -325,7 +315,6 @@ struct Ship: Codable, JSONSerialization {
     enum CodingKeys: String, CodingKey {
         case name = "name"
         case _xws = "xws"
-        case _ffg = "ffg"
         case _size = "size"
         case _dial = "dial"
         case _dialCodes = "dialCodes"
@@ -388,7 +377,6 @@ extension Ship {
                     case "Double Turret Arc": self = .doubleTurretArc
                     case "Rear Arc": self = .rearArc
                     default: self = .noArc
-//                default: return nil
                 }
             }
         
@@ -536,7 +524,6 @@ struct ShipPilot: Identifiable, Equatable {
     let upgrades: [Upgrade]
     let points: Int
     let pilotState: PilotState
-//    var pilotStateData: PilotStateData?
     
     static func ==(lhs: ShipPilot, rhs: ShipPilot) -> Bool {
         return lhs.id == rhs.id
