@@ -21,14 +21,29 @@
     "4FR",
     "5FR"
   ],
-  "stats": [],
-  "actions": [],
+  "dialCodes": ["CR90-REP"],
+  "stats": [
+    { "arc": "Left Arc", "type": "attack", "value": 4 },
+    { "arc": "Right Arc", "type": "attack", "value": 4 },
+    { "type": "agility", "value": 0 },
+    { "type": "hull", "value": 18 },
+    { "type": "shields", "value": 7, "recovers": 2 },
+    { "type": "energy", "value": 7, "recovers": 2 }
+  ],
+  "actions": [
+    { "difficulty": "White", "type": "Focus" },
+    { "difficulty": "White", "type": "Reinforce" },
+    { "difficulty": "White", "type": "Lock" },
+    { "difficulty": "Red", "type": "Coordinate" },
+    { "difficulty": "White", "type": "Jam" }
+  ],
   "pilots": [
     {
       "ffg": 705,
       "name": "Republic Judiciary",
       "initiative": 8,
-      "cost": 146,
+      "cost": 131,
+      "loadout": 0,
       "limited": 0,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/a04b07c3b0b3dbe1bfac935ca3a9f0d4.jpg",
       "shipAbility": {
@@ -36,7 +51,9 @@
         "text": "You can acquire locks and perform primary attacks at range 1-4."
       },
       "text": "The Galactic Republic uses small, swift warships such as the CR90 corvette to respond rapidly to Separatist incursions across the galaxy.",
-      "hyperspace": false,
+      "standard": false,
+      "extended": false,
+      "epic": true,
       "engagement": 0,
       "xws": "republicjudiciary",
       "slots": [

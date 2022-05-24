@@ -16,13 +16,15 @@
           "maxrange": 3,
           "ordnance": false
         },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_27.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_27.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_27.jpg",
         "ffg": 256
       }
     ],
     "cost": { "value": 4 },
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Ion Cannon",
@@ -41,13 +43,15 @@
           "maxrange": 3,
           "ordnance": false
         },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_28.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_28.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_28.jpg",
         "ffg": 257
       }
     ],
     "cost": { "value": 6 },
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Jamming Beam",
@@ -66,13 +70,15 @@
           "maxrange": 2,
           "ordnance": false
         },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_29.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_29.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_29.jpg",
         "ffg": 258
       }
     ],
     "cost": { "value": 0 },
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Tractor Beam",
@@ -91,20 +97,21 @@
           "maxrange": 3,
           "ordnance": false
         },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_30.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_30.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_30.jpg",
         "ffg": 259
       }
     ],
     "cost": { "value": 4 },
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Autoblasters",
     "limited": 0,
     "xws": "autoblasters",
-    "cost": { "value": 4 },
-    "hyperspace": false,
+    "cost": { "value": 7 },
     "sides": [
       {
         "ability": "Attack: If the defender is in your [Bullseye Arc], roll 1 additional die. During the Neutralize Results step, if you are not in the defender's [Front Arc], [Evade] results do not cancel [Critical Hit] results.",
@@ -120,9 +127,12 @@
         },
         "ffg": 578,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/dbdad938bd9f4ce64af1d7106dfd5b5e.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/59d4a52e3a534dd090259bd5546e7bab.png"
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/59d4a52e3a534dd090259bd5546e7bab.png"
       }
-    ]
+    ],
+    "standard": false,
+    "extended": true,
+    "epic": true
   },
   {
     "sides": [
@@ -139,21 +149,48 @@
           "ordnance": false
         },
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/70d44704aaa8bb8d1f1e2bc904b18c77.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/6927e82e460670044786cd46327cb891.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/6927e82e460670044786cd46327cb891.png",
         "ability": "Attack: If you are calculating, the defender does not apply the range bonus."
       }
     ],
     "name": "Synced Laser Cannons",
-    "cost": { "value": 7 },
+    "cost": { "value": 8 },
     "limited": 0,
     "xws": "syncedlasercannons",
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "Proton Cannons",
+    "limited": 0,
+    "xws": "protoncannons",
+    "sides": [
+      {
+        "ability": "Attack: Spend 2 [Charge]. Change 1 [Focus] or [Hit] result to a [Critical Hit] result.",
+        "image": "https://infinitearenas.com/xw2/images/upgrades/protoncannons.png",
+        "charges": { "value": 2, "recovers": 1 },
+        "title": "Proton Cannons",
+        "type": "Cannon",
+        "slots": ["Cannon", "Cannon"],
+        "attack": {
+          "arc": "Bullseye Arc",
+          "value": 4,
+          "minrange": 2,
+          "maxrange": 3,
+          "ordnance": false
+        }
+      }
+    ],
+    "cost": { "value": 4 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Underslung Blaster Cannon",
     "limited": 0,
     "xws": "underslungblastercannon",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "After an enemy ship executes a maneuver, you may perform this attack against it as a bonus attack. Attack ([Lock]):Your dice can be modified only by spending a lock for the default effect.",
@@ -177,6 +214,9 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/734d68b47d976624629d101299719222.jpg"
       }
     ],
-    "cost": { "value": 2 }
+    "cost": { "value": 2 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   }
 ]

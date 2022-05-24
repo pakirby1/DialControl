@@ -38,14 +38,15 @@
   "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_Ghost.png",
   "pilots": [
     {
-      "name": "\"Chopper\"",
+      "name": "“Chopper”",
       "caption": "Spectre-3",
       "initiative": 2,
       "limited": 1,
-      "cost": 67,
+      "cost": 7,
+      "loadout": 18,
       "xws": "chopper",
       "ability": "At the start of the Engagement Phase, each enemy ship at range 0 gains 2 jam tokens.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_75.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_75.png",
       "shipActions": [
         { "difficulty": "White", "type": "Calculate" },
         { "difficulty": "White", "type": "Lock" },
@@ -67,18 +68,21 @@
       ],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_75.jpg",
       "ffg": 75,
-      "hyperspace": false,
-      "keywords": ["Droid", "Freighter", "Spectre"]
+      "standard": true,
+      "extended": true,
+      "keywords": ["Droid", "Freighter", "Spectre"],
+      "epic": true
     },
     {
       "name": "Hera Syndulla",
       "caption": "Spectre-2",
       "initiative": 5,
       "limited": 1,
-      "cost": 72,
+      "cost": 7,
+      "loadout": 20,
       "xws": "herasyndulla-vcx100lightfreighter",
       "ability": "After you reveal a red or blue maneuver, you may set your dial to another maneuver of the same difficulty.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_73.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_73.png",
       "shipAbility": {
         "name": "Tail Gun",
         "text": "While you have a docked ship, you have a primary [Rear Arc] weapon with an attack value equal to your docked ship's primary [Front Arc] attack value."
@@ -96,18 +100,21 @@
       ],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_73.jpg",
       "ffg": 73,
-      "hyperspace": true,
-      "keywords": ["Freighter", "Spectre"]
+      "standard": false,
+      "extended": true,
+      "keywords": ["Freighter", "Spectre"],
+      "epic": true
     },
     {
       "name": "Kanan Jarrus",
       "caption": "Spectre-1",
       "initiative": 3,
       "limited": 1,
-      "cost": 76,
+      "cost": 8,
+      "loadout": 20,
       "xws": "kananjarrus",
       "ability": "While a friendly ship in your firing arc defends, you may spend 1 [Force]. If you do, the attacker rolls 1 fewer attack die.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_74.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_74.png",
       "force": { "value": 2, "recovers": 1, "side": ["light"] },
       "shipAbility": {
         "name": "Tail Gun",
@@ -126,35 +133,31 @@
       ],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_74.jpg",
       "ffg": 74,
-      "hyperspace": true,
-      "keywords": ["Spectre"]
+      "standard": true,
+      "extended": true,
+      "keywords": ["Freighter", "Jedi", "Light Side", "Spectre"],
+      "epic": true
     },
     {
       "name": "Lothal Rebel",
       "initiative": 2,
       "limited": 0,
-      "cost": 67,
+      "cost": 7,
+      "loadout": 8,
       "xws": "lothalrebel",
       "text": "Another successful Corellian Engineering Corporation freighter design, the VCX-100 is larger than the ubiquitous YT-series, boasting more living space and customizability.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_76.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_76.png",
       "shipAbility": {
         "name": "Tail Gun",
         "text": "While you have a docked ship, you have a primary [Rear Arc] weapon with an attack value equal to your docked ship's primary [Front Arc] attack value."
       },
-      "slots": [
-        "Sensor",
-        "Turret",
-        "Torpedo",
-        "Crew",
-        "Crew",
-        "Modification",
-        "Title",
-        "Gunner"
-      ],
+      "slots": ["Turret", "Torpedo", "Gunner"],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_76.jpg",
       "ffg": 76,
-      "hyperspace": false,
-      "keywords": ["Freighter"]
+      "standard": true,
+      "extended": true,
+      "keywords": ["Freighter"],
+      "epic": true
     },
     {
       "name": "Alexsandr Kallus",
@@ -166,7 +169,8 @@
         "text": "While you have a docked ship, you have a primary [Rear Arc] weapon with an attack value equal to your docked ship's primary [Front Arc] attack value."
       },
       "caption": "Fulcrum",
-      "hyperspace": true,
+      "standard": true,
+      "extended": true,
       "slots": [
         "Talent",
         "Sensor",
@@ -179,11 +183,13 @@
         "Title"
       ],
       "ability": "While you defend, if the attacker modified any attack dice, you may roll 1 additional defense die.",
-      "cost": 68,
+      "cost": 7,
+      "loadout": 16,
       "ffg": 631,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/af4c16c8955bddf75d5eb7723c7a5f2d.jpg",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/f78c33b746f35f6848708327178dec80.png",
-      "keywords": ["Freighter", "Spectre"]
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/f78c33b746f35f6848708327178dec80.png",
+      "keywords": ["Freighter", "Spectre"],
+      "epic": true
     }
   ]
 }

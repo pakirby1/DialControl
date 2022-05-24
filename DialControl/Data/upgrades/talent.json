@@ -9,14 +9,16 @@
         "type": "Talent",
         "ability": "After you fail an action, if you have no green tokens, you may perform a [Focus] action. If you do, you cannot perform additional actions this round.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/73927eb0dc7bc2bb0de194f1af1dead2.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/73927eb0dc7bc2bb0de194f1af1dead2.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_156.jpg",
         "ffg": 381
       }
     ],
     "cost": { "value": 1 },
     "restrictions": [{ "action": { "type": "Focus" } }],
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Crack Shot",
@@ -29,13 +31,15 @@
         "ability": "While you perform a primary attack, if the defender is in your [Bullseye Arc], before the Neutralize Results step, you may spend 1 [Charge] to cancel 1 [Evade] result.",
         "slots": ["Talent"],
         "charges": { "value": 1, "recovers": 0 },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_1.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_1.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_1.jpg",
         "ffg": 230
       }
     ],
     "cost": { "value": 3 },
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Daredevil",
@@ -47,7 +51,7 @@
         "type": "Talent",
         "ability": "While you perform a white [Boost] action, you may treat it as red to use the [1 [Turn Left]] or [1 [Turn Right]] template instead.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_2.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_2.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_2.jpg",
         "ffg": 231
       }
@@ -57,7 +61,9 @@
       { "sizes": ["Small"] },
       { "action": { "type": "Boost", "difficulty": "White" } }
     ],
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Debris Gambit",
@@ -76,14 +82,16 @@
             "value": { "type": "Evade", "difficulty": "Red" }
           }
         ],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_3.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_3.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_3.jpg",
         "ffg": 232
       }
     ],
-    "cost": { "value": 3 },
+    "cost": { "value": 6 },
     "restrictions": [{ "sizes": ["Small", "Medium"] }],
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Elusive",
@@ -96,14 +104,16 @@
         "ability": "While you defend, you may spend 1 [Charge] to reroll 1 defense die. After you fully execute a red maneuver, recover 1 [Charge].",
         "slots": ["Talent"],
         "charges": { "value": 1, "recovers": 0 },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_4.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_4.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_4.jpg",
         "ffg": 233
       }
     ],
     "cost": { "value": 2 },
     "restrictions": [{ "sizes": ["Small", "Medium"] }],
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Expert Handling",
@@ -122,19 +132,18 @@
             "value": { "type": "Barrel Roll", "difficulty": "White" }
           }
         ],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_5.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_5.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_5.jpg",
         "ffg": 234
       }
     ],
-    "cost": {
-      "variable": "size",
-      "values": { "Small": 2, "Medium": 3, "Large": 4 }
-    },
+    "cost": { "value": 2 },
     "restrictions": [
       { "action": { "type": "Barrel Roll", "difficulty": "Red" } }
     ],
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Fanatical",
@@ -145,7 +154,7 @@
         "title": "Fanatical",
         "type": "Talent",
         "ability": "While you perform a primary attack, if you are not shielded, you may change 1 [Focus] result to a [Hit] result.",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/8b164bdb2b401b6741519f6c6e067550.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/8b164bdb2b401b6741519f6c6e067550.png",
         "slots": ["Talent"],
         "ffg": 459,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/0a7cac152b045daf71fa5d28504e54b4.jpg"
@@ -153,7 +162,9 @@
     ],
     "cost": { "value": 1 },
     "restrictions": [{ "factions": ["First Order"] }],
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Fearless",
@@ -164,7 +175,7 @@
         "title": "Fearless",
         "type": "Talent",
         "ability": "While you perform a [Front Arc] primary attack, if the attack range is 1 and you are in the defender's [Front Arc], you may change 1 of your results to a [Hit] result.",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_6.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_6.png",
         "slots": ["Talent"],
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_6.jpg",
         "ffg": 235
@@ -172,7 +183,9 @@
     ],
     "cost": { "value": 3 },
     "restrictions": [{ "factions": ["Scum and Villainy"] }],
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Heroic",
@@ -184,14 +197,16 @@
         "type": "Talent",
         "ability": "While you defend or perform an attack, if you have only blank results and have 2 or more results, you may reroll any number of your dice.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/9f8baf4893cd90288df44b69b50fa788.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/9f8baf4893cd90288df44b69b50fa788.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/0f6d1677c35001248d7768047c10aa87.jpg",
         "ffg": 471
       }
     ],
     "cost": { "value": 2 },
     "restrictions": [{ "factions": ["Resistance"] }],
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Intimidation",
@@ -203,13 +218,15 @@
         "type": "Talent",
         "ability": "While an enemy ship at range 0 defends, it rolls 1 fewer defense die.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_7.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_7.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_7.jpg",
         "ffg": 236
       }
     ],
     "cost": { "value": 3 },
-    "hyperspace": false
+    "standard": false,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Juke",
@@ -221,7 +238,7 @@
         "type": "Talent",
         "ability": "While you perform an attack, if you are evading, you may change 1 of the defender's [Evade] results to a [Focus] result.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_8.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_8.png",
         "alt": [
           {
             "image": "https://images-cdn.fantasyflightgames.com/filer_public/4c/e1/4ce1fe4d-b778-4dc9-8272-23aac7c3884d/g18xs_juke2nd.png",
@@ -234,7 +251,9 @@
     ],
     "cost": { "value": 6 },
     "restrictions": [{ "sizes": ["Small", "Medium"] }],
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Lone Wolf",
@@ -247,13 +266,15 @@
         "ability": "While you defend or perform an attack, if there are no other friendly ships at range 0-2, you may spend 1 [Charge] to reroll 1 of your dice.",
         "slots": ["Talent"],
         "charges": { "value": 1, "recovers": 1 },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_9.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_9.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_9.jpg",
         "ffg": 238
       }
     ],
     "cost": { "value": 5 },
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Marksmanship",
@@ -265,13 +286,15 @@
         "type": "Talent",
         "ability": "While you perform an attack, if the defender is in your [Bullseye Arc], you may change 1 [Hit] result to a [Critical Hit] result.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_10.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_10.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_10.jpg",
         "ffg": 239
       }
     ],
     "cost": { "value": 1 },
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Outmaneuver",
@@ -283,13 +306,15 @@
         "type": "Talent",
         "ability": "While you perform a [Front Arc] attack, if you are not in the defender's firing arc, the defender rolls 1 fewer defense die.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_11.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_11.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_11.jpg",
         "ffg": 240
       }
     ],
-    "cost": { "value": 6 },
-    "hyperspace": false
+    "cost": { "value": 12 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Predator",
@@ -301,13 +326,15 @@
         "type": "Talent",
         "ability": "While you perform a primary attack, if the defender is in your [Bullseye Arc], you may reroll 1 attack die.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_12.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_12.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_12.jpg",
         "ffg": 241
       }
     ],
     "cost": { "value": 2 },
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Ruthless",
@@ -318,7 +345,7 @@
         "title": "Ruthless",
         "type": "Talent",
         "ability": "While you perform an attack, you may choose another friendly ship at range 0-1 of the defender. If you do, that ship suffers 1 [Hit] damage and you may change 1 of your die results to a [Hit] result.",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_13.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_13.png",
         "slots": ["Talent"],
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_13.jpg",
         "ffg": 242
@@ -326,7 +353,9 @@
     ],
     "cost": { "value": 1 },
     "restrictions": [{ "factions": ["Galactic Empire"] }],
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Saturation Salvo",
@@ -338,14 +367,16 @@
         "type": "Talent",
         "ability": "While you perform a [Torpedo] or [Missile] attack, you may spend 1 [Charge] from that upgrade. If you do, choose two defense dice. The defender must reroll those dice.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_14.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_14.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_14.jpg",
         "ffg": 243
       }
     ],
     "cost": { "value": 3 },
     "restrictions": [{ "action": { "type": "Reload" } }],
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Selfless",
@@ -356,7 +387,7 @@
         "title": "Selfless",
         "type": "Talent",
         "ability": "While another friendly ship at range 0-1 defends, before the Neutralize Results step, if you are in the attack arc, you may suffer 1 [Critical Hit] damage to cancel 1 [Critical Hit] result.",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_15.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_15.png",
         "slots": ["Talent"],
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_15.jpg",
         "ffg": 244
@@ -364,7 +395,9 @@
     ],
     "cost": { "value": 2 },
     "restrictions": [{ "factions": ["Rebel Alliance"] }],
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Squad Leader",
@@ -383,16 +416,15 @@
             "value": { "type": "Coordinate", "difficulty": "Red" }
           }
         ],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_16.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_16.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_16.jpg",
         "ffg": 245
       }
     ],
-    "cost": {
-      "variable": "initiative",
-      "values": { "0": 2, "1": 4, "2": 6, "3": 8, "4": 10, "5": 12, "6": 14 }
-    },
-    "hyperspace": false
+    "cost": { "value": 6 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Swarm Tactics",
@@ -404,16 +436,15 @@
         "type": "Talent",
         "ability": "At the start of the Engagement Phase, you may choose 1 friendly ship at range 1. If you do, that ship treats its initiative as equal to yours until the end of the round.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_17.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_17.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_17.jpg",
         "ffg": 246
       }
     ],
-    "cost": {
-      "variable": "initiative",
-      "values": { "0": 3, "1": 3, "2": 3, "3": 3, "4": 3, "5": 4, "6": 5 }
-    },
-    "hyperspace": false
+    "cost": { "value": 5 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Trick Shot",
@@ -425,13 +456,15 @@
         "type": "Talent",
         "ability": "While you perform an attack that is obstructed by an obstacle, roll 1 additional attack die.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Upgrade_18.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Upgrade_18.png",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_U_18.jpg",
         "ffg": 247
       }
     ],
     "cost": { "value": 4 },
-    "hyperspace": false
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Treacherous",
@@ -444,14 +477,16 @@
         "ability": "While you defend, you may choose a ship obstructing the attack and spend 1 [Charge]. If you do, cancel 1 [Hit] or [Critical Hit] result, and the ship you chose gains 1 strain token. After a ship at range 0-3 is destroyed, recover 1 [Charge].",
         "slots": ["Talent"],
         "charges": { "value": 1, "recovers": 0 },
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/a10d907fea50e32ab28d924c67486d37.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/a10d907fea50e32ab28d924c67486d37.png",
         "ffg": 529,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/406e6007268488c36fc9066fb0a5d70f.jpg"
       }
     ],
-    "hyperspace": true,
     "restrictions": [{ "factions": ["Separatist Alliance"] }],
-    "cost": { "value": 2 }
+    "cost": { "value": 2 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Dedicated",
@@ -463,17 +498,19 @@
         "type": "Talent",
         "ability": "While another friendly ship in your [Left Arc] or [Right Arc] at range 0-2 defends, if it is limited or has the Dedicated upgrade and you are not strained, you may gain 1 strain token. If you do, the defender rerolls 1 of their blank results.",
         "slots": ["Talent"],
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/31c6723d7e5670c257acfa8788160437.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/31c6723d7e5670c257acfa8788160437.png",
         "ffg": 544,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/21b00eaf0d2f447db8fc7b2dc69222ab.jpg"
       }
     ],
-    "hyperspace": true,
     "restrictions": [
       { "factions": ["Galactic Republic"] },
-      { "non-limited": true }
+      { "keywords": ["Clone"] }
     ],
-    "cost": { "value": 1 }
+    "cost": { "value": 1 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Ensnare",
@@ -487,33 +524,20 @@
         "ability": "At the end of the Activation Phase, if you are tractored, you may choose 1 ship in your [Single Turret Arc] arc at range 0-1. Transfer 1 tractor token to it.",
         "ffg": 610,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/9513320be3bb150bb8ee6d3504e0ed01.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/5d7e0560460a1d91281537a658ddfc86.png"
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/5d7e0560460a1d91281537a658ddfc86.png"
       }
     ],
-    "cost": {
-      "variable": "initiative",
-      "values": {
-        "0": 19,
-        "1": 19,
-        "2": 19,
-        "3": 19,
-        "4": 19,
-        "5": 21,
-        "6": 24
-      }
-    },
-    "hyperspace": false,
-    "restrictions": [{ "ships": ["nantexclassstarfighter"] }]
+    "cost": { "value": 10 },
+    "restrictions": [{ "ships": ["nantexclassstarfighter"] }],
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Snap Shot",
     "limited": 0,
     "xws": "snapshot",
-    "hyperspace": true,
-    "cost": {
-      "variable": "size",
-      "values": { "Small": 7, "Medium": 8, "Large": 9 }
-    },
+    "cost": { "value": 9 },
     "sides": [
       {
         "ability": "After an enemy ship executes a maneuver, you may perform this attack against it as a bonus attack. Attack: Your dice cannot be modified.",
@@ -522,7 +546,7 @@
         "slots": ["Talent"],
         "ffg": 612,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/ec959ee48f953dbde71aa7c89d0b54bf.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/fed45c0416dfd298d9433c4608e99b7e.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/fed45c0416dfd298d9433c4608e99b7e.png",
         "attack": {
           "arc": "Front Arc",
           "value": 2,
@@ -531,7 +555,10 @@
           "ordnance": true
         }
       }
-    ]
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "sides": [
@@ -539,7 +566,7 @@
         "ffg": 611,
         "title": "Gravitic Deflection",
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/8bcd2006892a98b5b29d9aba67733cb6.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/50ec6aa5a267ece16d36533f4efe2bb0.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/50ec6aa5a267ece16d36533f4efe2bb0.png",
         "ability": "While you defend, you may reroll 1 defense die for each tractored ship in the attack arc.",
         "slots": ["Talent"],
         "type": "Talent"
@@ -548,14 +575,15 @@
     "name": "Gravitic Deflection",
     "limited": 0,
     "cost": { "value": 4 },
-    "hyperspace": true,
-    "xws": "graviticdeflection"
+    "xws": "graviticdeflection",
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Proud Tradition",
     "limited": 0,
     "xws": "proudtradition",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "Setup: Equip this side faceup. While you have 2 or fewer stress tokens, you may perform [Focus] actions even while stressed. After you perform an attack, if you are stressed, the defender may spend 1 focus token or suffer 1 [Critical Hit] damage to flip this card.",
@@ -564,7 +592,7 @@
         "slots": ["Talent"],
         "ffg": 653,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/8f9f85aa00fb260336b9938e2a3f7c33.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/09ec8bb3b37800437bbff7963db6aec6.png"
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/09ec8bb3b37800437bbff7963db6aec6.png"
       },
       {
         "ability": "Treat your [Focus] actions as red.",
@@ -573,10 +601,13 @@
         "slots": ["Talent"],
         "ffg": 652,
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/30486dca1780008aea8c4c905f44ead3.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/a060961e9ee792e605c75aaf6d65ad34.png"
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/a060961e9ee792e605c75aaf6d65ad34.png"
       }
     ],
-    "cost": { "value": 2 }
+    "cost": { "value": 2 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "sides": [
@@ -586,7 +617,7 @@
         "type": "Talent",
         "slots": ["Talent"],
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/9f2bb1378eecd7358ebb4fd42b3f2f65.jpg",
-        "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/99f10f4dd059aae2529ec0863a6cc47e.png",
+        "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/99f10f4dd059aae2529ec0863a6cc47e.png",
         "ability": "While you perform a primary attack, if the defender is in your [Bullseye Arc], you may spend 1 [Hit] result or change 1 [Critical Hit] result to a [Hit] result. If you do, the defender exposes 1 of its damage cards."
       }
     ],
@@ -594,13 +625,14 @@
     "cost": { "value": 1 },
     "limited": 0,
     "xws": "deadeyeshot",
-    "hyperspace": true
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Backwards Tailslide",
     "limited": 0,
     "xws": "backwardstailslide",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "While you boost or barrel roll, if your equipped [Configuration] upgrade has the \"(Closed)\" side faceup, you can move through and overlap obstacles. After you boost or barrel roll through an obstacle, if you are not at range 0 of it, gain 1 evade token.",
@@ -611,13 +643,15 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/d30db8383beca909eca0993a9299d226.jpg"
       }
     ],
-    "cost": { "value": 2 }
+    "cost": { "value": 2 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Ion Limiter Override",
     "limited": 0,
     "xws": "ionlimiteroverride",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "After you fully execute a red maneuver, you may perform a [Barrel Roll] action, even while stressed. If you do, roll an attack die; on a [Hit] result gain 1 strain token, and on a [Critical Hit] result gain 1 ion token.",
@@ -628,14 +662,16 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/babf3b90df6a73d026d4ab7670306ab7.jpg"
       }
     ],
-    "restrictions": [{ "names": ["TIE"] }],
-    "cost": { "value": 2 }
+    "restrictions": [{ "keywords": ["TIE"] }],
+    "cost": { "value": 2 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Marg Sabl Closure",
     "limited": 0,
     "xws": "margsablclosure",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "After you fully execute a maneuver, if you moved through an obstacle, structure, or huge ship, or if you deployed, you may choose 1 enemy ship in your [Front Arc] at range 1-2. That ship gains 1 strain token.",
@@ -646,13 +682,15 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/6c495e5b96157ab865a895c70d614ae6.jpg"
       }
     ],
-    "cost": { "value": 1 }
+    "cost": { "value": 1 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Starbird Slash",
     "limited": 0,
     "xws": "starbirdslash",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "After you fully execute a maneuver, you may choose 1 enemy ship you moved through. That ship gains 1 strain token. Then, if you are in that ship's firing arc, you gain 1 strain token.",
@@ -663,13 +701,15 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/9651ea60a9c2b74779fbcadcc989c171.jpg"
       }
     ],
-    "cost": { "value": 1 }
+    "cost": { "value": 1 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Cutthroat",
     "limited": 0,
     "xws": "cutthroat",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "After another friendly ship at range 0-3 is destroyed, if that ship is limited or has the Cutthroat upgrade, you may remove 1 of your orange or red tokens, or recover 1 non-recurring [Charge] on your ship card or one of your equipped upgrade cards.",
@@ -680,13 +720,15 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/ae15ec14df97ac215567f78fe6c92343.jpg"
       }
     ],
-    "cost": { "value": 2 }
+    "cost": { "value": 2 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Disciplined",
     "limited": 0,
     "xws": "disciplined",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "After another friendly ship at range 0-3 is destroyed, if that ship is limited or has the Disciplined upgrade, you may perform a [Lock] or [Barrel Roll] action.",
@@ -697,13 +739,15 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/bddffdbe4ada9aa8b6f43b883cfb7acb.jpg"
       }
     ],
-    "cost": { "value": 2 }
+    "cost": { "value": 2 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Hopeful",
     "limited": 0,
     "xws": "hopeful",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "After another friendly ship at range 0-3 is destroyed, if that ship is limited or has the Hopeful upgrade, you may perform a [Focus] or [Boost] action.",
@@ -714,13 +758,15 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/3c50ea7c72423be60ac00017cbaed807.jpg"
       }
     ],
-    "cost": { "value": 1 }
+    "cost": { "value": 1 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Interloper Turn",
     "limited": 0,
     "xws": "interloperturn",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "Before you execute a speed 1-2 turn ([Turn Left] or [Turn Right]) or speed 1-2 Koiogran Turn ([Koiogran Turn]) maneuver, if you are at range 0-1 of an asteroid, structure, or huge ship, you may gain 1 tractor token.",
@@ -732,13 +778,15 @@
       }
     ],
     "restrictions": [{ "ships": ["tieddefender"] }],
-    "cost": { "value": 1 }
+    "cost": { "value": 1 },
+    "standard": false,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Tierfon Belly Run",
     "limited": 0,
     "xws": "tierfonbellyrun",
-    "hyperspace": true,
     "sides": [
       {
         "ability": "You can perform special attacks even while at range 0 of asteroids. While you defend, if you are at range 0 of an obstacle, attack dice cannot be rerolled.",
@@ -749,7 +797,10 @@
         "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/a1b35914e278f332b59e04749c90452c.jpg"
       }
     ],
-    "cost": { "value": 1 }
+    "cost": { "value": 0 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   },
   {
     "name": "Feedback Ping",
@@ -767,7 +818,73 @@
       }
     ],
     "cost": { "value": 1 },
-    "restrictions": [{ "action": { "type": "Reload" } }, { "names": ["TIE"] }],
-    "hyperspace": true
+    "restrictions": [
+      { "action": { "type": "Reload" } },
+      { "keywords": ["TIE"] }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "Clan Training",
+    "limited": 0,
+    "xws": "clantraining",
+    "sides": [
+      {
+        "title": "Clan Training",
+        "type": "Talent",
+        "ability": "Before you engage, if you are not focused and there is an enemy ship in your [Front Arc] at range 1, you may spend 1 [Charge] to perform a red [Focus] action. After you perform an attack, if the defender is destroyed, recover 1 [Charge].",
+        "charges": { "value": 1, "recovers": 0 },
+        "slots": ["Talent"],
+        "image": "https://infinitearenas.com/xw2/images/upgrades/clantraining.png",
+        "artwork": "???"
+      }
+    ],
+    "cost": { "value": 3 },
+    "restrictions": [{ "keywords": ["Mandalorian"] }],
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "Notorious",
+    "limited": 1,
+    "xws": "notorious",
+    "sides": [
+      {
+        "title": "Notorious",
+        "type": "Talent",
+        "ability": "After you defend, if the attacker is in your firing arc, you may spend 1 [Charge]. If you do, the attacker gains 1 strain token. While you perform an attack, if the defender is strained, you may reroll 1 blank result.",
+        "charges": { "value": 2, "recovers": 1 },
+        "slots": ["Talent"],
+        "image": "https://infinitearenas.com/xw2/images/upgrades/notorious.png",
+        "artwork": "???"
+      }
+    ],
+    "cost": { "value": 2 },
+    "restrictions": [{ "equipped": ["Illicit"] }],
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "Enduring",
+    "limited": 0,
+    "xws": "enduring",
+    "sides": [
+      {
+        "title": "Enduring",
+        "type": "Talent",
+        "ability": "While you defend, if you are not in the attacker's [Bullseye Arc], [Critical Hit] results are neutralized before [Hit] results. After you suffer [Critical Hit] damage, you may perform a [Calculate] or [Focus] action on your action bar, even while stressed, treating that action as red.",
+        "slots": ["Talent"],
+        "image": "https://infinitearenas.com/xw2/images/upgrades/enduring.png",
+        "artwork": "???"
+      }
+    ],
+    "cost": { "value": 5 },
+    "standard": true,
+    "extended": true,
+    "epic": true
   }
 ]

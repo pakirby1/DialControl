@@ -21,14 +21,28 @@
     "4FW",
     "5FR"
   ],
-  "stats": [],
-  "actions": [],
+  "dialCodes": ["RDR-I"],
+  "stats": [
+    { "arc": "Full Front Arc", "type": "attack", "value": 4 },
+    { "type": "agility", "value": 0 },
+    { "type": "hull", "value": 20 },
+    { "type": "shields", "value": 8, "recovers": 2 },
+    { "type": "energy", "value": 6, "recovers": 2 }
+  ],
+  "actions": [
+    { "difficulty": "White", "type": "Focus" },
+    { "difficulty": "White", "type": "Lock" },
+    { "difficulty": "White", "type": "Coordinate" },
+    { "difficulty": "White", "type": "Reinforce" },
+    { "difficulty": "White", "type": "Jam" }
+  ],
   "pilots": [
     {
       "ffg": 707,
       "name": "Outer Rim Patrol",
       "initiative": 8,
-      "cost": 146,
+      "cost": 134,
+      "loadout": 0,
       "limited": 0,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/bbcb9af1eb386d2855f34e7ffa730528.jpg",
       "shipAbility": {
@@ -36,7 +50,9 @@
         "text": "While you perform a primary, [Torpedo], or [Missile] attack, if the defender is in your [Bullseye Arc], roll 1 additional die."
       },
       "text": "The Raider-class corvette is one of the Empire's smallest warships, often used for reconnaissance missions, surgical strikes, or suppressing enemy starfighters with its powerful ordnance.",
-      "hyperspace": false,
+      "standard": false,
+      "extended": false,
+      "epic": true,
       "engagement": 0,
       "xws": "outerrimpatrol",
       "slots": [
@@ -45,6 +61,7 @@
         "Missile",
         "Hardpoint",
         "Hardpoint",
+        "Crew",
         "Crew",
         "Team",
         "Team",

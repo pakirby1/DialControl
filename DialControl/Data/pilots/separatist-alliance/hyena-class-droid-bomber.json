@@ -50,20 +50,17 @@
         "name": "Networked Calculations",
         "text": "While you defend or perform an attack, you may spend 1 calculate token from a friendly ship at range 0-1 to change 1 [Focus] result to an [Evade] or [Hit] result."
       },
-      "hyperspace": false,
-      "cost": 25,
-      "slots": [
-        "Torpedo",
-        "Missile",
-        "Device",
-        "Modification",
-        "Configuration"
-      ],
+      "standard": true,
+      "extended": true,
+      "cost": 3,
+      "loadout": 6,
+      "slots": ["Torpedo", "Device", "Modification", "Configuration"],
       "text": "Baktoid Armor Workshop developed the Hyena as a strike craft compatible with Trade Federation Vulture swarm tactics.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/749bdc89c3da6b8034154780959e9c34.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/749bdc89c3da6b8034154780959e9c34.png",
       "ffg": 568,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/38a1ea6b53a619fcc6121cc32a91024d.jpg",
-      "keywords": ["Droid"]
+      "keywords": ["Droid"],
+      "epic": true
     },
     {
       "name": "Bombardment Drone",
@@ -76,13 +73,16 @@
         "text": "While you defend or perform an attack, you may spend 1 calculate token from a friendly ship at range 0-1 to change 1 [Focus] result to an [Evade] or [Hit] result."
       },
       "ability": "If you would drop a device, you may launch that device instead, using the same template.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/099422de35fb5ad2c2d238237e7dfe2c.png",
-      "hyperspace": true,
-      "cost": 29,
-      "slots": ["Sensor", "Device", "Device", "Modification", "Configuration"],
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/099422de35fb5ad2c2d238237e7dfe2c.png",
+      "standard": true,
+      "extended": true,
+      "cost": 3,
+      "loadout": 8,
+      "slots": ["Device", "Device", "Modification", "Configuration"],
       "ffg": 565,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/bc5e862af323dbe8db28d0d6bc6be4ad.jpg",
-      "keywords": ["Droid"]
+      "keywords": ["Droid"],
+      "epic": true
     },
     {
       "name": "DBS-404",
@@ -94,8 +94,10 @@
         "name": "Networked Calculations",
         "text": "While you defend or perform an attack, you may spend 1 calculate token from a friendly ship at range 0-1 to change 1 [Focus] result to an [Evade] or [Hit] result."
       },
-      "hyperspace": true,
-      "cost": 30,
+      "standard": true,
+      "extended": true,
+      "cost": 4,
+      "loadout": 10,
       "slots": [
         "Torpedo",
         "Missile",
@@ -103,11 +105,12 @@
         "Modification",
         "Configuration"
       ],
-      "ability": "You can perform primary attacks at range 0. While you perform an attack at attack range 0-1, you must roll 1 additional die. After the attack hits, suffer 1 [Critical Hit] damage.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/3e647295c7237a5eb36b94d887eb8e56.png",
+      "ability": "While you perform an attack at attack range 1, you must roll 1 additional die. After the attack hits, suffer 1 [Critical Hit] damage.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/3e647295c7237a5eb36b94d887eb8e56.png",
       "ffg": 563,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/fb1f119c8dcd69db43a442fecf25fceb.jpg",
-      "keywords": ["Droid"]
+      "keywords": ["Droid"],
+      "epic": true
     },
     {
       "name": "Baktoid Prototype",
@@ -116,13 +119,15 @@
       "initiative": 1,
       "limited": 2,
       "ability": "While you perform a special attack, if a friendly ship with the Networked Calculations ship ability has a lock on the defender, you may ignore the [Focus], [Calculate], or [Lock] requirement of that attack.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/254bc7be63cc9f4e629198f8d45f2f9b.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/254bc7be63cc9f4e629198f8d45f2f9b.png",
       "shipAbility": {
         "name": "Networked Calculations",
         "text": "While you defend or perform an attack, you may spend 1 calculate token from a friendly ship at range 0-1 to change 1 [Focus] result to an [Evade] or [Hit] result."
       },
-      "hyperspace": true,
-      "cost": 28,
+      "standard": true,
+      "extended": true,
+      "cost": 3,
+      "loadout": 9,
       "slots": [
         "Sensor",
         "Missile",
@@ -132,7 +137,8 @@
       ],
       "ffg": 566,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/f1e719d3490aceee6e5d93ac5b2a6cb2.jpg",
-      "keywords": ["Droid"]
+      "keywords": ["Droid"],
+      "epic": true
     },
     {
       "name": "Separatist Bomber",
@@ -140,23 +146,20 @@
       "initiative": 3,
       "limited": 0,
       "text": "The droid armies of the Separatists are callous to the plight of civilians and make no effort to limit collateral damage.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/cf510ca885a5f85395542b9aa51fba73.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/cf510ca885a5f85395542b9aa51fba73.png",
       "shipAbility": {
         "name": "Networked Calculations",
         "text": "While you defend or perform an attack, you may spend 1 calculate token from a friendly ship at range 0-1 to change 1 [Focus] result to an [Evade] or [Hit] result."
       },
-      "hyperspace": false,
-      "cost": 28,
-      "slots": [
-        "Torpedo",
-        "Missile",
-        "Device",
-        "Modification",
-        "Configuration"
-      ],
+      "standard": true,
+      "extended": true,
+      "cost": 3,
+      "loadout": 4,
+      "slots": ["Missile", "Device", "Modification", "Configuration"],
       "ffg": 567,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/162821196c9ca9ca7ef8d1cb1acab15b.jpg",
-      "keywords": ["Droid"]
+      "keywords": ["Droid"],
+      "epic": true
     },
     {
       "name": "DBS-32C",
@@ -165,7 +168,7 @@
       "limited": 1,
       "initiative": 3,
       "ability": "At the start of the Engagement Phase, you may spend 1 calculate token to perform a [Coordinate] action. You cannot coordinate ships that do not have the Networked Calculations ship ability.",
-      "image": "https://sb-cdn.fantasyflightgames.com/card_images/en/1befc5619a02e2ea8b7bfb8df93471a1.png",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/en/1befc5619a02e2ea8b7bfb8df93471a1.png",
       "shipAbility": {
         "name": "Networked Calculations",
         "text": "While you defend or perform an attack, you may spend 1 calculate token from a friendly ship at range 0-1 to change 1 [Focus] result to an [Evade] or [Hit] result."
@@ -180,12 +183,15 @@
         },
         { "difficulty": "Red", "type": "Jam" }
       ],
-      "hyperspace": true,
-      "cost": 40,
+      "standard": true,
+      "extended": true,
+      "cost": 4,
+      "loadout": 16,
       "slots": ["Sensor", "Tactical Relay", "Modification", "Configuration"],
       "ffg": 564,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/f58f50898f4fa3900eb1b7d01aec4ae5.jpg",
-      "keywords": ["Droid"]
+      "keywords": ["Droid"],
+      "epic": true
     }
   ],
   "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_Hyena.png"

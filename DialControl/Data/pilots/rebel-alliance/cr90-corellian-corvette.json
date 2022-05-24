@@ -21,14 +21,29 @@
     "4FR",
     "5FR"
   ],
-  "stats": [],
-  "actions": [],
+  "dialCodes": ["CR90-REB"],
+  "stats": [
+    { "arc": "Left Arc", "type": "attack", "value": 4 },
+    { "arc": "Right Arc", "type": "attack", "value": 4 },
+    { "type": "agility", "value": 0 },
+    { "type": "hull", "value": 18 },
+    { "type": "shields", "value": 7, "recovers": 2 },
+    { "type": "energy", "value": 7, "recovers": 2 }
+  ],
+  "actions": [
+    { "difficulty": "White", "type": "Focus" },
+    { "difficulty": "White", "type": "Reinforce" },
+    { "difficulty": "White", "type": "Lock" },
+    { "difficulty": "Red", "type": "Coordinate" },
+    { "difficulty": "White", "type": "Jam" }
+  ],
   "pilots": [
     {
       "ffg": 706,
       "name": "Alderaanian Guard",
       "initiative": 8,
-      "cost": 146,
+      "cost": 134,
+      "loadout": 0,
       "limited": 0,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/c029d78ab010ebb2d5a9405924efbf5a.jpg",
       "shipAbility": {
@@ -36,7 +51,9 @@
         "text": "You can acquire locks and perform primary attacks at range 1-4."
       },
       "text": "A craft used since before the Clone Wars, the CR90 corvette is favored by the Royal House of Alderaan for its versatility.",
-      "hyperspace": false,
+      "standard": false,
+      "extended": false,
+      "epic": true,
       "engagement": 0,
       "xws": "alderaanianguard",
       "slots": [

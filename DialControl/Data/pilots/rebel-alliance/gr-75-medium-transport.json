@@ -18,14 +18,28 @@
     "3FR",
     "4FR"
   ],
-  "stats": [],
-  "actions": [],
+  "dialCodes": ["GR75-REB"],
+  "stats": [
+    { "arc": "Front Arc", "type": "attack", "value": 2 },
+    { "type": "agility", "value": 0 },
+    { "type": "hull", "value": 12 },
+    { "type": "shields", "value": 3, "recovers": 1 },
+    { "type": "energy", "value": 4, "recovers": 1 }
+  ],
+  "actions": [
+    { "difficulty": "White", "type": "Focus" },
+    { "difficulty": "Red", "type": "Lock" },
+    { "difficulty": "White", "type": "Coordinate" },
+    { "difficulty": "Red", "type": "Reinforce" },
+    { "difficulty": "White", "type": "Jam" }
+  ],
   "pilots": [
     {
       "ffg": 709,
       "name": "Echo Base Evacuees",
       "initiative": 7,
-      "cost": 55,
+      "cost": 65,
+      "loadout": 0,
       "limited": 0,
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/4a49f20575c252f47a70d3c4da909301.jpg",
       "shipAbility": {
@@ -33,7 +47,9 @@
         "text": "After another friendly ship at range 0-1 performs an action, you may spend 1 [Energy]. If you do, it removes 1 orange or red token, or recovers 1 shield."
       },
       "text": "The GR-75 medium transport acquitted itself well at battles such as the evacuation of Hoth, where several of these ships were pivotal to the Rebel forces' escape.",
-      "hyperspace": false,
+      "standard": false,
+      "extended": false,
+      "epic": true,
       "engagement": 1,
       "xws": "echobaseevacuees",
       "slots": [
