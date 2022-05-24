@@ -20,14 +20,81 @@ class JSONService : JSONServiceProtocol {
                           pilotName: String,
                           faction: String) -> (Ship, Pilot)
     {
+        if FeaturesManager.shared.isFeatureEnabled(.loadloadShipFromJSON)
+        {
+            return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName, faction: faction)
+        }
+        else {
+            return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName, faction: faction)
+        }
+    }
+    
+    func loadShipFromJSON_New(shipName: String,
+                          pilotName: String,
+                          faction: String) -> (Ship, Pilot)
+    {
         var shipJSON: String = ""
         
         print("shipName: \(shipName)")
         print("pilotName: \(pilotName)")
         
+        global_os_log("loadShipFromJSON_New", [shipName, pilotName, faction].joined(separator: ", "))
+        
+        /*
+         do we have a (Ship, Pilot) already in the cache for this shipName & pilotName, faction combination?
+         
+            delta7aethersprite, obiwankenobi, galacticrepublic
+         
+            the cache key could be a String :
+         
+            delta7aethersprite, obiwankenobi, galacticrepublic
+         
+            let key = [shipName, pilotName, faction].joined(".")
+         
+            "delta7aethersprite.obiwankenobi.galacticrepublic"
+         
+         
+            guard let cachedShip = cache(key) else {
+                global_os_log("loadShipFromJSON_New cache miss", [shipName, pilotName, faction].joined(separator: ", "))
+         
+                let ship: (Ship, Pilot) = loadShipFromJSON_Old(shipName, pilotName, faction)
+                cache.store(key, ship)
+                return ship
+            }
+         
+            global_os_log("loadShipFromJSON_New cache hit", [shipName, pilotName, faction].joined(separator: ", "))
+         
+            return cachcedShip
+         */
+        // check the `cache` for this ship, pilot combination
+        /// Cache the ship JSON so that we don't have to read from the file system each time
+        shipJSON = getJSONFor(ship: shipName, faction: faction)
+        
+        /// Cache the Ship by xws xws -> Ship
+        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+        var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
+        
+        /// Update image to point to "https://pakirby1.github.io/Images/XWing/Pilots/{pilotName}.png
+        foundPilots.image = ImageUrlTemplates.buildPilotUrl(xws: pilotName)
+        
+        return (ship, foundPilots)
+    }
+    
+    func loadShipFromJSON_Old(shipName: String,
+                          pilotName: String,
+                          faction: String) -> (Ship, Pilot)
+    {
+        var shipJSON: String = ""
+        
+        print("shipName: \(shipName)")
+        print("pilotName: \(pilotName)")
+        
+        global_os_log("loadShipFromJSON_Old", [shipName, pilotName, faction].joined(separator: ", "))
+        
         // check the `cache` for this ship, pilot combination
         shipJSON = getJSONFor(ship: shipName, faction: faction)
         
+        /// Cache the Ship by xws
         let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
         var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
         
