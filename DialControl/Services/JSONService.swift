@@ -52,7 +52,7 @@ class JSONService : JSONServiceProtocol {
             let key = [shipName, pilotName, faction].joined(".")
          
             "delta7aethersprite.obiwankenobi.galacticrepublic"
-         
+            let cache = Cache<PilotKey, Ship>
          
             guard let cachedShip = cache(key) else {
                 global_os_log("loadShipFromJSON_New cache miss", [shipName, pilotName, faction].joined(separator: ", "))

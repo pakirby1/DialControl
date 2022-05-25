@@ -63,6 +63,7 @@ typealias ShipResult = Result<Ship, Error>
 class CacheService : CacheServiceProtocol {
     private var shipCache = Cache<ShipKey, Ship>()
     private var upgradeCache = Cache<String, [Upgrade]>()
+    private var pilotCache = Cache<PilotKey, Ship>()
     
     enum CacheError : Error {
         case FactoryFailure(String)
@@ -265,6 +266,20 @@ struct ShipKey: CustomStringConvertible, Hashable {
     
     var description: String {
         return "\(faction).\(xws)"
+    }
+}
+
+struct PilotKey : CustomStringConvertible, Hashable {
+    let shipKey: ShipKey
+    let pilot: String
+    
+    init(faction: String, ship: String, pilot: String) {
+        self.shipKey = ShipKey(faction: faction, xws: ship)
+        self.pilot = pilot
+    }
+    
+    var description: String {
+        return "\(shipKey.xws).\(pilot).\(shipKey.faction)"
     }
 }
 
