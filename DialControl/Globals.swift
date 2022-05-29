@@ -521,7 +521,7 @@ func measure<A>(_ feature: String = "", name: String = "", _ block: () -> A) -> 
     let startTime = CACurrentMediaTime()
     let result = block()
     let timeElapsed = CACurrentMediaTime() - startTime
-    print("\(feature) Time: \(name) - \(timeElapsed)")
+    global_os_log("\(feature) Time: \(name) - \(timeElapsed)")
     return result
 }
 

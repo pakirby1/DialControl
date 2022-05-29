@@ -19,9 +19,9 @@ struct ShipCacheKey {
 }
 
 class JSONService : JSONServiceProtocol {
-    let cacheService: CacheService
+    let cacheService: CacheServiceProtocol
     
-    init(cacheService: CacheService) {
+    init(cacheService: CacheServiceProtocol) {
         self.cacheService = cacheService
     }
     
@@ -30,9 +30,11 @@ class JSONService : JSONServiceProtocol {
                           pilotName: String,
                           faction: String) -> (Ship, Pilot)
     {
-        if FeaturesManager.shared.isFeatureEnabled(.loadloadShipFromJSON)
+        if FeaturesManager.shared.isFeatureEnabled(.loadShipFromJSON)
         {
-            return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName, faction: faction)
+            return measure("Performance", name: "loadShipFromJSON_New") {
+                return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName, faction: faction)
+            }
         }
         else {
             return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName, faction: faction)
@@ -43,6 +45,16 @@ class JSONService : JSONServiceProtocol {
                           pilotName: String,
                           faction: String) -> (Ship, Pilot)
     {
+        func buildShipFromJSON(key: ShipFactionCacheKey) -> Ship {
+            shipJSON = getJSONFor(ship: shipName, faction: faction)
+            
+            /// Cache the Ship by shipName xws -> Ship
+            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+            let pilot = ship.getPilot(pilotName: pilotName)
+            
+            return ship
+        }
+        
         var shipJSON: String = ""
         
         print("shipName: \(shipName)")
@@ -50,44 +62,20 @@ class JSONService : JSONServiceProtocol {
         
         global_os_log("loadShipFromJSON_New", [shipName, pilotName, faction].joined(separator: ", "))
         
-        /*
-         do we have a (Ship, Pilot) already in the cache for this shipName & pilotName, faction combination?
-         
-            delta7aethersprite, obiwankenobi, galacticrepublic
-         
-            the cache key could be a String :
-         
-            delta7aethersprite, obiwankenobi, galacticrepublic
-         
-            let key = [shipName, pilotName, faction].joined(".")
-         
-            "delta7aethersprite.obiwankenobi.galacticrepublic"
-            let cache = Cache<PilotKey, Ship>
-         
-            guard let cachedShip = cache(key) else {
-                global_os_log("loadShipFromJSON_New cache miss", [shipName, pilotName, faction].joined(separator: ", "))
-         
-                let ship: (Ship, Pilot) = loadShipFromJSON_Old(shipName, pilotName, faction)
-                cache.store(key, ship)
-                return ship
-            }
-         
-            global_os_log("loadShipFromJSON_New cache hit", [shipName, pilotName, faction].joined(separator: ", "))
-         
-            return cachcedShip
-         */
-        // check the `cache` for this ship, pilot combination
-        /// Cache the ship JSON so that we don't have to read from the file system each time
         let key = ShipFactionCacheKey(shipName: shipName, faction: faction)
+        
         guard let ship = cacheService.getShip(key: key) else {
+            global_os_log("loadShipFromJSON_New cache miss", key.description)
             shipJSON = getJSONFor(ship: shipName, faction: faction)
             
             /// Cache the Ship by shipName xws -> Ship
             let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
             let pilot = ship.getPilot(pilotName: pilotName)
+            cacheService.setShip(key: key, value: ship)
             return (ship, pilot)
         }
         
+        global_os_log("loadShipFromJSON_New cache hit", key.description)
         let pilot = ship.getPilot(pilotName: pilotName)
         return (ship, pilot)
     }

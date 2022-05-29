@@ -14,6 +14,8 @@ protocol CacheServiceProtocol {
     func getShip(squad: Squad,
                  squadPilot: SquadPilot,
                  pilotState: PilotState) -> AnyPublisher<ShipPilot, Never>
+    func getShip(key: ShipFactionCacheKey) -> Ship?
+    func setShip(key: ShipFactionCacheKey, value: Ship)
 }
 
 class Cache<Key: Hashable & CustomStringConvertible, Value> {
@@ -22,6 +24,10 @@ class Cache<Key: Hashable & CustomStringConvertible, Value> {
     func getValue(key: Key) -> Value? {
         guard let value = store[key] else { return nil }
         return value
+    }
+    
+    func setValue(key: Key, value: Value) {
+        store[key] = value
     }
 
     func getValue(key: Key, factory: @escaping (Key) -> Value) -> Value {
@@ -77,6 +83,10 @@ class CacheService : CacheServiceProtocol {
     
     func getShip(key: ShipFactionCacheKey) -> Ship? {
         shipFactionCache.getValue(key: key)
+    }
+    
+    func setShip(key: ShipFactionCacheKey, value: Ship) {
+        shipFactionCache.setValue(key: key, value: value)
     }
     
     func getShip(squad: Squad,

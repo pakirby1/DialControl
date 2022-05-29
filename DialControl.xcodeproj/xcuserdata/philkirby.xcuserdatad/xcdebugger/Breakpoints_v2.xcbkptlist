@@ -14,8 +14,8 @@
             filePath = "DialControl/Services/JSONService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
+            startingLineNumber = "92"
+            endingLineNumber = "92"
             landmarkName = "loadShipFromJSON_Old(shipName:pilotName:faction:)"
             landmarkType = "7">
             <Actions>
@@ -39,8 +39,8 @@
             filePath = "DialControl/Services/CacheService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "getShipV1(squad:squadPilot:pilotState:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -65,14 +65,30 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "9396CBBE-D580-43DD-BAE5-EF285383E681"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DialControl/Services/JSONService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
+            startingLineNumber = "79"
+            endingLineNumber = "79"
+            landmarkName = "loadShipFromJSON_New(shipName:pilotName:faction:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "26162F09-59E8-42DE-8966-9925A529A670"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControl/Services/JSONService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "loadShipFromJSON_New(shipName:pilotName:faction:)"
             landmarkType = "7">
          </BreakpointContent>
