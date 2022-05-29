@@ -18,6 +18,11 @@ protocol CacheServiceProtocol {
 
 class Cache<Key: Hashable & CustomStringConvertible, Value> {
     private var store = [Key: Value]()
+    
+    func getValue(key: Key) -> Value? {
+        guard let value = store[key] else { return nil }
+        return value
+    }
 
     func getValue(key: Key, factory: @escaping (Key) -> Value) -> Value {
         if let value = store[key] {
@@ -64,9 +69,14 @@ class CacheService : CacheServiceProtocol {
     private var shipCache = Cache<ShipKey, Ship>()
     private var upgradeCache = Cache<String, [Upgrade]>()
     private var pilotCache = Cache<PilotKey, Ship>()
+    private var shipFactionCache = Cache<ShipFactionCacheKey, Ship>()
     
     enum CacheError : Error {
         case FactoryFailure(String)
+    }
+    
+    func getShip(key: ShipFactionCacheKey) -> Ship? {
+        shipFactionCache.getValue(key: key)
     }
     
     func getShip(squad: Squad,
@@ -289,5 +299,16 @@ struct UpgradeKey : CustomStringConvertible, Hashable {
     
     var description: String {
         return "\(category).\(xws)"
+    }
+}
+
+struct ShipFactionCacheKey: Hashable {
+    let shipName: String
+    let faction: String
+}
+
+extension ShipFactionCacheKey : CustomStringConvertible {
+    var description: String {
+        return "\(faction).\(shipName)"
     }
 }

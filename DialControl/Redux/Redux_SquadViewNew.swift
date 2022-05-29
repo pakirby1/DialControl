@@ -185,9 +185,9 @@ extension Redux_SquadViewNew {
                 
                 return Button(action: {
                     func logDetails() {
-                        print("PAK_Redux_SquadView dialsState: \(self.viewModel.viewProperties.dialsState)")
-                        print("PAK_Redux_SquadView revealedDialCount: \(self.viewModel.viewProperties.revealedDialCount)")
-                        print("PAK_Redux_SquadView shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
+                        global_os_log("Redux_SquadViewNew dialsState: \(self.viewModel.viewProperties.dialsState)")
+                        global_os_log("Redux_SquadViewNew revealedDialCount: \(self.viewModel.viewProperties.revealedDialCount)")
+                        global_os_log("Redux_SquadViewNew shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
                     }
                     
                     logDetails()
@@ -197,7 +197,7 @@ extension Redux_SquadViewNew {
 
                     logDetails()
 
-                    print("PAK_DialStatus_New Button: \(self.viewModel.viewProperties.dialsState)")
+                    global_os_log("Redux_SquadViewNew dialsState: \(self.viewModel.viewProperties.dialsState)")
                 }) {
                     Text(title).foregroundColor(Color.white)
                 }
@@ -536,6 +536,8 @@ extension Redux_SquadViewNewViewProperties {
     
     var dialsState : SquadDialsState {
         get {
+            global_os_log("Redux_SquadViewNew dialsState: revealedDialCount: \(self.revealedDialCount) shipPilots.count: \(self.shipPilots.count)")
+            
             if self.revealedDialCount == self.shipPilots.count {
                 return .revealed
             } else {

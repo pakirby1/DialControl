@@ -476,13 +476,13 @@ extension Redux_SquadView {
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
                     data.change(update: {
-                        print("PAK_DialStatus pilotStateData.id: \($0)")
+                        global_os_log("Redux_SquadViewNew pilotStateData.id: \($0)")
     
                         $0.dial_status = newDialStatus
                         
                         self.updatePilotState(pilotStateData: $0,
                                                            pilotState: shipPilot.pilotState)
-                        print("PAK_DialStatus updateAllDials $0.dial_status = \($0.dial_status)")
+                        global_os_log("Redux_SquadViewNew updateAllDials $0.dial_status = \($0.dial_status)")
                     })
                 }
             }

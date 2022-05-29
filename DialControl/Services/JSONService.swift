@@ -14,7 +14,17 @@ protocol JSONServiceProtocol {
                           faction: String) -> (Ship, Pilot)
 }
 
+struct ShipCacheKey {
+    let shipName: String
+}
+
 class JSONService : JSONServiceProtocol {
+    let cacheService: CacheService
+    
+    init(cacheService: CacheService) {
+        self.cacheService = cacheService
+    }
+    
     /// What do we return if we encounter an error (empty file)?
     func loadShipFromJSON(shipName: String,
                           pilotName: String,
@@ -68,16 +78,18 @@ class JSONService : JSONServiceProtocol {
          */
         // check the `cache` for this ship, pilot combination
         /// Cache the ship JSON so that we don't have to read from the file system each time
-        shipJSON = getJSONFor(ship: shipName, faction: faction)
+        let key = ShipFactionCacheKey(shipName: shipName, faction: faction)
+        guard let ship = cacheService.getShip(key: key) else {
+            shipJSON = getJSONFor(ship: shipName, faction: faction)
+            
+            /// Cache the Ship by shipName xws -> Ship
+            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+            let pilot = ship.getPilot(pilotName: pilotName)
+            return (ship, pilot)
+        }
         
-        /// Cache the Ship by xws xws -> Ship
-        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-        var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
-        
-        /// Update image to point to "https://pakirby1.github.io/Images/XWing/Pilots/{pilotName}.png
-        foundPilots.image = ImageUrlTemplates.buildPilotUrl(xws: pilotName)
-        
-        return (ship, foundPilots)
+        let pilot = ship.getPilot(pilotName: pilotName)
+        return (ship, pilot)
     }
     
     func loadShipFromJSON_Old(shipName: String,

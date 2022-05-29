@@ -516,6 +516,15 @@ extension Ship {
         
         return charge
     }
+    
+    func getPilot(pilotName: String) -> Pilot {
+        var pilot: Pilot = self.pilots.filter{ $0.xws == pilotName }[0].asPilot()
+        
+        /// Update image to point to "https://pakirby1.github.io/Images/XWing/Pilots/{pilotName}.png
+        pilot.image = ImageUrlTemplates.buildPilotUrl(xws: pilotName)
+        
+        return pilot
+    }
 }
 
 struct ShipPilot: Identifiable, Equatable {

@@ -16,10 +16,10 @@ class DIContainer {
     var jsonService: JSONService!
     var imageService: ImageService!
     
-    func registerServices(moc: NSManagedObjectContext) {
-        self.squadService = SquadService(moc: moc, cacheService: CacheService())
+    func registerServices(moc: NSManagedObjectContext, cacheService: CacheService) {
+        self.squadService = SquadService(moc: moc, cacheService: cacheService)
         self.pilotStateService = PilotStateService(moc: moc)
-        self.jsonService = JSONService()
+        self.jsonService = JSONService(cacheService: cacheService)
         self.imageService = ImageService(moc: moc)
     }
 }
