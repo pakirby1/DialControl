@@ -37,49 +37,12 @@ class JSONService : JSONServiceProtocol {
             }
         }
         else {
-            return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName, faction: faction)
+            return measure("Performance", name: "loadShipFromJSON_Old") {
+                return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName, faction: faction)
+            }
         }
     }
-    
-    func loadShipFromJSON_New2(shipName: String,
-                          pilotName: String,
-                          faction: String) -> (Ship, Pilot)
-    {
-        func buildShipFromJSON(key: ShipFactionCacheKey) -> Ship {
-            shipJSON = getJSONFor(ship: shipName, faction: faction)
-            
-            /// Cache the Ship by shipName xws -> Ship
-            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            let pilot = ship.getPilot(pilotName: pilotName)
-            
-            return ship
-        }
-        
-        var shipJSON: String = ""
-        
-        print("shipName: \(shipName)")
-        print("pilotName: \(pilotName)")
-        
-        global_os_log("loadShipFromJSON_New2", [shipName, pilotName, faction].joined(separator: ", "))
-        
-        let key = ShipFactionCacheKey(shipName: shipName, faction: faction)
-        
-        guard let ship = cacheService.getShip(key: key) else {
-            global_os_log("loadShipFromJSON_New2 cache miss", key.description)
-            shipJSON = getJSONFor(ship: shipName, faction: faction)
-            
-            /// Cache the Ship by shipName xws -> Ship
-            let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-            let pilot = ship.getPilot(pilotName: pilotName)
-            cacheService.setShip(key: key, value: ship)
-            return (ship, pilot)
-        }
-        
-        global_os_log("loadShipFromJSON_New2 cache hit", key.description)
-        let pilot = ship.getPilot(pilotName: pilotName)
-        return (ship, pilot)
-    }
-    
+ 
     func loadShipFromJSON_New(shipName: String,
                           pilotName: String,
                           faction: String) -> (Ship, Pilot)
