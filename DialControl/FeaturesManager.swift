@@ -50,7 +50,6 @@ class FeaturesManager {
         add(Feature(id: FeatureId.MyRedux, enabled: true))
         add(Feature(id: FeatureId.Redux_FactionSquadList, enabled: true))
         add(Feature(id: FeatureId.Redux_SquadView, enabled: true))
-        add(Feature(id: FeatureId.loadShipFromJSON, enabled: true))
     }
 }
 
@@ -80,7 +79,6 @@ enum FeatureId : String {
     case MyRedux
     case Redux_FactionSquadList
     case Redux_SquadView
-    case loadShipFromJSON
 }
 
 protocol IFeature {

@@ -7,31 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B73C0129-DD06-4ABF-8CB5-26B0E57A2D03"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "Yes"
-            filePath = "DialControl/Services/JSONService.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
-            landmarkName = "loadShipFromJSON_Old(shipName:pilotName:faction:)"
-            landmarkType = "7">
-            <Actions>
-               <BreakpointActionProxy
-                  ActionExtensionID = "Xcode.BreakpointAction.Log">
-                  <ActionContent
-                     message = "loadShipFromJSON Hit %H"
-                     conveyanceType = "0">
-                  </ActionContent>
-               </BreakpointActionProxy>
-            </Actions>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "2BC69EFC-E15F-4B11-A3A5-BD30D9DE298A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -71,8 +46,8 @@
             filePath = "DialControl/Services/JSONService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "71"
-            endingLineNumber = "71"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "loadShipFromJSON_New(shipName:pilotName:faction:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -87,8 +62,8 @@
             filePath = "DialControl/Services/JSONService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "loadShipFromJSON_New(shipName:pilotName:faction:)"
             landmarkType = "7">
          </BreakpointContent>

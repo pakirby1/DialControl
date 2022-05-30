@@ -30,23 +30,6 @@ class JSONService : JSONServiceProtocol {
                           pilotName: String,
                           faction: String) -> (Ship, Pilot)
     {
-        if FeaturesManager.shared.isFeatureEnabled(.loadShipFromJSON)
-        {
-            return measure("Performance", name: "loadShipFromJSON_New") {
-                return loadShipFromJSON_New(shipName: shipName, pilotName: pilotName, faction: faction)
-            }
-        }
-        else {
-            return measure("Performance", name: "loadShipFromJSON_Old") {
-                return loadShipFromJSON_Old(shipName: shipName, pilotName: pilotName, faction: faction)
-            }
-        }
-    }
- 
-    func loadShipFromJSON_New(shipName: String,
-                          pilotName: String,
-                          faction: String) -> (Ship, Pilot)
-    {
         var shipJSON: String = ""
         
         print("shipName: \(shipName)")
@@ -70,30 +53,6 @@ class JSONService : JSONServiceProtocol {
         global_os_log("loadShipFromJSON_New cache hit", key.description)
         let pilot = ship.getPilot(pilotName: pilotName)
         return (ship, pilot)
-    }
-    
-    func loadShipFromJSON_Old(shipName: String,
-                          pilotName: String,
-                          faction: String) -> (Ship, Pilot)
-    {
-        var shipJSON: String = ""
-        
-        print("shipName: \(shipName)")
-        print("pilotName: \(pilotName)")
-        
-        global_os_log("loadShipFromJSON_Old", [shipName, pilotName, faction].joined(separator: ", "))
-        
-        // check the `cache` for this ship, pilot combination
-        shipJSON = getJSONFor(ship: shipName, faction: faction)
-        
-        /// Cache the Ship by xws
-        let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
-        var foundPilots: Pilot = ship.pilots.filter{ $0.xws == pilotName }[0].asPilot()
-        
-        /// Update image to point to "https://pakirby1.github.io/Images/XWing/Pilots/{pilotName}.png
-        foundPilots.image = ImageUrlTemplates.buildPilotUrl(xws: pilotName)
-        
-        return (ship, foundPilots)
     }
     
     /// The default path for pilots
