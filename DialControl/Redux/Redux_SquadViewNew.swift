@@ -181,23 +181,19 @@ extension Redux_SquadViewNew {
         
         var hideOrRevealAll: some View {
             func buildButton(_ newDialStatus: DialStatus) -> some View {
+                global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton newDialStatus: \(newDialStatus)")
                 let title: String = (newDialStatus == .hidden) ? "Hide" : "Reveal"
+                global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton title: \(title)")
                 
                 return Button(action: {
                     func logDetails() {
-                        global_os_log("Redux_SquadViewNew dialsState: \(self.viewModel.viewProperties.dialsState)")
-                        global_os_log("Redux_SquadViewNew revealedDialCount: \(self.viewModel.viewProperties.revealedDialCount)")
-                        global_os_log("Redux_SquadViewNew shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
+                        global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton dialsState: \(self.viewModel.viewProperties.dialsState)")
+                        global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton revealedDialCount: \(self.viewModel.viewProperties.revealedDialCount)")
+                        global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
                     }
                     
                     logDetails()
-                    
-        //            self.revealAllDials.toggle()
                     self.updateAllDials(newDialStatus: newDialStatus)
-
-                    logDetails()
-
-                    global_os_log("Redux_SquadViewNew dialsState: \(self.viewModel.viewProperties.dialsState)")
                 }) {
                     Text(title).foregroundColor(Color.white)
                 }
@@ -526,7 +522,7 @@ extension Redux_SquadViewNewViewProperties {
     var revealedDialCount: Int {
         self.shipPilots.filter{
             guard let status = $0.pilotStateData?.dial_status else { return false }
-            return status == .revealed
+            return (status == .revealed) || (status == .destroyed)
         }.count
     }
     
@@ -536,11 +532,13 @@ extension Redux_SquadViewNewViewProperties {
     
     var dialsState : SquadDialsState {
         get {
-            global_os_log("Redux_SquadViewNew dialsState: revealedDialCount: \(self.revealedDialCount) shipPilots.count: \(self.shipPilots.count)")
+            global_os_log("Redux_SquadViewNewViewProperties dialsState: revealedDialCount: \(self.revealedDialCount) shipPilots.count: \(self.shipPilots.count)")
             
             if self.revealedDialCount == self.shipPilots.count {
+                global_os_log("Redux_SquadViewNewViewProperties dialsState: counts match .revealed")
                 return .revealed
             } else {
+                global_os_log("Redux_SquadViewNewViewProperties dialsState: counts do not match .hidden")
                 return .hidden
             }
         }
