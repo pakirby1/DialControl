@@ -93,31 +93,13 @@ class ViewFactory: ObservableObject {
         }
         
         func buildSquadView(squad: Squad, squadData: SquadData) -> AnyView {
-            func buildSquadViewOld(squad: Squad, squadData: SquadData) -> AnyView {
-                return measure("Performance", name: "ViewFactory.Redux_buildView().squadViewPAK") {
-                    return AnyView(Redux_SquadView(squad: squad,
-                                                   squadData: squadData)
-                                    .environmentObject(self)
-                                    .environmentObject(store)
-                    )
-                }
-            }
-            
-            func buildSquadViewNew(squad: Squad, squadData: SquadData) -> AnyView {
-                return measure("Performance", name: "ViewFactory.Redux_buildView().squadViewPAK") {
-                    return AnyView(Redux_SquadViewNew(store: store,
-                                                      squad: squad,
-                                                      squadData: squadData
-                                                      )
-                                    .environmentObject(self)
-                    )
-                }
-            }
-            
-            if (FeaturesManager.shared.isFeatureEnabled(.Redux_SquadView)) {
-                return buildSquadViewNew(squad: squad, squadData: squadData)
-            } else {
-                return buildSquadViewOld(squad: squad, squadData: squadData)
+            return measure("Performance", name: "ViewFactory.Redux_buildView().squadViewPAK") {
+                return AnyView(Redux_SquadViewNew(store: store,
+                                                  squad: squad,
+                                                  squadData: squadData
+                                                  )
+                                .environmentObject(self)
+                )
             }
         }
         
