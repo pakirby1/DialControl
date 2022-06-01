@@ -8,19 +8,6 @@
 
 import Foundation
 
-/*
- fm.isFeatureEnabled(FeatureId.getShips) { isTrue in
-    if (isTrue) {
-        // foo()
-    } else {
-        // bar()
-    }
- }
- 
- fm.isFeatureEnabled(FeatrueId.getShips, enabled: {}, disabled: {})
- 
- func isFeatureEnabled(_ id: FeatureId
- */
 class FeaturesManager {
     var features: [FeatureId: Feature] = [:]
     
@@ -49,6 +36,7 @@ class FeaturesManager {
     func configureFeatures() {
         add(Feature(id: FeatureId.MyRedux, enabled: true))
         add(Feature(id: FeatureId.Redux_FactionSquadList, enabled: true))
+        add(Feature(id: FeatureId.UpgradeChargeBanner, enabled: true))
     }
 }
 
@@ -77,7 +65,7 @@ extension FeaturesManager {
 enum FeatureId : String {
     case MyRedux
     case Redux_FactionSquadList
-//    case Redux_SquadView
+    case UpgradeChargeBanner
 }
 
 protocol IFeature {

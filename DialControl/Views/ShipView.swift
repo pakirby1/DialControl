@@ -337,6 +337,16 @@ class ShipViewModel: ObservableObject {
         
         self.pilotStateData = newData
     }
+    
+    func getUpgradeStateData(upgrade: Upgrade) -> UpgradeStateData? {
+        // do we have any upgrade states?
+        guard let upgradeStates = self.pilotStateData.upgradeStates else { return nil }
+        
+        let upgradeStateData: [UpgradeStateData] = upgradeStates.filter({ upgradeState in upgradeState.xws == upgrade.xws })
+    
+        // yes, return the upgrade state with matching name/xws or nil
+        return (upgradeStateData.count > 0 ? upgradeStateData[0] : nil)
+    }
 }
 
 enum PilotStatePropertyType {
@@ -541,15 +551,7 @@ struct ShipView: View {
         }
     }
     
-    func getUpgradeStateData(upgrade: Upgrade) -> UpgradeStateData? {
-        // do we have any upgrade states?
-        guard let upgradeStates = viewModel.pilotStateData.upgradeStates else { return nil }
-        
-        let upgradeStateData: [UpgradeStateData] = upgradeStates.filter({ upgradeState in upgradeState.xws == upgrade.xws })
     
-        // yes, return the upgrade state with matching name/xws or nil
-        return (upgradeStateData.count > 0 ? upgradeStateData[0] : nil)
-    }
     
     var linkedView: AnyView {
         let emptyView = AnyView(EmptyView())
@@ -560,7 +562,7 @@ struct ShipView: View {
         
             // yes
                 // do we have an upgradeState for this upgrade?
-            guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
+            guard let upgradeState = viewModel.getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
         
             guard let charge_active = upgradeState.charge_active else { return emptyView }
             guard let charge_inactive = upgradeState.charge_inactive else { return emptyView }
@@ -594,7 +596,7 @@ struct ShipView: View {
         if (self.imageOverlayUrlBack != "") {
             guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
             
-            guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
+            guard let upgradeState = self.viewModel.getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
             let side = (upgradeState.selected_side == 0) ? false : true
             
 //            let flipView = UpgradeCardFlipView(

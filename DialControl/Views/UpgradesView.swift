@@ -30,6 +30,7 @@ struct UpgradesView: View {
                         self.imageOverlayUrlBack = upgradeViewModel.imageUrlBack
                         self.selectedUpgrade = upgradeViewModel
                     }
+                    .environmentObject(viewModel)
                 }
             }
         }
@@ -101,6 +102,23 @@ struct UpgradeView: View {
     @EnvironmentObject var shipViewModel: ShipViewModel
     var callback: (UpgradeViewModel) -> ()
     
+    var emptyView: AnyView {
+        AnyView(EmptyView())
+    }
+    
+    var banner: AnyView {
+        guard let upgradeState = self.shipViewModel.getUpgradeStateData(upgrade: viewModel.upgrade) else { return emptyView }
+        
+        guard let charge_active = upgradeState.charge_active else { return emptyView }
+        guard let charge_inactive = upgradeState.charge_inactive else { return emptyView }
+        
+        return Capsule()
+            .fill(Color.red)
+            .overlay(
+                Text("\(charge_active)")
+            ).eraseToAnyView()
+    }
+    
     var body: some View {
         Text("\(self.viewModel.upgrade.name)")
             .foregroundColor(.white)
@@ -108,13 +126,9 @@ struct UpgradeView: View {
             .padding(15)
             .overlay(
                 ZStack {
-//                    HStack {
-//                        CountBannerView(count: 0, type: .active, width: 30)
-//                        CountBannerView(count: 0, type: .inactive)
-//                    }.offset(x: 70, y: -20)
-                    
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.white, lineWidth: 1)
+                    banner
                 }
             )
             .onTapGesture {
