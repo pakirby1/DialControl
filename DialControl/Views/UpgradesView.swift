@@ -11,7 +11,7 @@ import SwiftUI
 
 // MARK:- UpgradesView
 struct UpgradesView: View {
-    @EnvironmentObject var viewModel: ShipViewModel
+    @EnvironmentObject var viewModel: Redux_ShipViewModel
     @State var imageName: String = ""
     let upgrades: [Upgrade]
     @Binding var showImageOverlay: Bool
@@ -99,7 +99,7 @@ struct UpgradeView: View {
     }
     
     let viewModel: UpgradeViewModel
-    @EnvironmentObject var shipViewModel: ShipViewModel
+    @EnvironmentObject var shipViewModel: Redux_ShipViewModel
     var callback: (UpgradeViewModel) -> ()
     
     var emptyView: AnyView {

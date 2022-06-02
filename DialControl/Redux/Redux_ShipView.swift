@@ -416,14 +416,15 @@ class Redux_ShipViewModel: ObservableObject {
         self.pilotStateData = newData
     }
     
-//    func updateState_New(newData: PilotStateData) {
-//        guard let state = self.pilotState else { return }
-//
-//        self.pilotStateService.updateState(newData: newData,
-//                                           state: state)
-//
-//        self.pilotStateData = newData
-//    }
+    func getUpgradeStateData(upgrade: Upgrade) -> UpgradeStateData? {
+        // do we have any upgrade states?
+        guard let upgradeStates = self.pilotStateData.upgradeStates else { return nil }
+        
+        let upgradeStateData: [UpgradeStateData] = upgradeStates.filter({ upgradeState in upgradeState.xws == upgrade.xws })
+    
+        // yes, return the upgrade state with matching name/xws or nil
+        return (upgradeStateData.count > 0 ? upgradeStateData[0] : nil)
+    }
 }
 
 enum Redux_PilotStatePropertyType {

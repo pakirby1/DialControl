@@ -443,54 +443,29 @@ struct ShipView: View {
     }
     
     func buildLinkedView(max: Int,
-                             type: StatButtonType,
-                             active: Int,
-                             inActive: Int,
-                             updateType: PilotStatePropertyType,
-                             handleDestroyed: Bool = false) -> AnyView
-        {
-            if (max > 0) {
-                return AnyView(LinkedView(type: type,
-                           active: active,
-                           inactive: inActive)
-                { (active, inactive) in
-                    self.viewModel.update(type: updateType,
-                                          active: active,
-                                          inactive: inactive)
-                    
-                    if (handleDestroyed) {
-                        self.viewModel.handleDestroyed()
-                    }
-                })
-            }
-            
-            return AnyView(EmptyView())
+                         type: StatButtonType,
+                         active: Int,
+                         inActive: Int,
+                         updateType: PilotStatePropertyType,
+                         handleDestroyed: Bool = false) -> AnyView
+    {
+        if (max > 0) {
+            return AnyView(LinkedView(type: type,
+                                      active: active,
+                                      inactive: inActive)
+            { (active, inactive) in
+                self.viewModel.update(type: updateType,
+                                      active: active,
+                                      inactive: inactive)
+                
+                if (handleDestroyed) {
+                    self.viewModel.handleDestroyed()
+                }
+            })
         }
         
-    //    func buildLinkedView_New(max: Int,
-    //                         type: StatButtonType,
-    //                         active: Int,
-    //                         inActive: Int,
-    //                         updateType: PilotStatePropertyType) -> AnyView
-    //    {
-    //        if (max > 0) {
-    //            let viewModel = LinkedViewModel(store: Store(state: AppState(), environment: AppEnvironment()),
-    //                                            pilotIndex: self.viewModel.shipPilot.pilotState.pilotIndex,
-    //                                            type: type)
-    //
-    //
-    //            return AnyView(LinkedView(type: type,
-    //                       active: active,
-    //                       inactive: inActive)
-    //            { (active, inactive) in
-    //                self.viewModel.update(type: updateType,
-    //                                      active: active,
-    //                                      inactive: inactive)
-    //            })
-    //        }
-    //
-    //        return AnyView(EmptyView())
-    //    }
+        return AnyView(EmptyView())
+    }
     
     var footer: some View {
         UpgradesView(upgrades: viewModel.shipPilot.upgrades,
@@ -518,10 +493,7 @@ struct ShipView: View {
     var clearView: some View {
         Color
             .clear
-//            .border(Color.red, width: 5)
     }
-    
-    
     
     var upgradeImageOverlay: some View {
         ZStack {
