@@ -159,19 +159,7 @@ extension Popup {
     }
 }
 
-extension View {
-    func popup<T: View>(
-        isPresented: Bool,
-        alignment: Alignment = .center,
-        direction: Popup<T>.Direction = .bottom,
-        @ViewBuilder content: () -> T
-    ) -> some View {
-        return modifier(Popup(isPresented: isPresented,
-                              alignment: alignment,
-                              direction: direction,
-                              content: content))
-    }
-}
+
 
 private extension View {
     func onGlobalFrameChange(_ onChange: @escaping (CGRect) -> Void) -> some View {

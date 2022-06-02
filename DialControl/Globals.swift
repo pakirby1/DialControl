@@ -176,22 +176,6 @@ protocol IDataStorage {
     func setValue(newValue: Value, forKey: String)
 }
 
-public extension View {
-    func myAlert(isPresented: Binding<Bool>,
-               title: String,
-               message: String? = nil,
-               dismissButton: Alert.Button? = nil) -> some View
-    {
-
-        alert(isPresented: isPresented) {
-            Alert(title: Text(title),
-                  message: {
-                    if let message = message { return Text(message) }
-                    else { return nil } }(),
-                  dismissButton: dismissButton)
-        }
-    }
-}
 
 /*
  .alert(isPresented: $displayDeleteAllConfirmation) {
@@ -222,11 +206,7 @@ struct LongPressAlertModifier: ViewModifier {
     }
 }
 
-extension View {
-    func addLongPressAlert(_ isPresented: Binding<Bool>, _ message: String) -> some View {
-        self.modifier(LongPressAlertModifier(isPresented: isPresented, message: message))
-    }
-}
+
 
 struct AlertModifier: ViewModifier {
     struct Properties {
@@ -255,12 +235,7 @@ struct AlertModifier: ViewModifier {
     }
 }
 
-extension View {
-    func addAlert(_ showAlert: Binding<Bool>, properties: AlertModifier.Properties) -> some View {
-        self.modifier(AlertModifier(showAlert: showAlert,
-                                    properties: properties))
-    }
-}
+
 
 func logMessage(_ message: String) {
     print("\(Date()) \(message)")
@@ -538,3 +513,14 @@ func measureThrows<A>(_ feature: String = "", name: String = "", _ block: () thr
         throw SquadServiceProtocolError.saveSquadError(error.localizedDescription)
     }
 }
+
+func ForEachWithIndex<Data: RandomAccessCollection, Content: View>(
+    _ data: Data,
+    @ViewBuilder content: @escaping (Data.Index, Data.Element) -> Content)
+-> some View where Data.Element: Identifiable, Data.Element: Hashable
+{
+    ForEach(Array(zip(data.indices, data)), id:\.1) { index, element in
+        content(index, element)
+    }
+}
+

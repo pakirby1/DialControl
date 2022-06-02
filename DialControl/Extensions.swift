@@ -11,13 +11,33 @@ import SwiftUI
 import Combine
 
 extension View {
+    func popup<T: View>(
+        isPresented: Bool,
+        alignment: Alignment = .center,
+        direction: Popup<T>.Direction = .bottom,
+        @ViewBuilder content: () -> T
+    ) -> some View {
+        return modifier(Popup(isPresented: isPresented,
+                              alignment: alignment,
+                              direction: direction,
+                              content: content))
+    }
+}
+
+extension View {
     func debugType() -> some View {
         print(type(of: self))
         return self
     }
 }
 
-
+extension View {
+    func navigate<Content: View>(
+        @ViewBuilder to destination: () -> Content
+    ) -> some View {
+        NavigationLink(destination: destination(), label: { self })
+    }
+}
 
 /// Creates a new `View` based on a condition.
 ///
@@ -101,6 +121,35 @@ public extension Cancellable {
     }
 }
 
+public extension View {
+    func myAlert(isPresented: Binding<Bool>,
+               title: String,
+               message: String? = nil,
+               dismissButton: Alert.Button? = nil) -> some View
+    {
+
+        alert(isPresented: isPresented) {
+            Alert(title: Text(title),
+                  message: {
+                    if let message = message { return Text(message) }
+                    else { return nil } }(),
+                  dismissButton: dismissButton)
+        }
+    }
+}
+
+extension View {
+    func addLongPressAlert(_ isPresented: Binding<Bool>, _ message: String) -> some View {
+        self.modifier(LongPressAlertModifier(isPresented: isPresented, message: message))
+    }
+}
+
+extension View {
+    func addAlert(_ showAlert: Binding<Bool>, properties: AlertModifier.Properties) -> some View {
+        self.modifier(AlertModifier(showAlert: showAlert,
+                                    properties: properties))
+    }
+}
 extension View {
     func eraseToAnyView() -> AnyView {
         AnyView(self)
