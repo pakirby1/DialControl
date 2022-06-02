@@ -205,8 +205,6 @@ extension Redux_SquadViewNew {
         return ZStack {
             VStack(alignment: .leading) {
                 // Header
-                Text("Redux_SquadViewNew")
-                
                 HStack {
                     points
 
