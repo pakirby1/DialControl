@@ -155,19 +155,6 @@ class Redux_ShipViewModel: ObservableObject {
         )))
     }
     
-//    lazy var shipImageURL: String = {
-//        self.store.send(.ship(action: .loadShipImage(
-//            shipPilot.shipName,
-//            shipPilot.pilotName,
-//            self.squad
-//        )))
-//
-//        return self.store.state.ship.shipImageURL
-////        loadShipFromJSON(shipName: shipPilot.shipName,
-////                       pilotName: shipPilot.pilotName).1.image
-//    }()
-    
-    
     // Load values from pilotShipState, becuase shipPilot ontains the initial values
     // Not the updated values
     var force: Int {
@@ -181,12 +168,10 @@ class Redux_ShipViewModel: ObservableObject {
     }
     
     var shieldsActive: Int {
-//        self.shipPilot.shieldStats
         return self.pilotStateData.shield_active
     }
     
     var hullActive: Int {
-//        self.shipPilot.hullStats
         return self.pilotStateData.hull_active
     }
     

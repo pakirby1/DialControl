@@ -107,34 +107,54 @@ struct UpgradeView: View {
     }
     
     var banner: AnyView {
+        func buildColor(charge_active: Int, charge_inactive: Int, charge_total: Int) -> Color
+        {
+            if charge_active == charge_total {
+                return .green
+            } else if (charge_active > 0) && (charge_active < charge_total) {
+                return .yellow
+            } else {
+                return .red
+            }
+        }
+        
         guard let upgradeState = self.shipViewModel.getUpgradeStateData(upgrade: viewModel.upgrade) else { return emptyView }
         
         guard let charge_active = upgradeState.charge_active else { return emptyView }
         guard let charge_inactive = upgradeState.charge_inactive else { return emptyView }
         
+        let charge_total = charge_active + charge_inactive
+        
+        let color = buildColor(charge_active: charge_active, charge_inactive: charge_inactive, charge_total: charge_total)
+        
         return Capsule()
-            .fill(Color.red)
+            .fill(color)
             .overlay(
-                Text("\(charge_active)")
+                Text("\(charge_active) / \(charge_total)")
+                    .foregroundColor(.black)
             ).eraseToAnyView()
     }
     
     var body: some View {
-        Text("\(self.viewModel.upgrade.name)")
-            .foregroundColor(.white)
-            .font(.largeTitle)
-            .padding(15)
-            .overlay(
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.white, lineWidth: 1)
-                    banner
-                }
-            )
-            .onTapGesture {
-                print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")
-                self.callback(self.viewModel)
+        HStack {
+            Text("\(self.viewModel.upgrade.name)")
+                .foregroundColor(.white)
+                .font(.largeTitle)
+                
+            banner
+                .frame(width: 50, height: 50, alignment: .top)
+        }
+        .padding(15)
+        .overlay(
+            ZStack {
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.white, lineWidth: 1)
             }
+        )
+        .onTapGesture {
+            print("\(Date()) UpgradeView.Text.onTapGesture \(self.viewModel.imageUrl)")
+            self.callback(self.viewModel)
+        }
     }
 }
 
