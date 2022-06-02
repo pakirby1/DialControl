@@ -38,25 +38,11 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                     Spacer()
                     
                     systemPhaseToggle.zIndex(1.0)
-                    /*
-                    systemPhaseToggle
-                        .onAppear() {
-                            self.hasSystemPhaseAction = self.shipPilot.pilotStateData?.hasSystemPhaseAction ?? false
-                        }
-                        .onChange(of: hasSystemPhaseAction, perform: { value in
-                            measure(name: "setSystemPhaseState") {
-                                self.setSystemPhaseState(state: value)
-                            }
-                        })
-                    */
-                    
+
                     DamagedStatusView(shipPilot: shipPilot)
                 }
                 .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                 .background(Color.black)
-                
-//                Spacer()
-                
                 // https://medium.com/swlh/swiftui-and-the-missing-environment-object-1a4bf8913ba7
                 
                 HStack {
@@ -273,17 +259,11 @@ struct Redux_PilotDetailsView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            
-            
             HStack {
                 buildPointsView()
                 
                 buildPointsView(half: true)
-                
-//                IndicatorView(label: "\(self.shipPilot.threshold)",
-//                    bgColor: Color.yellow,
-//                    fgColor: Color.black)
-                
+
                 Spacer()
                 
                 upgrades
@@ -294,7 +274,6 @@ struct Redux_PilotDetailsView: View {
                     dialViewNew
                 }
             }
-//            .border(Color.white)
             .padding(.leading, 10)
             .onAppear() {
                 print("\(Date()) PilotDetailsView.body.onAppear")
@@ -375,9 +354,7 @@ extension Redux_PilotDetailsView {
         switch(dialStatus) {
             case .hidden, .destroyed:
                 view = AnyView(Text("").padding(15))
-            case .ionized:
-                view = Maneuver.buildManeuver(maneuver: ionManeuver).view
-            case .revealed, .set:
+            case .revealed, .set, .ionized:
                 if x.count > 0 {
                     let m = Maneuver.buildManeuver(maneuver: x)
                     view = m.view
@@ -396,7 +373,7 @@ extension Redux_PilotDetailsView {
             if dialStatus == .ionized {
                 Text("Ion")
                     .foregroundColor(Color.red)
-                    .offset(x:0, y: 50)
+                    .offset(x:0, y: 25)
             }
 
             view

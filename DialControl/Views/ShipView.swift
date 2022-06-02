@@ -639,7 +639,7 @@ extension ShipView {
             if self.viewModel.pilotStateData.isDestroyed {
                 self.viewModel.updateDialStatus(status: .destroyed)
             } else {
-                self.viewModel.updateSelectedManeuver(maneuver: "1FB")
+//                self.viewModel.updateSelectedManeuver(maneuver: "1FB")
                 self.viewModel.updateDialStatus(status: .ionized)
             }
         }
