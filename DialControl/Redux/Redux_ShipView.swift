@@ -23,12 +23,10 @@ protocol ShipViewModelProtocol: ObservableObject {
     // Put into Environment
     var moc: NSManagedObjectContext { get set }
     var pilotStateService: PilotStateServiceProtocol { get }
-    
     var shipPilot: ShipPilot { get set }
     var pilotStateData: PilotStateData { get set }
     var currentManeuver: String { get set }
     var shipImageURL: String { get set }
-    
     var hullActive: Int { get }
     var chargeActive: Int { get }
     var forceActive: Int { get }
@@ -81,8 +79,6 @@ class Redux_ShipViewModel: ObservableObject {
         self.pilotState = shipPilot.pilotState
         self.store = store
         
-        
-        
         // CoreData
         self.moc = moc
         self.frc = BindableFetchedResultsController<ImageData>(fetchRequest: ImageData.fetchAll(),
@@ -97,7 +93,6 @@ class Redux_ShipViewModel: ObservableObject {
         // and assign it to
         // players.  This way clients don't have to access viewModel.frc.fetchedObjects
         // directly.  Use $ to geet access to the publisher of the @Published.
-        let q = DispatchQueue(label: "ShipViewModel")
         
         // Init
         self.initState()
@@ -129,13 +124,13 @@ class Redux_ShipViewModel: ObservableObject {
         self.store
             .$state
             .lane("state")
-            .sink(receiveValue: {
-                self.pilotStateData = $0.ship.pilotStateData!
-                self.shipImageURL = $0.ship.shipImageURL
+            .sink(receiveValue: { [weak self] in
+                self?.pilotStateData = $0.ship.pilotStateData!
+                self?.shipImageURL = $0.ship.shipImageURL
                 
                 print("PAKRedux_ShipView")
-                print(self.pilotStateData)
-                print(self.shipImageURL)
+                print(self?.pilotStateData)
+                print(self?.shipImageURL)
             })
             .store(in: &cancellableSet)
     }
@@ -204,165 +199,26 @@ class Redux_ShipViewModel: ObservableObject {
     }
     
     func update(type: PilotStatePropertyType, active: Int, inactive: Int) {
-        func Redux_store() {
-            switch(type) {
-                case .hull:
-                    self.store.send(.ship(action: .updateHull(active, inactive)))
-                case .shield:
-                    self.store.send(.ship(action: .updateShield(active, inactive)))
-                case .force:
-                    self.store.send(.ship(action: .updateForce(active, inactive)))
-                case .charge:
-                    self.store.send(.ship(action: .updateCharge(active, inactive)))
-                case .shipIDMarker(let id):
-                    self.store.send(.ship(action: .updateShipIDMarker(id)))
-                case .selectedManeuver(let maneuver):
-                    self.store.send(.ship(action: .updateSelectedManeuver(maneuver)))
-                case .upgradeCharge(var upgrade):
-                    self.store.send(.ship(action: .updateUpgradeCharge(upgrade, active, inactive)))
-                case .selectedSide(var upgrade, let side):
-                    self.store.send(.ship(action: .updateUpgradeSelectedSide(upgrade, side)))
-
-                case .reset:
-                    self.store.send(.ship(action: .reset))
-            }
-        }
-        
-        func old() {
-            func updateHull(active: Int, inactive: Int) {
-                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-                    self.pilotStateData.change(update: {
-                        print("PAK_\(#function) pilotStateData.id: \($0)")
-                        $0.updateHull(active: active, inactive: inactive)
-                        self.updateState(newData: $0)
-                    })
-            }
-            
-            func updateShield(active: Int, inactive: Int) {
-                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-                    self.pilotStateData.change(update: {
-                        print("PAK_\(#function) pilotStateData.id: \($0)")
-                        $0.updateShield(active: active, inactive: inactive)
-                        self.updateState(newData: $0)
-                    })
-            }
-            
-            func updateForce(active: Int, inactive: Int) {
-                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-                    self.pilotStateData.change(update: {
-                        print("PAK_\(#function) pilotStateData.id: \($0)")
-                        $0.updateForce(active: active, inactive: inactive)
-                        self.updateState(newData: $0)
-                    })
-            }
-            
-            func updateCharge(active: Int, inactive: Int) {
-                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-                    self.pilotStateData.change(update: {
-                        print("PAK_\(#function) pilotStateData.id: \($0)")
-                        $0.updateCharge(active: active, inactive: inactive)
-                        self.updateState(newData: $0)
-                    })
-            }
-            
-            func updateUpgradeCharge(upgrade: UpgradeStateData, active: Int, inactive: Int) {
-                print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-                    upgrade.change(update: { newUpgrade in
-                        print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                        newUpgrade.updateCharge(active: active, inactive: inactive)
-                        
-                        // the old upgrade state is in the pilotStateData, so we need
-                        // to replace the old upgrade state with the new upgrade state
-                        // in $0
-                        if let upgrades = self.pilotStateData.upgradeStates {
-                            if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                                self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
-                            }
-                        }
-                        
-                        self.updateState(newData: self.pilotStateData)
-                    })
-            }
-            
-            func updateUpgradeSelectedSide(upgrade: UpgradeStateData,
-                                           selectedSide: Bool)
-            {
-                print("\(Date()) PAK_\(#function) : side: \(selectedSide)")
-                    upgrade.change(update: { newUpgrade in
-                        print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
-                        newUpgrade.updateSelectedSide(side: selectedSide ? 1 : 0)
-                        
-                        // the old upgrade state is in the pilotStateData, so we need
-                        // to replace the old upgrade state with the new upgrade state
-                        // in $0
-                        if let upgrades = self.pilotStateData.upgradeStates {
-                            if let indexOfUpgrade = upgrades.firstIndex(where: { $0.xws == newUpgrade.xws }) {
-                                self.pilotStateData.upgradeStates?[indexOfUpgrade] = newUpgrade
-                            }
-                        }
-                        
-                        self.updateState(newData: self.pilotStateData)
-                    })
-            }
-            
-            func updateShipIDMarker(marker: String) {
-                print("\(Date()) \(#function) : \(marker)")
-                self.pilotStateData.change(update: {
-                    $0.updateShipID(shipID: marker)
-                    self.updateState(newData: $0)
-                })
-            }
-            
-            switch(type) {
+        switch(type) {
             case .hull:
-                updateHull(active: active, inactive: inactive)
+                self.store.send(.ship(action: .updateHull(active, inactive)))
             case .shield:
-                updateShield(active: active, inactive: inactive)
+                self.store.send(.ship(action: .updateShield(active, inactive)))
             case .force:
-                updateForce(active: active, inactive: inactive)
+                self.store.send(.ship(action: .updateForce(active, inactive)))
             case .charge:
-                updateCharge(active: active, inactive: inactive)
+                self.store.send(.ship(action: .updateCharge(active, inactive)))
             case .shipIDMarker(let id):
-                updateShipIDMarker(marker: id)
+                self.store.send(.ship(action: .updateShipIDMarker(id)))
             case .selectedManeuver(let maneuver):
-                updateSelectedManeuver(maneuver: maneuver)
-            case .upgradeCharge(var upgrade):
-//                upgrade.updateCharge(active: active, inactive: inactive)
-                updateUpgradeCharge(upgrade: upgrade, active: active, inactive: inactive)
-            case .selectedSide(var upgrade, let side):
-                updateUpgradeSelectedSide(upgrade: upgrade, selectedSide: side)
+                self.store.send(.ship(action: .updateSelectedManeuver(maneuver)))
+            case .upgradeCharge(let upgrade):
+                self.store.send(.ship(action: .updateUpgradeCharge(upgrade, active, inactive)))
+            case .selectedSide(let upgrade, let side):
+                self.store.send(.ship(action: .updateUpgradeSelectedSide(upgrade, side)))
             case .reset:
-                reset()
-            }
+                self.store.send(.ship(action: .reset))
         }
-        
-        func new() {
-            
-            switch(type) {
-            case .hull:
-                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.hull(active, inactive)))
-            case .shield:
-                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.shield(active, inactive)))
-            case .force:
-                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.force(active, inactive)))
-            case .charge:
-                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.charge(active, inactive)))
-            case .shipIDMarker(let id):
-                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.shipIDMarker(id)))
-            case .selectedManeuver(let maneuver):
-                updateState(newData: self.pilotStateData.update(type: PilotStatePropertyType_New.selectedManeuver(maneuver)))
-            case .upgradeCharge(var upgrade):
-                upgrade.updateCharge(active: active, inactive: inactive)
-            case .selectedSide(let side):
-                reset()
-            case .reset:
-                reset()
-            }
-        }
-        
-//        old()
-        Redux_store()
-//        new()
     }
     
     func reset() {
@@ -412,27 +268,27 @@ class Redux_ShipViewModel: ObservableObject {
     }
 }
 
-enum Redux_PilotStatePropertyType {
-    case hull
-    case shield
-    case charge
-    case force
-    case shipIDMarker(String)
-    case selectedManeuver(String)
-    case upgradeCharge(UpgradeStateData)
-    case reset
-    case selectedSide(UpgradeStateData, Bool)
-}
+//enum Redux_PilotStatePropertyType {
+//    case hull
+//    case shield
+//    case charge
+//    case force
+//    case shipIDMarker(String)
+//    case selectedManeuver(String)
+//    case upgradeCharge(UpgradeStateData)
+//    case reset
+//    case selectedSide(UpgradeStateData, Bool)
+//}
 
-enum Redux_PilotStatePropertyType_New {
-    case hull(Int, Int)
-    case shield(Int, Int)
-    case charge(Int, Int)
-    case force(Int, Int)
-    case shipIDMarker(String)
-    case selectedManeuver(String)
-    case revealAllDials(Bool)
-}
+//enum Redux_PilotStatePropertyType_New {
+//    case hull(Int, Int)
+//    case shield(Int, Int)
+//    case charge(Int, Int)
+//    case force(Int, Int)
+//    case shipIDMarker(String)
+//    case selectedManeuver(String)
+//    case revealAllDials(Bool)
+//}
 
 // MARK:- ShipView
 /*
@@ -443,31 +299,20 @@ we can do this:
 https://stackoverflow.com/questions/59503399/how-to-define-a-protocol-as-a-type-for-a-observedobject-property
 */
 struct Redux_ShipView: View, ShipIDRepresentable {
-    
-    
-//    struct SelectedUpgrade {
-//        let upgrade: Upgrade
-//        let imageOverlayUrl: String
-//        let imageOverlayUrlBack: String
-//    }
-
     @EnvironmentObject var viewFactory: ViewFactory
     @EnvironmentObject var store: MyAppStore
-    @State var currentManeuver: String = ""
     @State var showImageOverlay: Bool = false
     @State var imageOverlayUrl: String = ""
     @State var imageOverlayUrlBack: String = ""
-//    @ObservedObject var viewModel: Model
     @ObservedObject var viewModel: Redux_ShipViewModel
     let theme: Theme = WestworldUITheme()
     let printer = DeallocPrinter("ShipView")
     @State var selectedUpgrade: UpgradeView.UpgradeViewModel? = nil
     @State var displaySetShipID: Bool = false
-    @State var textEntered: String = ""
+    @State var shipIDEntered: String = ""
     
     init(viewModel: Redux_ShipViewModel) {
         self.viewModel = viewModel
-        self.currentManeuver = ""
     }
 
     // MARK:- computed properties
@@ -479,10 +324,10 @@ struct Redux_ShipView: View, ShipIDRepresentable {
         CustomAlert(
             title: "Set Ship ID",
             textInputLabel: "Ship ID",
-            textEntered: $textEntered,
+            textEntered: $shipIDEntered,
             showingAlert: $displaySetShipID)
         {
-            self.viewModel.updateShipID(shipId: textEntered)
+            self.viewModel.updateShipID(shipId: shipIDEntered)
         }
     }
     

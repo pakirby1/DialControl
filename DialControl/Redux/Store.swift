@@ -383,6 +383,30 @@ func factionFilterReducer(state: inout FactionFilterState,
     return noAction
 }
 
+enum XWSImportError: Error {
+    case squadNameNotFound
+
+    // Throw in all other cases
+    case unexpected(code: Int)
+}
+
+extension XWSImportError : LocalizedError {
+    public var errorDescription: String? {
+        switch(self) {
+            case .squadNameNotFound :
+                return NSLocalizedString(
+                    "No squad name specified",
+                    comment: "Invalid Squad Name"
+                )
+            case .unexpected(let code) :
+                return NSLocalizedString(
+                    "Code \(code)",
+                    comment: "Error"
+                )
+        }
+    }
+}
+
 func xwsImportReducer(state: inout MyXWSImportViewState,
                       action: MyXWSImportAction,
                       environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never> {
@@ -400,8 +424,14 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                 //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                 return Just<MyAppAction>(.xwsImport(action: .importSuccess))
                     .eraseToAnyPublisher()
+            } else {
+                throw XWSImportError.squadNameNotFound
             }
-        } catch {
+        } catch XWSImportError.squadNameNotFound {
+            return Just<MyAppAction>(.xwsImport(action: .displayAlert("Squad Name Not Found")))
+                .eraseToAnyPublisher()
+        }
+        catch {
             print(error.localizedDescription)
             return Just<MyAppAction>(.xwsImport(action: .displayAlert(error.localizedDescription)))
                 .eraseToAnyPublisher()
@@ -932,9 +962,9 @@ extension Store {
             .eraseToAnyPublisher()
             .lane("send_new flatMap", filter: [.event], transformValue: transform(action:))
             .receive(on: DispatchQueue.main)
-            .sink(receiveValue: {
+            .sink(receiveValue: { [weak self] in
                 global_os_log("Store.send_new sink(\(action))")
-                self.publisher.send($0)
+                self?.publisher.send($0)
             })
             .store(in: &cancellables)
     }

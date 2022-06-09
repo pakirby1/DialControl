@@ -451,13 +451,9 @@ struct Squad: Codable, JSONSerialization {
     }
     
     static func serializeJSON(jsonString: String,
-                              callBack: ((String) -> ())? = nil) -> Squad {
-        func handleError(errorString: String) {
-            print(errorString)
-            
-            if let cb = callBack {
-                cb(errorString)
-            }
+                              callBack: ((String) throws -> Void)? = nil) -> Squad {
+        func handleError(errorString: String, callBack: (String) throws -> Void) rethrows {
+                try callBack(errorString)
         }
         
         let jsonData = jsonString.data(using: .utf8)!
@@ -468,10 +464,13 @@ struct Squad: Codable, JSONSerialization {
             return squad
         } catch let DecodingError.dataCorrupted(context) {
             let errorString: String = context.debugDescription
-            handleError(errorString: errorString)
+            
+            guard let cb = callBack else { return Squad.emptySquad }
+            try? handleError(errorString: errorString, callBack: cb)
         } catch {
             let errorString: String = "error: \(error)"
-            handleError(errorString: errorString)
+            guard let cb = callBack else { return Squad.emptySquad }
+            try? handleError(errorString: errorString, callBack: cb)
         }
         
         return Squad.emptySquad

@@ -71,7 +71,7 @@ extension SquadServiceProtocol {
             .replacingOccurrences(of: "tactical-relay", with: "tacticalrelay")
         
         return Squad.serializeJSON(jsonString: jsonString,
-                                   callBack: handleError as? ((String) -> ()))
+                                   callBack: handleError)
     }
     
     func saveSquad_throws(jsonString: String,
