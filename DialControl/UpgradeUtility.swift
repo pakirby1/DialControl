@@ -77,59 +77,58 @@ struct UpgradeUtility {
             }
         
             func getUpgrades(upgradeCategory: String) -> [Upgrade] {
-//                return getUpgrades_old(upgradeCategory: upgradeCategory)
-                return getUpgrades_new(upgradeCategory: upgradeCategory)
-            }
-        
-            func getUpgrades_old(upgradeCategory: String) -> [Upgrade] {
-                let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
-                
-                let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-
-                return upgrades
-            }
-        
-            func getUpgrades_new(upgradeCategory: String) -> [Upgrade] {
-                func getUpgradesFromCache(upgradeCategory: String) -> [Upgrade]? {
-                    guard let upgrades = store?.state.upgrades.upgrades[upgradeCategory] else {
-                        return nil
-                    }
-                    
-                    guard !upgrades.isEmpty else {
-                        return nil
-                    }
-                    
-                    return upgrades
-                }
-                
-                func setUpgradesInCache(upgradeCategory: String, upgrades: [Upgrade]) {
-                    guard let store = store else { return }
-                    
-                    logMessage("UpgradeUtility setUpgradesInCache(\(upgradeCategory))")
-                    store.state.upgrades.upgrades[upgradeCategory] = upgrades
-                }
-                
-                func getUpgradesFromJSON(upgradeCategory: String) -> [Upgrade] {
+                func getUpgrades_old(upgradeCategory: String) -> [Upgrade] {
                     let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
                     
                     let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-                    
-                    setUpgradesInCache(upgradeCategory: upgradeCategory, upgrades: upgrades)
-                    
-                    return upgrades
-                }
-                
-                
-                if let upgrades = getUpgradesFromCache(upgradeCategory: upgradeCategory) {
-                    logMessage("UpgradeUtility getUpgradesFromCache(\(upgradeCategory))")
-                    return upgrades
-                } else {
-                    logMessage("UpgradeUtility getUpgradesFromJSON(\(upgradeCategory))")
 
-                    return getUpgradesFromJSON(upgradeCategory: upgradeCategory)
+                    return upgrades
                 }
+            
+                func getUpgrades_new(upgradeCategory: String) -> [Upgrade] {
+                    func getUpgradesFromCache(upgradeCategory: String) -> [Upgrade]? {
+                        guard let upgrades = store?.state.upgrades.upgrades[upgradeCategory] else {
+                            return nil
+                        }
+                        
+                        guard !upgrades.isEmpty else {
+                            return nil
+                        }
+                        
+                        return upgrades
+                    }
+                    
+                    func getUpgradesFromJSON(upgradeCategory: String) -> [Upgrade] {
+                        func setUpgradesInCache(upgradeCategory: String, upgrades: [Upgrade]) {
+                            guard let store = store else { return }
+                            
+                            logMessage("UpgradeUtility setUpgradesInCache(\(upgradeCategory))")
+                            store.state.upgrades.upgrades[upgradeCategory] = upgrades
+                        }
+                        
+                        let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
+                        
+                        let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
+                        
+                        setUpgradesInCache(upgradeCategory: upgradeCategory, upgrades: upgrades)
+                        
+                        return upgrades
+                    }
+                    
+                    if let upgrades = getUpgradesFromCache(upgradeCategory: upgradeCategory) {
+                        logMessage("UpgradeUtility getUpgradesFromCache(\(upgradeCategory))")
+                        return upgrades
+                    } else {
+                        logMessage("UpgradeUtility getUpgradesFromJSON(\(upgradeCategory))")
+
+                        return getUpgradesFromJSON(upgradeCategory: upgradeCategory)
+                    }
+                }
+            
+//                return getUpgrades_old(upgradeCategory: upgradeCategory)
+                return getUpgrades_new(upgradeCategory: upgradeCategory)
             }
-        
+            
             func buildUpgradeDictionary() {
                 let allAstromechs : [Upgrade] = getUpgrades(upgradeCategory: "astromech")
                 var dict: [String: [Upgrade]] = [:]

@@ -14,7 +14,6 @@ struct VectorImageButton: View {
     let size: CGSize
     let action: () -> Void
     
-    
     var body: some View {
         Button(action: {
             self.action()
@@ -25,8 +24,6 @@ struct VectorImageButton: View {
                     .resizable()
                     .frame(width: size.width, height: size.height, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
                     .foregroundColor(.red)
-                    
-                    
             }
             .padding(5)
             .overlay(

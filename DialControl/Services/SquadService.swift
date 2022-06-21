@@ -130,12 +130,6 @@ extension SquadServiceProtocol {
         return squadData
     }
     
-//    func loadSquad(jsonString: String) -> Squad {
-//        return Squad.serializeJSON(jsonString: jsonString) { [weak self] errorString in
-//            self?.alertText = errorString
-//        }
-//    }
-    
     func updateSquad(squadData: SquadData) {
         do {
             try self.moc.save()

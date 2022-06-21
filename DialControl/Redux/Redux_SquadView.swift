@@ -347,17 +347,28 @@ extension Redux_SquadView {
             self.action = action
         }
         
+        func updateCurrentPoints(increment: Bool = true) -> Self {
+            if increment {
+                currentPoints += 1
+            } else {
+                currentPoints -= 1
+                let newPoints = (currentPoints < 0 ? 0 : currentPoints)
+                currentPoints = newPoints
+            }
+            
+            return self
+        }
+        
+        func execute(_ currentPoints: Int32) {
+            action(currentPoints)
+        }
+        
         var body: some View {
             HStack {
                 VectorImageButton(imageName: "VictoryYellow", size: size) {
-                    currentPoints += 1
-                    action(currentPoints)
-                    /*
-                    var currentPoints = self.squadData.victoryPoints
-                    currentPoints += 1
-                    self.squadData.victoryPoints = currentPoints
-                    self.updateSquad(squadData: self.squadData)
-                    */
+//                    currentPoints += 1
+                    updateCurrentPoints().execute(currentPoints)
+//                    action(currentPoints)
                 }
                 
                 IndicatorView(label: "\(self.currentPoints)",
@@ -365,17 +376,13 @@ extension Redux_SquadView {
                     fgColor: Color.white)
                 
                 VectorImageButton(imageName: "VictoryRed2", size: size) {
+                    updateCurrentPoints(increment: false).execute(currentPoints)
+                    
+                    /*
                     currentPoints -= 1
                     let newPoints = (currentPoints < 0 ? 0 : currentPoints)
                     currentPoints = newPoints
                     action(newPoints)
-                    /*
-                    var currentPoints = self.squadData.victoryPoints
-                    currentPoints -= 1
-                     
-                    self.squadData.victoryPoints = (currentPoints < 0 ? 0 : currentPoints)
-                     
-                    self.updateSquad(squadData: self.squadData)
                     */
                 }
                 

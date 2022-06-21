@@ -10,6 +10,15 @@ import Foundation
 import SwiftUI
 import Combine
 
+extension Publisher {
+    func catchResult() -> AnyPublisher<Result<Output, Failure>, Never> {
+        self
+            .map(Result.success)
+            .catch { Just(Result.failure($0)) }
+            .eraseToAnyPublisher()
+    }
+}
+
 extension View {
     func popup<T: View>(
         isPresented: Bool,

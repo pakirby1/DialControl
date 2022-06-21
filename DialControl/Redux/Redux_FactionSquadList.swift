@@ -71,6 +71,7 @@ struct Redux_FactionSquadList: View {
             }
             
             return HStack {
+                Text(version())
                 toolsButton
                     .padding(10)
             }

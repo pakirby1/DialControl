@@ -451,31 +451,76 @@ struct Squad: Codable, JSONSerialization {
     }
     
     static func serializeJSON(jsonString: String,
-                              callBack: ((String) throws -> Void)? = nil) -> Squad {
-        func handleError(errorString: String, callBack: (String) throws -> Void) rethrows {
-                try callBack(errorString)
-        }
-        
-        let jsonData = jsonString.data(using: .utf8)!
-        let decoder = JSONDecoder()
-        
-        do {
-            let squad = try decoder.decode(Squad.self, from: jsonData)
-            return squad
-        } catch let DecodingError.dataCorrupted(context) {
-            let errorString: String = context.debugDescription
+                              callBack: ((String) throws -> Void)? = nil) -> Squad
+    {
+        func serializeJSON_New(jsonString: String,
+                                  callBack: ((String) throws -> Void)? = nil) -> Squad
+        {
+            func handleError(errorString: String, callBack: (String) throws -> Void) rethrows {
+                    try callBack(errorString)
+            }
             
-            guard let cb = callBack else { return Squad.emptySquad }
-            try? handleError(errorString: errorString, callBack: cb)
-        } catch {
-            let errorString: String = "error: \(error)"
-            guard let cb = callBack else { return Squad.emptySquad }
-            try? handleError(errorString: errorString, callBack: cb)
+            func serializeJSON(jsonString: String) -> Result<Squad, Error> {
+                let jsonData = jsonString.data(using: .utf8)!
+                let decoder = JSONDecoder()
+                
+                do {
+                    let squad = try decoder.decode(Squad.self, from: jsonData)
+                    return .success(squad)
+                } catch let DecodingError.dataCorrupted(context) {
+                    return .failure(DecodingError.dataCorrupted(context))
+                } catch {
+                    return .failure(error)
+                }
+            }
+            
+            let result = serializeJSON(jsonString: jsonString)
+            
+            switch(result) {
+                case .success(let squad):
+                    return squad
+                case .failure(let error):
+                    let errorString: String = "error: \(error)"
+                    guard let cb = callBack else { return Squad.emptySquad }
+                    try? handleError(errorString: errorString, callBack: cb)
+            }
+            
+            return Squad.emptySquad
         }
         
-        return Squad.emptySquad
+        func serializeJSON_Old(jsonString: String,
+                                  callBack: ((String) throws -> Void)? = nil) -> Squad {
+            func handleError(errorString: String, callBack: (String) throws -> Void) rethrows {
+                    try callBack(errorString)
+            }
+
+            let jsonData = jsonString.data(using: .utf8)!
+            let decoder = JSONDecoder()
+
+            do {
+                let squad = try decoder.decode(Squad.self, from: jsonData)
+                return squad
+            } catch let DecodingError.dataCorrupted(context) {
+                let errorString: String = context.debugDescription
+
+                guard let cb = callBack else { return Squad.emptySquad }
+                try? handleError(errorString: errorString, callBack: cb)
+            } catch {
+                let errorString: String = "error: \(error)"
+                guard let cb = callBack else { return Squad.emptySquad }
+                try? handleError(errorString: errorString, callBack: cb)
+            }
+
+            return Squad.emptySquad
+        }
+        
+        if(FeaturesManager.shared.isFeatureEnabled(.serializeJSON)) {
+            return serializeJSON_New(jsonString: jsonString, callBack: callBack)
+        } else {
+            return serializeJSON_Old(jsonString: jsonString, callBack: callBack)
+        }
     }
-    
+
     static func loadSquad(jsonString: String) -> Squad {
         return Squad.serializeJSON(jsonString: jsonString)
     }

@@ -827,7 +827,8 @@ struct PilotDetailsView: View {
             
             // Upgrades
 //            upgrades
-            upgrades_grid.border(Color.white, width: 1)
+            upgrades_grid
+//                .border(Color.white, width: 1)
             
 //            Spacer()
             

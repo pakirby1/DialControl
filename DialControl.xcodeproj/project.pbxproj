@@ -213,6 +213,7 @@
 		AEC125E32513468600021096 /* UpgradeUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeUtility.swift; sourceTree = "<group>"; };
 		AEC76F90264BD9CD00449A56 /* Redux_ToolsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_ToolsView.swift; sourceTree = "<group>"; };
 		AECD9764282E78CA006E6F3D /* Redux_SquadViewNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_SquadViewNew.swift; sourceTree = "<group>"; };
+		AECF76E1285DEEAD00DA02D5 /* CountView.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CountView.md; sourceTree = "<group>"; };
 		AECF88C8253AB6AD00AAA23B /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AED0381924A9D4540064A547 /* SquadData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataClass.swift"; sourceTree = "<group>"; };
 		AED0381A24A9D4540064A547 /* SquadData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SquadData+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -484,6 +485,7 @@
 				AE5FEDAE2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf */,
 				AECF88C8253AB6AD00AAA23B /* README.md */,
 				AE5FEDAD281575C900978FD3 /* Redux_FactionSquadListView.md */,
+				AECF76E1285DEEAD00DA02D5 /* CountView.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";

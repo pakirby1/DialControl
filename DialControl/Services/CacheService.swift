@@ -70,6 +70,28 @@ class Cache<Key: Hashable & CustomStringConvertible, Value> {
 typealias ShipPilotResult = Result<ShipPilot, Error>
 typealias ShipResult = Result<Ship, Error>
 
+/*
+    func getShip(key: ShipKey) -> AnyPublisher<ShipResult, Never> {
+        let cachedShip:AnyPublisher<ShipResult, Never> = shipCache.getValue(key: shipKey)
+            .catchResult()
+
+        let ship: AnyPublisher<ShipResult, Never> =
+            cachedShip.map{
+                switch($0) {
+                    case .failure(...) :
+                        getShipFromFile($0)
+                    default:
+                        return
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+ 
+    func getPilot(ship: inout Ship) -> AnyPublisher<ShipPilotResult, Never> {
+        
+    }
+ */
+
 /// <#Description#>
 class CacheService : CacheServiceProtocol {
     private var shipCache = Cache<ShipKey, Ship>()
@@ -110,7 +132,7 @@ class CacheService : CacheServiceProtocol {
                 
                 shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
                 
-                var ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
+                let ship: Ship = Ship.serializeJSON(jsonString: shipJSON)
                 
                 return ship
             }

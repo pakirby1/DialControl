@@ -268,6 +268,14 @@ struct ImageUrlTemplates {
     }
 }
 
+func version() -> String {
+    let dictionary = Bundle.main.infoDictionary!
+    let version = dictionary["CFBundleShortVersionString"] as! String
+    let build = dictionary["CFBundleVersion"] as! String
+    return "\(version) build \(build)"
+}
+
+
 func loadJSON(fileName: String, directoryPath: String) -> String {
     if let path = Bundle.main.path(forResource: fileName,
                                    ofType: "",
