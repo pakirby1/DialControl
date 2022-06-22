@@ -153,7 +153,7 @@ struct PillButton : View {
 ### Counter UI
 I'd like the views to be consistent across the application so I created a UI prototype using Xd & Vectornator (or any vector editing program like InkScape or Illustrator).
 
-![Counter UI](https://raw.githubusercontent.com/pakirby1/pakirby1.github.io/master/images/CounterControlNew.png?token=GHSAT0AAAAAABRPISSROXSFSRXLU37PV7VMYVRXZTA)
+![Counter UI](https://pakirby1.github.io/images/CounterControlNew.png)
 
 The control is made up of...
 - Capsule (800 x 200), grey fill, black border
