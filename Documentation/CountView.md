@@ -129,21 +129,39 @@ struct PillButton : View {
     let label: String
     let add: () -> Void
     let subtract: () -> Void
+    let reset: () -> Void
     
     var body: some View {
         ZStack {
-            Capsule().frame(width: 150, height: 100, alignment: .center)
+            Capsule()
+                .frame(width: 220, height: 60, alignment: .center)
+                .foregroundColor(.white)
             
             HStack {
                 Button(action: subtract) {
-                    Text("-")
-                }.border(Color.green, width: 1)
+                    Image(systemName: "minus.circle.fill")
+                        .imageScale(.large)
+                        .font(Font.largeTitle.weight(.regular))
+                        .foregroundColor(.blue)
+                }
                 
-                Text(label).foregroundColor(.black).border(Color.red, width: 1)
+                Text(label)
+                    .font(.largeTitle)
+                    .foregroundColor(.black)
                 
                 Button(action: add) {
-                    Text("+")
-                }.border(Color.green, width: 1)
+                    Image(systemName: "plus.circle.fill")
+                        .imageScale(.large)
+                        .font(Font.largeTitle.weight(.regular))
+                        .foregroundColor(.blue)
+                }
+                
+                Button(action: reset) {
+                    Image(systemName: "multiply.circle.fill")
+                        .imageScale(.large)
+                        .font(Font.largeTitle.weight(.regular))
+                        .foregroundColor(.red)
+                }
             }
         }
     }
@@ -164,20 +182,4 @@ The control is made up of...
     - plus.circle.fill
 - 1 80 x 80 SFSymbol with red fill
     - multiply.circle.fill 
-
-```
-ZStack {
-    Capsule(...).border(Color.black, 3)
-    HStack {
-        Button(...) { minus sf symbol }
-        Spacer()
-        Text(count)
-        Spacer()
-        Button(...) { plus sf symbol }
-        Spacer()
-        Line()
-        Button(...) { multiply sf symbol }
-    }
-}
-```
 
