@@ -236,7 +236,7 @@ struct PilotDTO: Codable {
     var text: String { return _text ?? "" }
     var shipAbility: ShipAbility? { return _shipAbility ?? nil }
     var slots: [Slot]? { return _slots ?? [] }
-    let artwork: String
+    var artwork: String { return _artwork ?? "" }
     var force: Force? { return _force ?? nil }
     var charges: Charges? { return _charges ?? nil }
     
@@ -245,6 +245,7 @@ struct PilotDTO: Codable {
     private var _charges: Charges?
     private var _shipAbility: ShipAbility?
     private var _slots: [Slot]?
+    private var _artwork: String?
     
     enum CodingKeys: String, CodingKey {
         case _text = "text"
@@ -255,7 +256,7 @@ struct PilotDTO: Codable {
         case xws
         case _shipAbility = "shipAbility"
         case _slots = "slots"
-        case artwork
+        case _artwork = "artwork"
         case _force = "force"
         case _charges = "charges"
     }
