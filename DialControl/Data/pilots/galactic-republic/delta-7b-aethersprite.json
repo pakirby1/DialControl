@@ -168,8 +168,8 @@
       "force": { "value": 3, "recovers": 1, "side": ["light"] },
       "standard": true,
       "epic": true,
-      "cost": 6,
-      "loadout": 20,
+      "cost": 7,
+      "loadout": 15,
       "slots": [
         "Force Power",
         "Force Power",
