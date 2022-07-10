@@ -117,20 +117,28 @@ extension Redux_SquadViewNew {
             
             if (FeaturesManager.shared.isFeatureEnabled(.firstPlayerUpdate)) {
                 // for each pilot update system phase state
-                updateAllPilots() { $0.updateSystemPhaseState(value: false) }
+                disableSystemPhaseForAllPilots()
+                hideAllDials()
             }
         })
     }
 
+    private func hideAllDials() {
+        updateAllPilots() { $0.dial_status == .hidden }
+    }
+    
+    private func disableSystemPhaseForAllPilots() {
+        updateAllPilots() { $0.updateSystemPhaseState(value: false) }
+    }
+    
     private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
         sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
-                data.change(update: {
-                    handler(&$0)
-                    
-                    self.updatePilotState(pilotStateData: $0,
-                                          pilotState: shipPilot.pilotState)
-                })
+                handler(&data)
+                
+                // Update the store
+                self.updatePilotState(pilotStateData: data,
+                                      pilotState: shipPilot.pilotState)
             }
         }
     }
