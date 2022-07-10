@@ -114,9 +114,27 @@ extension Redux_SquadViewNew {
             let x = $0
             self.squadData.firstPlayer = x
             self.updateSquad(squadData: self.squadData)
+            
+            if (FeaturesManager.shared.isFeatureEnabled(.firstPlayerUpdate)) {
+                // for each pilot update system phase state
+                updateAllPilots() { $0.updateSystemPhaseState(value: false) }
+            }
         })
     }
 
+    private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
+        sortedShipPilots.forEach{ shipPilot in
+            if var data = shipPilot.pilotStateData {
+                data.change(update: {
+                    handler(&$0)
+                    
+                    self.updatePilotState(pilotStateData: $0,
+                                          pilotState: shipPilot.pilotState)
+                })
+            }
+        }
+    }
+    
     var content: some View {
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
@@ -477,6 +495,8 @@ extension Redux_SquadViewNewViewModel {
     {
         self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
     }
+    
+    
 }
 
 extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {

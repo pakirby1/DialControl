@@ -10,6 +10,26 @@ import Foundation
 import SwiftUI
 import Combine
 
+extension PilotStateData {
+    private func updateState(label: String,
+                     state: Bool,
+                     handler: (inout PilotStateData) -> ()
+    ) {
+        measure(name: "\(label)(state:\(state)") {
+            self.change(update: { psd in
+                global_os_log(label, state.description)
+                handler(&psd)
+            })
+        }
+    }
+    
+    func updateSystemPhaseState(value: Bool) {
+        updateState(label: "FeatureId.firstPlayerUpdate", state: value) {
+            $0.updateSystemPhaseAction(value: value)
+        }
+    }
+}
+
 extension Publisher {
     func catchResult() -> AnyPublisher<Result<Output, Failure>, Never> {
         self

@@ -37,6 +37,7 @@ class FeaturesManager {
         add(Feature(id: FeatureId.MyRedux, enabled: true))
         add(Feature(id: FeatureId.Redux_FactionSquadList, enabled: true))
         add(Feature(id: FeatureId.serializeJSON, enabled: true))
+        add(Feature(id: FeatureId.firstPlayerUpdate, enabled: true))
     }
 }
 
@@ -66,6 +67,7 @@ enum FeatureId : String {
     case MyRedux
     case Redux_FactionSquadList
     case serializeJSON
+    case firstPlayerUpdate
 }
 
 protocol IFeature {

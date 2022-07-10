@@ -556,6 +556,7 @@ extension ShipPilot {
     var shipName: String { ship.xws }
     var pilotName: String { ship.pilots[0].xws }
     
+    // FIX ME: Too much deserialize???
     var pilotStateData: PilotStateData? {
         if let json = self.pilotState.json {
             return PilotStateData.deserialize(jsonString: json)

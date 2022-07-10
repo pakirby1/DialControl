@@ -261,7 +261,7 @@ extension PilotStateData {
         case .revealAllDials(let revealed):
             return change{ $0.updateDialRevealed(revealed: revealed)}
         case .hasSystemPhaseAction(let state):
-            return change{ $0.updateSystemPhaseAction(state: state)}
+            return change{ $0.updateSystemPhaseAction(value: state)}
         }
     }
     
@@ -344,8 +344,8 @@ extension PilotStateData {
         self.dial_status = (revealed ? .revealed : .hidden)
     }
     
-    mutating func updateSystemPhaseAction(state: Bool) {
-        self.hasSystemPhaseAction = state
+    mutating func updateSystemPhaseAction(value: Bool) {
+        self.hasSystemPhaseAction = value
     }
     
     var health: Int {

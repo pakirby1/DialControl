@@ -69,7 +69,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
     }
     
     var systemPhaseToggle: some View {
-        Toggle(isOn: self.$hasSystemPhaseAction){
+        Toggle(isOn: $hasSystemPhaseAction){
             EmptyView()
         }
         .labelsHidden() // Label takes up too much space, so just hide it.
@@ -79,9 +79,9 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             withAnimation { hasSystemPhaseAction.toggle() }
             */
             hasSystemPhaseAction.toggle()
-            print("systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(self.hasSystemPhaseAction)")
+            print("systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(hasSystemPhaseAction)")
             measure(name: "setSystemPhaseState") {
-                self.setSystemPhaseState(state: self.hasSystemPhaseAction)
+                setSystemPhaseState(state: hasSystemPhaseAction)
             }
         }
     }
@@ -173,21 +173,54 @@ extension Redux_PilotCardView {
     }
     
     func setSystemPhaseState(state: Bool) {
-        measure(name: "setSystemPhaseState(state:\(state)") {
+        func setSystemPhaseState_New(state: Bool) {
+            updateSystemPhaseState(value: state)
+        }
+        
+        func setSystemPhaseState_Old(state: Bool) {
+            measure(name: "setSystemPhaseState(state:\(state)") {
+                if let data = shipPilot.pilotStateData {
+                    let name = shipPilot.pilotName
+                    data.change(update: { psd in
+                        
+                        print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
+
+                        psd.hasSystemPhaseAction = state
+    //
+                        self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
+
+        //                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
+                        print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
+                    })
+                }
+            }
+        }
+        
+        setSystemPhaseState_Old(state: state)
+    }
+}
+
+extension Redux_PilotCardView {
+    private func updateState(label: String,
+                     state: Bool,
+                     handler: (inout PilotStateData) -> ()
+    ) {
+        measure(name: "\(label)(state:\(state)") {
             if let data = shipPilot.pilotStateData {
                 let name = shipPilot.pilotName
                 data.change(update: { psd in
+                    print("\(label) name: \(name) state: \(state)")
                     
-                    print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
-
-                    psd.hasSystemPhaseAction = state
-//
+                    handler(&psd)
                     self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
-
-    //                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
-                    print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
                 })
             }
+        }
+    }
+    
+    private func updateSystemPhaseState(value: Bool) {
+        updateState(label: "FeatureId.firstPlayerUpdate", state: value) {
+            $0.updateSystemPhaseAction(value: value)
         }
     }
 }
@@ -247,6 +280,17 @@ struct Redux_PilotDetailsView: View {
     }
     
     var upgrades: some View {
+//        func color(upgrade: Upgrade) -> Color {
+//            guard let upgradeState = getUpgradeStateData(upgrade: upgrade) else { return Color.white }
+//
+//            guard let charge_active = upgradeState.charge_active else { return Color.white }
+//            guard let charge_inactive = upgradeState.charge_inactive else { return Color.white }
+//
+//            if charge_active == 0 {
+//                return Color.red
+//            }
+//        }
+        
         VStack(alignment: .leading) {
             if (displayUpgrades) {
                 ForEach(self.shipPilot.upgrades) { upgrade in
