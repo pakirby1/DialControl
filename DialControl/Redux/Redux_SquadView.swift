@@ -321,7 +321,7 @@ extension Redux_SquadView {
                 print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
                 return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
-                                                   updatePilotStateCallback: self.updatePilotState, hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
+                                                   updatePilotStateCallback: self.updatePilotState, hasSystemPhaseAction: false)
                     .environmentObject(self.viewFactory)
                     .environmentObject(self.store))
             }

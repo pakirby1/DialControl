@@ -13,7 +13,7 @@ import TimelaneCombine
 
 struct Redux_PilotCardView: View, ShipIDRepresentable {
     let theme: Theme = WestworldUITheme()
-    let shipPilot: ShipPilot
+    var shipPilot: ShipPilot
     @EnvironmentObject var viewFactory: ViewFactory
     @State var dialStatus: DialStatus
     let updatePilotStateCallback: (PilotStateData, PilotState) -> ()
@@ -58,6 +58,9 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
             .multilineTextAlignment(.center)
         }
+        .onAppear() {
+            global_os_log("FeatureId.firstPlayerUpdate","Redux_PilotCardView.newView.onAppear \(shipPilot.pilotName) \(String(describing: shipPilot.pilotStateData?.hasSystemPhaseAction))")
+        }
     }
     
     var body: some View {
@@ -72,16 +75,13 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
         Toggle(isOn: $hasSystemPhaseAction){
             EmptyView()
         }
+        .border(Color.white, width: 1)
+        .contentShape(Rectangle())
         .labelsHidden() // Label takes up too much space, so just hide it.
-        .onTapGesture {
-            /*
-            // Necessary to receive tap events while in a ZStack
-            withAnimation { hasSystemPhaseAction.toggle() }
-            */
-            hasSystemPhaseAction.toggle()
-            print("systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(hasSystemPhaseAction)")
+        .onChange(of: hasSystemPhaseAction) { action in
+            global_os_log("FeatureId.firstPlayerUpdate","Redux_PilotCardView.systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(action)")
             measure(name: "setSystemPhaseState") {
-                setSystemPhaseState(state: hasSystemPhaseAction)
+                setSystemPhaseState(state: action)
             }
         }
     }

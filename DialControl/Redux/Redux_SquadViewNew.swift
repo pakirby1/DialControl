@@ -20,6 +20,9 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @State var isFirstPlayer: Bool = false
     @State var victoryPoints: Int32 = 0
     
+    @State private var firstPlayerRefresh: Bool = false
+    @State var shipPilotsNew : [ShipPilot] = []
+    
     let theme: Theme = WestworldUITheme()
     let squad: Squad
     let squadData: SquadData
@@ -33,9 +36,9 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     
     var shipPilots: [ShipPilot] {
         print("PAKshipPilots \(Date()) count: \(self.viewModel.viewProperties.shipPilots.count)")
-        self.viewModel.viewProperties.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
+        self.shipPilotsNew.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
 
-        return self.viewModel.viewProperties.shipPilots
+        return self.shipPilotsNew
     }
     
     var chunkedShips : [[ShipPilot]] {
@@ -45,7 +48,7 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     var sortedShipPilots: [ShipPilot] {
         // TODO: Switch & AppStore
         
-        var copy = self.viewModel.viewProperties.shipPilots
+        var copy = self.shipPilotsNew
         
         if (activationOrder) {
             copy.sort(by: { $0.ship.pilots[0].initiative < $1.ship.pilots[0].initiative })
@@ -119,16 +122,42 @@ extension Redux_SquadViewNew {
                 // for each pilot update system phase state
                 disableSystemPhaseForAllPilots()
                 hideAllDials()
+                self.firstPlayerRefresh.toggle()
             }
         })
     }
 
     private func hideAllDials() {
-        updateAllPilots() { $0.dial_status == .hidden }
+        updateAllPilots() { $0.dial_status = .hidden }
     }
     
     private func disableSystemPhaseForAllPilots() {
-        updateAllPilots() { $0.updateSystemPhaseState(value: false) }
+        
+        func setSystemPhaseState_Old(shipPilot: ShipPilot, state: Bool) {
+            measure(name: "setSystemPhaseState(state:\(state)") {
+                if let data = shipPilot.pilotStateData {
+                    let name = shipPilot.pilotName
+                    data.change(update: { psd in
+                        
+                        print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
+
+                        psd.hasSystemPhaseAction = state
+                        self.viewModel.store.send(.squad(action: .updatePilotState(psd, shipPilot.pilotState)))
+
+                        print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
+                    })
+                }
+            }
+        }
+        
+        sortedShipPilots.forEach{ shipPilot in
+            setSystemPhaseState_Old(shipPilot: shipPilot, state: false)
+        }
+//        updateAllPilots() { $0.updateSystemPhaseAction(value: false) }
+    }
+    
+    private func setSystemPhaseForAllPilots(value: Bool) {
+        updateAllPilots() { $0.updateSystemPhaseState(value: value) }
     }
     
     private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
@@ -266,6 +295,8 @@ extension Redux_SquadViewNew {
                     shipsView
                 }
                 
+                Text("\(self.viewModel.viewProperties.shipPilots.count)")
+                
                 // Footer
                 CustomDivider()
                 HStack {
@@ -284,6 +315,14 @@ extension Redux_SquadViewNew {
                 print("PAKshipPilots \(Date()) .onAppear")
             }
         }
+        .onReceive(self.viewModel.$viewProperties) {
+            let shipPilots = $0.shipPilots
+            self.shipPilotsNew = $0.shipPilots
+            global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onReceive \(shipPilots)")
+        }
+        .onChange(of: self.shipPilotsNew) {
+            global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onChange(of: shipPilotsNew) \($0.count)")
+        }
     }
     
     var body: some View {
@@ -293,13 +332,21 @@ extension Redux_SquadViewNew {
         }
         
         return VStack {
+            if (self.firstPlayerRefresh) {
+                Text("First Player Refreshed")
+            }
+            
             header
             content
+            
         }
         .onAppear() {
             executionTime("Redux_SquadView.body.onAppear()") {
                 onAppearBlock()
             }
+        }
+        .onChange(of: self.firstPlayerRefresh) {
+            global_os_log("FeatureId.firstPlayerUpdate","firstPlayerRefresh= \($0.description)")
         }
     }
     
@@ -310,7 +357,8 @@ extension Redux_SquadViewNew {
                 print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
                 return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
-                                                   updatePilotStateCallback: self.updatePilotState, hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
+                                                   updatePilotStateCallback: self.updatePilotState,
+                                                   hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
                     .environmentObject(self.viewFactory)
                                 .environmentObject(self.viewModel.store))
             }
@@ -515,6 +563,19 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
             .sink{ [weak self] state in
                 guard let self = self else { return }
                 self.viewProperties = self.buildViewProperties(state: state)
+                let systemPhaseStates: [(String, Bool)] = state.squad.shipPilots.map {
+                    if let x = $0.pilotStateData?.hasSystemPhaseAction {
+                        return ($0.pilotName, x)
+                    }
+                    
+                    return ($0.pilotName, false)
+                }
+                
+                let descriptions : [String] = systemPhaseStates.map { $0.0 + " value:" + $0.1.description }
+                
+                let y = descriptions.joined(separator: "\n")
+                
+                global_os_log("FeatureId.firstPlayerUpdate", "configureViewProperties:\n" + y)
             }
         
         self.cancellable = AnyCancellable(stateSink)

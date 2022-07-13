@@ -7,81 +7,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D255FF34-9E32-4E87-89FB-7F336BBC3505"
+            uuid = "EF040CC1-0A64-4095-BE70-BF4409AE7C53"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
-            landmarkName = "header"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
+            landmarkName = "content"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "D255FF34-9E32-4E87-89FB-7F336BBC3505 - ec1e98d167338c82"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.Bool) -&gt; () in DialControl.Redux_SquadViewNew.header.getter : some"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Redux/Redux_SquadViewNew.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "328">
-               </Location>
-               <Location
-                  uuid = "D255FF34-9E32-4E87-89FB-7F336BBC3505 - 848e9e4be35942d7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (inout DialControl.PilotStateData) -&gt; () in closure #2 (Swift.Bool) -&gt; () in DialControl.Redux_SquadViewNew.header.getter : some"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Redux/Redux_SquadViewNew.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "120"
-                  endingLineNumber = "120"
-                  offsetFromSymbolStart = "70">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B5CDB382-1F97-4332-931F-3BF96EAD1099"
+            uuid = "D0A2BE38-834C-4D60-90CC-4AE69C0EE2E9"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "408"
-            endingLineNumber = "408"
-            landmarkName = "updatePilotState(pilotStateData:pilotState:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "138C8597-915C-4F6D-8EE6-F23FAAC3182D"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Extensions.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "updateSystemPhaseState(value:)"
-            landmarkType = "7">
+            startingLineNumber = "320"
+            endingLineNumber = "320"
+            landmarkName = "content"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
