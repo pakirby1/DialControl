@@ -292,7 +292,11 @@ extension Redux_SquadViewNew {
                 if shipPilots.isEmpty {
                     emptySection
                 } else {
-                    shipsView
+                    ShipGridView(shipPilots: self.viewModel.viewProperties.shipPilots,
+                                 updatePilotState: self.updatePilotState(pilotStateData:pilotState:),
+                                 activationOrder: self.activationOrder,
+                                 buildShipButtonCallback: self.buildShipButton(shipPilot:))
+//                    shipsView
                 }
                 
                 Text("\(self.viewModel.viewProperties.shipPilots.count)")
@@ -320,9 +324,9 @@ extension Redux_SquadViewNew {
             self.shipPilotsNew = $0.shipPilots
             global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onReceive \(shipPilots)")
         }
-        .onChange(of: self.shipPilotsNew) {
-            global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onChange(of: shipPilotsNew) \($0.count)")
-        }
+//        .onChange(of: self.shipPilotsNew) {
+//            global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onChange(of: shipPilotsNew) \($0.count)")
+//        }
     }
     
     var body: some View {
@@ -575,7 +579,7 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
                 
                 let y = descriptions.joined(separator: "\n")
                 
-                global_os_log("FeatureId.firstPlayerUpdate", "configureViewProperties:\n" + y)
+                global_os_log("FeatureId.firstPlayerUpdate", "Redux_SquadViewNewViewModel.configureViewProperties():\n" + y)
             }
         
         self.cancellable = AnyCancellable(stateSink)
@@ -650,3 +654,45 @@ enum SquadDialsState: CustomStringConvertible {
     }
 }
 
+struct ShipGridView<ShipButton: View> : View {
+    let shipPilots: [ShipPilot]
+    let updatePilotState: (PilotStateData, PilotState) -> ()
+    let activationOrder: Bool
+    let buildShipButtonCallback: (ShipPilot) -> ShipButton
+    
+    var chunkedShips : [[ShipPilot]] {
+        return sortedShipPilots.chunked(into: 2)
+    }
+    
+    var sortedShipPilots: [ShipPilot] {
+        // TODO: Switch & AppStore
+        
+        var copy = self.shipPilots
+        
+        if (activationOrder) {
+            copy.sort(by: { $0.ship.pilots[0].initiative < $1.ship.pilots[0].initiative })
+        } else {
+            copy.sort(by: { $0.ship.pilots[0].initiative > $1.ship.pilots[0].initiative })
+        }
+        
+        return copy
+    }
+    
+    var body: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            ForEach(chunkedShips, id: \.self) { index in
+                HStack {
+                    ForEach(index, id:\.self) { shipPilot in
+                        self.buildShipButton(shipPilot: shipPilot)
+                    }
+                }
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+            }
+        }
+    }
+    
+    func buildShipButton(shipPilot: ShipPilot) -> some View {
+        return buildShipButtonCallback(shipPilot)
+    }
+}
