@@ -41,7 +41,7 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
         return self.shipPilotsNew
     }
     
-    var chunkedShips : [[ShipPilot]] {
+    var chunkedShips : Array<[ShipPilot]> {
         return sortedShipPilots.chunked(into: 2)
     }
     
@@ -134,7 +134,7 @@ extension Redux_SquadViewNew {
     private func disableSystemPhaseForAllPilots() {
         
         func setSystemPhaseState_Old(shipPilot: ShipPilot, state: Bool) {
-            measure(name: "setSystemPhaseState(state:\(state)") {
+//            measure(name: "setSystemPhaseState(state:\(state)") {
                 if let data = shipPilot.pilotStateData {
                     let name = shipPilot.pilotName
                     data.change(update: { psd in
@@ -147,12 +147,15 @@ extension Redux_SquadViewNew {
                         print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
                     })
                 }
-            }
+//            }
         }
         
         sortedShipPilots.forEach{ shipPilot in
             setSystemPhaseState_Old(shipPilot: shipPilot, state: false)
         }
+        
+        getShips()
+        
 //        updateAllPilots() { $0.updateSystemPhaseAction(value: false) }
     }
     
@@ -292,7 +295,7 @@ extension Redux_SquadViewNew {
                 if shipPilots.isEmpty {
                     emptySection
                 } else {
-                    ShipGridView(shipPilots: self.viewModel.viewProperties.shipPilots,
+                    ShipGridView(shipPilots: self.shipPilotsNew,
                                  updatePilotState: self.updatePilotState(pilotStateData:pilotState:),
                                  activationOrder: self.activationOrder,
                                  buildShipButtonCallback: self.buildShipButton(shipPilot:))
@@ -354,6 +357,11 @@ extension Redux_SquadViewNew {
         }
     }
     
+    func getShips() {
+        global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.getShips()")
+        self.viewModel.store.send(.squad(action: .getShips(self.squad, self.squadData)))
+    }
+    
     private func buildShipButton(shipPilot: ShipPilot) -> some View {
         func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
             // Get the dial status from the pilot state
@@ -362,6 +370,7 @@ extension Redux_SquadViewNew {
                 return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
                                                    updatePilotStateCallback: self.updatePilotState,
+                                                   getShips: getShips,
                                                    hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
                     .environmentObject(self.viewFactory)
                                 .environmentObject(self.viewModel.store))

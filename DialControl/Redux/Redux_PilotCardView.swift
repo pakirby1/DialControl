@@ -17,6 +17,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
     @EnvironmentObject var viewFactory: ViewFactory
     @State var dialStatus: DialStatus
     let updatePilotStateCallback: (PilotStateData, PilotState) -> ()
+    let getShips: () -> ()
     @EnvironmentObject var store: MyAppStore
     @State var hasSystemPhaseAction: Bool
     
@@ -37,7 +38,8 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
 
                     Spacer()
                     
-                    systemPhaseToggle.zIndex(1.0)
+                    systemPhaseToggle
+                        .zIndex(1.0)
 
                     DamagedStatusView(shipPilot: shipPilot)
                 }
@@ -71,6 +73,33 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
         )
     }
     
+    func setSystemPhaseState(state: Bool) {
+        func setSystemPhaseState_New(state: Bool) {
+            updateSystemPhaseState(value: state)
+        }
+        
+        func setSystemPhaseState_Old(state: Bool) {
+            measure(name: "setSystemPhaseState(state:\(state)") {
+                if let data = shipPilot.pilotStateData {
+                    let name = shipPilot.pilotName
+                    data.change(update: { psd in
+                        
+                        print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
+
+                        psd.hasSystemPhaseAction = state
+    //
+                        self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
+
+        //                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
+                        print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
+                    })
+                }
+            }
+        }
+        
+        setSystemPhaseState_Old(state: state)
+    }
+    
     var systemPhaseToggle: some View {
         Toggle(isOn: $hasSystemPhaseAction){
             EmptyView()
@@ -82,6 +111,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             global_os_log("FeatureId.firstPlayerUpdate","Redux_PilotCardView.systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(action)")
             measure(name: "setSystemPhaseState") {
                 setSystemPhaseState(state: action)
+                getShips()
             }
         }
     }
@@ -172,32 +202,7 @@ extension Redux_PilotCardView {
                                       displayDial: true).environmentObject(self.store)
     }
     
-    func setSystemPhaseState(state: Bool) {
-        func setSystemPhaseState_New(state: Bool) {
-            updateSystemPhaseState(value: state)
-        }
-        
-        func setSystemPhaseState_Old(state: Bool) {
-            measure(name: "setSystemPhaseState(state:\(state)") {
-                if let data = shipPilot.pilotStateData {
-                    let name = shipPilot.pilotName
-                    data.change(update: { psd in
-                        
-                        print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
-
-                        psd.hasSystemPhaseAction = state
-    //
-                        self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
-
-        //                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
-                        print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
-                    })
-                }
-            }
-        }
-        
-        setSystemPhaseState_Old(state: state)
-    }
+    
 }
 
 extension Redux_PilotCardView {
