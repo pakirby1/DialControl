@@ -359,7 +359,8 @@ extension Redux_SquadViewNew {
     
     func getShips() {
         global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.getShips()")
-        self.viewModel.store.send(.squad(action: .getShips(self.squad, self.squadData)))
+        self.viewModel.loadShips(squad: self.squad, squadData: self.squadData)
+//        self.viewModel.store.send(.squad(action: .getShips(self.squad, self.squadData)))
     }
     
     private func buildShipButton(shipPilot: ShipPilot) -> some View {
@@ -564,8 +565,6 @@ extension Redux_SquadViewNewViewModel {
     {
         self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
     }
-    
-    
 }
 
 extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
