@@ -20,7 +20,6 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @State var isFirstPlayer: Bool = false
     @State var victoryPoints: Int32 = 0
     
-    @State private var firstPlayerRefresh: Bool = false
     @State var shipPilotsNew : [ShipPilot] = []
     
     let theme: Theme = WestworldUITheme()
@@ -40,24 +39,6 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
 
         return self.shipPilotsNew
     }
-    
-    var chunkedShips : Array<[ShipPilot]> {
-        return sortedShipPilots.chunked(into: 2)
-    }
-    
-    var sortedShipPilots: [ShipPilot] {
-        // TODO: Switch & AppStore
-        
-        var copy = self.shipPilotsNew
-        
-        if (activationOrder) {
-            copy.sort(by: { $0.ship.pilots[0].initiative < $1.ship.pilots[0].initiative })
-        } else {
-            copy.sort(by: { $0.ship.pilots[0].initiative > $1.ship.pilots[0].initiative })
-        }
-        
-        return copy
-    }
 }
 
 extension Redux_SquadViewNew {
@@ -66,33 +47,7 @@ extension Redux_SquadViewNew {
             Text("No ships found")
         }
     }
-    
-    private var shipsView: AnyView {
-        return shipsGrid.eraseToAnyView()
-    }
-    
-    var shipsListSection: some View {
-        Section {
-            ForEach(sortedShipPilots) { shipPilot in
-                self.buildShipButton(shipPilot: shipPilot)
-            }
-        }
-    }
-    
-    var shipsGrid: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            ForEach(chunkedShips, id: \.self) { index in
-                HStack {
-                    ForEach(index, id:\.self) { shipPilot in
-                        self.buildShipButton(shipPilot: shipPilot)
-                    }
-                }
-                .padding(.leading, 20)
-                .padding(.trailing, 20)
-            }
-        }
-    }
-    
+
     var header: some View {
         HStack {
             BackButtonView()
@@ -122,7 +77,6 @@ extension Redux_SquadViewNew {
                 // for each pilot update system phase state
                 disableSystemPhaseForAllPilots()
                 hideAllDials()
-                self.firstPlayerRefresh.toggle()
             }
         })
     }
@@ -132,7 +86,6 @@ extension Redux_SquadViewNew {
     }
     
     private func disableSystemPhaseForAllPilots() {
-        
         func setSystemPhaseState_Old(shipPilot: ShipPilot, state: Bool) {
 //            measure(name: "setSystemPhaseState(state:\(state)") {
                 if let data = shipPilot.pilotStateData {
@@ -150,7 +103,7 @@ extension Redux_SquadViewNew {
 //            }
         }
         
-        sortedShipPilots.forEach{ shipPilot in
+        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             setSystemPhaseState_Old(shipPilot: shipPilot, state: false)
         }
         
@@ -164,7 +117,7 @@ extension Redux_SquadViewNew {
     }
     
     private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
-        sortedShipPilots.forEach{ shipPilot in
+        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 handler(&data)
                 
@@ -285,12 +238,6 @@ extension Redux_SquadViewNew {
                     damaged
                 }.padding(20)
 
-//                HStack {
-//                    Spacer()
-//                    dialState
-//                    Spacer()
-//                }
-                
                 // Body
                 if shipPilots.isEmpty {
                     emptySection
@@ -298,8 +245,8 @@ extension Redux_SquadViewNew {
                     ShipGridView(shipPilots: self.shipPilotsNew,
                                  updatePilotState: self.updatePilotState(pilotStateData:pilotState:),
                                  activationOrder: self.activationOrder,
-                                 buildShipButtonCallback: self.buildShipButton(shipPilot:))
-//                    shipsView
+                                 onPilotTapped: self.pilotTapped,
+                                 getShips: self.getShips)
                 }
                 
                 Text("\(self.viewModel.viewProperties.shipPilots.count)")
@@ -339,10 +286,6 @@ extension Redux_SquadViewNew {
         }
         
         return VStack {
-            if (self.firstPlayerRefresh) {
-                Text("First Player Refreshed")
-            }
-            
             header
             content
             
@@ -352,9 +295,6 @@ extension Redux_SquadViewNew {
                 onAppearBlock()
             }
         }
-        .onChange(of: self.firstPlayerRefresh) {
-            global_os_log("FeatureId.firstPlayerUpdate","firstPlayerRefresh= \($0.description)")
-        }
     }
     
     func getShips() {
@@ -363,29 +303,10 @@ extension Redux_SquadViewNew {
 //        self.viewModel.store.send(.squad(action: .getShips(self.squad, self.squadData)))
     }
     
-    private func buildShipButton(shipPilot: ShipPilot) -> some View {
-        func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
-            // Get the dial status from the pilot state
-            if let data = shipPilot.pilotStateData {
-                print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
-                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
-                                                   dialStatus: data.dial_status,
-                                                   updatePilotStateCallback: self.updatePilotState,
-                                                   getShips: getShips,
-                                                   hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
-                    .environmentObject(self.viewFactory)
-                                .environmentObject(self.viewModel.store))
-            }
-            
-            return AnyView(EmptyView())
-        }
-        
-        return Button(action: {
-            self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
-        }) {
-            buildPilotCardView(shipPilot: shipPilot)
-        }
+    func pilotTapped(shipPilot: ShipPilot) {
+        self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
     }
+    
     
     struct ObjectiveScoreView : View {
         @Binding var currentPoints: Int32
@@ -480,7 +401,7 @@ extension Redux_SquadViewNew {
     
     
     private func resetAllShips() {
-        sortedShipPilots.forEach{ shipPilot in
+        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 data.change(update: {
                     $0.reset()
@@ -497,7 +418,7 @@ extension Redux_SquadViewNew {
     }
     
     private func updateAllDials() {
-        sortedShipPilots.forEach{ shipPilot in
+        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
                     data.change(update: {
@@ -516,7 +437,7 @@ extension Redux_SquadViewNew {
     }
     
     private func updateAllDials(newDialStatus: DialStatus) {
-        sortedShipPilots.forEach{ shipPilot in
+        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
                     data.change(update: {
@@ -610,9 +531,28 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
 //MARK:- View Properties
 struct Redux_SquadViewNewViewProperties {
     let shipPilots: [ShipPilot]
+    var activationOrder: Bool = false
 }
 
 extension Redux_SquadViewNewViewProperties {
+    var sortedShipPilots: [ShipPilot] {
+        // TODO: Switch & AppStore
+
+        var copy = self.shipPilots
+
+        if (activationOrder) {
+            copy.sort(by: { $0.ship.pilots[0].initiative < $1.ship.pilots[0].initiative })
+        } else {
+            copy.sort(by: { $0.ship.pilots[0].initiative > $1.ship.pilots[0].initiative })
+        }
+
+        return copy
+    }
+    
+    var chunkedShips : Array<[ShipPilot]> {
+        return sortedShipPilots.chunked(into: 2)
+    }
+    
     static var none : Redux_SquadViewNewViewProperties {
         return Redux_SquadViewNewViewProperties(
             shipPilots: [])
@@ -662,11 +602,13 @@ enum SquadDialsState: CustomStringConvertible {
     }
 }
 
-struct ShipGridView<ShipButton: View> : View {
+struct ShipGridView : View {
     let shipPilots: [ShipPilot]
     let updatePilotState: (PilotStateData, PilotState) -> ()
     let activationOrder: Bool
-    let buildShipButtonCallback: (ShipPilot) -> ShipButton
+    let onPilotTapped: (ShipPilot) -> ()
+    let getShips: () -> ()
+    @EnvironmentObject var store: MyAppStore
     
     var chunkedShips : [[ShipPilot]] {
         return sortedShipPilots.chunked(into: 2)
@@ -700,7 +642,27 @@ struct ShipGridView<ShipButton: View> : View {
         }
     }
     
-    func buildShipButton(shipPilot: ShipPilot) -> some View {
-        return buildShipButtonCallback(shipPilot)
+    private func buildShipButton(shipPilot: ShipPilot) -> some View {
+        func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
+            // Get the dial status from the pilot state
+            if let data = shipPilot.pilotStateData {
+                print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
+                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
+                                                   dialStatus: data.dial_status,
+                                                   updatePilotStateCallback: self.updatePilotState,
+                                                   getShips: getShips,
+                                                   hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
+                                .environmentObject(self.store))
+            }
+            
+            return AnyView(EmptyView())
+        }
+        
+        return Button(action: {
+//
+            onPilotTapped(shipPilot)
+        }) {
+            buildPilotCardView(shipPilot: shipPilot)
+        }
     }
 }

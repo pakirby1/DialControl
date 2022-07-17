@@ -14,12 +14,11 @@ import TimelaneCombine
 struct Redux_PilotCardView: View, ShipIDRepresentable {
     let theme: Theme = WestworldUITheme()
     var shipPilot: ShipPilot
-    @EnvironmentObject var viewFactory: ViewFactory
     @State var dialStatus: DialStatus
     let updatePilotStateCallback: (PilotStateData, PilotState) -> ()
     let getShips: () -> ()
-    @EnvironmentObject var store: MyAppStore
     @State var hasSystemPhaseAction: Bool
+    @EnvironmentObject var store: MyAppStore
     
     var newView: some View {
         ZStack(alignment: .top) {
