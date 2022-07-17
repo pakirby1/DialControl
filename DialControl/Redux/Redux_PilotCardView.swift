@@ -86,8 +86,10 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                         print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
 
                         psd.hasSystemPhaseAction = state
-    //
-                        self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
+
+                        updatePilotStateCallback(psd, self.shipPilot.pilotState)
+
+//                        self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
 
         //                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
                         print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
@@ -216,7 +218,8 @@ extension Redux_PilotCardView {
                     print("\(label) name: \(name) state: \(state)")
                     
                     handler(&psd)
-                    self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
+                    updatePilotStateCallback(psd, self.shipPilot.pilotState)
+//                    self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
                 })
             }
         }
@@ -254,6 +257,7 @@ struct Redux_PilotDetailsView: View {
     let theme: Theme = WestworldUITheme()
     @State var currentManeuver: String = ""
     @EnvironmentObject var store: MyAppStore
+    
     
     var dialViewNew: some View {
         let status = self.shipPilot.pilotStateData!.dial_status
