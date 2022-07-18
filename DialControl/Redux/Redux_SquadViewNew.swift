@@ -14,17 +14,16 @@ import TimelaneCombine
 //MARK:- View
 struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @EnvironmentObject var viewFactory: ViewFactory
-    
     @State var activationOrder: Bool = true
     @State private var displayResetAllConfirmation: Bool = false
     @State var isFirstPlayer: Bool = false
     @State var victoryPoints: Int32 = 0
-    
     @State var shipPilotsNew : [ShipPilot] = []
     
     let theme: Theme = WestworldUITheme()
     let squad: Squad
     let squadData: SquadData
+
     @StateObject var viewModel: Redux_SquadViewNewViewModel
     
     init(store: MyAppStore, squad: Squad, squadData: SquadData) {
@@ -110,10 +109,6 @@ extension Redux_SquadViewNew {
         getShips()
         
 //        updateAllPilots() { $0.updateSystemPhaseAction(value: false) }
-    }
-    
-    private func setSystemPhaseForAllPilots(value: Bool) {
-        updateAllPilots() { $0.updateSystemPhaseState(value: value) }
     }
     
     private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
@@ -243,10 +238,11 @@ extension Redux_SquadViewNew {
                     emptySection
                 } else {
                     ShipGridView(shipPilots: self.shipPilotsNew,
-                                 updatePilotState: self.updatePilotState(pilotStateData:pilotState:),
                                  activationOrder: self.activationOrder,
                                  onPilotTapped: self.pilotTapped,
                                  getShips: self.getShips)
+                        .environmentObject(viewModel.store)
+                        .environment(\.updatePilotStateHandler, updatePilotState)
                 }
                 
                 Text("\(self.viewModel.viewProperties.shipPilots.count)")
@@ -604,11 +600,11 @@ enum SquadDialsState: CustomStringConvertible {
 
 struct ShipGridView : View {
     let shipPilots: [ShipPilot]
-    let updatePilotState: (PilotStateData, PilotState) -> ()
     let activationOrder: Bool
     let onPilotTapped: (ShipPilot) -> ()
     let getShips: () -> ()
     @EnvironmentObject var store: MyAppStore
+    @Environment(\.updatePilotStateHandler) var updatePilotState
     
     var chunkedShips : [[ShipPilot]] {
         return sortedShipPilots.chunked(into: 2)
@@ -649,10 +645,12 @@ struct ShipGridView : View {
                 print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
                 return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
-                                                   updatePilotStateCallback: self.updatePilotState,
                                                    getShips: getShips,
                                                    hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
-                                .environmentObject(self.store))
+                                .environmentObject(self.store)
+                                .environment(\.updatePilotStateHandler, updatePilotState)
+                )
+                                
             }
             
             return AnyView(EmptyView())
@@ -663,5 +661,18 @@ struct ShipGridView : View {
         }) {
             buildPilotCardView(shipPilot: shipPilot)
         }
+    }
+}
+
+typealias UpdatePilotStateCallback = ((PilotStateData, PilotState) -> ())?
+
+private struct ClosureKey: EnvironmentKey {
+    static let defaultValue : UpdatePilotStateCallback = {_, _ in  }
+}
+
+extension EnvironmentValues {
+    var updatePilotStateHandler : UpdatePilotStateCallback {
+        get { self[ClosureKey.self] }
+        set { self[ClosureKey.self] = newValue }
     }
 }

@@ -15,10 +15,10 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
     let theme: Theme = WestworldUITheme()
     var shipPilot: ShipPilot
     @State var dialStatus: DialStatus
-    let updatePilotStateCallback: (PilotStateData, PilotState) -> ()
     let getShips: () -> ()
     @State var hasSystemPhaseAction: Bool
     @EnvironmentObject var store: MyAppStore
+    @Environment(\.updatePilotStateHandler) var updatePilotStateCallback
     
     var newView: some View {
         ZStack(alignment: .top) {
@@ -87,7 +87,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
 
                         psd.hasSystemPhaseAction = state
 
-                        updatePilotStateCallback(psd, self.shipPilot.pilotState)
+                        updatePilotStateCallback?(psd, self.shipPilot.pilotState)
 
 //                        self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
 
@@ -176,8 +176,6 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             .bold()
             .foregroundColor(Color.orange)
     }
-
-    
     
     var pilotShipNames: some View {
         VStack {
@@ -196,14 +194,13 @@ extension Redux_PilotCardView {
     func buildPilotDetailsView() -> some View {
         print("PAK_DialStatus buildPilotDetailsView() self.dialStatus = \(dialStatus)")
         
-        return Redux_PilotDetailsView(updatePilotStateCallback: self.updatePilotStateCallback,
-                                      shipPilot: self.shipPilot,
+        return Redux_PilotDetailsView(shipPilot: self.shipPilot,
                                       displayUpgrades: true,
                                       displayHeaders: false,
-                                      displayDial: true).environmentObject(self.store)
+                                      displayDial: true)
+            .environmentObject(self.store)
+            .environment(\.updatePilotStateHandler, updatePilotStateCallback)
     }
-    
-    
 }
 
 extension Redux_PilotCardView {
@@ -218,7 +215,7 @@ extension Redux_PilotCardView {
                     print("\(label) name: \(name) state: \(state)")
                     
                     handler(&psd)
-                    updatePilotStateCallback(psd, self.shipPilot.pilotState)
+                    updatePilotStateCallback?(psd, self.shipPilot.pilotState)
 //                    self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
                 })
             }
@@ -249,7 +246,6 @@ struct DamagedStatusView: View {
 }
 
 struct Redux_PilotDetailsView: View {
-    let updatePilotStateCallback: (PilotStateData, PilotState) -> ()
     let shipPilot: ShipPilot
     let displayUpgrades: Bool
     let displayHeaders: Bool
@@ -257,7 +253,7 @@ struct Redux_PilotDetailsView: View {
     let theme: Theme = WestworldUITheme()
     @State var currentManeuver: String = ""
     @EnvironmentObject var store: MyAppStore
-    
+    @Environment(\.updatePilotStateHandler) var updatePilotStateCallback
     
     var dialViewNew: some View {
         let status = self.shipPilot.pilotStateData!.dial_status
