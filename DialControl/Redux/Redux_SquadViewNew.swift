@@ -387,6 +387,10 @@ extension Redux_SquadViewNew {
         self.viewModel.updatePilotState(pilotStateData: pilotStateData, pilotState: pilotState)
     }
     
+    func flipDial(pilotStateData: PilotStateData, pilotState: PilotState) {
+        self.viewModel.flipDial(pilotStateData: pilotStateData, pilotState: pilotState)
+    }
+    
     private func processEngage() {
         self.activationOrder.toggle()
         self.squadData.engaged = self.activationOrder
@@ -481,6 +485,12 @@ extension Redux_SquadViewNewViewModel {
                                   pilotState: PilotState)
     {
         self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
+    }
+    
+    func flipDial(pilotStateData: PilotStateData,
+                  pilotState: PilotState)
+    {
+        self.store.send(.squad(action: .flipDial(pilotStateData, pilotState)))
     }
 }
 
@@ -645,7 +655,6 @@ struct ShipGridView : View {
                 print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
                 return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
-                                                   getShips: getShips,
                                                    hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
                                 .environmentObject(self.store)
                                 .environment(\.updatePilotStateHandler, updatePilotState)

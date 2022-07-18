@@ -15,9 +15,9 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
     let theme: Theme = WestworldUITheme()
     var shipPilot: ShipPilot
     @State var dialStatus: DialStatus
-    let getShips: () -> ()
+//    let getShips: () -> ()
     @State var hasSystemPhaseAction: Bool
-    @EnvironmentObject var store: MyAppStore
+//    @EnvironmentObject var store: MyAppStore
     @Environment(\.updatePilotStateHandler) var updatePilotStateCallback
     
     var newView: some View {
@@ -112,7 +112,6 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             global_os_log("FeatureId.firstPlayerUpdate","Redux_PilotCardView.systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(action)")
             measure(name: "setSystemPhaseState") {
                 setSystemPhaseState(state: action)
-                getShips()
             }
         }
     }
@@ -198,12 +197,17 @@ extension Redux_PilotCardView {
                                       displayUpgrades: true,
                                       displayHeaders: false,
                                       displayDial: true)
-            .environmentObject(self.store)
-            .environment(\.updatePilotStateHandler, updatePilotStateCallback)
+//            .environmentObject(self.store)
     }
 }
 
 extension Redux_PilotCardView {
+    
+    /// Updates a Bool on a pilot state data
+    /// - Parameters:
+    ///   - label: Label for logging
+    ///   - state: Bool
+    ///   - handler: what function should be called on the pilot state data
     private func updateState(label: String,
                      state: Bool,
                      handler: (inout PilotStateData) -> ()
@@ -216,7 +220,6 @@ extension Redux_PilotCardView {
                     
                     handler(&psd)
                     updatePilotStateCallback?(psd, self.shipPilot.pilotState)
-//                    self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
                 })
             }
         }
@@ -253,7 +256,6 @@ struct Redux_PilotDetailsView: View {
     let theme: Theme = WestworldUITheme()
     @State var currentManeuver: String = ""
     @EnvironmentObject var store: MyAppStore
-    @Environment(\.updatePilotStateHandler) var updatePilotStateCallback
     
     var dialViewNew: some View {
         let status = self.shipPilot.pilotStateData!.dial_status
