@@ -656,7 +656,7 @@ struct ShipGridView : View {
                 return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
                                                    hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
-                                .environmentObject(self.store)
+                                .environmentObject(SquadViewHandler(store: store))
                                 .environment(\.updatePilotStateHandler, updatePilotState)
                 )
                                 
