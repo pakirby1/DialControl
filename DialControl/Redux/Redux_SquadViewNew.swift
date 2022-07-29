@@ -665,9 +665,10 @@ struct ShipGridView : View {
             return AnyView(EmptyView())
         }
         
+        
         return Button(action: {
-            onPilotTapped(shipPilot)
-        }) {
+            onPilotTapped(shipPilot) })
+        {
             buildPilotCardView(shipPilot: shipPilot)
         }
     }

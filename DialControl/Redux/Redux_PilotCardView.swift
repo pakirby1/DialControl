@@ -36,7 +36,8 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                     Spacer()
                     
                     systemPhaseToggle
-                        .zIndex(1.0)
+                        .zIndex(-1)
+                        .border(Color.white, width: 2)
 
                     DamagedStatusView(shipPilot: shipPilot)
                 }
@@ -74,15 +75,16 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
         Toggle(isOn: $hasSystemPhaseAction){
             EmptyView()
         }
-        .border(Color.white, width: 1)
+        .fixedSize()
+        .background(Color.red)
         .contentShape(Rectangle())
-        .labelsHidden() // Label takes up too much space, so just hide it.
         .onChange(of: hasSystemPhaseAction) { action in
             global_os_log("FeatureId.firstPlayerUpdate","Redux_PilotCardView.systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(action)")
             measure(name: "setSystemPhaseState") {
                 handler.setSystemPhaseState(shipPilot: shipPilot, state: action)
             }
         }
+        .onTapGesture {} // hide the Redux_PilotCardView.onTapGesture()
     }
     
     var healthStatus: some View {
