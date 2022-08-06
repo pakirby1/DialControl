@@ -271,7 +271,15 @@ extension Redux_SquadViewNew {
                 
                 HStack {
                     Spacer()
+                    PillButton(label: "Won: \(self.viewModel.viewProperties.wonCount)",
+                               add: {},
+                               subtract: {},
+                               reset: {})
                     reset
+                    PillButton(label: "Lost: \(self.viewModel.viewProperties.wonCount)",
+                               add: {},
+                               subtract: {},
+                               reset: {})
                     Spacer()
                 }
             }

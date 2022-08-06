@@ -20,7 +20,7 @@ struct PillButton : View {
     var body: some View {
         ZStack {
             Capsule()
-                .frame(width: 220, height: 60, alignment: .center)
+                .frame(width: 240, height: 60, alignment: .center)
                 .foregroundColor(.white)
             
             HStack {
