@@ -62,6 +62,8 @@ struct MySquadViewState {
     var squad: Squad?
     var squadData: SquadData?
     var cancellables = Set<AnyCancellable>()
+    var wonCount: Count = Count.zero
+    var lostCount: Count = Count.zero
 }
 
 struct FactionSquadListState {

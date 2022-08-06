@@ -11,6 +11,53 @@ import SwiftUI
 import CoreData
 import Combine
 
+struct PillButton : View {
+    let label: String
+    let add: () -> Void
+    let subtract: () -> Void
+    let reset: () -> Void
+    
+    var body: some View {
+        ZStack {
+            Capsule()
+                .frame(width: 220, height: 60, alignment: .center)
+                .foregroundColor(.white)
+            
+            HStack {
+                Button(action: subtract) {
+                    Image(systemName: "minus.circle.fill")
+                        .modifier(PillButtonImageModifier(color: .blue))
+                }
+                
+                Text(label)
+                    .font(.body)
+                    .foregroundColor(.black)
+                
+                Button(action: add) {
+                    Image(systemName: "plus.circle.fill")
+                        .modifier(PillButtonImageModifier(color: .blue))
+                }
+                
+                Button(action: reset) {
+                    Image(systemName: "multiply.circle.fill")
+                        .modifier(PillButtonImageModifier(color: .red))
+                }
+            }
+        }
+    }
+}
+
+struct PillButtonImageModifier: ViewModifier {
+    let color: Color
+    
+    func body(content: Content) -> some View {
+        return content
+            .imageScale(.large)
+            .font(Font.largeTitle.weight(.regular))
+            .foregroundColor(color)
+    }
+}
+
 struct Redux_FactionSquadList: View {
     @EnvironmentObject var viewFactory: ViewFactory
     var store: MyAppStore
@@ -95,6 +142,45 @@ struct Redux_FactionSquadList: View {
                 }
             }
             
+            var new_roundCount: some View {
+                func increment() {
+                    let newRound = store.state.faction.currentRound + 1
+                    
+                    setRound(newRound: newRound)
+                }
+                
+                func decrement() {
+                    var newRound = store.state.faction.currentRound - 1
+                    
+                    if newRound < 0 { newRound = 0 }
+                    
+                    setRound(newRound: newRound)
+                }
+                
+                func reset() {
+                    setRound(newRound: 0)
+                }
+                
+                func pre_reset() {
+                    displayResetRoundCounter = true
+                }
+                
+                return PillButton(label: "\(store.state.faction.currentRound)",
+                           add: increment,
+                           subtract: decrement,
+                           reset: pre_reset)
+                    .alert(isPresented: $displayResetRoundCounter) {
+                        Alert(
+                            title: Text("Reset"),
+                            message: Text("Reset Round Counter?"),
+                            primaryButton: Alert.Button.default(Text("Reset"), action: { reset() }),
+                            secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
+                        )
+                    }.onAppear(perform: {
+                        self.loadRound()
+                    })
+            }
+            
             var roundCount: some View {
                 func increment() {
                     let newRound = store.state.faction.currentRound + 1
@@ -118,7 +204,7 @@ struct Redux_FactionSquadList: View {
                     Button(action:{ increment() }) { Image(systemName: "plus.circle.fill").font(.largeTitle) }
                     
                     Text("Round: \(viewModel.viewProperties.currentRound)")
-                        .font(.title)
+                        .font(.body)
                     
                     Button(action:{ decrement() }) { Image(systemName: "minus.circle.fill").font(.largeTitle) }
                     
@@ -165,7 +251,8 @@ struct Redux_FactionSquadList: View {
                 Spacer()
                 favoritesFilterView
                 Spacer()
-                roundCount
+//                roundCount
+                new_roundCount
                 Spacer()
                 xwsImportButton
             }

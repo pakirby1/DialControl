@@ -249,6 +249,26 @@ extension Redux_SquadViewNew {
                 
                 // Footer
                 CustomDivider()
+                
+//                HStack {
+//                    Spacer()
+//                    PillButton(label: "\(viewModel.store.state.faction.currentRound)",
+//                               add: increment,
+//                               subtract: decrement,
+//                               reset: pre_reset)
+//                        .alert(isPresented: $displayResetRoundCounter) {
+//                            Alert(
+//                                title: Text("Reset"),
+//                                message: Text("Reset Round Counter?"),
+//                                primaryButton: Alert.Button.default(Text("Reset"), action: { reset() }),
+//                                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
+//                            )
+//                        }.onAppear(perform: {
+//                            self.loadRound()
+//                        })
+//                    Spacer()
+//                }
+                
                 HStack {
                     Spacer()
                     reset
@@ -530,7 +550,9 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
     
     func buildViewProperties(state: MyAppState) -> Redux_SquadViewNewViewProperties
     {
-        return Redux_SquadViewNewViewProperties(shipPilots: state.squad.shipPilots)
+        return Redux_SquadViewNewViewProperties(shipPilots: state.squad.shipPilots,
+                                                wonCount: state.squad.wonCount,
+                                                lostCount: state.squad.lostCount)
     }
 }
 
@@ -538,6 +560,8 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
 struct Redux_SquadViewNewViewProperties {
     let shipPilots: [ShipPilot]
     var activationOrder: Bool = false
+    let wonCount: Count
+    let lostCount: Count
 }
 
 extension Redux_SquadViewNewViewProperties {
@@ -561,7 +585,8 @@ extension Redux_SquadViewNewViewProperties {
     
     static var none : Redux_SquadViewNewViewProperties {
         return Redux_SquadViewNewViewProperties(
-            shipPilots: [])
+            shipPilots: [],
+            wonCount: Count.zero, lostCount: Count.zero)
     }
     
     var revealedDialCount: Int {
@@ -686,3 +711,45 @@ extension EnvironmentValues {
         set { self[ClosureKey.self] = newValue }
     }
 }
+
+struct Count {
+    let count: Int32
+    let limit: Int32
+    
+    var min: Count {
+        let newCount = count - 1
+        
+        if (newCount) < 0 {
+            return Count(count:0, limit: limit)
+        } else {
+            return Count(count:newCount, limit: limit)
+        }
+    }
+    
+    var max: Count {
+        let newCount = count + 1
+        
+        if (newCount) > limit {
+            return Count(count: limit, limit: limit)
+        } else {
+            return Count(count: newCount, limit: limit)
+        }
+    }
+    
+    static var zero: Count {
+        return Count(count:0, limit: 20)
+    }
+    
+    static var twelveCount: Count {
+        return Count(count:0, limit: 12)
+    }
+}
+
+extension Count : CustomStringConvertible {
+    var description: String {
+        "\(count)"
+    }
+}
+
+extension Count : Equatable {}
+
