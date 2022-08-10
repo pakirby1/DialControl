@@ -529,23 +529,28 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
             .statePublisher
             .sink{ [weak self] state in
                 guard let self = self else { return }
-                self.viewProperties = self.buildViewProperties(state: state)
-                let systemPhaseStates: [(String, Bool)] = state.squad.shipPilots.map {
-                    if let x = $0.pilotStateData?.hasSystemPhaseAction {
-                        return ($0.pilotName, x)
-                    }
-                    
-                    return ($0.pilotName, false)
-                }
-                
-                let descriptions : [String] = systemPhaseStates.map { $0.0 + " value:" + $0.1.description }
-                
-                let y = descriptions.joined(separator: "\n")
-                
-                global_os_log("FeatureId.firstPlayerUpdate", "Redux_SquadViewNewViewModel.configureViewProperties():\n" + y)
+                self.bind(state: state)
             }
         
         self.cancellable = AnyCancellable(stateSink)
+    }
+    
+    func bind(state: MyAppState) {
+        self.viewProperties = self.buildViewProperties(state: state)
+        
+        let systemPhaseStates: [(String, Bool)] = state.squad.shipPilots.map {
+            if let x = $0.pilotStateData?.hasSystemPhaseAction {
+                return ($0.pilotName, x)
+            }
+            
+            return ($0.pilotName, false)
+        }
+        
+        let descriptions : [String] = systemPhaseStates.map { $0.0 + " value:" + $0.1.description }
+        
+        let y = descriptions.joined(separator: "\n")
+        
+        global_os_log("FeatureId.firstPlayerUpdate", "Redux_SquadViewNewViewModel.configureViewProperties():\n" + y)
     }
     
     var viewPropertiesPublished: Published<Redux_SquadViewNewViewProperties> {
