@@ -106,6 +106,26 @@ extension Publisher {
     }
 }
 
+/*
+    store.statePublisher
+        .map { state in buildViewProperties(state) }
+        .weakSink(on: self, handler: setViewProperties)
+ 
+    func buildViewProperties(state: CountViewState) -> CountViewProperties { ... }
+ 
+    func setViewProperties(_ properties: CountViewProperties) {
+        properties = properties
+    }
+ */
+extension Publisher where Failure == Never {
+    func weakSink<T: AnyObject>(on object: T, handler: @escaping (Output) -> ()) -> AnyCancellable
+    {
+        sink { [weak object] value in
+            handler(value)
+        }
+    }
+}
+
 extension Publisher {
     
     /// Converts the output into a `Result<Output, Failure>` type.
