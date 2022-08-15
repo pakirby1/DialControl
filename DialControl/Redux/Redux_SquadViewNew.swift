@@ -366,6 +366,7 @@ extension Redux_SquadViewNew {
 }
 
 //MARK:- Behavior
+
 extension Redux_SquadViewNew {
     private func hideAllDials() {
         updateAllPilots() { $0.dial_status = .hidden }
@@ -514,6 +515,18 @@ extension Redux_SquadViewNew {
     }
 }
 
+extension Redux_SquadViewNew : ViewModelRepresentable {
+    func buildViewModel(store: MyAppStore) -> Redux_SquadViewNewViewModel {
+        global_os_log("Redux_SquadViewNew") { "buildViewModel(store:)" }
+        return Redux_SquadViewNewViewModel(store: store)
+    }
+ 
+    func buildView(viewModel: Redux_SquadViewNewViewModel) -> some View {
+        global_os_log("CountViewContainerHelper") { "body(viewModel:)" }
+        let v = self.body
+        return v
+    }
+}
 //MARK:- View Model
 class Redux_SquadViewNewViewModel : ObservableObject {
     var store: MyAppStore

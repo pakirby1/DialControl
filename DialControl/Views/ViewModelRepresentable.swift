@@ -15,23 +15,13 @@ protocol ViewModelRepresentable: View {
     associatedtype ViewModel
     associatedtype V : SwiftUI.View
     func buildViewModel(store: Store) -> ViewModel
-    func body(viewModel: ViewModel) -> V
+    func buildView(viewModel: ViewModel) -> V
 }
 
-/*
- func render(state: State, dispatch: @escaping DispatchFunction) -> V {
-     let props = map(state: state, dispatch: dispatch)
-     return body(props: props)
- }
-
- var body: StoreConnector<State, V> {
-     return StoreConnector(content: render)
- }
- */
 extension ViewModelRepresentable {
     func render(store: Store) -> V {
         let viewModel = buildViewModel(store: store)
-        return body(viewModel: viewModel)
+        return buildView(viewModel: viewModel)
     }
     
     var body: StoreDataProvider<Store, V> {
@@ -39,17 +29,6 @@ extension ViewModelRepresentable {
     }
 }
 
-/*
- public struct StoreConnector<State: FluxState, V: View>: View {
-     @EnvironmentObject var store: Store<State>
-     let content: (State, @escaping (Action) -> Void) -> V
-     
-     public var body: V {
-         content(store.state, store.dispatch(action:))
-     }
- }
-
- */
 struct StoreDataProvider<Store: ObservableObject, V: View> : View {
     @EnvironmentObject var store: Store
     let content: (Store) -> V
