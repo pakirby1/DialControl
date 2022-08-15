@@ -37,7 +37,6 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                     
                     systemPhaseToggle
                         .zIndex(-1)
-                        .border(Color.white, width: 2)
 
                     DamagedStatusView(shipPilot: shipPilot)
                 }
@@ -76,7 +75,6 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
             EmptyView()
         }
         .fixedSize()
-        .background(Color.red)
         .contentShape(Rectangle())
         .onChange(of: hasSystemPhaseAction) { action in
             global_os_log("FeatureId.firstPlayerUpdate","Redux_PilotCardView.systemPhaseToggle.onTapGesture hasSystemPhaseAction = \(action)")

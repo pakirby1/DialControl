@@ -19,6 +19,7 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @State var isFirstPlayer: Bool = false
     @State var victoryPoints: Int32 = 0
     @State var shipPilotsNew : [ShipPilot] = []
+    @State private var displayWonLostCount: Bool = false
     
     let theme: Theme = WestworldUITheme()
     let squad: Squad
@@ -38,9 +39,62 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
 
         return self.shipPilotsNew
     }
+    
+    var wonLostCountButton: some View {
+        Button(action: {
+            self.displayWonLostCount = true
+        }) {
+            let wonCount: String = self.viewModel.viewProperties.wonCount.description
+            let lostCount: String = self.viewModel.viewProperties.lostCount.description
+            
+            Text("Won: \(wonCount) Lost: \(lostCount)")
+                .font(.title)
+                .foregroundColor(Color.red)
+        }
+    }
 }
 
 extension Redux_SquadViewNew {
+    var imageOverlayView: AnyView {
+        var wonLossCountOverlay: some View {
+            ZStack {
+                Color
+                    .gray
+                    .opacity(0.5)
+                    .onTapGesture{
+                        self.displayWonLostCount = false
+                    }
+                
+                HStack {
+                    Spacer()
+                    PillButton(label: "Won: \(self.viewModel.viewProperties.wonCount)",
+                               add: {
+//                                self.squadData.wonCount += self.squadData.wonCount
+//                                self.viewModel.updateSquad(squadData: T##SquadData)
+                               },
+                               subtract: {},
+                               reset: {})
+                    
+                    PillButton(label: "Lost: \(self.viewModel.viewProperties.lostCount)",
+                               add: {},
+                               subtract: {},
+                               reset: {})
+                    Spacer()
+                }
+            }
+        }
+        
+        let defaultView = AnyView(Color.clear)
+        
+        print("Redux_SquadViewNew var displayWonLostCount self.displayWonLostCount=\(self.displayWonLostCount)")
+
+        if (self.displayWonLostCount == true) {
+            return AnyView(wonLossCountOverlay)
+        } else {
+            return defaultView
+        }
+    }
+    
     var emptySection: some View {
         Section {
             Text("No ships found")
@@ -61,7 +115,8 @@ extension Redux_SquadViewNew {
                 .environmentObject(viewFactory)
             
             Spacer()
-            
+            wonLostCountButton
+            Spacer()
             CustomToggleView(label: "First Player", binding: $isFirstPlayer)
         }
         .padding(10)
@@ -78,49 +133,6 @@ extension Redux_SquadViewNew {
                 hideAllDials()
             }
         })
-    }
-
-    private func hideAllDials() {
-        updateAllPilots() { $0.dial_status = .hidden }
-    }
-    
-    private func disableSystemPhaseForAllPilots() {
-        func setSystemPhaseState_Old(shipPilot: ShipPilot, state: Bool) {
-//            measure(name: "setSystemPhaseState(state:\(state)") {
-                if let data = shipPilot.pilotStateData {
-                    let name = shipPilot.pilotName
-                    data.change(update: { psd in
-                        
-                        print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
-
-                        psd.hasSystemPhaseAction = state
-                        self.viewModel.store.send(.squad(action: .updatePilotState(psd, shipPilot.pilotState)))
-
-                        print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
-                    })
-                }
-//            }
-        }
-        
-        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
-            setSystemPhaseState_Old(shipPilot: shipPilot, state: false)
-        }
-        
-        getShips()
-        
-//        updateAllPilots() { $0.updateSystemPhaseAction(value: false) }
-    }
-    
-    private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
-        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
-            if var data = shipPilot.pilotStateData {
-                handler(&data)
-                
-                // Update the store
-                self.updatePilotState(pilotStateData: data,
-                                      pilotState: shipPilot.pilotState)
-            }
-        }
     }
     
     var content: some View {
@@ -141,6 +153,8 @@ extension Redux_SquadViewNew {
             .font(.title)
             .lineLimit(1)
             .foregroundColor(theme.TEXT_FOREGROUND)
+        
+        
         
         let reset = Button(action: {
             self.displayResetAllConfirmation = true
@@ -208,31 +222,43 @@ extension Redux_SquadViewNew {
             return (self.viewModel.viewProperties.dialsState == .hidden) ? buildButton(.revealed) : buildButton(.hidden)
         }
     
+        var header: some View {
+            HStack {
+                points
+
+                Spacer()
+
+                engage
+
+                Spacer()
+
+                title
+
+                firstPlayer
+
+                Spacer()
+
+                hideOrRevealAll
+
+                Spacer()
+
+                damaged
+            }.padding(20)
+        }
+        
+        var footer: some View {
+            HStack {
+                Spacer()
+                reset
+                Spacer()
+            }
+        }
+        
         return ZStack {
             VStack(alignment: .leading) {
                 // Header
-                HStack {
-                    points
-
-                    Spacer()
-
-                    engage
-
-                    Spacer()
-
-                    title
-
-                    firstPlayer
-
-                    Spacer()
-
-                    hideOrRevealAll
-
-                    Spacer()
-
-                    damaged
-                }.padding(20)
-
+                header
+                
                 // Body
                 if shipPilots.isEmpty {
                     emptySection
@@ -245,43 +271,8 @@ extension Redux_SquadViewNew {
                         .environment(\.updatePilotStateHandler, updatePilotState)
                 }
                 
-                Text("\(self.viewModel.viewProperties.shipPilots.count)")
-                
-                // Footer
                 CustomDivider()
-                
-//                HStack {
-//                    Spacer()
-//                    PillButton(label: "\(viewModel.store.state.faction.currentRound)",
-//                               add: increment,
-//                               subtract: decrement,
-//                               reset: pre_reset)
-//                        .alert(isPresented: $displayResetRoundCounter) {
-//                            Alert(
-//                                title: Text("Reset"),
-//                                message: Text("Reset Round Counter?"),
-//                                primaryButton: Alert.Button.default(Text("Reset"), action: { reset() }),
-//                                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
-//                            )
-//                        }.onAppear(perform: {
-//                            self.loadRound()
-//                        })
-//                    Spacer()
-//                }
-                
-                HStack {
-                    Spacer()
-                    PillButton(label: "Won: \(self.viewModel.viewProperties.wonCount)",
-                               add: {},
-                               subtract: {},
-                               reset: {})
-                    reset
-                    PillButton(label: "Lost: \(self.viewModel.viewProperties.wonCount)",
-                               add: {},
-                               subtract: {},
-                               reset: {})
-                    Spacer()
-                }
+                footer
             }
             .multilineTextAlignment(.center)
         }
@@ -312,25 +303,14 @@ extension Redux_SquadViewNew {
         return VStack {
             header
             content
-            
         }
+        .overlay(imageOverlayView)
         .onAppear() {
             executionTime("Redux_SquadView.body.onAppear()") {
                 onAppearBlock()
             }
         }
     }
-    
-    func getShips() {
-        global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.getShips()")
-        self.viewModel.loadShips(squad: self.squad, squadData: self.squadData)
-//        self.viewModel.store.send(.squad(action: .getShips(self.squad, self.squadData)))
-    }
-    
-    func pilotTapped(shipPilot: ShipPilot) {
-        self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
-    }
-    
     
     struct ObjectiveScoreView : View {
         @Binding var currentPoints: Int32
@@ -387,6 +367,59 @@ extension Redux_SquadViewNew {
 
 //MARK:- Behavior
 extension Redux_SquadViewNew {
+    private func hideAllDials() {
+        updateAllPilots() { $0.dial_status = .hidden }
+    }
+    
+    private func disableSystemPhaseForAllPilots() {
+        func setSystemPhaseState_Old(shipPilot: ShipPilot, state: Bool) {
+//            measure(name: "setSystemPhaseState(state:\(state)") {
+                if let data = shipPilot.pilotStateData {
+                    let name = shipPilot.pilotName
+                    data.change(update: { psd in
+                        
+                        print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
+
+                        psd.hasSystemPhaseAction = state
+                        self.viewModel.store.send(.squad(action: .updatePilotState(psd, shipPilot.pilotState)))
+
+                        print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
+                    })
+                }
+//            }
+        }
+        
+        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
+            setSystemPhaseState_Old(shipPilot: shipPilot, state: false)
+        }
+        
+        getShips()
+        
+//        updateAllPilots() { $0.updateSystemPhaseAction(value: false) }
+    }
+    
+    private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
+        viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
+            if var data = shipPilot.pilotStateData {
+                handler(&data)
+                
+                // Update the store
+                self.updatePilotState(pilotStateData: data,
+                                      pilotState: shipPilot.pilotState)
+            }
+        }
+    }
+    
+    func getShips() {
+        global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.getShips()")
+        self.viewModel.loadShips(squad: self.squad, squadData: self.squadData)
+//        self.viewModel.store.send(.squad(action: .getShips(self.squad, self.squadData)))
+    }
+    
+    func pilotTapped(shipPilot: ShipPilot) {
+        self.viewFactory.viewType = .shipViewNew(shipPilot, self.squad)
+    }
+    
     func setVictoryPoints(points: Int32) {
         // Mutate & Persist
         self.squadData.victoryPoints = Int32(points)
@@ -426,8 +459,6 @@ extension Redux_SquadViewNew {
     }
     
     // TODO: Switch & AppStore
-    
-    
     private func resetAllShips() {
         viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
