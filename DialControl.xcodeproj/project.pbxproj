@@ -14,6 +14,7 @@
 		AE028C6524A2C93B00DF689B /* ImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6424A2C93B00DF689B /* ImageData.swift */; };
 		AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */; };
 		AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */; };
+		AE0ED9A828AA75560003EFD2 /* ViewModelRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0ED9A728AA75560003EFD2 /* ViewModelRepresentable.swift */; };
 		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
 		AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */ = {isa = PBXBuildFile; fileRef = AE15E78D241D02120002F696 /* tie-in-interceptor.json */; };
 		AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */; };
@@ -135,6 +136,7 @@
 		AE028C6424A2C93B00DF689B /* ImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageData.swift; sourceTree = "<group>"; };
 		AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFetchedResultsController.swift; sourceTree = "<group>"; };
 		AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotStateData.swift; sourceTree = "<group>"; };
+		AE0ED9A728AA75560003EFD2 /* ViewModelRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelRepresentable.swift; sourceTree = "<group>"; };
 		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AE15E78D241D02120002F696 /* tie-in-interceptor.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tie-in-interceptor.json"; sourceTree = "<group>"; };
 		AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradesView.swift; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 				AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */,
 				AEDCB2CB264E7A6500DE4F10 /* BackButtonView.swift */,
 				AE390EF226D6DBCB007D054A /* AsyncObjectView.swift */,
+				AE0ED9A728AA75560003EFD2 /* ViewModelRepresentable.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -707,6 +710,7 @@
 				AEE98B5024B5D4AA00E60128 /* ShipLookupBuilder.swift in Sources */,
 				AEE65514260DE22D00AFAE6A /* HealthStatsView.swift in Sources */,
 				AE1FBE5C24166623005C54F5 /* Maneuver.swift in Sources */,
+				AE0ED9A828AA75560003EFD2 /* ViewModelRepresentable.swift in Sources */,
 				AE5FEDB52816BF8400978FD3 /* ViewPropertiesRepresentable.swift in Sources */,
 				AEF3B4642439B9B200A49717 /* InnerCircle.swift in Sources */,
 				AEF65F192445D3B4009D6BDC /* Upgrade.swift in Sources */,
