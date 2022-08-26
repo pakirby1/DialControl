@@ -294,7 +294,7 @@ extension Redux_SquadViewNew {
 //        }
     }
     
-    var body: some View {
+    var bodyView: some View {
         func onAppearBlock() {
             self.isFirstPlayer = self.squadData.firstPlayer
             self.victoryPoints = self.squadData.victoryPoints
@@ -523,7 +523,7 @@ extension Redux_SquadViewNew : ViewModelRepresentable {
  
     func buildView(viewModel: Redux_SquadViewNewViewModel) -> some View {
         global_os_log("CountViewContainerHelper") { "body(viewModel:)" }
-        let v = self.body
+        let v = self.bodyView
         return v
     }
 }
@@ -730,6 +730,26 @@ struct ShipGridView : View {
         }
     }
     
+    struct ShipButton: View {
+        @EnvironmentObject var store: MyAppStore
+        @Environment(\.updatePilotStateHandler) var updatePilotState
+        let shipPilot: ShipPilot
+        
+        var body: some View {
+            if let data = shipPilot.pilotStateData {
+                print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
+                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
+                                                   dialStatus: data.dial_status,
+                                                   hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
+                                .environmentObject(SquadViewHandler(store: store))
+                                .environment(\.updatePilotStateHandler, updatePilotState)
+                )
+            }
+            
+            return AnyView(EmptyView())
+        }
+    }
+    
     private func buildShipButton(shipPilot: ShipPilot) -> some View {
         func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
             // Get the dial status from the pilot state
@@ -747,11 +767,11 @@ struct ShipGridView : View {
             return AnyView(EmptyView())
         }
         
-        
         return Button(action: {
             onPilotTapped(shipPilot) })
         {
-            buildPilotCardView(shipPilot: shipPilot)
+//            buildPilotCardView(shipPilot: shipPilot)
+            ShipButton(shipPilot: shipPilot)
         }
     }
 }
