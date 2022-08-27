@@ -570,11 +570,7 @@ extension ShipPilot {
     }
     
     var halfPoints: Int {
-        if points.isMultiple(of: 2) {
-            return points / 2
-        } else {
-            return (points + 1) / 2
-        }
+        return points / 2
     }
     
     var threshold: Int {
