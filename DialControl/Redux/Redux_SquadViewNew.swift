@@ -21,6 +21,8 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @State var shipPilotsNew : [ShipPilot] = []
     @State private var displayWonLostCount: Bool = false
     
+    @State private var viewProperties: Redux_SquadViewNewViewPropertiesNew?
+    
     let theme: Theme = WestworldUITheme()
     let squad: Squad
     let squadData: SquadData
@@ -294,6 +296,10 @@ extension Redux_SquadViewNew {
 //        }
     }
     
+    func body(viewModel: Redux_SquadViewNewViewModel) -> some View {
+        return bodyView
+    }
+    
     var bodyView: some View {
         func onAppearBlock() {
             self.isFirstPlayer = self.squadData.firstPlayer
@@ -523,6 +529,7 @@ extension Redux_SquadViewNew : ViewModelRepresentable {
  
     func buildView(viewModel: Redux_SquadViewNewViewModel) -> some View {
         global_os_log("CountViewContainerHelper") { "body(viewModel:)" }
+        self.viewProperties = viewModel.buildViewProperties()
         let v = self.bodyView
         return v
     }
@@ -611,6 +618,13 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
                                                 wonCount: state.squad.wonCount,
                                                 lostCount: state.squad.lostCount)
     }
+    
+    func buildViewProperties() -> Redux_SquadViewNewViewPropertiesNew {
+        return Redux_SquadViewNewViewPropertiesNew(store: store,
+                                                   shipPilots: store.state.squad.shipPilots,
+                                                wonCount: store.state.squad.wonCount,
+                                                lostCount: store.state.squad.lostCount)
+    }
 }
 
 //MARK:- View Properties
@@ -675,6 +689,40 @@ extension Redux_SquadViewNewViewProperties {
 extension Redux_SquadViewNewViewProperties: CustomStringConvertible {
     var description: String {
         "shipPilots \(self.shipPilots.count)"
+    }
+}
+
+struct Redux_SquadViewNewViewPropertiesNew {
+    var store: MyAppStore
+    let shipPilots: [ShipPilot]
+    var activationOrder: Bool = false
+    let wonCount: Count
+    let lostCount: Count
+}
+
+extension Redux_SquadViewNewViewPropertiesNew {
+    func loadShips(squad: Squad, squadData: SquadData) {
+        // Make request to store to build the store.shipPilots
+        
+        logMessage("damagedPoints SquadCardView.loadShips")
+        print("PAK_DialStatus SquadCardView.loadShips()")
+        self.store.send(.squad(action: .getShips(squad, squadData)))
+    }
+    
+    func updateSquad(squadData: SquadData) {
+        self.store.send(.squad(action: .updateSquad(squadData)))
+    }
+    
+    func updatePilotState(pilotStateData: PilotStateData,
+                          pilotState: PilotState)
+    {
+        self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
+    }
+    
+    func flipDial(pilotStateData: PilotStateData,
+                  pilotState: PilotState)
+    {
+        self.store.send(.squad(action: .flipDial(pilotStateData, pilotState)))
     }
 }
 

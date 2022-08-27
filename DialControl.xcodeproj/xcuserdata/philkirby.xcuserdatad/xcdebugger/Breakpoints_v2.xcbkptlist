@@ -14,8 +14,8 @@
             filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "771"
-            endingLineNumber = "771"
+            startingLineNumber = "819"
+            endingLineNumber = "819"
             landmarkName = "buildShipButton(shipPilot:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "304"
-            endingLineNumber = "304"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
             landmarkName = "bodyView"
             landmarkType = "24">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "299"
-            endingLineNumber = "299"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "bodyView"
             landmarkType = "24">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "774"
-            endingLineNumber = "774"
+            startingLineNumber = "822"
+            endingLineNumber = "822"
             landmarkName = "buildShipButton(shipPilot:)"
             landmarkType = "7">
          </BreakpointContent>
