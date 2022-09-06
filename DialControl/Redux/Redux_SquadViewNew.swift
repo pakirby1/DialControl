@@ -173,6 +173,8 @@ extension Redux_SquadViewNew {
             )
         }
         
+        let totalHealth = IndicatorView(label: "30", bgColor: .white, fgColor: .black)
+        
         let damaged = Text("\(damagedPoints)")
             .font(.title)
             .foregroundColor(theme.TEXT_FOREGROUND)
@@ -244,7 +246,7 @@ extension Redux_SquadViewNew {
 
                 Spacer()
 
-                damaged
+                totalHealth
             }.padding(20)
         }
         
