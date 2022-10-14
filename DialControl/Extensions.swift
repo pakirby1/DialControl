@@ -148,6 +148,16 @@ extension Publisher where Failure == Never {
             object?[keyPath: keyPath] = value
         }
     }
+    
+    func weakSink<T: AnyObject>(
+        _ weaklyCaptured: T,
+        receiveValue: @escaping (T, Self.Output) -> Void
+    ) -> AnyCancellable {
+        sink { [weak weaklyCaptured] output in
+            guard let strongRef = weaklyCaptured else { return }
+            receiveValue(strongRef, output)
+        }
+    }
 }
 
 @available(OSX 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)

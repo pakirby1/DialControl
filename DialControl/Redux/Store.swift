@@ -46,12 +46,6 @@ struct MyXWSImportViewState {
 }
 
 struct MyShipViewState {
-    /*
-     Redux_SquadView:
-     var shipPilots: [ShipPilot] {
-         self.store.state.squad.shipPilots
-     }
-     */
     var pilotState: PilotState?
     var pilotStateData: PilotStateData?
     var shipImageURL: String = ""
@@ -75,7 +69,6 @@ struct FactionSquadListState {
     }
     
     var shipPilots: [ShipPilot] = []
-//    var shipPilotsCollection: Array<[ShipPilot]> = []
     var currentRound: Int = 0
 }
 
@@ -201,7 +194,6 @@ extension NameDescribable {
 }
 
 var noAction : AnyPublisher<MyAppAction, Never> {
-//    return Just(.none).eraseToAnyPublisher()
     return Empty().eraseToAnyPublisher()
 }
 
@@ -348,9 +340,6 @@ func toolsReducer(state: inout ToolsViewState,
         case .setDownloadEvent(let event):
             state.currentImage = event
             return noAction
-            
-        default:
-            return noAction
     }
 }
 
@@ -376,19 +365,15 @@ func factionFilterReducer(state: inout FactionFilterState,
 
             return noAction
             
-        case .deselectFaction(let faction):
+        case .deselectFaction(_):
             return noAction
         case .deselectAll:
             return noAction
     }
-    
-    return noAction
 }
 
 enum XWSImportError: Error {
     case squadNameNotFound
-
-    // Throw in all other cases
     case unexpected(code: Int)
 }
 
@@ -423,7 +408,6 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                 
                 try environment.pilotStateService.createPilotState_throws(squad: squad, squadData: squadData)
                 
-                //                    self.viewFactory.viewType = .factionSquadList(.galactic_empire)
                 return Just<MyAppAction>(.xwsImport(action: .importSuccess))
                     .eraseToAnyPublisher()
             } else {
@@ -438,9 +422,6 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
             return Just<MyAppAction>(.xwsImport(action: .displayAlert(error.localizedDescription)))
                 .eraseToAnyPublisher()
         }
-        
-        return Empty()
-            .eraseToAnyPublisher()
     }
     
     switch(action) {
@@ -747,12 +728,6 @@ func factionReducer(state: inout MyAppState,
                     .eraseToAnyPublisher()
             }
 
-//            state.faction.squadDataList.setShips(data: data)
-//            let x = state.faction.squadDataList[0]
-//            logMessage("pilot count: \(x.shipPilots.count)")
-//            
-//            logMessage("PAK_damagedPoints .getShips() \(data)")
-            
         case .updateFavorites(let showFavorites):
             showFavoritesOnly = showFavorites
             return loadAllSquads()
@@ -856,7 +831,6 @@ class MockStore<State, Action, Environment> : ObservableObject, IStore {
 }
 
 class Store<State, Action, Environment> : ObservableObject {
-//    @Published var state: State
     @Published var state: State {
         didSet {
             let s: MyAppState = state as! MyAppState
@@ -892,42 +866,42 @@ class Store<State, Action, Environment> : ObservableObject {
 }
 
 extension Store {
-//    func send(action: ActionProtocol) {
-//        action.execute(state: &state as! AppState, environment: environment).sink(
-//            receiveCompletion: { completion in
-//                switch(completion) {
-//                    case .finished:
-//                        print("finished")
-//                    case .failure:
-//                        print("failure")
-//                }
-//            },
-//            receiveValue: { nextAction in
-//                self.send(action: nextAction)
-//            }).store(in: &cancellables)
-//    }
-}
-
-extension Store {
     func send(_ action: Action) {
-//        send_old(action)
-        send_new(action)
-    }
-    
-    func send_old(_ action: Action) {
-        measure(name: "setSystemPhaseState store.send")
-        {
-            let nextAction = reducer(&state, action, environment)
+        func send_old(_ action: Action) {
+            measure(name: "setSystemPhaseState store.send")
+            {
+                let nextAction = reducer(&state, action, environment)
 
-            nextAction
+                nextAction
+                    .eraseToAnyPublisher()
+                    .print("Store.send")
+                    .receive(on: DispatchQueue.main)
+                    .sink(receiveValue: {
+                        self.publisher.send($0)
+                    })
+                    .store(in: &cancellables)
+            }
+        }
+        
+        func send_new(_ action: Action) {
+            global_os_log("Store.send_new(\(action))")
+            
+            Just(action)
+                .lane("send_new Just", filter: [.event], transformValue: transform(action:))
+                .flatMap{
+                    return self.reducer(&self.state, $0, self.environment)
+                }
                 .eraseToAnyPublisher()
-                .print("Store.send")
+                .lane("send_new flatMap", filter: [.event], transformValue: transform(action:))
                 .receive(on: DispatchQueue.main)
-                .sink(receiveValue: {
-                    self.publisher.send($0)
+                .sink(receiveValue: { [weak self] in
+                    global_os_log("Store.send_new sink(\(action))")
+                    self?.publisher.send($0)
                 })
                 .store(in: &cancellables)
         }
+        
+        send_new(action)
     }
     
     func transform(action: Action) -> String {
@@ -951,24 +925,6 @@ extension Store {
             default:
                 return "Action is: \(action)"
         }
-    }
-    
-    func send_new(_ action: Action) {
-        global_os_log("Store.send_new(\(action))")
-        
-        Just(action)
-            .lane("send_new Just", filter: [.event], transformValue: transform(action:))
-            .flatMap{
-                return self.reducer(&self.state, $0, self.environment)
-            }
-            .eraseToAnyPublisher()
-            .lane("send_new flatMap", filter: [.event], transformValue: transform(action:))
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] in
-                global_os_log("Store.send_new sink(\(action))")
-                self?.publisher.send($0)
-            })
-            .store(in: &cancellables)
     }
     
     func cancel() {
