@@ -98,7 +98,6 @@ struct Redux_FactionSquadList: View {
     var squadDataList : [SquadData] {
         get {
             let list = self.viewModel.viewProperties.squadDataList
-//            let list = self.store.state.faction.squadDataList
             logMessage("damagedPoints list \(list)")
             return list
         }
@@ -239,7 +238,6 @@ struct Redux_FactionSquadList: View {
                 Button(action: {
                     self.viewFactory.viewType = .factionFilterView
                 }) {
-    //                Text("Filter")
                     Image(systemName: "line.horizontal.3.decrease.circle.fill")
                         .foregroundColor(.white)
                         .font(.system(size: 48, weight: .bold))
@@ -251,7 +249,6 @@ struct Redux_FactionSquadList: View {
                 Spacer()
                 favoritesFilterView
                 Spacer()
-//                roundCount
                 new_roundCount
                 Spacer()
                 xwsImportButton
@@ -313,20 +310,6 @@ struct Redux_FactionSquadList: View {
 }
 
 extension Redux_FactionSquadList {
-    func pak() {
-        func new() {
-            self.viewModel.send(.deleteAllSquads)
-        }
-
-        if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList) {
-            new()
-            return
-        }
-        
-        self.store.send(.faction(action: .deleteAllSquads))
-
-    }
-    
     func loadRound() {
         if FeaturesManager.shared.isFeatureEnabled(.Redux_FactionSquadList)
         {
@@ -445,51 +428,45 @@ class Test_Redux_FactionSquadListViewModel : ObservableObject {
     }
     
     func configureViewProperties() {
-        configureViewProperties_new()
-    }
-    
-    func configureViewProperties_old() {
-        let stateSink = store.statePublisher
-            .lane("configureViewProperties() statePublisher")
-            .os_log(message: "configureViewProperties() statePublisher")
-            .map { state in
-                self.buildViewProperties(state: state)
-            }
-            .print()
-//            .removeDuplicates { (prev, current) -> Bool in
-//                    // Considers points to be duplicate if the x coordinate
-//                    // is equal, and ignores the y coordinate
-//                prev.squadDataList == current.squadDataList
-//            }
-            //.lane("configureViewProperties() buildViewProperties")
-            .os_log(message: "configureViewProperties() buildViewProperties")
-            .sink { [weak self] viewProperties in
-                self?.viewProperties = viewProperties
-            }
-        
-        self.cancellables.insert(AnyCancellable(stateSink))
-        
-        global_os_log("Test_Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
-    }
+        func configureViewProperties_old() {
+            let stateSink = store.statePublisher
+                .lane("configureViewProperties() statePublisher")
+                .os_log(message: "configureViewProperties() statePublisher")
+                .map { state in
+                    self.buildViewProperties(state: state)
+                }
+                .print()
+                .os_log(message: "configureViewProperties() buildViewProperties")
+                .sink { [weak self] viewProperties in
+                    self?.viewProperties = viewProperties
+                }
+            
+            self.cancellables.insert(AnyCancellable(stateSink))
+            
+            global_os_log("Test_Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
+        }
 
-    func configureViewProperties_new() {
-        store.statePublisher
-            .lane("configureViewProperties() statePublisher")
-            .os_log(message: "configureViewProperties() statePublisher")
-            .map { state in
-                self.buildViewProperties(state: state)
-            }
-            .print()
-            .removeDuplicates { (prev, current) -> Bool in
-                    // Considers points to be duplicate if the x coordinate
-                    // is equal, and ignores the y coordinate
-                prev.squadDataList == current.squadDataList
-            }
-            //.lane("configureViewProperties() buildViewProperties")
-            .os_log(message: "configureViewProperties() buildViewProperties")
-            .assign(to: &$viewProperties)
+        func configureViewProperties_new() {
+            store.statePublisher
+                .lane("configureViewProperties() statePublisher")
+                .os_log(message: "configureViewProperties() statePublisher")
+                .map { state in
+                    self.buildViewProperties(state: state)
+                }
+                .print()
+                .removeDuplicates { (prev, current) -> Bool in
+                        // Considers points to be duplicate if the x coordinate
+                        // is equal, and ignores the y coordinate
+                    prev.squadDataList == current.squadDataList
+                }
+                //.lane("configureViewProperties() buildViewProperties")
+                .os_log(message: "configureViewProperties() buildViewProperties")
+                .assign(to: &$viewProperties)
+            
+            global_os_log("Test_Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
+        }
         
-        global_os_log("Test_Redux_FactionSquadListViewModel.configureViewProperties() \(id) \(self.cancellables.count) subscriptions")
+        configureViewProperties_new()
     }
     
     deinit {
@@ -509,11 +486,9 @@ class Redux_FactionSquadListViewModel : ObservableObject {
         self.viewProperties = Redux_FactionSquadListViewProperties.none
         configureViewProperties()
         global_os_log("allocated Redux_FactionSquadListViewModel.init \(id) for view :\(viewID)")
-//        cancellable?.cancel()
     }
     
     deinit {
-//        cancellable?.cancel()
         global_os_log("deallocated Redux_FactionSquadListViewModel.deinit \(id)  for view :\(id)")
     }
     
@@ -577,9 +552,6 @@ extension Redux_FactionSquadListViewModel {
     func send(_ action: Redux_FactionSquadListViewModelAction) {
         switch(action) {
             case .refreshSquadsList:
-                // Update viewProperties to instruct the view to
-                // display a progress control
-//                displayProgressControl()
                 self.store.send(.faction(action: .loadSquads))
             
             case let .deleteSquad(squadData):

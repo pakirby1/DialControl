@@ -42,7 +42,6 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                 }
                 .padding(EdgeInsets(top: 0, leading: 5, bottom: 0, trailing: 5))
                 .background(Color.black)
-                // https://medium.com/swlh/swiftui-and-the-missing-environment-object-1a4bf8913ba7
                 
                 HStack {
                     Spacer()
@@ -82,7 +81,7 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
                 handler.setSystemPhaseState(shipPilot: shipPilot, state: action)
             }
         }
-        .onTapGesture {} // hide the Redux_PilotCardView.onTapGesture()
+        .onTapGesture {} // hide the Redux_PilotCardView.onTapGesture() by passing an empty closure
     }
     
     var healthStatus: some View {
@@ -204,10 +203,7 @@ struct Redux_PilotDetailsView: View {
             .padding(10)
             .animation(.default) // implicitly applying animation
             .onTapGesture {
-                // explicitly apply animation on toggle (choose either or)
-                //withAnimation {
                 self.flipDial()
-                //}
             }
     }
     
@@ -224,17 +220,6 @@ struct Redux_PilotDetailsView: View {
     }
     
     var upgrades: some View {
-//        func color(upgrade: Upgrade) -> Color {
-//            guard let upgradeState = getUpgradeStateData(upgrade: upgrade) else { return Color.white }
-//
-//            guard let charge_active = upgradeState.charge_active else { return Color.white }
-//            guard let charge_inactive = upgradeState.charge_inactive else { return Color.white }
-//
-//            if charge_active == 0 {
-//                return Color.red
-//            }
-//        }
-        
         VStack(alignment: .leading) {
             if (displayUpgrades) {
                 ForEach(self.shipPilot.upgrades) { upgrade in
@@ -395,6 +380,7 @@ class SquadViewHandler: ObservableObject {
     /// Updates a Bool on a pilot state data
     /// - Parameters:
     ///   - label: Label for logging
+    ///   - shipPilot: ship pilot
     ///   - state: Bool
     ///   - handler: what function should be called on the pilot state data
     func updateState<T: CustomStringConvertible>(label: String,
@@ -447,16 +433,12 @@ extension SquadViewHandler {
 
                         updatePilotState(pilotStateData: psd, pilotState: shipPilot.pilotState)
 
-//                        self.store.send(.squad(action: .updatePilotState(psd, self.shipPilot.pilotState)))
-
-        //                self.store.send(.squad(action: .updatePilotState($0, self.shipPilot.pilotState)))
                         print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
                     })
                 }
             }
         }
         
-//        setSystemPhaseState_Old(shipPilot: shipPilot,state: state)
         setSystemPhaseState_New(state: state)
     }
     

@@ -26,7 +26,6 @@ struct Redux_SquadView: View, DamagedSquadRepresenting {
     let squadData: SquadData
     
     var shipPilots: [ShipPilot] {
-//        loadShips()
         print("PAKshipPilots \(Date()) count: \(self.store.state.squad.shipPilots.count)")
         self.store.state.squad.shipPilots.forEach{ print("PAKshipPilots \(Date()) \($0.shipName)") }
         
@@ -38,8 +37,6 @@ struct Redux_SquadView: View, DamagedSquadRepresenting {
     }
     
     var sortedShipPilots: [ShipPilot] {
-        // TODO: Switch & AppStore
-        
         var copy = self.shipPilots
         
         if (activationOrder) {
@@ -223,7 +220,6 @@ extension Redux_SquadView {
                     
                     logDetails()
                     
-        //            self.revealAllDials.toggle()
                     self.updateAllDials(newDialStatus: newDialStatus)
 
                     logDetails()
@@ -262,14 +258,6 @@ extension Redux_SquadView {
                     damaged
                 }.padding(20)
 
-//                HStack {
-//                    Spacer()
-//                    dialState
-//                    Spacer()
-//                }
-                
-                // Body
-                // TODO: Switch & AppStore
                 if shipPilots.isEmpty {
                     emptySection
                 } else {
@@ -288,7 +276,6 @@ extension Redux_SquadView {
         }
         .onAppear{
             print("PAK_DialStatus SquadCardView.onAppear()")
-            // TODO: Switch & AppStore
             executionTime("Perf Redux_SquadView.content.onAppear()") {
                 self.loadShips()
                 self.activationOrder = self.squadData.engaged
@@ -366,9 +353,7 @@ extension Redux_SquadView {
         var body: some View {
             HStack {
                 VectorImageButton(imageName: "VictoryYellow", size: size) {
-//                    currentPoints += 1
                     updateCurrentPoints().execute(currentPoints)
-//                    action(currentPoints)
                 }
                 
                 IndicatorView(label: "\(self.currentPoints)",
@@ -377,13 +362,6 @@ extension Redux_SquadView {
                 
                 VectorImageButton(imageName: "VictoryRed2", size: size) {
                     updateCurrentPoints(increment: false).execute(currentPoints)
-                    
-                    /*
-                    currentPoints -= 1
-                    let newPoints = (currentPoints < 0 ? 0 : currentPoints)
-                    currentPoints = newPoints
-                    action(newPoints)
-                    */
                 }
                 
                 CustomToggleView(label: "Reset Points", binding: $resetPoints)
@@ -424,8 +402,6 @@ extension Redux_SquadView {
                                   pilotState: PilotState)
     {
         self.store.send(.squad(action: .updatePilotState(pilotStateData, pilotState)))
-        
-//        loadShips()
     }
     
     private func processEngage() {
@@ -480,7 +456,7 @@ extension Redux_SquadView {
     
     private func updateAllDials(newDialStatus: DialStatus) {
         sortedShipPilots.forEach{ shipPilot in
-            if var data = shipPilot.pilotStateData {
+            if let data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
                     data.change(update: {
                         global_os_log("Redux_SquadViewNew pilotStateData.id: \($0)")
