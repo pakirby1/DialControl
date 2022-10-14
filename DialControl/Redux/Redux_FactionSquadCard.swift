@@ -70,7 +70,6 @@ struct Redux_FactionSquadCard: View  {
     
     @State var displayDeleteConfirmation: Bool = false
     @State var refreshView: Bool = false
-//    @State var damagedPointsState: Int = 0
     
     let printer: DeallocPrinter
     
@@ -133,11 +132,6 @@ struct Redux_FactionSquadCard: View  {
             .clipShape(Circle())
     }
     
-    /*
-     For the common case of text-only labels, you can use the convenience initializer that takes a title string (or localized string key) as its first parameter, instead of a trailing closure:
-
-     Button("Sign In", action: signIn)
-     */
     var vendorView: some View {
         Button("\(self.squad.vendor?.description ?? "")") {
             UIApplication.shared.open(URL(string: self.squad.vendor?.link ?? "")!)

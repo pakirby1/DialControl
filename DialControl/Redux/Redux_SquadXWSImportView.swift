@@ -26,39 +26,6 @@ class Redux_SquadXWSImportViewModel : ObservableObject {
         self.squadService = squadService
         self.pilotStateService = pilotStateService
     }
-    
-    
-    
-    /*
-     struct UpgradeStateData {
-         let force_active : Int?
-         let force_inactive : Int?
-         let charge_active : Int?
-         let charge_inactive : Int?
-         let selected_side : Int
-     }
-
-     struct PilotStateData {
-         let adjusted_attack : Int
-         let adjusted_defense : Int
-         let hull_active : Int
-         let hull_inactive : Int
-         let shield_active : Int
-         let shield_inactive : Int
-         let force_active : Int
-         let force_inactive : Int
-         let charge_active : Int
-         let charge_inactive : Int
-         let selected_maneuver: String
-         let shipID: String
-         let upgradeStates : [UpgradeStateData]?
-     }
-     */
-    
-    
-    
-    
-    
 }
 
 struct Redux_SquadXWSImportView : View {
@@ -104,14 +71,6 @@ struct Redux_SquadXWSImportView : View {
                   message: Text(store.state.xwsImport.alertText),
                   dismissButton: .default(Text("OK")))
         }
-        // MARK:- Figure out how to navigate back from the Store
-//        .onReceive(store.$state, perform: { state in
-//            print("\(Date()) Redux_SquadXWSImportView.body.onReceive navigateBack = \(state.xwsImport.navigateBack)")
-//
-//            if state.xwsImport.navigateBack == true {
-//                self.navigateBack()
-//            }
-//        })
     }
 }
 

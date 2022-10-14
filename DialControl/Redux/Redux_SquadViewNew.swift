@@ -293,9 +293,6 @@ extension Redux_SquadViewNew {
             self.shipPilotsNew = $0.shipPilots
             global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onReceive \(shipPilots)")
         }
-//        .onChange(of: self.shipPilotsNew) {
-//            global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onChange(of: shipPilotsNew) \($0.count)")
-//        }
     }
     
     func body(viewModel: Redux_SquadViewNewViewModel) -> some View {
@@ -336,12 +333,6 @@ extension Redux_SquadViewNew {
                 VectorImageButton(imageName: "VictoryYellow", size: size) {
                     currentPoints += 1
                     action(currentPoints)
-                    /*
-                    var currentPoints = self.squadData.victoryPoints
-                    currentPoints += 1
-                    self.squadData.victoryPoints = currentPoints
-                    self.updateSquad(squadData: self.squadData)
-                    */
                 }
                 
                 IndicatorView(label: "\(self.currentPoints)",
@@ -353,14 +344,6 @@ extension Redux_SquadViewNew {
                     let newPoints = (currentPoints < 0 ? 0 : currentPoints)
                     currentPoints = newPoints
                     action(newPoints)
-                    /*
-                    var currentPoints = self.squadData.victoryPoints
-                    currentPoints -= 1
-                     
-                    self.squadData.victoryPoints = (currentPoints < 0 ? 0 : currentPoints)
-                     
-                    self.updateSquad(squadData: self.squadData)
-                    */
                 }
                 
                 CustomToggleView(label: "Reset Points", binding: $resetPoints)
@@ -382,20 +365,18 @@ extension Redux_SquadViewNew {
     
     private func disableSystemPhaseForAllPilots() {
         func setSystemPhaseState_Old(shipPilot: ShipPilot, state: Bool) {
-//            measure(name: "setSystemPhaseState(state:\(state)") {
-                if let data = shipPilot.pilotStateData {
-                    let name = shipPilot.pilotName
-                    data.change(update: { psd in
-                        
-                        print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
-
-                        psd.hasSystemPhaseAction = state
-                        self.viewModel.store.send(.squad(action: .updatePilotState(psd, shipPilot.pilotState)))
-
-                        print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
-                    })
-                }
-//            }
+            if let data = shipPilot.pilotStateData {
+                let name = shipPilot.pilotName
+                data.change(update: { psd in
+                    
+                    print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
+                    
+                    psd.hasSystemPhaseAction = state
+                    self.viewModel.store.send(.squad(action: .updatePilotState(psd, shipPilot.pilotState)))
+                    
+                    print("Redux_PilotCardView $0.hasSystemPhaseAction = \(String(describing: psd.hasSystemPhaseAction))")
+                })
+            }
         }
         
         viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
@@ -403,8 +384,6 @@ extension Redux_SquadViewNew {
         }
         
         getShips()
-        
-//        updateAllPilots() { $0.updateSystemPhaseAction(value: false) }
     }
     
     private func updateAllPilots(_ handler: (inout PilotStateData) -> ()) {
@@ -422,7 +401,6 @@ extension Redux_SquadViewNew {
     func getShips() {
         global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.getShips()")
         self.viewModel.loadShips(squad: self.squad, squadData: self.squadData)
-//        self.viewModel.store.send(.squad(action: .getShips(self.squad, self.squadData)))
     }
     
     func pilotTapped(shipPilot: ShipPilot) {
@@ -467,7 +445,6 @@ extension Redux_SquadViewNew {
         self.updateSquad(squadData: self.squadData)
     }
     
-    // TODO: Switch & AppStore
     private func resetAllShips() {
         viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
@@ -551,8 +528,6 @@ class Redux_SquadViewNewViewModel : ObservableObject {
 
 extension Redux_SquadViewNewViewModel {
     func loadShips(squad: Squad, squadData: SquadData) {
-        // Make request to store to build the store.shipPilots
-        
         logMessage("damagedPoints SquadCardView.loadShips")
         print("PAK_DialStatus SquadCardView.loadShips()")
         self.store.send(.squad(action: .getShips(squad, squadData)))
@@ -639,8 +614,6 @@ struct Redux_SquadViewNewViewProperties {
 
 extension Redux_SquadViewNewViewProperties {
     var sortedShipPilots: [ShipPilot] {
-        // TODO: Switch & AppStore
-
         var copy = self.shipPilots
 
         if (activationOrder) {
@@ -820,7 +793,6 @@ struct ShipGridView : View {
         return Button(action: {
             onPilotTapped(shipPilot) })
         {
-//            buildPilotCardView(shipPilot: shipPilot)
             ShipButton(shipPilot: shipPilot)
         }
     }

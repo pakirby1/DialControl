@@ -12,16 +12,6 @@ import Combine
 import SwiftUI
 
 enum ProgressControlState {
-    /*
-     DownloadEventEnum
-     
-     case idle
-     case inProgress(DownloadEvent)
-     case finished
-     case failed(Error)
-     case cancelled
-     */
-    
     case idle   // idle
     case active // inProgress(DownloadEvent)
     case paused // ???
@@ -79,14 +69,14 @@ enum ProgressControlEvent {
 }
 
 struct ProgressControl : View {
-//    @State var isPlaying: Bool = false
-    @State var state: ProgressControlState = .idle
     let size: CGFloat
-    @State private var test: String = ""
-    @State private var ratio: CGFloat = 0
     let onStart: () -> Void
     let onStop: () -> Void
     let id = UUID()
+
+    @State var state: ProgressControlState = .idle
+    @State private var test: String = ""
+    @State private var ratio: CGFloat = 0
     @EnvironmentObject var store: MyAppStore
     
     var body: some View {

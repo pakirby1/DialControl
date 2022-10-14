@@ -86,7 +86,6 @@ struct Redux_ToolsView: View {
             ProgressControl(size: 60,
                             onStart: self.downloadAllImages,
                             onStop: self.cancel)
-//                .border(Color.white, width: 1)
                 .environmentObject(store)
         }
         
@@ -94,7 +93,6 @@ struct Redux_ToolsView: View {
             ProgressControl(size: 60,
                             onStart: self.downloadAllImages,
                             onStop: self.cancel)
-//                .border(Color.white, width: 1)
                 .environmentObject(store)
         }
         
@@ -221,15 +219,12 @@ struct ToolsCard: View {
 }
 
 struct CustomView <Content: View>: View {
-    
     var content: () -> Content
     
     init(@ViewBuilder content: @escaping () -> Content) { self.content = content }
     
     var body: some View {
-
-            content()  // <<: Do anything you want with your imported View here.
-
+            content()
     }
 }
 

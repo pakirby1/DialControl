@@ -147,7 +147,6 @@ class ViewFactory: ObservableObject {
     }
     
     func buildView(type: ViewType) -> AnyView {
-        
         switch(type) {
         case .toolsView:
             return AnyView(Redux_ToolsView()
@@ -233,12 +232,12 @@ enum Faction: String, CaseIterable {
     
     var characterCode: String {
         switch(self) {
-        case .galacticrepublic: return "\u{002f}" // Good
-        case .separatistalliance: return "\u{002e}" // Good
+        case .galacticrepublic: return "\u{002f}"
+        case .separatistalliance: return "\u{002e}"
         case .galacticempire: return "\u{0040}"
-        case .rebelalliance: return "\u{002D}" // Good
-        case .scumandvillainy: return "\u{0023}" // Good
-        case .resistance: return "\u{0021}" // Good
+        case .rebelalliance: return "\u{002D}"
+        case .scumandvillainy: return "\u{0023}"
+        case .resistance: return "\u{0021}"
         case .firstorder: return "\u{002B}"
         case .none: return ""
         }
@@ -246,12 +245,12 @@ enum Faction: String, CaseIterable {
     
     var xwsID: String {
         switch(self) {
-        case .galacticrepublic: return "galacticrepublic" // Good
-        case .separatistalliance: return "separatistalliance" // Good
+        case .galacticrepublic: return "galacticrepublic"
+        case .separatistalliance: return "separatistalliance"
         case .galacticempire: return "galacticempire"
-        case .rebelalliance: return "rebelalliance" // Good
-        case .scumandvillainy: return "scumandvillainy" // Good
-        case .resistance: return "resistance" // Good
+        case .rebelalliance: return "rebelalliance"
+        case .scumandvillainy: return "scumandvillainy"
+        case .resistance: return "resistance"
         case .firstorder: return "firstorder"
         case .none: return ""
         }
@@ -336,19 +335,16 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-//            viewFactory.buildView(type: viewFactory.viewType)
             measure(name:"Perf ContentView.body") {
                 viewFactory.buildView()
             }
         }.onAppear() {
             print("ContentView.onAppear")
         }
-//        .border(Color.green, width: 2)
-//            .background(theme.BORDER_INACTIVE)
     }
 }
 
-// Hold down the option key and drag to rotate
+// Hold down the option key and drag to rotate in the simulator
 struct Rotation: View {
     enum RotationState {
         case inactive
@@ -393,10 +389,6 @@ struct Rotation: View {
         
         anglePublisher.send(ret)
         
-//        // figure out the segment
-//        let segmentAngle = 360.0 / Double(totalSegments)
-//        currentSegment = UInt(ret.degrees / segmentAngle)
-        
         return ret
     }
     
@@ -411,7 +403,6 @@ struct Rotation: View {
             self.viewRotationState += value
             let segmentAngle = 360.0 / Double(self.totalSegments)
             let tempSegment = self.rotationAngle.degrees / segmentAngle
-//            self.currentSegment = UInt()
             print("onEnded.value: \(value.degrees) viewRotationState: \(self.viewRotationState.degrees) segmentAngle: \(segmentAngle) tempSegment: \(tempSegment)")
         }
         
@@ -426,7 +417,6 @@ struct Rotation: View {
                 VStack {
                     Text("Angle: \(rotationAngle.degrees)").font(.title)
                     Text("Segment: \(currentSegment)").font(.title)
-//                    Text("\(rotationState.rotationAngle.degrees)").font(.title)
                 }
             }
     }

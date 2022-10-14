@@ -11,7 +11,6 @@ import SwiftUI
 
 struct Redux_FactionFilterView: View {
     @EnvironmentObject var viewFactory: ViewFactory
-//    let faction: Faction
     @State var test: Bool = false
     @EnvironmentObject var store: MyAppStore
 
