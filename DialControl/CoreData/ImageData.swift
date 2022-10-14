@@ -9,7 +9,6 @@ import UIKit
 import Foundation
 import CoreData
 
-//@objc(ImageData)
 public class ImageData: NSManagedObject, Identifiable {
     @NSManaged public var url: String?
     @NSManaged public var data: Data?

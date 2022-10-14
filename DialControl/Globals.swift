@@ -21,17 +21,12 @@ func global_os_log(_ message: String = "", _ valueFactory: () -> String) {
 }
 
 extension Publisher {
-    
     /// Logs to the console
-    /// .os_log(message: "Store.send MySquadAction.getShips")
-    /// - Parameter message: <#message description#>
-    /// - Returns: <#description#>
     func os_log(message: String = "") -> Publishers.HandleEvents<Self> {
         handleEvents(receiveOutput: { value in
             os.os_log("[%@] value: %@", message, String(describing: value))
         })
     }
-    
     
     /// Logs to the console
     /// - Parameters:
@@ -176,37 +171,17 @@ protocol IDataStorage {
     func setValue(newValue: Value, forKey: String)
 }
 
-
-/*
- .alert(isPresented: $displayDeleteAllConfirmation) {
-     Alert(title: Text("Delete"),
-           message: Text("All Squads?"),
-         primaryButton: Alert.Button.default(Text("Delete"), action: {
-             _ = self.viewModel.squadDataList.map { self.viewModel.deleteSquad(squadData: $0) }
-         }),
-         secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {
-             print("Cancelled Delete")
-         })
-     )
- }
- */
 struct LongPressAlertModifier: ViewModifier {
-//    @State var showAlert = false
     @Binding var isPresented: Bool
     let message: String
 
     func body(content: Content) -> some View {
         content
-//            .onLongPressGesture {
-//                self.showAlert = true
-//            }
             .alert(isPresented: $isPresented) {
                 Alert(title: Text("Alert"), message: Text(message), dismissButton: .default(Text("OK!")))
             }
     }
 }
-
-
 
 struct AlertModifier: ViewModifier {
     struct Properties {
@@ -234,8 +209,6 @@ struct AlertModifier: ViewModifier {
             }
     }
 }
-
-
 
 func logMessage(_ message: String) {
     print("\(Date()) \(message)")
@@ -275,7 +248,6 @@ func version() -> String {
     return "\(version) build \(build)"
 }
 
-
 func loadJSON(fileName: String, directoryPath: String) -> String {
     if let path = Bundle.main.path(forResource: fileName,
                                    ofType: "",
@@ -304,11 +276,6 @@ func fetchImageFromURL(urlString: String) -> UIImage {
 
     // Synchronous download using Data & String
     do {
-        // get the content as String synchronously
-//        let content = try String(contentsOf: url)
-//        print(content)
-
-        // get the content of the url as Data synchronously
         let data = try Data(contentsOf: url)
         image = UIImage(data: data)
     }
@@ -347,26 +314,8 @@ extension DeallocPrinter : CustomStringConvertible {
         " \(id) \(label) "
     }
 }
-/*
-func asyncMethod(completion: ((String) -> Void)) {
-    //...
-}
-
-func promisifiedAsyncMethod() -> AnyPublisher<String, Never> {
-    Future<String, Never> { promise in
-        asyncMethod { value in
-            promise(.success(value))
-        }
-    }
-    .eraseToAnyPublisher()
-}
-*/
 
 // MARK:- Images
-/// https://theswiftdev.com/how-to-download-files-with-urlsession-using-combine-publishers-and-subscribers/
-/// https://www.vadimbulavin.com/asynchronous-swiftui-image-loading-from-url-with-combine-and-swift/
-// Fetches an image from an url and publishes the UIImage
-// on a Combine publisher
 class ImageFetcher : ObservableObject {
     @Published var image: UIImage?
     var url: URL
@@ -399,11 +348,7 @@ class ImageFetcher : ObservableObject {
     }
 }
 
-// View that references the ImageFetcher
-// let url = URL(string: "https://image.tmdb.org/t/p/original/pThyQovXQrw2m0s9x82twj48Jq4.jpg")!
-// URLImageView(url: URL(string: "https://image.tmdb.org/t/p/original/pThyQovXQrw2m0s9x82twj48Jq4.jpg")!, view: Text("Loading.."))
 struct URLImageView<T: View>: View {
-//    var url: URL
     @ObservedObject private var imageFetcher: ImageFetcher
     private let placeholder: T?
 
@@ -420,7 +365,6 @@ struct URLImageView<T: View>: View {
     
     var body: some View {
         image.onAppear(perform: imageFetcher.load)
-//        EmptyView()
     }
     
     init(url: URL, view: T? = nil) {
@@ -453,7 +397,6 @@ class TimeCounter: ObservableObject {
         timer.fire()
     }
 }
-
 
 public struct CustomStyle : TextFieldStyle {
   public func _body(configuration: TextField<Self._Label>) -> some View {
@@ -508,7 +451,6 @@ func measure<A>(_ feature: String = "", name: String = "", _ block: () -> A) -> 
     return result
 }
 
-
 @discardableResult
 func measureThrows<A>(_ feature: String = "", name: String = "", _ block: () throws -> A) throws -> A {
     do {
@@ -532,3 +474,115 @@ func ForEachWithIndex<Data: RandomAccessCollection, Content: View>(
     }
 }
 
+let shipJSON = """
+{
+  "name": "TIE/in Interceptor",
+  "xws": "tieininterceptor",
+  "ffg": 41,
+  "size": "Small",
+  "dial": [
+    "1TW",
+    "1YW",
+    "2TB",
+    "2BB",
+    "2FB",
+    "2NB",
+    "2YB",
+    "3LR",
+    "3TW",
+    "3BW",
+    "3FB",
+    "3NW",
+    "3YW",
+    "3PR"
+  ],
+  "dialCodes": [
+    "TI"
+  ],
+  "faction": "Galactic Empire",
+  "stats": [
+    { "arc": "Front Arc", "type": "attack", "value": 3 },
+    { "type": "agility", "value": 3 },
+    { "type": "hull", "value": 3 }
+  ],
+  "actions": [
+    { "difficulty": "White", "type": "Focus" },
+    { "difficulty": "White", "type": "Evade" },
+    { "difficulty": "White", "type": "Barrel Roll" },
+    { "difficulty": "White", "type": "Boost" }
+  ],
+  "icon": "https://sb-cdn.fantasyflightgames.com/ship_types/I_TIEInterceptor.png",
+  "pilots": [
+    {
+      "name": "Alpha Squadron Pilot",
+      "initiative": 1,
+      "limited": 0,
+      "cost": 31,
+      "xws": "alphasquadronpilot",
+      "text": "Sienar Fleet Systems designed the TIE interceptor with four wing-mounted laser cannons, a dramatic increase in firepower over its predecessors.",
+      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_106.png",
+      "shipAbility": {
+        "name": "Autothrusters",
+        "text": "After you perform an action, you may perform a red [Barrel Roll] or red [Boost] action."
+      },
+      "slots": ["Modification", "Modification"],
+      "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_106.jpg",
+      "ffg": 106,
+      "hyperspace": false
+    },
+    {
+      "name": "Saber Squadron Ace",
+      "initiative": 4,
+      "limited": 0,
+      "cost": 36,
+      "xws": "sabersquadronace",
+      "text": "Led by Baron Soontir Fel, the pilots of Saber Squadron are among the Empire's best. Their TIE interceptors are marked with red stripes to designate pilots with at least ten confirmed kills.",
+      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_105.png",
+      "shipAbility": {
+        "name": "Autothrusters",
+        "text": "After you perform an action, you may perform a red [Barrel Roll] or red [Boost] action."
+      },
+      "slots": ["Talent", "Modification", "Modification"],
+      "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_105.jpg",
+      "ffg": 105,
+      "hyperspace": false
+    },
+    {
+      "name": "Soontir Fel",
+      "caption": "Ace of Legend",
+      "initiative": 6,
+      "limited": 1,
+      "cost": 53,
+      "xws": "soontirfel",
+      "ability": "At the start of the Engagement Phase, if there is an enemy ship in your [Bullseye Arc], gain 1 focus token.",
+      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_103.png",
+      "shipAbility": {
+        "name": "Autothrusters",
+        "text": "After you perform an action, you may perform a red [Barrel Roll] or red [Boost] action."
+      },
+      "slots": ["Talent", "Modification", "Modification"],
+      "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_103.jpg",
+      "ffg": 103,
+      "hyperspace": false
+    },
+    {
+      "name": "Turr Phennir",
+      "caption": "Ambitious Ace",
+      "initiative": 4,
+      "limited": 1,
+      "cost": 42,
+      "xws": "turrphennir",
+      "ability": "After you perform an attack, you may perform a [Barrel Roll] or [Boost] action, even if you are stressed.",
+      "image": "https://sb-cdn.fantasyflightgames.com/card_images/Card_Pilot_104.png",
+      "shipAbility": {
+        "name": "Autothrusters",
+        "text": "After you perform an action, you may perform a red [Barrel Roll] or red [Boost] action."
+      },
+      "slots": ["Talent", "Modification", "Modification"],
+      "artwork": "https://sb-cdn.fantasyflightgames.com/card_art/Card_art_XW_P_104.jpg",
+      "ffg": 104,
+      "hyperspace": false
+    }
+  ]
+}
+"""

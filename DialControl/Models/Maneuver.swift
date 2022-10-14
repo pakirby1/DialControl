@@ -9,24 +9,6 @@
 import Foundation
 import SwiftUI
 
-//    "1TW",
-//    "1YW",
-//    "2TB",
-//    "2BB",
-//    "2FB",
-//    "2NB",
-//    "2YB",
-//    "3LR",
-//    "3TW",
-//    "3BW",
-//    "3FB",
-//    "3NW",
-//    "3YW",
-//    "3PR",
-//    "4FB",
-//    "4KR",
-//    "5FW"
-
 enum ManeuverBearing : String {
     case E      // Left Talon
     case L      // Left Sloop
@@ -97,24 +79,6 @@ enum ManeuverDifficulty: String {
     }
 }
 
-//    "1TW",
-//    "1YW",
-//    "2TB",
-//    "2BB",
-//    "2FB",
-//    "2NB",
-//    "2YB",
-//    "3LR",
-//    "3TW",
-//    "3BW",
-//    "3FB",
-//    "3NW",
-//    "3YW",
-//    "3PR",
-//    "4FB",
-//    "4KR",
-//    "5FW"
-
 struct Maneuver: CustomStringConvertible {
     let speed: UInt
     let bearing: ManeuverBearing
@@ -143,10 +107,8 @@ struct Maneuver: CustomStringConvertible {
             Text("\(speed)")
                 .font(.system(size: 30.0, weight: .bold))
                 .foregroundColor(difficulty.color)
-//                .border(Color.white, width: 1)
             
             buildSymbolView()
-//                .border(Color.red, width: 1)
         }
         
         return AnyView(view)
@@ -174,7 +136,6 @@ struct Maneuver: CustomStringConvertible {
             
             // For some reason, the top of the arrow gets cut off for the "8" (Straight) bearing in x-wing font. See baselineOffset
             if bearing == .F {
-    //            return buildSFSymbolView()
                 return AnyView(buildTextFontView(baselineOffset: -10))
             } else if bearing == .K {
                 return AnyView(buildTextFontView(baselineOffset: -5))

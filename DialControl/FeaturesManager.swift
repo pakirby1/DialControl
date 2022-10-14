@@ -8,6 +8,8 @@
 
 import Foundation
 
+
+/// Manages feature switches
 class FeaturesManager {
     var features: [FeatureId: Feature] = [:]
     

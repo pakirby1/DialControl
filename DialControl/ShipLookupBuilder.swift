@@ -55,8 +55,6 @@ struct ShipLookupBuilder {
         var privateVars: [String] = []
         var codingKeys: [String] = []
         
-        
-        
         for upgrade in UpgradeCardEnum.allCases {
             let formatted = "\(upgrade)".removeAll(character: "(\"\")")
            
@@ -66,9 +64,6 @@ struct ShipLookupBuilder {
            privateVars.append(buildPrivateVar(upgrade: formatted))
            codingKeys.append(buildCodingKey(upgrade: formatted))
         }
-        
-//        let allUpgrades = "allUpgrades " + UpgradeCardEnum.allCases.joined(separator: " + ")
-//        allUpgrades = allUpgrades.removeAll(character: "(\"\")")
         
         print("\nSquadCardView.getShips()\n")
         allUpgrades.forEach{ print($0) }

@@ -18,14 +18,10 @@ extension DialControlTests {
     func testDeleteAllSquads() {
         // Subscribe to the store
         self.store?.$state
-//            .dropFirst(2)
             .sink(receiveValue: { state in
                 print("state.faction.displayDeleteAllSquadsConfirmation = \(state.faction.displayDeleteAllSquadsConfirmation)")
                 XCTAssertEqual(state.faction.displayDeleteAllSquadsConfirmation, false, "Display Delete all Squads confirmation is incorrect")
             }).store(in: &cancellables)
-        
-        // Send the store an event
-//        self.store?.send(.faction(action: .deleteAllSquads))
     }
     
     func testLoadAllSquads() {
@@ -39,7 +35,5 @@ extension DialControlTests {
         
         // Send the store an event
         self.store?.send(.faction(action: .loadSquads))
-        
-        // XCTAssert()
     }
 }

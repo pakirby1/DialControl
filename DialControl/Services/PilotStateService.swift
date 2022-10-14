@@ -20,7 +20,6 @@ protocol PilotStateServiceProtocol : class {
     func createPilotState_throws(squad: Squad, squadData: SquadData) throws
 }
 
-/// https://kaitlin.dev/2018/05/09/custom-errors.html
 enum PilotStateServiceProtocolError: LocalizedError {
     case savePilotStateError(String)
     case createPilotStateError(String)
@@ -58,8 +57,6 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                                     squadPilot: SquadPilot,
                                     allUpgrades: [Upgrade]) -> Int
         {
-
-//            allUpgrades.reduce(0, { $0.})
             let forceUpgrades = allUpgrades.filter{ upgrade in
                 if let _ = upgrade.sides[0].force {
                     return true
@@ -190,7 +187,6 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
         
         var pilotIndex: Int = 0
         
-        // for each pilot in squad.pilots
         for pilot in squad.pilots {
             // get the ship
             let json = buildPilotStateData(squad: squad,
@@ -260,8 +256,6 @@ extension PilotStateService {
                                     squadPilot: SquadPilot,
                                     allUpgrades: [Upgrade]) -> Int
         {
-            
-            //            allUpgrades.reduce(0, { $0.})
             let forceUpgrades = allUpgrades.filter{ upgrade in
                 if let _ = upgrade.sides[0].force {
                     return true
@@ -397,11 +391,7 @@ extension PilotStateService {
         
         var pilotIndex: Int = 0
         
-        // for each pilot in squad.pilots
         for pilot in squad.pilots {
-            // get the ship
-            
-            
             do {
                 let json = try buildPilotStateData(squad: squad,
                                                squadPilot: pilot,

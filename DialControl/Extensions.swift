@@ -106,17 +106,6 @@ extension Publisher {
     }
 }
 
-/*
-    store.statePublisher
-        .map { state in buildViewProperties(state) }
-        .weakSink(on: self, handler: setViewProperties)
- 
-    func buildViewProperties(state: CountViewState) -> CountViewProperties { ... }
- 
-    func setViewProperties(_ properties: CountViewProperties) {
-        properties = properties
-    }
- */
 extension Publisher where Failure == Never {
     func weakSink<T: AnyObject>(on object: T, handler: @escaping (Output) -> ()) -> AnyCancellable
     {
@@ -127,7 +116,6 @@ extension Publisher where Failure == Never {
 }
 
 extension Publisher {
-    
     /// Converts the output into a `Result<Output, Failure>` type.
     /// This catches any errors and stores them in the `Result`
     /// - Parameters:
@@ -264,7 +252,6 @@ extension EnvironmentValues {
     }
 }
 
-// https://stackoverflow.com/questions/58494193/swiftui-rotationeffect-framing-and-offsetting
 private struct SizeKey: PreferenceKey {
     static let defaultValue: CGSize = .zero
     
@@ -274,7 +261,6 @@ private struct SizeKey: PreferenceKey {
         value = nextValue()
     }
 }
-
 
 extension Array where Element == AngleRange {
     func getSegment(withAngle: CGFloat) -> UInt {
@@ -371,7 +357,6 @@ extension View {
         let y = withRadius * sin(angle)
 
         return CGPoint(x: x, y: y)
-//        return (x, y)
     }
 }
 
@@ -401,10 +386,6 @@ extension Shape {
             self.stroke(strokeColor, lineWidth: strokeWidth)
         }
     }
-}
-
-extension Image {
-    
 }
 
 extension String {
@@ -438,7 +419,6 @@ extension Array {
     }
 }
 
-
 extension SquadData {
     func getPilotState(index: Int) -> PilotState {
         let arr = Array(pilotState as! Set<PilotState>)
@@ -454,8 +434,6 @@ extension SquadData {
     }
 }
 
-/// Flips multiple different types of assets
-/// Card, Manuever Dial
 enum FlipCard {
     case frontToBack    // Display the back
     case backToFront    // Display the front
@@ -614,17 +592,14 @@ func executionTime(_ label: String, block: () -> ()) {
 }
 
 extension Array where Element: Publisher {
-
-    
-    /// Combines an array of publishers with a shared type and error type.
-    /// - Returns: <#description#>
-    /// – Jonathan Crooke
     /// https://stackoverflow.com/questions/65397556/swift-combine-how-to-combine-publishers-and-sink-when-only-one-publishers-valu
-    func combineAll() -> AnyPublisher<[Element.Output], Element.Failure>? {         guard let first = first else { return nil }
+    func combineAll() -> AnyPublisher<[Element.Output], Element.Failure>? {
+        guard let first = first else { return nil }
         
         return dropFirst()
             .reduce(into: AnyPublisher(first.map { [$0] })) {
-                $0 = $0.combineLatest($1) { $0 + [$1] }                     .eraseToAnyPublisher()
+                $0 = $0.combineLatest($1) { $0 + [$1] }
+                    .eraseToAnyPublisher()
                 }
     }
 }

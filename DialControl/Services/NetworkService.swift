@@ -19,7 +19,6 @@ class NetworkCacheService<Local: ILocalStore, Remote: IRemoteStore> : INetworkCa
     var classFuncString: String = ""
     let localStore: Local
     let remoteStore: Remote
-//    private var cancellable: AnyCancellable?
     let id = UUID()
     
     init(localStore: Local, remoteStore: Remote, label: String = "") {

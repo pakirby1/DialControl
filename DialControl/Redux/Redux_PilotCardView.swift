@@ -159,12 +159,13 @@ struct Redux_PilotCardView: View, ShipIDRepresentable {
 
 extension Redux_PilotCardView {
     func buildPilotDetailsView() -> some View {
-        print("PAK_DialStatus buildPilotDetailsView() self.dialStatus = \(dialStatus)")
+        print("PAK_DialStatus buildPilotDetailsView() \(self.shipPilot.pilotName) self.dialStatus = \(dialStatus)")
         
         return Redux_PilotDetailsView(shipPilot: self.shipPilot,
                                       displayUpgrades: true,
                                       displayHeaders: false,
-                                      displayDial: true)
+                                      displayDial: true,
+                                      dialStatus: dialStatus)
             .environmentObject(handler)
     }
 }
@@ -190,6 +191,7 @@ struct Redux_PilotDetailsView: View {
     let displayUpgrades: Bool
     let displayHeaders: Bool
     let displayDial: Bool
+    @State var dialStatus: DialStatus
     let theme: Theme = WestworldUITheme()
     @State var currentManeuver: String = ""
     @EnvironmentObject var handler: SquadViewHandler
@@ -197,7 +199,7 @@ struct Redux_PilotDetailsView: View {
     var dialViewNew: some View {
         let status = self.shipPilot.pilotStateData!.dial_status
         
-        print("\(Date()) PAK_DialStatus dialViewNew \(self.shipPilot.id) \(self.shipPilot.pilotName) \(status)")
+        print("PAK_DialStatus dialViewNew \(self.shipPilot.pilotName) \(status)")
         
         return buildManeuverView(dialStatus: status)
             .padding(10)
@@ -372,9 +374,11 @@ extension Redux_PilotDetailsView {
 
 class SquadViewHandler: ObservableObject {
     var store: MyAppStore
+    let getShips: () -> ()
     
-    init(store: MyAppStore) {
+    init(store: MyAppStore, getShips: @escaping () -> ()) {
         self.store = store
+        self.getShips = getShips
     }
     
     /// Updates a Bool on a pilot state data
@@ -445,6 +449,7 @@ extension SquadViewHandler {
     func flipDial(shipPilot: ShipPilot) {
         if let data = shipPilot.pilotStateData {
             store.send(.squad(action: .flipDial(data, shipPilot.pilotState)))
+            getShips()
         }
     }
 }

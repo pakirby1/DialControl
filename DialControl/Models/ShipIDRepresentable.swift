@@ -43,7 +43,6 @@ extension ShipIDRepresentable {
             } else {
                 switch(id) {
                     case "red":
-//                        buildSmallIndicatorView(color: Color.red)
                         ShipIDView(fill: Color.red)
                     case "green":
                         ShipIDView(fill:Color.green)

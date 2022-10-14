@@ -175,13 +175,6 @@ extension Redux_SquadViewNew {
         
         let totalHealth = IndicatorView(label: "30", bgColor: .white, fgColor: .black)
         
-        let damaged = Text("\(damagedPoints)")
-            .font(.title)
-            .foregroundColor(theme.TEXT_FOREGROUND)
-            .padding()
-            .background(Color.red)
-            .clipShape(Circle())
-        
         var firstPlayer: some View {
             if isFirstPlayer == true {
                 return AnyView(firstPlayerSymbol)
@@ -744,7 +737,7 @@ struct ShipGridView : View {
             ForEach(chunkedShips, id: \.self) { index in
                 HStack {
                     ForEach(index, id:\.self) { shipPilot in
-                        self.buildShipButton(shipPilot: shipPilot)
+                        self.buildShipButton(shipPilot: shipPilot, getShipsHandler: getShips)
                     }
                 }
                 .padding(.leading, 20)
@@ -757,14 +750,15 @@ struct ShipGridView : View {
         @EnvironmentObject var store: MyAppStore
         @Environment(\.updatePilotStateHandler) var updatePilotState
         let shipPilot: ShipPilot
+        let getShips: () -> ()
         
         var body: some View {
             if let data = shipPilot.pilotStateData {
-                print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
+                print("PAK_ShipButton \(shipPilot.pilotName) shipPilot.pilotStateData.dial_status = \(data.dial_status)")
                 return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
                                                    dialStatus: data.dial_status,
                                                    hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
-                                .environmentObject(SquadViewHandler(store: store))
+                                .environmentObject(SquadViewHandler(store: store, getShips: getShips))
                                 .environment(\.updatePilotStateHandler, updatePilotState)
                 )
             }
@@ -773,27 +767,27 @@ struct ShipGridView : View {
         }
     }
     
-    private func buildShipButton(shipPilot: ShipPilot) -> some View {
-        func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
-            // Get the dial status from the pilot state
-            if let data = shipPilot.pilotStateData {
-                print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
-                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
-                                                   dialStatus: data.dial_status,
-                                                   hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
-                                .environmentObject(SquadViewHandler(store: store))
-                                .environment(\.updatePilotStateHandler, updatePilotState)
-                )
-                                
-            }
-            
-            return AnyView(EmptyView())
-        }
+    private func buildShipButton(shipPilot: ShipPilot, getShipsHandler: @escaping () -> ()) -> some View {
+//        func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
+//            // Get the dial status from the pilot state
+//            if let data = shipPilot.pilotStateData {
+//                print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
+//                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
+//                                                   dialStatus: data.dial_status,
+//                                                   hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
+//                                .environmentObject(SquadViewHandler(store: store))
+//                                .environment(\.updatePilotStateHandler, updatePilotState)
+//                )
+//                                
+//            }
+//            
+//            return AnyView(EmptyView())
+//        }
         
         return Button(action: {
             onPilotTapped(shipPilot) })
         {
-            ShipButton(shipPilot: shipPilot)
+            ShipButton(shipPilot: shipPilot, getShips: getShipsHandler)
         }
     }
 }

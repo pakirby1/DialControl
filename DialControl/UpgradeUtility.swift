@@ -36,7 +36,6 @@ struct UpgradeUtility {
             }
         }
         
-        //            return modificationsUpgradesJSON
         return upgradeJSON
     }
     
@@ -59,15 +58,7 @@ struct UpgradeUtility {
     static func buildAllUpgrades(_ upgrades: SquadPilotUpgrade,
                                  store: MyAppStore? = nil) -> [Upgrade] {
         print("UpgradeUtility.buildAllUpgrades \(upgrades)")
-        
-            
-            
-            // getUpgrade(upgradeCategory: "device", upgradeName: "thermaldetonators")
             func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {
-//                let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
-//
-//                let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
-               
                 let upgrades = getUpgrades(upgradeCategory: upgradeCategory)
                 let matches: [Upgrade] = upgrades.filter({ $0.xws == upgradeName })
                 
@@ -125,7 +116,6 @@ struct UpgradeUtility {
                     }
                 }
             
-//                return getUpgrades_old(upgradeCategory: upgradeCategory)
                 return getUpgrades_new(upgradeCategory: upgradeCategory)
             }
             
@@ -134,22 +124,9 @@ struct UpgradeUtility {
                 var dict: [String: [Upgrade]] = [:]
                 
                 dict["astromech"] = allAstromechs
-                
-                /// upgrades.astromechs : [String]
-//                let astromechs: [Upgrade] = upgrades
-//                    .astromechs
-//                    .compactMap { astromech in
-//                        let x: [Upgrade]? = dict["astromech"]?.filter { $0.name == astromech}
-//
-//                        guard let u = x else {
-//                            return
-//                        }
-//                    }
             }
         
             var allUpgrades : [Upgrade] = []
-            
-            
         
             let astromechs : [Upgrade] = upgrades
                 .astromechs

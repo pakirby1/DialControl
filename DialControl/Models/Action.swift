@@ -9,7 +9,6 @@
 import Foundation
 import Combine
 
-/// AppState & AppEnvironment should be generic
 protocol ActionProtocol {
     func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
 }
@@ -54,20 +53,6 @@ struct ChargeAction : ActionProtocol {
 
     func execute(state: inout AppState, environment: AppEnvironment) -> AnyPublisher<ActionProtocol, Error>
     {
-//        func updateState(newData: PilotStateData) {
-//            print("\(Date()) PAK_updateState: \(newData.description)")
-//
-//            let json = PilotStateData.serialize(type: newData)
-//            /// where do we get a PilotState instance????
-//            guard let state = self.pilotState else { return }
-//
-//            self.pilotStateService.updatePilotState(pilotState: state,
-//                                                    state: json,
-//                                                    pilotIndex: newData.pilot_index)
-//
-//            self.pilotStateData = newData
-//        }
-        
         func spend(pilotStateData: PilotStateData,
                    statButtonType: StatButtonType)
         {
@@ -122,18 +107,3 @@ struct ChargeAction : ActionProtocol {
     }
 }
 
-//protocol ViewPropertyGenerating: class {
-//    associatedtype Properties
-//    var viewProperties: Properties { get set }
-////    var store: Store<AppState, Reducer<AppState, AppAction>, World> { get }
-//    
-//    func buildViewProperties(state: AppState) -> Properties
-//}
-//
-//extension ViewPropertyGenerating {
-//    func configureViewProperties() -> AnyCancellable {
-//        return store.$state.sink { state in
-//            self.viewProperties = self.buildViewProperties(state: state)
-//        }
-//    }
-//}

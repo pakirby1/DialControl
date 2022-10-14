@@ -8,127 +8,6 @@
 
 import Foundation
 
-let squadJSON = """
-{
-    "description":"",
-    "faction":"galacticempire",
-    "name":"OutmaneuverSoontirVaderSnapDuchess",
-    "pilots":
-    [
-        {
-            "id":"soontirfel",
-            "name":"soontirfel",
-            "points":69,
-            "ship":"tieininterceptor",
-            "upgrades":
-            {
-                "talent":["outmaneuver"],
-                "modification":["hullupgrade","targetingcomputer"]
-            }
-        },
-        {
-            "id":"darthvader",
-            "name":"darthvader",
-            "points":75,
-            "ship":"tieadvancedx1",
-            "upgrades":
-            {
-                "sensor":["firecontrolsystem"],
-                "modification":["afterburners"]
-            }
-        },
-        {
-            "id":"duchess",
-            "name":"duchess",
-            "points":49,
-            "ship":"tieskstriker",
-            "upgrades":
-            {
-                "talent":["snapshot"]
-            }
-        }
-    ],
-    "points":193,
-    "vendor":
-    {
-        "yasb":
-        {
-            "builder":"Yet Another Squad Builder 2.0",
-            "builder_url":"https://raithos.github.io/",
-            "link":"https://raithos.github.io/?f=Galactic%20Empire&d=v8ZsZ200Z179X126W164W249Y173XW113WW105Y211X256WWW&sn=OutmaneuverSoontirVaderSnapDuchess&obs="
-        }
-    },
-    "version":"2.0.0"
-}
-"""
-
-let New_squadJSON = """
-{
-  "description": "",
-  "faction": "rebelalliance",
-  "name": "CassianAPBraylenTen",
-  "pilots": [
-    {
-      "id": "cassianandor",
-      "name": "cassianandor",
-      "points": 59,
-      "ship": "ut60duwing",
-      "upgrades": {
-        "crew": [
-          "k2so"
-        ],
-        "configuration": [
-          "pivotwing"
-        ]
-      }
-    },
-    {
-      "id": "ap5",
-      "name": "ap5",
-      "points": 32,
-      "ship": "sheathipedeclassshuttle"
-    },
-    {
-      "id": "braylenstramm",
-      "name": "braylenstramm",
-      "points": 55,
-      "ship": "asf01bwing",
-      "upgrades": {
-        "cannon": [
-          "tractorbeam",
-          "jammingbeam"
-        ]
-      }
-    },
-    {
-      "id": "tennumb",
-      "name": "tennumb",
-      "points": 53,
-      "ship": "asf01bwing",
-      "upgrades": {
-        "cannon": [
-          "autoblasters",
-          "jammingbeam"
-        ],
-        "configuration": [
-          "stabilizedsfoils"
-        ]
-      }
-    }
-  ],
-  "points": 199,
-  "vendor": {
-    "yasb": {
-      "builder": "Yet Another Squad Builder 2.0",
-      "builder_url": "https://raithos.github.io/",
-      "link": "https://raithos.github.io/?f=Rebel%20Alliance&d=v8ZsZ200Z32XWW314WWW140Y72XWWWWY73XWW13W12WWWY74XWW232W12WWW313&sn=CassianAPBraylenTen&obs="
-    }
-  },
-  "version": "2.0.0"
-}
-"""
-/// From xws
-/// upgrades":{"cannon":["jammingbeam"],"crew":["emperorpalpatine"],"modification":["shieldupgrade"],"title":["st321"]}}
 struct SquadPilotUpgrade: Codable {
     var astromechs: [String] { return _astromech ?? [] }
     var cannons: [String] { return _cannon ?? [] }
@@ -413,7 +292,6 @@ struct Squad: Codable, JSONSerialization {
     var points: Int? { return _points ?? nil }
     var vendor: SquadVendor? { return _vendor ?? nil }
     var version: String
-//    let isFavorite: Bool = false
     
     private var _description: String?
     private var _name: String?
@@ -544,24 +422,6 @@ struct Squad: Codable, JSONSerialization {
         self.shipPilots = shipPilots
     }
 }
-
-// Custom JSON decoding
-//extension Squad {
-//    init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//
-//        description = try values.decode(String.self, forKey: .description)
-//        name = try values.decode(String.self, forKey: .name)
-//        faction = try values.decode(String.self, forKey: .faction)
-//        points = try values.decode(Int.self, forKey: .points)
-////        vendor = try values.decode(SquadVendor.self, forKey: .vendor)
-//        version = try values.decode(String.self, forKey: .version)
-//        pilots = try values.decode([SquadPilot].self, forKey: .pilots)
-//
-////        let additionalInfo = try values.nestedContainer(keyedBy: AdditionalInfoKeys.self, forKey: .additionalInfo)
-////        elevation = try additionalInfo.decode(Double.self, forKey: .elevation)
-//    }
-//}
 
 extension Squad: Equatable {
     static func ==(lhs: Squad, rhs: Squad) -> Bool {

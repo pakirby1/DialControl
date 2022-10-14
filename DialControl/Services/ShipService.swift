@@ -10,7 +10,6 @@ import Foundation
 import Combine
 
 class ShipService {
-    
     static func getShips(squad: Squad, squadData: SquadData) -> [ShipPilot] {
         let pilotStates = squadData.pilotStateArray.sorted(by: { $0.pilotIndex < $1.pilotIndex })
         _ = pilotStates.map{ print("pilotStates[\($0.pilotIndex)] id:\(String(describing: $0.id))") }
@@ -20,7 +19,6 @@ class ShipService {
         _ = zipped.map{ print("\(String(describing: $0.0.name)): \($0.1)")}
         
         let ret = zipped.map{
-            // Global Function
             global_getShip(squad: squad, squadPilot: $0.0, pilotState: $0.1)
         }
         

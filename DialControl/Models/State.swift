@@ -61,7 +61,7 @@ enum AppAction {
 }
 
 struct AppEnvironment {
-    let squadsService = SquadsService(moc: NSManagedObjectContext())
+    let squadsService = SquadsService(moc: NSManagedObjectContext.init(concurrencyType: .mainQueueConcurrencyType))
 }
 
 func reducer(state: inout AppState, action: AppAction, environment: AppEnvironment) -> AnyPublisher<AppAction, Error>

@@ -18,8 +18,6 @@ class ImageServiceTests: XCTestCase {
 
         var receiveCount = 0
         var collectedSequence: [Result<DownloadEventEnum, Error>] = []
-        
-        // Put setup code here. This method is called before the invocation of each test method in the class.
         let moc = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         
         // Used only if we have a unique constraint on our CoreData entity?
@@ -51,7 +49,6 @@ class ImageServiceTests: XCTestCase {
         wait(for: [expectation], timeout: 60.0)
         XCTAssertNotNil(cancellable)
         XCTAssertEqual(receiveCount, 4)
-//        XCTAssertEqual(collectedSequence, initialSequence)
     }
 }
 

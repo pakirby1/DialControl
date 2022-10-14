@@ -61,17 +61,6 @@ class JSONService : JSONServiceProtocol {
     /// The default path for upgrades
     static var upgradesPrefix: String { "https://pakirby1.github.io/Images/XWing/Upgrades/" }
     
-    /// Build a list of URLs for all Images
-    ///     pilots[]/{xws}.png
-    ///     upgrades[]/{xws}.png
-    ///     upgrades[]/{xws}-sideb.png
-    /// - Parameter path: The absolute path of the page.
-    /// - Parameter content: The page's content.
-    func getAllImageURLs() {
-        // Get all pilots
-        let pilots = readRecursive(directory: "Data\\Pilots")
-    }
-    
     /// Builds a list of URLS that exist within the `directory` sub directory of the main bundle
     /// - Parameter directory: Sub directory of the main bundle ("Data\\Pilots").
     func readRecursive(directory: String) -> [URL] {

@@ -24,7 +24,6 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     @Published var image: UIImage = UIImage()
     @Published var message = "Placeholder Image"
     
-//    let printer: DeallocPrinter
     private let service: INetworkCacheService
     private var cancellables = Set<AnyCancellable>()
     private var cache = [String:UIImage]()
@@ -32,7 +31,6 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     let id = UUID()
     
     init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore())) {
-//        printer = DeallocPrinter("NetworkCacheViewModel \(id)")
         self.service = service
         print("allocated \(self) \(id)")
     }
@@ -40,7 +38,6 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     convenience init(moc: NSManagedObjectContext) {
         self.init(service: NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: RemoteStore()))
         print("convenience \(self).init")
-//        print("allocated \(self) \(id)")
     }
     
     deinit {
@@ -109,6 +106,3 @@ extension NetworkCacheViewModel {
         loadImage()
     }
 }
-
-
-//let future: Future<Int, Never> = Just(1).asFuture

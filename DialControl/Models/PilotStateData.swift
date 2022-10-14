@@ -102,41 +102,6 @@ extension UpgradeStateData {
     }
 }
 
-//struct PilotStateDataNew : Codable, /*JSONSerialization,*/ CustomStringConvertible {
-//    var description: String
-//    var pilot_index : Int
-//    var adjusted_attack : Int
-//    var adjusted_defense : Int
-//    var hull_active : Int
-//    var hull_inactive : Int
-//    var shield_active : Int
-//    var shield_inactive : Int
-//    var force_active : Int
-//    var force_inactive : Int
-//    var charge_active : Int
-//    var charge_inactive : Int
-//    var selected_maneuver: String
-//    var shipID: String
-////    var upgradeStates : [UpgradeStateData]? // nil if no upgrades present
-////    var dial_status: DialStatus
-//}
-//struct UpgradeStateDataNew : Codable, CustomStringConvertible {
-//    var description: String
-//    var force_active : Int?
-//    var force_inactive : Int?
-//    var charge_active : Int?    // sides[].item[0].charges.value
-//    var charge_inactive : Int?
-//    var selected_side : Int
-//    var xws: String
-//    let id = UUID()
-//}
-
-//func update(handler: (inout PilotStateData) -> ()) {
-//}
-//func update(handler: (inout UpgradeStateData) -> ()) {
-//    //
-//}
-
 struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var pilot_index : Int
     var adjusted_attack : Int
@@ -155,7 +120,7 @@ struct PilotStateData : Codable, JSONSerialization, CustomStringConvertible {
     var dial_status: DialStatus
     var hasSystemPhaseAction: Bool? // nil if we haven't set the system phase state yet
     
-    var id = UUID()
+    let id = UUID()
     
     var description: String {
         var arr: [String] = []
@@ -239,7 +204,6 @@ extension PilotStateData {
         }
     }
 }
-
 
 extension PilotStateData {
     typealias UpdateHandler = (inout PilotStateData) -> ()
@@ -451,15 +415,11 @@ extension PilotStateData {
     
 }
 
-protocol PilotStateDataProtocol {
-    
-}
-
 enum DialStatus: Codable {
     case hidden
     case revealed
     case set
-    case destroyed   // Ship Destroyed
+    case destroyed   
     case ionized
     
     init(from decoder: Decoder) throws {

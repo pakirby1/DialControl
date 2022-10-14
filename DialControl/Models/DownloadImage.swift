@@ -82,9 +82,9 @@ extension DownloadImageType where T == LocalURL {
     ///     ["chopper", "genius", "r2astromech" ... ]
     func buildXWS() -> DownloadImageType<XWS> {
         switch(self) {
-            case .pilot(let url):
+            case .pilot(_):
                 return .pilot("4lom")
-            case .upgrade(let url):
+            case .upgrade(_):
                 return .upgrade("4lom")
         }
     }
@@ -124,12 +124,12 @@ extension DownloadImageType where T == XWS {
     func buildURL() -> DownloadImageType<RemoteURL>? {
         
         switch(self) {
-            case .pilot(let xws):
+            case .pilot(_):
                 if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
                     return .pilot(remoteURL)
                 }
                 
-            case .upgrade(let xws):
+            case .upgrade(_):
                 if let remoteURL = URL(string: "https://pakirby1.github.io/images/XWing/upgrades/tantiveiv.png") {
                     return .upgrade(remoteURL)
                 }
@@ -178,8 +178,4 @@ struct DownloadImageEvent: CustomStringConvertible {
     var file: String {
         return url.components(separatedBy: "/").last ?? ""
     }
-    
-//    static func buildCompleted() -> ImageService.DownloadImageEventResult {
-//        return .success(DownloadImageEvent(index: 0, total: 0, url: "", isCompleted: true))
-//    }
 }

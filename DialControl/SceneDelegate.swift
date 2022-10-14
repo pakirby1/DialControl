@@ -52,9 +52,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         diContainer.registerServices(moc: moc, cacheService: cacheService)
         
         // Redux Store
-        /*
-         Cannot convert value of type 'Reducer<MyAppState, MyAppAction, World>' (aka '(inout MyAppState, MyAppAction, World) -> AnyPublisher<MyAppAction, Never>') to expected argument type '(inout _, _, _) -> AnyPublisher<_, Never>'
-         */
         let store: MyAppStore = MyAppStore(
             state: buildState(),
             reducer: myAppReducer,

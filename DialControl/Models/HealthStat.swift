@@ -13,8 +13,4 @@ struct HealthStat : Identifiable {
     let id = UUID()
     let type: StatButtonType
     let value: Int
-//
-//    var image: Image {
-//        return UIImage(type.text)
-//    }
 }

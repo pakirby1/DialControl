@@ -12,11 +12,6 @@ import CoreData
 
 
 extension SquadData {
-
-//    @nonobjc public class func fetchRequest() -> NSFetchRequest<SquadData> {
-//        return NSFetchRequest<SquadData>(entityName: "SquadData")
-//    }
-
     @NSManaged public var id: UUID?
     @NSManaged public var json: String?
     @NSManaged public var name: String?
@@ -25,11 +20,6 @@ extension SquadData {
     @NSManaged public var revealed: Bool
     @NSManaged public var firstPlayer: Bool
     @NSManaged public var victoryPoints: Int32
-    
-    /// way easier to use:
-//    @NSManaged public var pilotState: Set<PilotState>
-    
-    /// than this:
     @NSManaged public var pilotState: NSSet?
 
 }

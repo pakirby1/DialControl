@@ -42,7 +42,8 @@ class DialControlTests: XCTestCase {
         moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         
         let diContainer = DIContainer()
-        diContainer.registerServices(moc: moc)
+        let cacheService = CacheService()
+        diContainer.registerServices(moc: moc, cacheService: cacheService)
         
         self.store = MyAppStore(
             state: buildState(),

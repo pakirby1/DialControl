@@ -18,13 +18,7 @@ protocol ILocalStore {
 
 class LocalStore : ILocalStore {
     private var cache = [String:Data]()
-    
-//    let printer: DeallocPrinter
     let id = UUID()
-    
-    init() {
-//        printer = DeallocPrinter("LocalStore \(id)")
-    }
     
     func loadData(url: String) -> AnyPublisher<Data, Error> {
         Future<Data, Error> { promise in
@@ -102,16 +96,6 @@ struct RemoteStore : IRemoteStore {
         printer = DeallocPrinter("RemoteStore \(id)")
     }
     
-    /*
-     let remoteDataPublisher = URLSession.shared.dataTaskPublisher(for: myURL!)
-     .tryMap { data, response -> Data in
-                 guard let httpResponse = response as? HTTPURLResponse,
-                     httpResponse.statusCode == 200 else {
-                         throw TestFailureCondition.invalidServerResponse
-                 }
-                 return data
-     }
-     */
     func loadData(url: String) -> Future<Data, Error> {
         let future = Future<Data, Error> { promise in
             let u = URL(string: url)!

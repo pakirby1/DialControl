@@ -12,11 +12,6 @@ import CoreData
 
 
 extension PilotState {
-
-//    @nonobjc public class func fetchRequest() -> NSFetchRequest<PilotState> {
-//        return NSFetchRequest<PilotState>(entityName: "PilotState")
-//    }
-
     @NSManaged public var id: UUID?
     @NSManaged public var json: String?
     @NSManaged public var pilotIndex: Int32

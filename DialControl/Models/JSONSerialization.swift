@@ -40,17 +40,12 @@ enum JSONSerializationError : LocalizedError {
 }
 
 extension JSONSerialization {
-    /// JSON -> T
     static func deserialize<T: Decodable>(jsonString: String) -> T {
         print(jsonString)
         let jsonData = jsonString.data(using: .utf8)!
         let decoder = JSONDecoder()
         var ret: T? = nil   // FIXME: How do I NOT use optionals???
-        
-//        guard let ret = try? decoder.decode(T.self, from: jsonData) else {
-//            fatalError("Failed to decode from bundle \(jsonString).")
-//        }
-        
+
         do {
             ret = try decoder.decode(T.self, from: jsonData)
         } catch let DecodingError.dataCorrupted(context) {
@@ -119,13 +114,11 @@ extension JSONSerialization {
         // open func encode<T>(_ value: T) throws -> Data where T : Encodable
         guard let data = try? encoder.encode(type) else {
             throw JSONSerializationError.encoding("\(type)")
-            fatalError("Failed to encode.")
         }
 
         let str = String(decoding: data, as: UTF8.self)
         
         return str
     }
-    
 }
 

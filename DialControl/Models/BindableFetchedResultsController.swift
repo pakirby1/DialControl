@@ -11,15 +11,13 @@ import CoreData
 import Combine
 import SwiftUI
 
-// From: https://www.mattmoriarity.com/observing-core-data-changes-with-combine/getting-started/
-
-class BindableFetchedResultsController<T: NSManagedObject>: NSObject, NSFetchedResultsControllerDelegate, ObservableObject {
+class BindableFetchedResultsController<T: NSManagedObject>: NSObject, NSFetchedResultsControllerDelegate, ObservableObject
+{
     let fetchedResultsController: NSFetchedResultsController<T>
 
-    // Publisher.  clients should reference to get updates
     @Published var fetchedObjects: [T]
     
-    private var cancellableSet = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
     
     private func updateFetchedObjects() {
         self.fetchedObjects = fetchedResultsController.fetchedObjects ?? []
@@ -53,7 +51,7 @@ class BindableFetchedResultsController<T: NSManagedObject>: NSObject, NSFetchedR
                 print("PAK: BindableFetchedResultsController.fetchedObjects event \(Date())")
                 print("PAK: BindableFetchedResultsController.fetchedObjects count: \(fetchedObjects.count)")
             }
-            .store(in: &cancellableSet)
+            .store(in: &cancellables)
     }
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
