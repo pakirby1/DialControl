@@ -1,43 +1,41 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "CombineExt",
-        "repositoryURL": "https://github.com/CombineCommunity/CombineExt.git",
-        "state": {
-          "branch": null,
-          "revision": "0880829102152185190064fd17847a7c681d2127",
-          "version": "1.5.1"
-        }
-      },
-      {
-        "package": "SwiftyJSON",
-        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
-        "state": {
-          "branch": null,
-          "revision": "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
-          "version": "5.0.1"
-        }
-      },
-      {
-        "package": "TimelaneCombine",
-        "repositoryURL": "https://github.com/icanzilb/TimelaneCombine",
-        "state": {
-          "branch": null,
-          "revision": "7366c0243860b8dbf265b5a5674e6c4797c44a8f",
-          "version": "1.0.2"
-        }
-      },
-      {
-        "package": "TimelaneCore",
-        "repositoryURL": "https://github.com/icanzilb/TimelaneCore",
-        "state": {
-          "branch": null,
-          "revision": "25d8cd6ab596c038316c7b65bfd9c0f1c7160ecf",
-          "version": "1.0.2"
-        }
+  "pins" : [
+    {
+      "identity" : "combineext",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/CombineCommunity/CombineExt.git",
+      "state" : {
+        "revision" : "d7b896fa9ca8b47fa7bcde6b43ef9b70bf8c1f56",
+        "version" : "1.8.1"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",
+      "state" : {
+        "revision" : "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
+        "version" : "5.0.1"
+      }
+    },
+    {
+      "identity" : "timelanecombine",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/icanzilb/TimelaneCombine",
+      "state" : {
+        "revision" : "d97f27b600de3b5a2ad20f610d67c6eeac380300",
+        "version" : "1.0.10"
+      }
+    },
+    {
+      "identity" : "timelanecore",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/icanzilb/TimelaneCore",
+      "state" : {
+        "revision" : "27df4c10e762d206164dce47b42816a452cab283",
+        "version" : "1.0.13"
+      }
+    }
+  ],
+  "version" : 2
 }
