@@ -39,7 +39,7 @@ struct UpgradesView: View {
 
 // MARK:- UpgradeView
 /*
- 
+ Update to support quick builds (Battle of Yavin)
  */
 struct UpgradeView: View {
     struct UpgradeViewModel {
