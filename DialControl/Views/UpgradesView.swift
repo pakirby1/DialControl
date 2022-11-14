@@ -194,3 +194,9 @@ struct UpgradeCardFlipView<Model: ShipViewModelProtocol> : View {
             .frame(width: 500.0, height:350)
     }
 }
+
+struct UpgradeTextView: View {
+    var body: some View {
+        Text("UpgradeTextView")
+    }
+}
