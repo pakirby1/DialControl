@@ -197,6 +197,6 @@ struct UpgradeCardFlipView<Model: ShipViewModelProtocol> : View {
 
 struct UpgradeTextView: View {
     var body: some View {
-        Text("UpgradeTextView") 
+        Text("UpgradeTextView")
     }
 }
