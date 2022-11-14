@@ -7,128 +7,48 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C7E4F237-3731-4A1D-9A9F-813213F0B90C"
-            shouldBeEnabled = "No"
+            uuid = "96F38DD8-4047-4DB4-9475-CDC1EB417A43"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_PilotCardView.swift"
+            filePath = "DialControl/Redux/Redux_ShipView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
-            landmarkName = "dialViewNew"
-            landmarkType = "24">
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "init(moc:shipPilot:squad:pilotStateService:store:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "DC946AA4-C919-4C17-B75B-936DE3E90F57"
-            shouldBeEnabled = "No"
+            uuid = "B86A6C57-6A5D-42D4-9467-D55759ED1913"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_PilotCardView.swift"
+            filePath = "DialControl/Services/JSONService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204"
-            landmarkName = "dialViewNew"
-            landmarkType = "24">
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "loadShipFromJSON(shipName:pilotName:faction:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "0899F117-642A-4FB0-89F6-874E4C143D1C"
-            shouldBeEnabled = "No"
+            uuid = "EF1B0B94-EBB8-4485-B54A-AAF22DFFC3B4"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_PilotCardView.swift"
+            filePath = "DialControl/Services/JSONService.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "258"
-            endingLineNumber = "258"
-            landmarkName = "body"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A0F4126A-225A-4149-B6DE-A7B7C0280910"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Store.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "643"
-            endingLineNumber = "643"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F69DBFD6-9808-4DAD-B166-B3C8CC4637B0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Store.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "622"
-            endingLineNumber = "622"
-            landmarkName = "unknown"
-            landmarkType = "0">
-            <Locations>
-               <Location
-                  uuid = "F69DBFD6-9808-4DAD-B166-B3C8CC4637B0 - 3ea50323168430ae"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "DialControl.squadReducer(state: inout DialControl.MySquadViewState, action: DialControl.MySquadAction, environment: DialControl.MyEnvironment) -&gt; Combine.AnyPublisher&lt;DialControl.MyAppAction, Swift.Never&gt;"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Redux/Store.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "622"
-                  endingLineNumber = "622"
-                  offsetFromSymbolStart = "1996">
-               </Location>
-               <Location
-                  uuid = "F69DBFD6-9808-4DAD-B166-B3C8CC4637B0 - 11cbc0d7a6e1f57b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 (inout DialControl.PilotStateData) -&gt; () in DialControl.squadReducer(state: inout DialControl.MySquadViewState, action: DialControl.MySquadAction, environment: DialControl.MyEnvironment) -&gt; Combine.AnyPublisher&lt;DialControl.MyAppAction, Swift.Never&gt;"
-                  moduleName = "DialControl"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControl/Redux/Store.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "623"
-                  endingLineNumber = "623"
-                  offsetFromSymbolStart = "418">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FC9C8ADA-BEFF-4DD8-9C1E-3FE4C7FA86C7"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_PilotCardView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "452"
-            endingLineNumber = "452"
-            landmarkName = "flipDial(shipPilot:)"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
+            landmarkName = "loadShipFromJSON(shipName:pilotName:faction:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

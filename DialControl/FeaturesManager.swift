@@ -40,6 +40,7 @@ class FeaturesManager {
         add(Feature(id: FeatureId.Redux_FactionSquadList, enabled: true))
         add(Feature(id: FeatureId.serializeJSON, enabled: true))
         add(Feature(id: FeatureId.firstPlayerUpdate, enabled: true))
+        add(Feature(id: FeatureId.UpgradeTextView, enabled: true))
     }
 }
 
@@ -70,6 +71,7 @@ enum FeatureId : String {
     case Redux_FactionSquadList
     case serializeJSON
     case firstPlayerUpdate
+    case UpgradeTextView
 }
 
 protocol IFeature {

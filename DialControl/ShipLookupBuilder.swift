@@ -110,7 +110,7 @@ extension ShipLookupBuilder {
                 print("\t\(file)")
                 let filename = file.fileName()  // tie-ln-fighter.json
                 let key = buildKey(filename: filename)    // tielnfighter
-                let directoryPath = "pilots/" + dir // rebel-alliance
+                let directoryPath = "pilots/" + dir // pilots/rebel-alliance
                 let faction = dir.removeAll(character: "-")
                 let pfu = PilotFileUrl(fileName: file,
                                        directoryPath: directoryPath,
