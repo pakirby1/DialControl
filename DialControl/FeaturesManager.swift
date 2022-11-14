@@ -40,7 +40,7 @@ class FeaturesManager {
         add(Feature(id: FeatureId.Redux_FactionSquadList, enabled: true))
         add(Feature(id: FeatureId.serializeJSON, enabled: true))
         add(Feature(id: FeatureId.firstPlayerUpdate, enabled: true))
-        add(Feature(id: FeatureId.UpgradeTextView, enabled: true))
+        add(Feature(id: FeatureId.UpgradeTextView, enabled: true)) 
     }
 }
 
