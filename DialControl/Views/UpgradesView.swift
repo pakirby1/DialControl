@@ -196,7 +196,343 @@ struct UpgradeCardFlipView<Model: ShipViewModelProtocol> : View {
 }
 
 struct UpgradeTextView: View {
+    let utility = UpgradeTextUtility()
+    @State var text = "UpgradeTextView"
+    
     var body: some View {
-        Text("UpgradeTextView")
+        let substrings = utility.testMergeTypes()
+        utility.buildViews(substrings)
+    }
+}
+
+class UpgradeTextUtility {
+    enum SubstringType : Equatable, CustomStringConvertible {
+        var description: String {
+            switch(self) {
+                case .text(let val):
+                    return val
+                case .symbol(let val):
+                    return val
+            }
+        }
+        
+        case text(String)
+        case symbol(String)
+        
+        func merge(_ type: Self) -> SubstringType? {
+            if self == type {
+                switch (self, type) {
+                    case (.text(let lhs), .text(let rhs)):
+                        return .text(lhs + rhs)
+                    case (.symbol(let lhs), .symbol(let rhs)):
+                        return .symbol(lhs + rhs)
+                    default:
+                        return nil
+                }
+            }
+            
+            return nil
+        }
+        
+//        func hasSameCaseAs(_ type: Self) -> Bool {
+//            switch self {
+//                case .text: if case .text = type { return true }
+//                case .symbol: if case .symbol = type { return true }
+//            }
+//            return false
+//        }
+//
+        public static func ==(lhs: SubstringType, rhs:SubstringType) -> Bool {
+                switch (lhs,rhs) {
+                    case (.text, .text):
+                        return true
+                    case (.symbol, .symbol):
+                        return true
+                default:
+                    return false
+                }
+        }
+    }
+    
+    /*
+     Given a string of length n, return an array that contains all subsets
+     separated by either '[' or ']' characters.
+     
+     if the input is:
+     "After you perform a [Straight] maneuver, you may perform a [Boost] action."
+                                   i
+                          s        e
+     
+     0  "After you perform a "
+     1  "[Straight]"
+     2  " maneuver, you may perform a "
+     3  "[Boost]"
+     4  " action."
+     */
+    func findDelimitedSubstrings(_ input : String) -> [String] {
+        func updateResult(input: String, result: inout [String]) {
+            if (!input.isEmpty) {
+                result.append(input)
+            }
+        }
+        
+        if (input.isEmpty) { return [] }
+        var i = 0
+        var start = 0
+        var ret = [String]()
+        let len = input.count
+        
+        while i < len {
+            let currentIndex = input.index(input.startIndex, offsetBy: i)
+            let startIndex = input.index(input.startIndex, offsetBy: start)
+            
+            if (input[currentIndex] == "[") {
+                let endIndex = input.index(before: currentIndex)
+                let sub = String(input[startIndex...endIndex])
+                updateResult(input: sub, result: &ret)
+                
+                start = i
+            } else if (input[currentIndex] == "]") {
+                let endIndex = currentIndex
+                let sub = String(input[startIndex...endIndex])
+                updateResult(input: sub, result: &ret)
+                
+                start = i + 1
+            }
+            
+            i += 1
+        }
+        
+        if (start < len) {
+            let startIndex = input.index(input.startIndex, offsetBy: start)
+            let endIndex = input.index(input.startIndex, offsetBy: len)
+            let sub = String(input[startIndex..<endIndex])
+            
+            updateResult(input: sub, result: &ret)
+        }
+        
+        return ret
+    }
+    
+    /*
+     "After you fully execute a ",
+     "[3 ",
+     "[Straight]",
+     "]",
+     " or ",
+     "[4 ",
+     "[Straight]",
+     "]",
+     " maneuver, you may perform a boost using the ",
+     "[1 ",
+     "[Straight]",
+     "]",
+     " template. (This is not an action)."
+     
+    Should convert to
+     [
+        SubstringType.text("After you fully execute a "),
+        SubstringType.text("[3 "),
+        SubstringType.symbol("[Straight]")
+        ...
+     ]
+     */
+    func createSubstringArray(_ input: [String]) -> [SubstringType] {
+        var ret = [SubstringType]()
+        
+        for str in input {
+            let startIndex = str.startIndex
+            let endIndex = str.index(before: str.endIndex)
+            
+            if (str[startIndex] == "[") && (str[endIndex] == "]") {
+                ret.append(.symbol(str))
+            } else {
+                ret.append(.text(str))
+            }
+        }
+        
+        return ret
+    }
+    
+    /*
+     merge same contiguous substring types
+     
+     "After you fully execute a ",
+     "[3 ",
+     "[Straight]",
+          
+    Should convert to
+     [
+        SubstringType.text("After you fully execute a [3 "),
+        SubstringType.symbol("[Straight]")
+        ...
+     ]
+
+     */
+    func mergeSameSubstringTypes(_ input: [SubstringType]) -> [SubstringType] {
+        var results = [SubstringType]()
+        var mergedSubtype: SubstringType?
+        let len = input.count
+        var i = 0
+        
+        if len == 0 { return [] }
+        
+        while i < len {
+            let first = input[i]
+            
+            if let current = mergedSubtype {
+                if let merged = current.merge(first) {
+                    mergedSubtype = merged
+                } else {
+                    results.append(current)
+                    mergedSubtype = first
+                }
+            } else {
+                mergedSubtype = first
+            }
+            
+            i += 1
+        }
+        
+        // If we have a mergedSubtype, add it to the results
+        if (i == len) {
+            if let current = mergedSubtype {
+                results.append(current)
+            }
+        }
+        
+            return results
+    }
+    
+    private func getSymbol(_ input: String) -> String {
+        //strip off the brackets
+        
+        switch(input) {
+            case "[Straight]":
+                return "8"
+            case "[Focus]":
+                return "f"
+            case "[Evade]":
+                return "e"
+            case "[Lock]":
+                return "l"
+            case "[Boost]":
+                return "b"
+            case "[Calculate]":
+                return "a"
+            case "[Hit]":
+                return "d"
+            case "[Critical Hit]":
+                return "c"
+            case "[Charge]":
+                return "g"
+            case "[Force]":
+                return "h"
+            case "[Reinforce]":
+                return "i"
+            case "[Jam]":
+                return "j"
+            case "[Cloak]":
+                return "k"
+            case "[Coordinate]":
+                return "o"
+            case "[Reload]":
+                return "="
+            case "[Rotate Arc]":
+                return "R"
+            case "[Front Arc]":
+                return "{"
+            case "[Rear Arc]":
+                return "|"
+            case "[Bullseye Arc]":
+                return "}"
+            case "[Right Arc]":
+                return "cent"
+            case "[Left Arc]":
+                return "sterling"
+            case "[Full Front Arc]":
+                return "aciitilde"
+            case "[Full Rear Arc]":
+                return "exclamdown";
+            case "[Left Sloop]":
+                return "1"
+            case "[Right Sloop]":
+                return "3"
+            case "[Koigran Turn]":
+                return "2"
+            case "[Left Turn]":
+                return "4"
+            case "[Right Turn]":
+                return "6"
+            case "[Bank Left]":
+                return "7"
+            case "[Bank Right]":
+                return "9"
+            case "[Left Talon]":
+                return ":"
+            case "[Right Talon]":
+                return ";"
+            case "[Barrel Roll]":
+                return "r"
+            case "[Slam]":
+                return "s"
+            default:
+                return ""
+        }
+    }
+    
+    func buildViews(_ input: [SubstringType]) -> some View {
+        func buildView(_ type: SubstringType) -> Text {
+            switch(type) {
+                case .text(let val):
+                    return Text(val)
+                case .symbol(let val):
+                    return Text(getSymbol(val))
+                        .font(.custom("xwing-miniatures", size: 18))
+            }
+        }
+        
+        return VStack(alignment: .center) {
+            input.reduce(Text(""), { $0 + buildView($1) } )
+        }
+    }
+    
+    //MARK: - Tests
+    func testEmptyInput() -> [String] {
+        return findDelimitedSubstrings("")
+    }
+    
+    func testSimpleInput() -> [String] {
+        let input = "After you perform a [Straight] maneuver, you may perform a [Boost] action."
+        return findDelimitedSubstrings(input)
+    }
+    
+    func testComplexInput() -> [String] {
+        let input =  "After you fully execute a [3 [Straight]] or [4 [Straight]] maneuver, you may perform a boost using the [1 [Straight]] template. (This is not an action)."
+        
+        return findDelimitedSubstrings(input)
+    }
+    
+    func testCreateSubstringArray() -> [SubstringType] {
+        let input =  "After you fully execute a [3 [Straight]] or [4 [Straight]] maneuver, you may perform a boost using the [1 [Straight]] template. (This is not an action)."
+        
+        let substrings = findDelimitedSubstrings(input)
+        return createSubstringArray(substrings)
+    }
+    
+    /*
+     let substrings = utility.testMergeTypes()
+     utility.buildViews(substrings) // Builds a single Text view from the substrings
+     */
+    func testMergeTypes() -> [SubstringType] {
+//        let input =  "After you fully execute a [3 [Straight]] or [4 [Straight]] maneuver, you may perform a boost using the [1 [Straight]] template. (This is not an action)."
+        
+//        let input = "While you perform a primary attack, if you are damaged, you may change 1 [Focus] result to a [Hit] result."
+        
+        let input = "While you perform an attack, if the defender is in your [Bullseye Arc], you may change 1 [Hit] result to a [Critical Hit] result."
+        
+        let substrings = findDelimitedSubstrings(input)
+        let substringTypes = createSubstringArray(substrings)
+        return mergeSameSubstringTypes(substringTypes)
     }
 }
