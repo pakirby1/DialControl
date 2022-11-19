@@ -122,7 +122,10 @@ class Redux_ShipViewModel: ObservableObject {
             .$state
             .lane("state")
             .sink(receiveValue: { [weak self] in
-                self?.pilotStateData = $0.ship.pilotStateData!
+                if let psd = $0.ship.pilotStateData {
+                    self?.pilotStateData = psd
+                }
+                
                 self?.shipImageURL = $0.ship.shipImageURL
             })
             .store(in: &cancellableSet)

@@ -98,28 +98,28 @@ struct RemoteStore : IRemoteStore {
     
     func loadData(url: String) -> Future<Data, Error> {
         let future = Future<Data, Error> { promise in
-            let u = URL(string: url)!
-            
-            URLSession.shared.dataTask(with: u) { data, response, err in
-                do {
-                    guard let httpResponse = response as? HTTPURLResponse,
-                        httpResponse.statusCode == 200 else {
+            if let u = URL(string: url) {
+                URLSession.shared.dataTask(with: u) { data, response, err in
+                    do {
+                        guard let httpResponse = response as? HTTPURLResponse,
+                              httpResponse.statusCode == 200 else {
                             throw StoreError.remoteMiss("Invalid HTTP response code: \(String(describing: (response as? HTTPURLResponse)?.statusCode))")
+                        }
+                        
+                        if let error = err {
+                            throw StoreError.remoteMiss("\(error)")
+                        }
+                        
+                        guard let data = data else {
+                            throw StoreError.remoteMiss("No data was received")
+                        }
+                        
+                        promise(.success(data))
+                    } catch {
+                        promise(.failure(error))
                     }
-                    
-                    if let error = err {
-                        throw StoreError.remoteMiss("\(error)")
-                    }
-                    
-                    guard let data = data else {
-                        throw StoreError.remoteMiss("No data was received")
-                    }
-                    
-                    promise(.success(data))
-                } catch {
-                    promise(.failure(error))
-                }
-            }.resume()
+                }.resume()
+            }
         }
         
         return future

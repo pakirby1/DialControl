@@ -296,6 +296,7 @@ extension Redux_SquadViewNew {
         func onAppearBlock() {
             self.isFirstPlayer = self.squadData.firstPlayer
             self.victoryPoints = self.squadData.victoryPoints
+            self.viewProperties = viewModel.buildViewProperties()
         }
         
         return VStack {
@@ -501,11 +502,11 @@ extension Redux_SquadViewNew : ViewModelRepresentable {
  
     func buildView(viewModel: Redux_SquadViewNewViewModel) -> some View {
         global_os_log("CountViewContainerHelper") { "body(viewModel:)" }
-        self.viewProperties = viewModel.buildViewProperties()
         let v = self.bodyView
         return v
     }
 }
+
 //MARK:- View Model
 class Redux_SquadViewNewViewModel : ObservableObject {
     var store: MyAppStore
@@ -557,7 +558,9 @@ extension Redux_SquadViewNewViewModel : ViewPropertyRepresentable {
     }
     
     func bind(state: MyAppState) {
-        self.viewProperties = self.buildViewProperties(state: state)
+        DispatchQueue.main.async {
+            self.viewProperties = self.buildViewProperties(state: state)
+        }
         
         let systemPhaseStates: [(String, Bool)] = state.squad.shipPilots.map {
             if let x = $0.pilotStateData?.hasSystemPhaseAction {

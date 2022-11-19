@@ -895,38 +895,45 @@ extension Store {
         func send_old(_ action: Action) {
             measure(name: "setSystemPhaseState store.send")
             {
-                let nextAction = reducer(&state, action, environment)
-
-                nextAction
-                    .eraseToAnyPublisher()
-                    .print("Store.send")
-                    .receive(on: DispatchQueue.main)
-                    .sink(receiveValue: {
-                        self.publisher.send($0)
-                    })
-                    .store(in: &cancellables)
+                // I was getting the message
+                //Publishing changes from within view updates is not allowed, this will cause undefined behavior.
+                // the workaround is to wrap it in a DispatchQueue.main.async
+                // https://developer.apple.com/forums/thread/711899
+                DispatchQueue.main.async { [self] in
+                    
+                    let nextAction = reducer(&state, action, self.environment)
+                    
+                    nextAction
+                        .eraseToAnyPublisher()
+                        .print("Store.send")
+                        .receive(on: DispatchQueue.main)
+                        .sink(receiveValue: {
+                            self.publisher.send($0)
+                        })
+                        .store(in: &cancellables)
+                }
             }
         }
         
-        func send_new(_ action: Action) {
-            global_os_log("Store.send_new(\(action))")
-            
-            Just(action)
-                .lane("send_new Just", filter: [.event], transformValue: transform(action:))
-                .flatMap{
-                    return self.reducer(&self.state, $0, self.environment)
-                }
-                .eraseToAnyPublisher()
-                .lane("send_new flatMap", filter: [.event], transformValue: transform(action:))
-                .receive(on: DispatchQueue.main)
-                .sink(receiveValue: { [weak self] in
-                    global_os_log("Store.send_new sink(\(action))")
-                    self?.publisher.send($0)
-                })
-                .store(in: &cancellables)
-        }
+//        func send_new(_ action: Action) {
+//            global_os_log("Store.send_new(\(action))")
+//
+//            Just(action)
+//                .lane("send_new Just", filter: [.event], transformValue: transform(action:))
+//                .flatMap{
+//                    return self.reducer(&self.state, $0, self.environment)
+//                }
+//                .eraseToAnyPublisher()
+//                .lane("send_new flatMap", filter: [.event], transformValue: transform(action:))
+//                .receive(on: DispatchQueue.main)
+//                .sink(receiveValue: { [weak self] in
+//                    global_os_log("Store.send_new sink(\(action))")
+//                    self?.publisher.send($0)
+//                })
+//                .store(in: &cancellables)
+//        }
         
-        send_new(action)
+        send_old(action)
     }
     
     func transform(action: Action) -> String {

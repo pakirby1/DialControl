@@ -447,13 +447,13 @@ class UpgradeTextUtility {
             case "[Bullseye Arc]":
                 return "}"
             case "[Right Arc]":
-                return "cent"
+                return "¢"
             case "[Left Arc]":
-                return "sterling"
+                return "£"
             case "[Full Front Arc]":
-                return "aciitilde"
+                return "~"
             case "[Full Rear Arc]":
-                return "exclamdown";
+                return "¡";
             case "[Left Sloop]":
                 return "1"
             case "[Right Sloop]":
@@ -535,4 +535,6 @@ class UpgradeTextUtility {
         let substringTypes = createSubstringArray(substrings)
         return mergeSameSubstringTypes(substringTypes)
     }
+    
+    
 }
