@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // MARK: - IPrintLog
 protocol IPrintLog {
@@ -23,3 +24,5 @@ extension IPrintLog {
         printLog("\(tag) \(message)")
     }
 }
+
+

@@ -20,6 +20,29 @@ func global_os_log(_ message: String = "", _ valueFactory: () -> String) {
     os.os_log("[%@] value: %@", message, valueFactory())
 }
 
+extension View {
+    func debugPrint(_ message: String) -> some View {
+        #if DEBUG
+        global_os_log(message)
+        #endif
+        return self
+    }
+}
+
+struct LogView : View {
+    var body: some View {
+        ScrollView {
+            ForEach(0..<100) { i in
+                GeometryReader { geo in
+                    Text("Row \(i)")
+                        .debugPrint("Row \(i): \(geo.frame(in: .global))")
+                }
+                .frame(height: 50)
+            }
+        }
+    }
+}
+
 extension Publisher {
     /// Logs to the console
     func os_log(message: String = "") -> Publishers.HandleEvents<Self> {
