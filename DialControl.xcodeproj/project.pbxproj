@@ -200,6 +200,7 @@
 		AE7E5B3E2646A78C00BBEA15 /* Redux_FactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Redux_FactionFilterView.swift; sourceTree = "<group>"; };
 		AE7EC214245DA13400E92704 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		AE7EC216245EE95B00E92704 /* FactionFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FactionFilterView.swift; sourceTree = "<group>"; };
+		AE8934A1293E151F00883BE1 /* XWSImport.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = XWSImport.md; sourceTree = "<group>"; };
 		AE93ADDA24529F120017AEE8 /* SquadXWSImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquadXWSImportView.swift; sourceTree = "<group>"; };
 		AE93ADDC2452A45C0017AEE8 /* MultilineTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultilineTextView.swift; sourceTree = "<group>"; };
 		AE93ADDE2452A8EA0017AEE8 /* TextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
@@ -491,6 +492,7 @@
 				AE5FEDAD281575C900978FD3 /* Redux_FactionSquadListView.md */,
 				AECF76E1285DEEAD00DA02D5 /* CountView.md */,
 				AE7738D3286485080047EFFC /* XWSUtility.md */,
+				AE8934A1293E151F00883BE1 /* XWSImport.md */,
 			);
 			path = Documentation;
 			sourceTree = "<group>";
