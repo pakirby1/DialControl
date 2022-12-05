@@ -16,6 +16,9 @@ codingPath: [_JSONKey(stringValue: "Index 7", intValue: 7), CodingKeys(stringVal
 In the `configuration.json` file we have instances of `"cost": { "value": "???" }`.  The value is expected to be an int but it is a string.
 
 > Do we really care about upgrade `cost`?  Can we ignore it?
+> I changed it from `"cost": { "value": "???" }` to `"cost": { "value": 0 }` to fix the error.
+
+
 
 
 
