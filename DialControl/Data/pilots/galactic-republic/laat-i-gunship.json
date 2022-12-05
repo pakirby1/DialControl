@@ -43,7 +43,7 @@
       "caption": "Valkyrie 2929",
       "initiative": 4,
       "cost": 5,
-      "loadout": 20,
+      "loadout": 12,
       "charges": { "value": 2, "recovers": 1 },
       "slots": [
         "Talent",
@@ -74,8 +74,8 @@
       "xws": "hound",
       "caption": "Vigilant Tracker",
       "initiative": 2,
-      "cost": 5,
-      "loadout": 23,
+      "cost": 6,
+      "loadout": 20,
       "charges": { "value": 2, "recovers": 1 },
       "slots": [
         "Sensor",
@@ -159,6 +159,38 @@
         "name": "Fire Convergence",
         "text": "While a friendly ship performs a non-[Single Turret Arc] attack, if the defender is in your [Single Turret Arc], you may spend 1 [Charge]. If you do, the attacker rerolls up to 2 attack dice."
       },
+      "keywords": ["Clone"],
+      "epic": true
+    },
+    {
+      "name": "“Sicko”",
+      "xws": "sicko",
+      "caption": "CT-1127/549",
+      "initiative": 2,
+      "cost": 5,
+      "loadout": 12,
+      "charges": { "value": 2, "recovers": 1 },
+      "slots": [
+        "Talent",
+        "Missile",
+        "Missile",
+        "Crew",
+        "Crew",
+        "Modification",
+        "Gunner",
+        "Gunner"
+      ],
+      "limited": 1,
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/sicko.png",
+      "image": "https://infinitearenas.com/xw2/images/pilots/sicko.png",
+      "shipAbility": {
+        "name": "Fire Convergence",
+        "text": "While a friendly ship performs a non-[Single Turret Arc] attack, if the defender is in your [Single Turret Arc], you may spend 1 [Charge]. If you do, the attacker rerolls up to 2 attack dice."
+      },
+      "ability": "After you execute a basic maneuver, you may assign the Sickening Maneuver condition to yourself.",
+      "conditions": ["sickeningmaneuver"],
+      "standard": true,
+      "extended": true,
       "keywords": ["Clone"],
       "epic": true
     }

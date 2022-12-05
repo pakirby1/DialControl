@@ -1,9 +1,9 @@
 {
-  "name" : "TIE/ln Fighter",
-  "xws" : "tielnfighter",
-  "ffg" : 11,
-  "size" : "Small",
-  "dial" : [
+  "name": "TIE/ln Fighter",
+  "xws": "tielnfighter",
+  "ffg": 11,
+  "size": "Small",
+  "dial": [
     "1TW",
     "1YW",
     "2TW",
@@ -21,558 +21,440 @@
     "4KR",
     "5FW"
   ],
-  "dialCodes" : [
-    "TF"
+  "dialCodes": ["TF"],
+  "faction": "Galactic Empire",
+  "stats": [
+    { "arc": "Front Arc", "type": "attack", "value": 2 },
+    { "type": "agility", "value": 3 },
+    { "type": "hull", "value": 3 }
   ],
-  "faction" : "Galactic Empire",
-  "stats" : [
-    {
-      "arc" : "Front Arc",
-      "type" : "attack",
-      "value" : 2
-    },
-    {
-      "type" : "agility",
-      "value" : 3
-    },
-    {
-      "type" : "hull",
-      "value" : 3
-    }
+  "actions": [
+    { "difficulty": "White", "type": "Focus" },
+    { "difficulty": "White", "type": "Evade" },
+    { "difficulty": "White", "type": "Barrel Roll" }
   ],
-  "actions" : [
+  "icon": "https://squadbuilder.fantasyflightgames.com/ship_types/I_TIEFighter.png",
+  "pilots": [
     {
-      "difficulty" : "White",
-      "type" : "Focus"
-    },
-    {
-      "difficulty" : "White",
-      "type" : "Evade"
-    },
-    {
-      "difficulty" : "White",
-      "type" : "Barrel Roll"
-    }
-  ],
-  "icon" : "https://squadbuilder.fantasyflightgames.com/ship_types/I_TIEFighter.png",
-  "pilots" : [
-    {
-      "name" : "“Howlrunner”",
-      "caption" : "Obsidian Leader",
-      "initiative" : 5,
-      "limited" : 1,
-      "cost" : 4,
-      "loadout" : 8,
-      "xws" : "howlrunner",
-      "ability" : "While a friendly ship at range 0-1 performs a primary attack, that ship may reroll 1 attack die.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_81.png",
-      "slots" : [
+      "name": "“Howlrunner”",
+      "caption": "Obsidian Leader",
+      "initiative": 5,
+      "limited": 1,
+      "cost": 4,
+      "loadout": 8,
+      "xws": "howlrunner",
+      "ability": "While a friendly ship at range 0-1 performs a primary attack, that ship may reroll 1 attack die.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_81.png",
+      "slots": [
         "Talent",
         "Talent",
         "Modification"
       ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_81.jpg",
-      "ffg" : 81,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_81.jpg",
+      "ffg": 81,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "“Mauler” Mithel",
-      "caption" : "Black Two",
-      "initiative" : 5,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 4,
-      "xws" : "maulermithel",
-      "ability" : "While you perform an attack at attack range 1, roll 1 additional attack die.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_80.png",
-      "slots" : [
-        "Talent",
-        "Cannon"
-      ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_80.jpg",
-      "ffg" : 80,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "name": "“Mauler” Mithel",
+      "caption": "Black Two",
+      "initiative": 5,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 4,
+      "xws": "maulermithel",
+      "ability": "While you perform an attack at attack range 1, roll 1 additional attack die.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_80.png",
+      "slots": ["Talent", "Cannon"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_80.jpg",
+      "ffg": 80,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "“Night Beast”",
-      "caption" : "Obsidian Two",
-      "initiative" : 2,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 4,
-      "xws" : "nightbeast",
-      "ability" : "After you fully execute a blue maneuver, you may perform a [Focus] action.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_88.png",
-      "slots" : [
-        "Talent",
-        "Talent"
-      ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_88.jpg",
-      "ffg" : 88,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "name": "“Night Beast”",
+      "caption": "Obsidian Two",
+      "initiative": 2,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 4,
+      "xws": "nightbeast",
+      "ability": "After you fully execute a blue maneuver, you may perform a [Focus] action.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_88.png",
+      "slots": ["Talent", "Talent"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_88.jpg",
+      "ffg": 88,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "“Scourge” Skutu",
-      "caption" : "Seasoned Veteran",
-      "initiative" : 5,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 3,
-      "xws" : "scourgeskutu",
-      "ability" : "While you perform an attack against a defender in your [Bullseye Arc], roll 1 additional attack die.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_82.png",
-      "slots" : [
-        "Talent"
-      ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_82.jpg",
-      "ffg" : 82,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "name": "“Scourge” Skutu",
+      "caption": "Seasoned Veteran",
+      "initiative": 5,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 3,
+      "xws": "scourgeskutu",
+      "ability": "While you perform an attack against a defender in your [Bullseye Arc], roll 1 additional attack die.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_82.png",
+      "slots": ["Talent"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_82.jpg",
+      "ffg": 82,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "“Wampa”",
-      "caption" : "Black Eleven",
-      "initiative" : 1,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 5,
-      "xws" : "wampa",
-      "ability" : "While you perform an attack, you may spend 1 [Charge] to roll 1 additional attack die. After defending, lose 1 [Charge].",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_89.png",
-      "charges" : {
-        "value" : 1,
-        "recovers" : 1
-      },
-      "slots" : [
-        "Talent",
-        "Modification"
-      ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_89.jpg",
-      "ffg" : 89,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "name": "“Wampa”",
+      "caption": "Black Eleven",
+      "initiative": 1,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 5,
+      "xws": "wampa",
+      "ability": "While you perform an attack, you may spend 1 [Charge] to roll 1 additional attack die. After defending, lose 1 [Charge].",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_89.png",
+      "charges": { "value": 1, "recovers": 1 },
+      "slots": ["Talent", "Modification"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_89.jpg",
+      "ffg": 89,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Academy Pilot",
-      "initiative" : 1,
-      "limited" : 0,
-      "cost" : 2,
-      "loadout" : 0,
-      "xws" : "academypilot",
-      "text" : "The Galactic Empire uses the fast and agile TIE/ln, developed by Sienar Fleet Systems and produced in staggering quantity, as its primary starfighter.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_92.png",
-      "alt" : [
+      "name": "Academy Pilot",
+      "initiative": 1,
+      "limited": 0,
+      "cost": 2,
+      "loadout": 0,
+      "xws": "academypilot",
+      "text": "The Galactic Empire uses the fast and agile TIE/ln, developed by Sienar Fleet Systems and produced in staggering quantity, as its primary starfighter.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_92.png",
+      "alt": [
         {
-          "image" : "https://images-cdn.fantasyflightgames.com/filer_public/c9/4e/c94efa45-9cf7-4167-8e41-50d27d300f12/op066-academy-pilot.png",
-          "source" : "X-Wing Second Edition Launch Party"
+          "image": "https://images-cdn.fantasyflightgames.com/filer_public/c9/4e/c94efa45-9cf7-4167-8e41-50d27d300f12/op066-academy-pilot.png",
+          "source": "X-Wing Second Edition Launch Party"
         }
       ],
-      "slots" : [],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_92.jpg",
-      "ffg" : 92,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "slots": [],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_92.jpg",
+      "ffg": 92,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Black Squadron Ace",
-      "initiative" : 3,
-      "limited" : 0,
-      "cost" : 2,
-      "loadout" : 0,
-      "xws" : "blacksquadronace",
-      "text" : "The elite TIE/ln pilots of Black Squadron accompanied Darth Vader on a devastating strike against the Rebel forces at the Battle of Yavin.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_90.png",
-      "slots" : [],
-      "alt" : [
+      "name": "Black Squadron Ace",
+      "initiative": 3,
+      "limited": 0,
+      "cost": 2,
+      "loadout": 0,
+      "xws": "blacksquadronace",
+      "text": "The elite TIE/ln pilots of Black Squadron accompanied Darth Vader on a devastating strike against the Rebel forces at the Battle of Yavin.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_90.png",
+      "slots": [],
+      "alt": [
         {
-          "image" : "https://images-cdn.fantasyflightgames.com/filer_public/fe/2b/fe2b0b19-b983-4665-aa8a-769fc2e03f64/op086-obsidian-squadron-pilot.png",
-          "source" : "Gen Con Indy 2018"
+          "image": "https://images-cdn.fantasyflightgames.com/filer_public/fe/2b/fe2b0b19-b983-4665-aa8a-769fc2e03f64/op086-obsidian-squadron-pilot.png",
+          "source": "Gen Con Indy 2018"
         }
       ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_90.jpg",
-      "ffg" : 90,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_90.jpg",
+      "ffg": 90,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Del Meeko",
-      "caption" : "Inferno Three",
-      "initiative" : 4,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 6,
-      "xws" : "delmeeko",
-      "ability" : "While a friendly ship at range 0-2 defends against a damaged attacker, the defender may reroll 1 defense die.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_85.png",
-      "slots" : [
-        "Cannon",
-        "Talent"
-      ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_85.jpg",
-      "ffg" : 85,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "name": "Del Meeko",
+      "caption": "Inferno Three",
+      "initiative": 4,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 6,
+      "xws": "delmeeko",
+      "ability": "While a friendly ship at range 0-2 defends against a damaged attacker, the defender may reroll 1 defense die.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_85.png",
+      "slots": ["Cannon", "Talent"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_85.jpg",
+      "ffg": 85,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Gideon Hask",
-      "caption" : "Inferno Two",
-      "initiative" : 4,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 8,
-      "xws" : "gideonhask",
-      "ability" : "While you perform an attack against a damaged defender, roll 1 additional attack die.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_84.png",
-      "slots" : [
-        "Talent",
-        "Talent",
-        "Missile",
-        "Modification"
-      ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_84.jpg",
-      "ffg" : 84,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "name": "Gideon Hask",
+      "caption": "Inferno Two",
+      "initiative": 4,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 8,
+      "xws": "gideonhask",
+      "ability": "While you perform an attack against a damaged defender, roll 1 additional attack die.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_84.png",
+      "slots": ["Talent", "Talent", "Missile", "Modification"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_84.jpg",
+      "ffg": 84,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Iden Versio",
-      "caption" : "Inferno Leader",
-      "initiative" : 4,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 8,
-      "xws" : "idenversio",
-      "ability" : "Before a friendly TIE/ln fighter at range 0-1 would suffer 1 or more damage, you may spend 1 [Charge]. If you do, prevent that damage.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_83.png",
-      "charges" : {
-        "value" : 1,
-        "recovers" : 0
-      },
-      "slots" : [
+      "name": "Iden Versio",
+      "caption": "Inferno Leader",
+      "initiative": 4,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 8,
+      "xws": "idenversio",
+      "ability": "Before a friendly TIE/ln fighter at range 0-1 would suffer 1 or more damage, you may spend 1 [Charge]. If you do, prevent that damage.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_83.png",
+      "charges": { "value": 1, "recovers": 0 },
+      "slots": [
         "Talent",
         "Talent",
         "Cannon",
         "Missile",
         "Modification"
       ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_83.jpg",
-      "ffg" : 83,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_83.jpg",
+      "ffg": 83,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Obsidian Squadron Pilot",
-      "initiative" : 2,
-      "limited" : 0,
-      "cost" : 2,
-      "loadout" : 0,
-      "xws" : "obsidiansquadronpilot",
-      "text" : "The TIE fighter's Twin Ion Engine system was designed for speed, making the TIE/ln one of the most maneuverable starships ever mass-produced.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_91.png",
-      "alt" : [
+      "name": "Obsidian Squadron Pilot",
+      "initiative": 2,
+      "limited": 0,
+      "cost": 2,
+      "loadout": 0,
+      "xws": "obsidiansquadronpilot",
+      "text": "The TIE fighter's Twin Ion Engine system was designed for speed, making the TIE/ln one of the most maneuverable starships ever mass-produced.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_91.png",
+      "alt": [
         {
-          "image" : "https://images-cdn.fantasyflightgames.com/filer_public/12/55/12552f53-decc-49ff-8fe2-e4285d4ff31e/op066-obsidian-squadron-pilot.png",
-          "source" : "X-Wing Second Edition Launch Party"
+          "image": "https://images-cdn.fantasyflightgames.com/filer_public/12/55/12552f53-decc-49ff-8fe2-e4285d4ff31e/op066-obsidian-squadron-pilot.png",
+          "source": "X-Wing Second Edition Launch Party"
         }
       ],
-      "slots" : [],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_91.jpg",
-      "ffg" : 91,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "slots": [],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_91.jpg",
+      "ffg": 91,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Seyn Marana",
-      "caption" : "Inferno Four",
-      "initiative" : 4,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 8,
-      "xws" : "seynmarana",
-      "ability" : "While you perform an attack, you may spend 1 [Critical Hit] result. If you do, deal 1 facedown damage card to the defender, then cancel your remaining results.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_86.png",
-      "slots" : [
+      "name": "Seyn Marana",
+      "caption": "Inferno Four",
+      "initiative": 4,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 8,
+      "xws": "seynmarana",
+      "ability": "While you perform an attack, you may spend 1 [Critical Hit] result. If you do, deal 1 facedown damage card to the defender, then cancel your remaining results.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_86.png",
+      "slots": ["Talent", "Modification"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_86.jpg",
+      "ffg": 86,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "Valen Rudor",
+      "caption": "Braggadocious Baron",
+      "initiative": 3,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 5,
+      "xws": "valenrudor",
+      "ability": "After a friendly ship at range 0-1 defends (after damage is resolved, if any), you may perform an action.",
+      "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_87.png",
+      "slots": ["Talent", "Talent"],
+      "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_87.jpg",
+      "ffg": 87,
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "ISB Jingoist",
+      "caption": "Heartless Enforcer",
+      "initiative": 4,
+      "limited": 2,
+      "cost": 3,
+      "loadout": 5,
+      "xws": "isbjingoist",
+      "ability": "Before you engage, you may choose 1 enemy ship in your [Front Arc] at range 0-1. If you do, that ship gains 1 deplete or strain token of your choice unless it chooses to remove 1 green token.",
+      "image": "https://infinitearenas.com/xw2/images/pilots/isbjingoist.png",
+      "slots": ["Talent", "Illicit"],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/isbjingoist.png",
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "Moff Gideon",
+      "caption": "Ruthless Remnant Leader",
+      "initiative": 4,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 8,
+      "xws": "moffgideon",
+      "charges": { "value": 2, "recovers": 1 },
+      "ability": "While an enemy ship at range 1-3 defends, before attack dice are rolled, you may spend 1 [Charge] and choose a friendly ship at range 0-1 of the defender. If you do, defense dice cannot be modified during this attack and the chosen friendly ship gains 1 strain token.",
+      "image": "https://infinitearenas.com/xw2/images/pilots/moffgideon.png",
+      "slots": ["Talent", "Illicit", "Illicit", "Missile", "Modification"],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/moffgideon.png",
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "“Backstabber”",
+      "caption": "Battle of Yavin",
+      "initiative": 5,
+      "limited": 1,
+      "cost": 4,
+      "xws": "backstabber-battleofyavin",
+      "ability": "While you perform a primary attack, if a friendly Darth Vader or “Mauler” Mithel is in your [Left Arc] or [Right Arc] at range 0-1, roll 1 additional attack die.",
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/backstabber-battleofyavin.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/backstabber.png",
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 2 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 4 }
+      ],
+      "standardLoadout": ["crackshot", "disciplined", "afterburners"],
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "“Dark Curse”",
+      "caption": "Battle of Yavin",
+      "initiative": 6,
+      "limited": 1,
+      "cost": 4,
+      "xws": "darkcurse-battleofyavin",
+      "ability": "While you defend, the attacker's dice cannot be modified.",
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/darkcurse-battleofyavin.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/darkcurse.png",
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 2 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 4 }
+      ],
+      "standardLoadout": ["ruthless", "precisionionengines"],
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "“Mauler” Mithel",
+      "caption": "Battle of Yavin",
+      "initiative": 5,
+      "limited": 1,
+      "cost": 3,
+      "xws": "maulermithel-battleofyavin",
+      "ability": "While you perform a primary attack, if a friendly Darth Vader or “Backstabber” is in your [Left Arc] or [Right Arc] at range 0-1, roll 1 additional attack die.",
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/maulermithel-battleofyavin.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/maulermithel.png",
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 2 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 4 }
+      ],
+      "standardLoadout": ["predator", "afterburners"],
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "“Wampa”",
+      "caption": "Battle of Yavin",
+      "initiative": 1,
+      "limited": 1,
+      "cost": 3,
+      "xws": "wampa-battleofyavin",
+      "ability": "While you perform an attack, you may spend 1 [Charge] to roll 1 additional attack die. After defending, lose 1 [Charge].",
+      "charges": { "value": 1, "recovers": 1 },
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/wampa-battleofyavin.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/wampa.png",
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 2 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 4 }
+      ],
+      "standardLoadout": ["elusive", "vengeful-battleofyavin"],
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
+      "name": "Magna Tolvan",
+      "caption": "Cold Tyrant",
+      "initiative": 3,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 10,
+      "xws": "magnatolvan",
+      "ability": "While you have 2 or fewer stress tokens, you can perform white actions, even while stressed. After you gain a stress token, you may perform a white action, if able.",
+      "image": "https://infinitearenas.com/xw2/images/pilots/magnatolvan.png",
+      "slots": [
         "Talent",
+        "Cannon",
         "Modification"
       ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_86.jpg",
-      "ffg" : 86,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     },
     {
-      "name" : "Valen Rudor",
-      "caption" : "Braggadocious Baron",
-      "initiative" : 3,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 5,
-      "xws" : "valenrudor",
-      "ability" : "After a friendly ship at range 0-1 defends (after damage is resolved, if any), you may perform an action.",
-      "image" : "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_87.png",
-      "slots" : [
+      "name": "Yrica Quell",
+      "caption": "Consumed by Duty",
+      "initiative": 3,
+      "limited": 1,
+      "cost": 3,
+      "loadout": 9,
+      "xws": "yricaquell",
+      "ability": "After you fully execute a maneuver, you may acquire a lock on an enemy ship in your [Bullseye Arc].",
+      "image": "https://infinitearenas.com/xw2/images/pilots/yricaquell.png",
+      "slots": [
         "Talent",
-        "Talent"
-      ],
-      "artwork" : "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_87.jpg",
-      "ffg" : 87,
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
-    },
-    {
-      "name" : "ISB Jingoist",
-      "caption" : "Heartless Enforcer",
-      "initiative" : 4,
-      "limited" : 2,
-      "cost" : 3,
-      "loadout" : 5,
-      "xws" : "isbjingoist",
-      "ability" : "Before you engage, you may choose 1 enemy ship in your [Front Arc] at range 0-1. If you do, that ship gains 1 deplete or strain token of your choice unless it chooses to remove 1 green token.",
-      "image" : "https://infinitearenas.com/xw2/images/pilots/isbjingoist.png",
-      "slots" : [
-        "Talent",
-        "Illicit"
-      ],
-      "artwork" : "https://infinitearenas.com/xw2/images/artwork/pilots/isbjingoist.png",
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
-    },
-    {
-      "name" : "Moff Gideon",
-      "caption" : "Ruthless Remnant Leader",
-      "initiative" : 4,
-      "limited" : 1,
-      "cost" : 3,
-      "loadout" : 8,
-      "xws" : "moffgideon",
-      "charges" : {
-        "value" : 2,
-        "recovers" : 1
-      },
-      "ability" : "While an enemy ship at range 1-3 defends, before attack dice are rolled, you may spend 1 [Charge] and choose a friendly ship at range 0-1 of the defender. If you do, defense dice cannot be modified during this attack and the chosen friendly ship gains 1 strain token.",
-      "image" : "https://infinitearenas.com/xw2/images/pilots/moffgideon.png",
-      "slots" : [
-        "Talent",
-        "Illicit",
-        "Illicit",
         "Missile",
         "Modification"
       ],
-      "artwork" : "https://infinitearenas.com/xw2/images/artwork/pilots/moffgideon.png",
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
-    },
-    {
-      "name" : "“Backstabber”",
-      "caption" : "Battle of Yavin",
-      "initiative" : 5,
-      "limited" : 1,
-      "cost" : 4,
-      "xws" : "backstabber-battleofyavin",
-      "ability" : "While you perform a primary attack, if a friendly Darth Vader or “Mauler” Mithel is in your [Left Arc] or [Right Arc] at range 0-1, roll 1 additional attack die.",
-      "image" : "https://infinitearenas.com/xw2/images/quickbuilds/backstabber-battleofyavin.png",
-      "artwork" : "",
-      "shipStats" : [
-        {
-          "arc" : "Front Arc",
-          "type" : "attack",
-          "value" : 2
-        },
-        {
-          "type" : "agility",
-          "value" : 3
-        },
-        {
-          "type" : "hull",
-          "value" : 4
-        }
-      ],
-      "standardLoadout" : [
-        "crackshot",
-        "disciplined",
-        "afterburners"
-      ],
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
-    },
-    {
-      "name" : "“Dark Curse”",
-      "caption" : "Battle of Yavin",
-      "initiative" : 6,
-      "limited" : 1,
-      "cost" : 4,
-      "xws" : "darkcurse-battleofyavin",
-      "ability" : "While you defend, the attacker's dice cannot be modified.",
-      "image" : "https://infinitearenas.com/xw2/images/quickbuilds/darkcurse-battleofyavin.png",
-      "artwork" : "",
-      "shipStats" : [
-        {
-          "arc" : "Front Arc",
-          "type" : "attack",
-          "value" : 2
-        },
-        {
-          "type" : "agility",
-          "value" : 3
-        },
-        {
-          "type" : "hull",
-          "value" : 4
-        }
-      ],
-      "standardLoadout" : [
-        "ruthless",
-        "precisionionengines"
-      ],
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
-    },
-    {
-      "name" : "“Mauler” Mithel",
-      "caption" : "Battle of Yavin",
-      "initiative" : 5,
-      "limited" : 1,
-      "cost" : 3,
-      "xws" : "maulermithel-battleofyavin",
-      "ability" : "While you perform a primary attack, if a friendly Darth Vader or “Backstabber” is in your [Left Arc] or [Right Arc] at range 0-1, roll 1 additional attack die.",
-      "image" : "https://infinitearenas.com/xw2/images/quickbuilds/maulermithel-battleofyavin.png",
-      "artwork" : "",
-      "shipStats" : [
-        {
-          "arc" : "Front Arc",
-          "type" : "attack",
-          "value" : 2
-        },
-        {
-          "type" : "agility",
-          "value" : 3
-        },
-        {
-          "type" : "hull",
-          "value" : 4
-        }
-      ],
-      "standardLoadout" : [
-        "predator",
-        "afterburners"
-      ],
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
-    },
-    {
-      "name" : "“Wampa”",
-      "caption" : "Battle of Yavin",
-      "initiative" : 1,
-      "limited" : 1,
-      "cost" : 3,
-      "xws" : "wampa-battleofyavin",
-      "ability" : "While you perform an attack, you may spend 1 [Charge] to roll 1 additional attack die. After defending, lose 1 [Charge].",
-      "charges" : {
-        "value" : 1,
-        "recovers" : 1
-      },
-      "image" : "https://infinitearenas.com/xw2/images/quickbuilds/wampa-battleofyavin.png",
-      "artwork" : "",
-      "shipStats" : [
-        {
-          "arc" : "Front Arc",
-          "type" : "attack",
-          "value" : 2
-        },
-        {
-          "type" : "agility",
-          "value" : 3
-        },
-        {
-          "type" : "hull",
-          "value" : 4
-        }
-      ],
-      "standardLoadout" : [
-        "elusive",
-        "vengeful-battleofyavin"
-      ],
-      "standard" : true,
-      "extended" : true,
-      "keywords" : [
-        "TIE"
-      ],
-      "epic" : true
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
     }
   ]
 }

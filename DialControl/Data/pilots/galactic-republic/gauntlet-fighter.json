@@ -18,6 +18,7 @@
     "3YR",
     "4FW"
   ],
+  "dialCodes": ["GtF"],
   "faction": "Galactic Republic",
   "stats": [
     { "arc": "Front Arc", "type": "attack", "value": 3 },
@@ -59,6 +60,8 @@
         "Configuration",
         "Title"
       ],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/bokatankryze-galactic-republic.png",
+      "image": "https://infinitearenas.com/xw2/images/pilots/bokatankryze-galactic-republic.png",
       "keywords": ["Mandalorian"]
     },
     {
@@ -80,6 +83,8 @@
         "Modification",
         "Configuration"
       ],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/niteowlliberator.png",
+      "image": "https://infinitearenas.com/xw2/images/pilots/niteowlliberator.png",
       "keywords": ["Mandalorian"],
       "caption": "Resolute Warrior"
     }

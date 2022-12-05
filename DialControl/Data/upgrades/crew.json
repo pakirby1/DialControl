@@ -1515,6 +1515,7 @@
         "title": "GA-97",
         "type": "Crew",
         "slots": ["Crew"],
+        "charges": { "value": 5, "recovers": 1 },
         "grants": [
           {
             "type": "action",
@@ -1669,6 +1670,7 @@
     ],
     "cost": { "value": 6 },
     "limited": 1,
+    "restrictions": [{ "factions": ["Galactic Republic"] }],
     "standard": true,
     "extended": true,
     "epic": true,
@@ -2533,7 +2535,8 @@
         "title": "Tristan Wren",
         "type": "Crew",
         "slots": ["Crew"],
-        "image": "https://infinitearenas.com/xw2/images/upgrades/tristanwren"
+        "image": "https://infinitearenas.com/xw2/images/upgrades/tristanwren.png",
+        "charges": { "value": 1, "recovers": 1 }
       }
     ],
     "cost": { "value": 2 },
@@ -2842,6 +2845,40 @@
     "restrictions": [
       { "factions": ["Separatist Alliance"] },
       { "sizes": ["Medium", "Large", "Huge"] }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "Chewbacca",
+    "limited": 1,
+    "xws": "chewbacca-battleofyavin",
+    "sides": [
+      {
+        "title": "Chewbacca",
+        "type": "Crew",
+        "ability": "After you perform an [Evade] action, you may gain 1 focus token.",
+        "slots": ["Crew"]
+      }
+    ],
+    "standardLoadoutOnly": true,
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "Wolfpack",
+    "limited": 1,
+    "xws": "wolfpack-siegeofcoruscant",
+    "standardLoadoutOnly": true,
+    "sides": [
+      {
+        "title": "Wolfpack",
+        "type": "Crew",
+        "slots": ["Crew", "Gunner"],
+        "ability": "While you perform an attack, you may spend a lock belonging to a friendly Plo Koon ship or ship with the Born for This ability that is on the defender to reroll any number of attack dice."
+      }
     ],
     "standard": true,
     "extended": true,

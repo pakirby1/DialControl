@@ -248,7 +248,7 @@
         "text": "The Delta-7B was designed as a heavier variant of the Delta-7 Aethersprite-class Interceptor, identifiable by the repositioned astromech slot. Many Jedi Generals favor this craft's greater firepower and durability."
       }
     ],
-    "cost": { "value": 0 },
+    "cost": { "value": "???" },
     "restrictions": [{ "ships": ["delta7aethersprite"] }],
     "standard": false,
     "extended": false,
@@ -678,7 +678,7 @@
         "artwork": "???"
       }
     ],
-    "cost": { "value": 10 },
+    "cost": { "value": 5 },
     "restrictions": [{ "ships": ["btanr2ywing"] }, { "standardized": true }],
     "standard": true,
     "extended": true,
@@ -731,6 +731,41 @@
     ],
     "cost": { "value": 0 },
     "restrictions": [{ "ships": ["tiewiwhispermodifiedinterceptor"] }],
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "L3-37's Programming",
+    "limited": 1,
+    "xws": "l337sprogramming-battleofyavin",
+    "sides": [
+      {
+        "title": "L3-37's Programming",
+        "type": "Configuration",
+        "ability": "If you are not shielded, decrease the difficulty of your bank ([Bank Left] and [Bank Right]) maneuvers.",
+        "slots": ["Configuration"]
+      }
+    ],
+    "standardLoadoutOnly": true,
+    "standard": true,
+    "extended": true,
+    "epic": true
+  },
+  {
+    "name": "Strut-Lock Override",
+    "limited": 0,
+    "xws": "strutlockoverride-siegeofcoruscant",
+    "sides": [
+      {
+        "title": "strutlockoverride-siegeofcoruscant",
+        "type": "Configuration",
+        "ability": "At the start of your activation, you may spend 1 [Charge]. If you do, ignore obstacles while you move through them this round.",
+        "charges": { "value": 2, "recovers": 0 },
+        "slots": ["Configuration"]
+      }
+    ],
+    "standardLoadoutOnly": true,
     "standard": true,
     "extended": true,
     "epic": true
