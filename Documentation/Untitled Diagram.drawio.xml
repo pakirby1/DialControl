@@ -1,11 +1,11 @@
-<mxfile host="app.diagrams.net" modified="2022-12-09T11:37:21.158Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15" etag="sueQ_mYdDCQQmrgZKC6T" version="20.6.2" type="github">
+<mxfile host="app.diagrams.net" modified="2022-12-09T11:40:27.772Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15" etag="rWis8gyQS02S2fO-lM93" version="20.6.2" type="github">
   <diagram id="i6cXz1JMetOkronmdkW_" name="Page-1">
     <mxGraphModel dx="766" dy="475" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="qbYFzX-gmWvK4Rld0qlf-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="340" y="220" width="120" height="60" as="geometry" />
+        <mxCell id="ejDrtNr1g2dSB0wHZq7k-1" value="SquadService" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="100" height="300" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
