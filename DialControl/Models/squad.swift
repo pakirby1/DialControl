@@ -417,10 +417,6 @@ struct Squad: Codable, JSONSerialization {
         
         return Squad.emptySquad
     }
-    
-    mutating func setShipPilots(shipPilots: [ShipPilot]) {
-        self.shipPilots = shipPilots
-    }
 }
 
 extension Squad: Equatable {

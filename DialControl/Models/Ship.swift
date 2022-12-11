@@ -81,13 +81,15 @@ struct PilotDTO: Codable {
     var artwork: String { return _artwork ?? "" }
     var force: Force? { return _force ?? nil }
     var charges: Charges? { return _charges ?? nil }
-    
+    var standardLoadout : [String]? { return _standardLoadout ?? nil }
+
     private var _text: String?
     private var _force: Force?
     private var _charges: Charges?
     private var _shipAbility: ShipAbility?
     private var _slots: [Slot]?
     private var _artwork: String?
+    private var _standardLoadout : [String]?
     
     enum CodingKeys: String, CodingKey {
         case _text = "text"
@@ -101,6 +103,7 @@ struct PilotDTO: Codable {
         case _artwork = "artwork"
         case _force = "force"
         case _charges = "charges"
+        case _standardLoadout = "standardLoadout"
     }
 }
 
