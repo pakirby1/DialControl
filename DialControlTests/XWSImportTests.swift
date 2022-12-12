@@ -76,6 +76,7 @@ class XWSImportTests: XCTestCase {
             switch(result) {
                 case .success(let qb):
                     print(qb)
+                    print("Success")
 
                 case .failure(let _):
                     print("Failure")
