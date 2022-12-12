@@ -72,18 +72,36 @@ class XWSImportTests: XCTestCase {
     }
     
     func test_transform_squadPilot() {
+        let noUpgradesPilot:SquadPilot?
+        let withUpgradesPilot:SquadPilot?
+        
         let handler: Handler<SquadPilot> = { result in
             switch(result) {
                 case .success(let qb):
                     print(qb)
-                    print("Success")
+                    
+                    if (qb.id == "idenversio") {
+                        print("Success")
+                    }
 
                 case .failure(let _):
                     print("Failure")
             }
         }
         
-        test(jsonString: squadPilotWithNoUpgrades, then: handler)
+        // Build & verify squadPilotWithNoUpgrades
+        transform(jsonString: squadPilotWithNoUpgrades, then: handler)
+        
+        // Build & verify squadPilotWithUpgrades
+        transform(jsonString: squadPilotWithUpgrades, then: handler)
+        
+        // Add upgrades to squadPilotWithNoUpgrades object
+        // struct SquadPilotUpgrade: Codable
+        // var upgrades: SquadPilotUpgrade? { return _upgrades ?? nil }
+        // upgrades.astromechs.append["R2-D2"]
+        
+        // Compare & assert on withUpgradesPilot.json == json
+        
     }
 
     let squadPilotWithNoUpgrades = """
@@ -92,7 +110,7 @@ class XWSImportTests: XCTestCase {
           "name":"idenversio",
           "points":3,
           "ship":"tielnfighter"
-        },
+        }
     """
         
     let squadPilotWithUpgrades = """
@@ -105,7 +123,7 @@ class XWSImportTests: XCTestCase {
             "talent":["elusive"],
             "cannon":["ioncannon"]}
             }
-        },
+        }
     """
         
         // Build a SquadPilot from shipWithNoUpgrades

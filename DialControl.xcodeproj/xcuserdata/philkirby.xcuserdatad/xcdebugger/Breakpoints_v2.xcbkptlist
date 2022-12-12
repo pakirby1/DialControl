@@ -3,4 +3,70 @@
    uuid = "F61D3432-AD29-4011-B65B-D243988A0D93"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2977BECA-9980-4AFA-BEA3-B8F4EA48241E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControlTests/XWSImportTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "test_transform_squadPilot()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2977BECA-9980-4AFA-BEA3-B8F4EA48241E - 1fcb8951ac98ad87"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DialControlTests.XWSImportTests.test_transform_squadPilot() -&gt; ()"
+                  moduleName = "DialControlTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControlTests/XWSImportTests.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "86"
+                  endingLineNumber = "86"
+                  offsetFromSymbolStart = "50">
+               </Location>
+               <Location
+                  uuid = "2977BECA-9980-4AFA-BEA3-B8F4EA48241E - 1fcb8951ac98ac62"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "DialControlTests.XWSImportTests.test_transform_squadPilot() -&gt; ()"
+                  moduleName = "DialControlTests"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/philkirby/Documents/DialControl/DialControlTests/XWSImportTests.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "89"
+                  endingLineNumber = "89"
+                  offsetFromSymbolStart = "50">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5EB9A13A-1473-4784-BEB0-AE30E71E55A2"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "DialControlTests/XWSImportTests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "test_transform_squadPilot()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
