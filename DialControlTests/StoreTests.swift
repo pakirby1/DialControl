@@ -38,8 +38,9 @@ class StoreTests: XCTestCase {
         // Used only if we have a unique constraint on our CoreData entity?
         moc.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         
+        let cache = CacheService()
         let diContainer = DIContainer()
-        diContainer.registerServices(moc: moc)
+        diContainer.registerServices(moc: moc, cacheService: cache)
         
         self.store = MyAppStore(
             state: buildState(),
