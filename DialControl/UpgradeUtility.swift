@@ -9,6 +9,60 @@
 import Foundation
 
 struct UpgradeUtility {
+    static func getCategory(upgrade: String) -> String? {
+        let x: [String : Array<String>] = UpgradeUtility.buildUpgradesDictionary()
+        
+        for (key, value) in x {
+            if (value.contains(upgrade)) { return key }
+        }
+        
+        return nil
+    }
+    
+    enum UpgradeCategories: String, CaseIterable {
+        case astromechs
+        case cannons
+        case cargos
+        case commands
+        case configurations
+        case crews
+        case devices
+        case forcepowers
+        case gunners
+        case hardpoints
+        case illicits
+        case missiles
+        case modifications
+        case sensors
+        case tacticalrelays
+        case talents
+        case teams
+        case techs
+        case titles
+        case torpedos
+        case turrets
+    }
+    
+    static func buildUpgradesDictionary() -> [String: Array<String>] {
+        var dict: [String: Array<String>] = [:]
+        
+        // for every case in UpgradeCategories
+            // func getUpgrades(upgradeCategory: String) -> [Upgrade]
+        for category in UpgradeCategories.allCases {
+            // category.rawValue : upgrades
+            let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: category.rawValue).map{ $0.xws }
+            dict[category.rawValue] = upgrades
+        }
+        
+        return dict
+    }
+    
+    /*
+     talent : ["composure", "daredevil", "elusive"]
+     cannons : ["ioncannon", "jammingbeam"}
+     */
+    var upgradesByCategory: [String: Array<String>] = [:]
+    
     static func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
         func buildFileName() -> String {
             if forType == "forcepower" {
@@ -119,6 +173,8 @@ struct UpgradeUtility {
                 return getUpgrades_new(upgradeCategory: upgradeCategory)
             }
             
+            
+        
             func buildUpgradeDictionary() {
                 let allAstromechs : [Upgrade] = getUpgrades(upgradeCategory: "astromech")
                 var dict: [String: [Upgrade]] = [:]
@@ -398,5 +454,11 @@ struct UpgradeUtility {
         catch{
             throw error
         }
+    }
+    
+    static func getCategory(for upgrade: String) -> String {
+        return ""
+        
+        
     }
 }

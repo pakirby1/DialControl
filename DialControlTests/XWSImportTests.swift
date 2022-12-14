@@ -71,6 +71,13 @@ class XWSImportTests: XCTestCase {
         transform(jsonString: jsonString, then: handler)
     }
     
+    func getCategory(upgrade: String) -> String? {
+        if let u = UpgradeUtility.getCategory(upgrade: upgrade) {
+            return u
+        }
+        return nil
+    }
+    
     func test_transform_squadPilot() {
         func buildUpgrades() -> SquadPilotUpgrade {
             var newUpgrades = SquadPilotUpgrade()
