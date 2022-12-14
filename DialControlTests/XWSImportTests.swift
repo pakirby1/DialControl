@@ -72,36 +72,65 @@ class XWSImportTests: XCTestCase {
     }
     
     func test_transform_squadPilot() {
-        let noUpgradesPilot:SquadPilot?
-        let withUpgradesPilot:SquadPilot?
+        func buildUpgrades() -> SquadPilotUpgrade {
+            var newUpgrades = SquadPilotUpgrade()
+            newUpgrades._talent = []
+            newUpgrades._talent?.append("elusive")
+            
+            newUpgrades._cannon = []
+            newUpgrades._cannon?.append("ioncannon")
+            
+            return newUpgrades
+        }
         
-        let handler: Handler<SquadPilot> = { result in
+        var noUpgradesPilot:SquadPilot?
+        var withUpgradesPilot:SquadPilot?
+        
+        let noUpgradesHandler: Handler<SquadPilot> = { result in
             switch(result) {
-                case .success(let qb):
+                case .success(var qb):
                     print(qb)
+                    noUpgradesPilot = qb
+                    noUpgradesPilot?.upgrades = buildUpgrades()
                     
-                    if (qb.id == "idenversio") {
-                        print("Success")
-                    }
-
+                case .failure(let _):
+                    print("Failure")
+            }
+        }
+        
+        let upgradesHandler: Handler<SquadPilot> = { result in
+            switch(result) {
+                case .success(var qb):
+                    print(qb)
+                    withUpgradesPilot = qb
+                    
                 case .failure(let _):
                     print("Failure")
             }
         }
         
         // Build & verify squadPilotWithNoUpgrades
-        transform(jsonString: squadPilotWithNoUpgrades, then: handler)
+        transform(jsonString: squadPilotWithNoUpgrades, then: noUpgradesHandler)
         
         // Build & verify squadPilotWithUpgrades
-        transform(jsonString: squadPilotWithUpgrades, then: handler)
+        transform(jsonString: squadPilotWithUpgrades, then: upgradesHandler)
         
         // Add upgrades to squadPilotWithNoUpgrades object
         // struct SquadPilotUpgrade: Codable
         // var upgrades: SquadPilotUpgrade? { return _upgrades ?? nil }
-        // upgrades.astromechs.append["R2-D2"]
+        // newUpgrades._talent?.append("elusive")
+        // newUpgrades._cannon?.append("ioncannon")
         
         // Compare & assert on withUpgradesPilot.json == json
-        
+        if let noUpgrades = noUpgradesPilot {
+            print(noUpgrades.description)
+            
+            if let withUpgrades = withUpgradesPilot {
+                print(withUpgrades.description)
+                
+                XCTAssertEqual(noUpgrades.description, withUpgrades.description)
+            }
+        }
     }
 
     let squadPilotWithNoUpgrades = """
@@ -121,7 +150,7 @@ class XWSImportTests: XCTestCase {
           "ship":"tielnfighter",
           "upgrades":{
             "talent":["elusive"],
-            "cannon":["ioncannon"]}
+            "cannon":["ioncannon"]
             }
         }
     """

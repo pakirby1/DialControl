@@ -31,27 +31,27 @@ struct SquadPilotUpgrade: Codable {
     var torpedos: [String] { return _torpedo ?? [] }
     var turrets: [String] { return _turret ?? [] }
 
-    private var _astromech: [String]?
-    private var _cannon: [String]?
-    private var _cargo: [String]?
-    private var _command: [String]?
-    private var _configuration: [String]?
-    private var _crew: [String]?
-    private var _device: [String]?
-    private var _forcepower: [String]?
-    private var _gunner: [String]?
-    private var _hardpoint: [String]?
-    private var _illicit: [String]?
-    private var _missile: [String]?
-    private var _modification: [String]?
-    private var _sensor: [String]?
-    private var _tacticalrelay: [String]?
-    private var _talent: [String]?
-    private var _team: [String]?
-    private var _tech: [String]?
-    private var _title: [String]?
-    private var _torpedo: [String]?
-    private var _turret: [String]?
+    var _astromech: [String]?
+    var _cannon: [String]?
+    var _cargo: [String]?
+    var _command: [String]?
+    var _configuration: [String]?
+    var _crew: [String]?
+    var _device: [String]?
+    var _forcepower: [String]?
+    var _gunner: [String]?
+    var _hardpoint: [String]?
+    var _illicit: [String]?
+    var _missile: [String]?
+    var _modification: [String]?
+    var _sensor: [String]?
+    var _tacticalrelay: [String]?
+    var _talent: [String]?
+    var _team: [String]?
+    var _tech: [String]?
+    var _title: [String]?
+    var _torpedo: [String]?
+    var _turret: [String]?
 
     enum CodingKeys: String, CodingKey {
         case _astromech = "astromech"
@@ -216,7 +216,12 @@ struct SquadPilot: Codable, Identifiable {
     let id: String
     let points: Int
     let ship: String
-    var upgrades: SquadPilotUpgrade? { return _upgrades ?? nil }
+//    var upgrades: SquadPilotUpgrade? { return _upgrades ?? nil }
+    var upgrades: SquadPilotUpgrade? {
+        get { return _upgrades ?? nil }
+        set { _upgrades = newValue }
+    }
+    
     var name: String? { return _name ?? nil }
     
     private var _upgrades: SquadPilotUpgrade?
@@ -228,6 +233,12 @@ struct SquadPilot: Codable, Identifiable {
         case points = "points"
         case ship = "ship"
         case _upgrades = "upgrades"
+    }
+}
+
+extension SquadPilot : CustomStringConvertible {
+    var description: String {
+        return "id: \(id) points: \(points) ship: \(ship) upgrades: \(String(describing: upgrades))"
     }
 }
 
