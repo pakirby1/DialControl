@@ -77,6 +77,75 @@ Notice that both `name` and `upgrades` are optional.
 
 > For our case we would like to transform a `SquadPilot` without upgrades into one with upgrades.
 
+Basically we'd like to translate 
+
+```
+{
+  "id":"backstabber-battleofyavin",
+  "name":"backstabber-battleofyavin",
+  "points":4,
+  "ship":"tielnfighter"
+}
+```
+into
+```
+{
+  "id":"backstabber-battleofyavin",
+  "name":"backstabber-battleofyavin",
+  "points":3,
+  "ship":"tielnfighter",
+  "upgrades":{
+    "talent":["crackshot", "disciplined"],
+    "modification":["afterburners"]}
+    }
+}
+```
+
+One approach is to transform each `SquadPilot` that contains no upgrades into a `SquadPilot` that does have upgrades only if the ship has a `standardLoadout` entry of upgrades in the ship.
+
+Here's the ship for `backstabber-battleofyavin`
+
+```
+{
+      "name": "“Backstabber”",
+      "caption": "Battle of Yavin",
+      "initiative": 5,
+      "limited": 1,
+      "cost": 4,
+      "xws": "backstabber-battleofyavin",
+      "ability": "While you perform a primary attack, if a friendly Darth Vader or “Mauler” Mithel is in your [Left Arc] or [Right Arc] at range 0-1, roll 1 additional attack die.",
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/backstabber-battleofyavin.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/backstabber.png",
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 2 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 4 }
+      ],
+      "standardLoadout": ["crackshot", "disciplined", "afterburners"],
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    }
+```
+
+The pipeline would have the following steps:
+
+- Use the `"id":"backstabber-battleofyavin"` and `"ship":"tielnfighter"` to load the pilot from the ship json.
+- Transform the `"standardLoadout": ["crackshot", "disciplined", "afterburners"]` field into
+```
+"upgrades":{
+    "talent":["crackshot", "disciplined"],
+    "modification":["afterburners"]}
+    }
+```
+To transform the `standardLoadout`
+- Iterate over each upgrade in `standardLoadout`
+  - Get the talent for the upgrade from the `UpgradeMap`
+    - If the category key doesn't exist in the dictionary, add the category, upgrade key value pair to the dictionary
+    - If the category key does exist in the dictionary, append the upgrade to the array keyed by the category.
+  - Once the dictionary is created, enumerate the dictionary and add the array for each category to `SquadPilot.upgrades`
+
 
 
 
