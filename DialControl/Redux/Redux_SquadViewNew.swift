@@ -132,7 +132,6 @@ extension Redux_SquadViewNew {
             if (FeaturesManager.shared.isFeatureEnabled(.firstPlayerUpdate)) {
                 // for each pilot update system phase state
                 disableSystemPhaseForAllPilots()
-                hideAllDials()
             }
         })
     }
