@@ -146,7 +146,17 @@ To transform the `standardLoadout`
     - If the category key does exist in the dictionary, append the upgrade to the array keyed by the category.
   - Once the dictionary is created, enumerate the dictionary and add the array for each category to `SquadPilot.upgrades`
 
+## `SquadPilotUpgradesCollection`
+A collection that stores upgrades for squad pilots
 
+![Linked View Model Diagram](https://pakirby1.github.io/images/XWSImport-SquadPilotUpgradesCollection.png)
+
+The collection is populated on app start from the upgrades in the `data/upgrades` folder.   Once all of the upgrades are populated, we can 
+
+- Obtain all upgrades for a category (`allUpgrades(in:)`)
+- Obtain the category for a given upgrade (`category(for:)`)
+
+If we have a list of upgrades, we can obtain a list of tuples of `(category, upgrade)` types
 
 
 
