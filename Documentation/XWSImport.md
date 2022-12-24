@@ -161,16 +161,10 @@ The collection is populated on app start from the upgrades in the `data/upgrades
 - Obtain all upgrades for a category (`allUpgrades(in:)`)
 - Obtain the category for a given upgrade (`category(for:)`)
 
-If we have a list of upgrades, we can obtain a list of tuples of `(category, upgrade)` types:
+we can build a dictionary of type `[UpgradeKeyCategory: [String]]`
 
 ```swift
-func buildUpgradesList(upgrades: [String]) -> [(UpgradeKeyCategory?, String)]
-```
-
-we can also build a dictionary of type `[UpgradeKeyCategory: [String]]`
-
-```swift
-func buildUpgradesList(upgrades: [String]) -> [UpgradeKeyCategory : [String]] {
+func buildUpgradesMap(upgrades: [String]) -> [UpgradeKeyCategory : [String]] {
         func add(upgrade: String, category: UpgradeKeyCategory) {
             if var upgrades = dict[category] {
                 upgrades.append(upgrade)
@@ -211,7 +205,7 @@ If we have a  list of `standardLoadout` upgrades, we can build a dictionary.
 
 ```swift
 let upgrades = ["crackshot", "disciplined", "afterburners"]
-let dict: [UpgradeKeyCategory : [String]] = buildUpgradesList(upgrades)
+let dict: [UpgradeKeyCategory : [String]] = buildUpgradesMap(upgrades)
 
 // Either create a JSON string
 
