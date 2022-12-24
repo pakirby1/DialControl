@@ -28,7 +28,9 @@ The imported XWS
 ```
 {"description":"","faction":"galacticempire","name":"BoyCrew","pilots":[{"id":"darthvader-battleofyavin","name":"darthvader-battleofyavin","points":6,"ship":"tieadvancedx1"},{"id":"maulermithel-battleofyavin","name":"maulermithel-battleofyavin","points":3,"ship":"tielnfighter"},{"id":"sigma7-battleofyavin","name":"sigma7-battleofyavin","points":4,"ship":"tieininterceptor"},{"id":"idenversio","name":"idenversio","points":3,"ship":"tielnfighter","upgrades":{"talent":["elusive"],"cannon":["ioncannon"]}},{"id":"backstabber-battleofyavin","name":"backstabber-battleofyavin","points":4,"ship":"tielnfighter"}],"points":20,"vendor":{"yasb":{"builder":"YASB - X-Wing 2.5","builder_url":"https://yasb.app/","link":"https://yasb.app/?f=Galactic%20Empire&d=v9ZhZ20Z564X125W204W105Y566X127W105Y573X125W113Y218X119WW11WWY565X116W381W105&sn=BoyCrew&obs="}},"version":"10/28/2022"}
 ```
+
 We really need to focus on the differences between each ship in the squad:
+
 ```
 {
   "id":"idenversio",
@@ -47,6 +49,7 @@ We really need to focus on the differences between each ship in the squad:
   "ship":"tielnfighter"
 }
 ```
+
 A regular ship will have the upgrades node while a quick build squad will have no upgrades node.
 A regular ship could also not have an upgrades node.
 
@@ -87,7 +90,9 @@ Basically we'd like to translate
   "ship":"tielnfighter"
 }
 ```
+
 into
+
 ```
 {
   "id":"backstabber-battleofyavin",
@@ -202,6 +207,17 @@ func category(for upgrade: String) -> UpgradeKeyCategory? {
     }
 ```
 
+If we have a  list of `standardLoadout` upgrades, we can build a dictionary.
+
+```swift
+let upgrades = ["crackshot", "disciplined", "afterburners"]
+let dict: [UpgradeKeyCategory : [String]] = buildUpgradesList(upgrades)
+
+// Either create a JSON string
+
+// Or add to `SquadPilot.upgrades`
+
+```
 
 
 
