@@ -164,6 +164,44 @@ func buildUpgradesList(upgrades: [String]) -> [(UpgradeKeyCategory?, String)]
 
 we can also build a dictionary of type `[UpgradeKeyCategory: [String]]`
 
+```swift
+func buildUpgradesList(upgrades: [String]) -> [UpgradeKeyCategory : [String]] {
+        func add(upgrade: String, category: UpgradeKeyCategory) {
+            if var upgrades = dict[category] {
+                upgrades.append(upgrade)
+            } else {
+                dict[category] = [upgrade]
+            }
+        }
+        
+        var dict: [UpgradeKeyCategory: [String]] = [:]
+        
+        upgrades.forEach{
+            if let category = category(for: $0) {
+                add(upgrade: $0, category: category)
+            }
+        }
+        
+        return dict
+    }
+```
+
+
+```swift
+func category(for upgrade: String) -> UpgradeKeyCategory? {
+        for key in UpgradeKeyCategory.allCases {
+            let upgrades = self[key]
+            let upgrade = upgrades.filter{ $0 == upgrade }
+            
+            if (upgrade.count > 0) {
+                return key
+            }
+        }
+        
+        return nil
+    }
+```
+
 
 
 
