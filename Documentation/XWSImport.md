@@ -156,7 +156,15 @@ The collection is populated on app start from the upgrades in the `data/upgrades
 - Obtain all upgrades for a category (`allUpgrades(in:)`)
 - Obtain the category for a given upgrade (`category(for:)`)
 
-If we have a list of upgrades, we can obtain a list of tuples of `(category, upgrade)` types
+If we have a list of upgrades, we can obtain a list of tuples of `(category, upgrade)` types:
+
+```swift
+func buildUpgradesList(upgrades: [String]) -> [(UpgradeKeyCategory?, String)]
+```
+
+we can also build a dictionary of type `[UpgradeKeyCategory: [String]]`
+
+
 
 
 
