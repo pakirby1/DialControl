@@ -151,7 +151,7 @@ A collection that stores upgrades for squad pilots
 
 ![Linked View Model Diagram](https://pakirby1.github.io/images/XWSImport-SquadPilotUpgradesCollection.png)
 
-The collection is populated on app start from the upgrades in the `data/upgrades` folder.   Once all of the upgrades are populated, we can 
+The collection is populated on app start from the upgrades in the `data/upgrades` folder.   Once all the upgrades are populated, we can 
 
 - Obtain all upgrades for a category (`allUpgrades(in:)`)
 - Obtain the category for a given upgrade (`category(for:)`)
