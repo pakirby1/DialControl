@@ -213,7 +213,8 @@ let dict: [UpgradeKeyCategory : [String]] = buildUpgradesMap(upgrades)
 
 ```
 
-![Squad/Ship Relationships](https://github.com/pakirby1/pakirby1.github.io/images/ShipXWSImport.png)
+![Squad/Ship Relationships](https://pakirby1.github.io/images/ShipXWSImport.png)
+
 
 
 
