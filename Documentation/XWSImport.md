@@ -213,10 +213,24 @@ let dict: [UpgradeKeyCategory : [String]] = buildUpgradesMap(upgrades)
 
 ```
 
-![Squad/Ship Relationships](https://github.com/pakirby1/pakirby1.github.io/images/ShipXWSImport.png)
+![Squad/Ship Relationships](https://pakirby1.github.io/images/ShipXWSImport.png)
 
+When the squad XWS is imported, it builds a list of pilots found within the xws and stores them in the `pilots` variable as an array of `SquadPilot` objects.  The `SquadPilot` has an `upgrades` field that contain the upgrades found for the pilot in the xws.  If no upgrades are associated with a `SquadPilot`, the `upgrades` field will be `nil`
 
+Now that we have a map of categories to upgrades we can iterate over the map and populate the `upgrades` field.
 
+Looking at the upgrades list within xws
+
+```
+"upgrades":
+  {
+    "talent":["daredevil", "elusive"],
+    "cannon":["ioncannon"]
+  }
+}
+```
+
+- `upgrades` is s dictionary of `String -> Array<String>`
 
 
 
