@@ -72,13 +72,13 @@
       "cost": 4,
       "loadout": 4,
       "xws": "jakkugunrunner",
-      "text": "The Quadrijet transfer spacetug, commonly called a \"Quadjumper,\" is nimble in space and atmosphere alike, making it popular among both smugglers and explorers.",
+      "text": "The Quadrijet transfer spacetug, commonly called a “Quadjumper,” is nimble in space and atmosphere alike, making it popular among both smugglers and explorers.",
       "image": "https://squadbuilder.fantasyflightgames.com/card_images/Card_Pilot_164.png",
       "shipAbility": {
         "name": "Spacetug Tractor Array",
         "text": "Action: Choose a ship in your [Front Arc] at range 1. That ship gains 1 tractor token, or 2 tractor tokens if it is in your [Bullseye Arc] at range 1."
       },
-      "slots": ["Device", "Illicit", "Illicit"],
+      "slots": ["Device", "Illicit"],
       "artwork": "https://squadbuilder.fantasyflightgames.com/card_art/Card_art_XW_P_164.jpg",
       "ffg": 164,
       "standard": false,
