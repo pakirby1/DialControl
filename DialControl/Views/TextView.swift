@@ -26,7 +26,7 @@ struct TextView: UIViewRepresentable {
         textView.text = placeholderText
         textView.textColor = .placeholderText
         
-        self.textViewObservable.height = textView.contentSize.height
+//        self.textViewObservable.height = textView.contentSize.height
         textView.isEditable = true
         textView.isUserInteractionEnabled = true
         
