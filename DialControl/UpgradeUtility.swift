@@ -56,7 +56,7 @@ struct UpgradeUtility {
         
         return dict
     }
-     
+    
     /*
      talent : ["composure", "daredevil", "elusive"]
      cannons : ["ioncannon", "jammingbeam"}
