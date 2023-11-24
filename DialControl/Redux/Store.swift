@@ -417,7 +417,8 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                 throw XWSImportError.squadNameNotFound
             }
         } catch XWSImportError.squadNameNotFound {
-            return Just<MyAppAction>(.xwsImport(action: .displayAlert("Squad Name Not Found")))
+            let alertText = environment.squadService.alertText
+            return Just<MyAppAction>(.xwsImport(action: .displayAlert(alertText)))
                 .eraseToAnyPublisher()
         }
         catch {
