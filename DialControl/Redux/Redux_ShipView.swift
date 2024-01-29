@@ -158,6 +158,10 @@ class Redux_ShipViewModel: ObservableObject {
             .charges?.value ?? 0
     }
     
+    var isStandardLoadout: Bool {
+        return shipPilot.ship.pilots[0].standardLoadout != nil
+    }
+    
     var shieldsActive: Int {
         return self.pilotStateData.shield_active
     }
@@ -594,7 +598,7 @@ extension Redux_ShipView {
                         }
                 }
             
-            return VStack {
+            var dialViewLarge: some View {
                 DialView(temperature: 100,
                                      diameter: 400,
                                      currentManeuver: self.$viewModel.currentManeuver,
@@ -604,6 +608,27 @@ extension Redux_ShipView {
                     self.viewModel.updateSelectedManeuver(maneuver: maneuver)
                 }
                 .frame(width: 400.0,height:400)
+            }
+            
+            var dialViewSmall: some View {
+                DialView(temperature: 100,
+                                     diameter: 400,
+                                     currentManeuver: self.$viewModel.currentManeuver,
+                                     dial: self.viewModel.shipPilot.ship.dial,
+                                     displayAngleRanges: false)
+                { (maneuver) in
+                    self.viewModel.updateSelectedManeuver(maneuver: maneuver)
+                }
+                .scaleEffect(x: 0.73, y: 0.73)
+                .frame(width: 400.0,height:400)
+            }
+            
+            return VStack {
+                if (self.viewModel.isStandardLoadout) {
+                    dialViewSmall
+                } else {
+                    dialViewLarge
+                }
                 
                 if (self.viewModel.currentManeuver != "") {
                     HStack {
