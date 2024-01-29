@@ -82,7 +82,8 @@ struct PilotDTO: Codable {
     var force: Force? { return _force ?? nil }
     var charges: Charges? { return _charges ?? nil }
     var standardLoadout : [String]? { return _standardLoadout ?? nil }
-
+    var shipStats: [Stat]? { return _shipStats ?? [] }
+    
     private var _text: String?
     private var _force: Force?
     private var _charges: Charges?
@@ -90,6 +91,7 @@ struct PilotDTO: Codable {
     private var _slots: [Slot]?
     private var _artwork: String?
     private var _standardLoadout : [String]?
+    private var _shipStats: [Stat]?
     
     enum CodingKeys: String, CodingKey {
         case _text = "text"
@@ -104,6 +106,7 @@ struct PilotDTO: Codable {
         case _force = "force"
         case _charges = "charges"
         case _standardLoadout = "standardLoadout"
+        case _shipStats = "shipStats"
     }
 }
 
@@ -307,6 +310,57 @@ extension Ship {
         
         print("Ship.selectedPilot pilot not found \(pilotId)")
         return nil
+    }
+    
+    /* Standard Loadout support
+     
+     "shipStats": [
+             { "arc": "Front Arc", "type": "attack", "value": 2 },
+             { "type": "agility", "value": 3 },
+             { "type": "hull", "value": 3 },
+             { "type": "shields", "value": 3 }
+           ]
+     
+     standardLoadout    shipStats   Result
+     =====================================
+     nil                nil         Use ship.stats
+     nil                X           Use pilot.shipStats
+     X                  nil         Use ship.stats
+     X                  X           Use pilot.shipStats
+     
+     if (pilot.shipStats == nil) {
+        // Use ship.stats
+     } else {
+        // Use pilot.shipStats
+     }
+     
+     */
+    func pilotShields(pilotId: String) -> Int {
+        func getStandardLoadoutStat(pilotId: String, type: String) -> Int {
+            let foundPilots = pilots.filter{ $0.xws == pilotId }
+            
+            if foundPilots.count > 0 {
+                guard let sl = foundPilots[0].standardLoadout else {
+                    return 0
+                }
+                
+                guard let shipStats = foundPilots[0].shipStats else {
+                    return 0
+                }
+                
+                let stats: [Stat] = shipStats.filter{ $0.type == "shields"}
+                
+                if (stats.count > 0) {
+                    return stats[0].value
+                } else {
+                    return 0
+                }
+            } else {
+                return 0
+            }
+        }
+        
+        return getStandardLoadoutStat(pilotId: pilotId, type: "shields")
     }
     
     func pilotForce(pilotId: String) -> Int {

@@ -481,33 +481,9 @@ extension Redux_ShipView {
         return (upgradeStateData.count > 0 ? upgradeStateData[0] : nil)
     }
     
-    func buildLinkedView(max: Int,
-                         type: StatButtonType,
-                         active: Int,
-                         inActive: Int,
-                         updateType: PilotStatePropertyType,
-                         handleDestroyed: Bool = false) -> AnyView {
-        
-        if (max > 0) {
-            return AnyView(LinkedView(type: type,
-                                      active: active,
-                                      inactive: inActive)
-            { (active, inactive) in
-                self.viewModel.update(type: updateType,
-                                      active: active,
-                                      inactive: inactive)
-                
-                if (handleDestroyed) {
-                    self.viewModel.handleDestroyed()
-                }
-            })
-        }
-        
-        return AnyView(EmptyView())
-    }
     
     var bodyContent: some View {
-        var shipImageView: some View {
+        var shipImageViewNormal: some View {
             /// Call .equatable() to prevent refreshing the static image
             /// https://swiftui-lab.com/equatableview/
             ImageView(url: viewModel.shipImageURL,
@@ -518,47 +494,33 @@ extension Redux_ShipView {
             .environmentObject(viewModel)
         }
         
-        var statusView: some View {
-            var dialStatusText: String {
-                return "\(self.viewModel.pilotStateData.dial_status.description)"
+        var shipImageViewStandardLoadout: some View {
+            /// Call .equatable() to prevent refreshing the static image
+            /// https://swiftui-lab.com/equatableview/
+            ImageView(url: viewModel.shipImageURL,
+                      moc: self.viewModel.moc,
+                     label: "ship")
+            .equatable()
+            .frame(width: 667, height:398)
+            .environmentObject(viewModel)
+        }
+        
+        var normalLayout: some View {
+            return HStack(alignment: .top) {
+                shipImageViewNormal
+                StatusView(viewModel: self.viewModel)
+                dialView
             }
-                
-            return VStack(spacing: 20) {
-                // Hull
-                buildLinkedView(max: viewModel.pilotStateData.hullMax,
-                                type: StatButtonType.hull,
-                                active: viewModel.hullActive,
-                                inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
-                                updateType: PilotStatePropertyType.hull,
-                                handleDestroyed: true)
-                
-                // Shield
-                buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
-                                type: StatButtonType.shield,
-                                active: viewModel.shieldsActive,
-                                inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
-                                updateType: PilotStatePropertyType.shield,
-                                handleDestroyed: true)
-                
-                // Force
-                buildLinkedView(max: viewModel.pilotStateData.forceMax,
-                                type: StatButtonType.force,
-                                active: viewModel.forceActive,
-                                inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
-                                updateType: PilotStatePropertyType.force)
-                
-                // Charge
-                buildLinkedView(max: viewModel.pilotStateData.chargeMax,
-                                type: StatButtonType.charge,
-                                active: viewModel.chargeActive,
-                                inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
-                                updateType: PilotStatePropertyType.charge)
-                
-                Text("Dial Status: \(dialStatusText)")
-                
-                
-            }.padding(.top, 20)
-            //                    .border(Color.green, width: 2)
+        }
+        
+        var standardLoadoutLayout: some View {
+            return VStack {
+                HStack(alignment: .top) {
+                    shipImageViewStandardLoadout
+                    dialView
+                }
+                StatusView(viewModel: self.viewModel)
+            }
         }
         
         var dialView: some View {
@@ -620,7 +582,7 @@ extension Redux_ShipView {
                     self.viewModel.updateSelectedManeuver(maneuver: maneuver)
                 }
                 .scaleEffect(x: 0.73, y: 0.73)
-                .frame(width: 400.0,height:400)
+                .frame(width: 292.0,height:292.0)
             }
             
             return VStack {
@@ -639,10 +601,135 @@ extension Redux_ShipView {
             }
         }
         
-        return HStack(alignment: .top) {
-            shipImageView
-            statusView
-            dialView
+        if (self.viewModel.isStandardLoadout) {
+            return AnyView(standardLoadoutLayout)
+        } else {
+            return AnyView(normalLayout)
+        }
+        
+//        return normalLayout
+    }
+}
+
+struct StatusView: View {
+    @ObservedObject var viewModel: Redux_ShipViewModel
+    
+    func buildLinkedView(max: Int,
+                         type: StatButtonType,
+                         active: Int,
+                         inActive: Int,
+                         updateType: PilotStatePropertyType,
+                         handleDestroyed: Bool = false) -> AnyView {
+        
+        if (max > 0) {
+            return AnyView(LinkedView(type: type,
+                                      active: active,
+                                      inactive: inActive)
+            { (active, inactive) in
+                self.viewModel.update(type: updateType,
+                                      active: active,
+                                      inactive: inactive)
+                
+                if (handleDestroyed) {
+                    self.viewModel.handleDestroyed()
+                }
+            })
+        }
+        
+        return AnyView(EmptyView())
+    }
+
+    var statusViewVertical: some View {
+        var dialStatusText: String {
+            return "\(self.viewModel.pilotStateData.dial_status.description)"
+        }
+            
+        return VStack(spacing: 20) {
+            // Hull
+            buildLinkedView(max: viewModel.pilotStateData.hullMax,
+                            type: StatButtonType.hull,
+                            active: viewModel.hullActive,
+                            inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
+                            updateType: PilotStatePropertyType.hull,
+                            handleDestroyed: true)
+            
+            // Shield
+            buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
+                            type: StatButtonType.shield,
+                            active: viewModel.shieldsActive,
+                            inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
+                            updateType: PilotStatePropertyType.shield,
+                            handleDestroyed: true)
+            
+            // Force
+            buildLinkedView(max: viewModel.pilotStateData.forceMax,
+                            type: StatButtonType.force,
+                            active: viewModel.forceActive,
+                            inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
+                            updateType: PilotStatePropertyType.force)
+            
+            // Charge
+            buildLinkedView(max: viewModel.pilotStateData.chargeMax,
+                            type: StatButtonType.charge,
+                            active: viewModel.chargeActive,
+                            inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
+                            updateType: PilotStatePropertyType.charge)
+            
+            Text("Dial Status: \(dialStatusText)")
+            
+            
+        }.padding(.top, 20)
+        //                    .border(Color.green, width: 2)
+    }
+
+    var statusViewHorizontal: some View {
+        var dialStatusText: String {
+            return "\(self.viewModel.pilotStateData.dial_status.description)"
+        }
+            
+        return HStack(spacing: 20) {
+            // Hull
+            buildLinkedView(max: viewModel.pilotStateData.hullMax,
+                            type: StatButtonType.hull,
+                            active: viewModel.hullActive,
+                            inActive: viewModel.pilotStateData.hullMax - viewModel.hullActive,
+                            updateType: PilotStatePropertyType.hull,
+                            handleDestroyed: true)
+            
+            // Shield
+            buildLinkedView(max: viewModel.pilotStateData.shieldsMax,
+                            type: StatButtonType.shield,
+                            active: viewModel.shieldsActive,
+                            inActive: viewModel.pilotStateData.shieldsMax - viewModel.shieldsActive,
+                            updateType: PilotStatePropertyType.shield,
+                            handleDestroyed: true)
+            
+            // Force
+            buildLinkedView(max: viewModel.pilotStateData.forceMax,
+                            type: StatButtonType.force,
+                            active: viewModel.forceActive,
+                            inActive: viewModel.pilotStateData.forceMax - viewModel.forceActive,
+                            updateType: PilotStatePropertyType.force)
+            
+            // Charge
+            buildLinkedView(max: viewModel.pilotStateData.chargeMax,
+                            type: StatButtonType.charge,
+                            active: viewModel.chargeActive,
+                            inActive: viewModel.pilotStateData.chargeMax - viewModel.chargeActive,
+                            updateType: PilotStatePropertyType.charge)
+            
+            Text("Dial Status: \(dialStatusText)")
+            
+            
+        }.padding(.top, 20)
+        //                    .border(Color.green, width: 2)
+    }
+    
+    var body: some View {
+        if (self.viewModel.isStandardLoadout) {
+            statusViewHorizontal
+        } else {
+            statusViewVertical
         }
     }
 }
