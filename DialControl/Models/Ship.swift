@@ -194,6 +194,8 @@ extension Ship {
             }
     }
     
+
+
     struct FiringArc {
         let type: FiringArcType
         let value: Int
@@ -361,6 +363,46 @@ extension Ship {
         }
         
         return getStandardLoadoutStat(pilotId: pilotId, type: "shields")
+    }
+
+    // Supports pilot shipStats for standard loadout pilot
+    /*
+     
+     */
+    func getShipStat(by pilotId: String, and type: String) -> Int {
+        func getStat(by type: String, stats: [Stat]) -> Int {
+            let statsWithType: [Stat] = stats.filter{ $0.type == type }
+            return (statsWithType.count > 0) ? statsWithType[0].value : 0
+        }
+        
+        // get all of the pilotShipStats
+        guard let pilotShipStats = pilotShipStats(pilotId: pilotId) else {
+            // No pilot ship stats
+            return getStat(by: type, stats: self.stats)
+        }
+        
+        // we have pilot ship stats
+        
+        // if we have pilot ship stat matching this type, return it,
+        // otherwise fall back and check if self.stats has a stat matching this type
+        /*
+           For the case where the standard loadout card only grants an extra shield but no other stats
+           are called out, so we use the self.stats to get the hull, agility, etc...
+         */
+        return getStat(by: type, stats: pilotShipStats)
+    }
+    
+    func pilotShipStats(pilotId: String) -> [Stat]? {
+        let foundPilots = pilots.filter{ $0.xws == pilotId }
+        
+        // No pilots found, return empty array
+        guard foundPilots.count > 0 else {
+            return nil
+        }
+        
+        let pilot = foundPilots[0]
+        
+        return pilot.shipStats
     }
     
     func pilotForce(pilotId: String) -> Int {

@@ -101,10 +101,12 @@ class PilotStateService: PilotStateServiceProtocol, ObservableObject {
                 
                 if case .hull = type {
                     value = "hull"
-                    amount = ship.hullStats
+                    // amount = ship.hullStats
+                    amount = ship.getShipStat(by: squadPilot.id, and: value)
                 } else if case .shields = type {
                     value = "shields"
-                    amount = ship.shieldStats
+                    //amount = ship.shieldStats
+                    amount = ship.getShipStat(by: squadPilot.id, and: value)
                 }
                 
                 for stat in stats {
@@ -300,10 +302,12 @@ extension PilotStateService {
                 
                 if case .hull = type {
                     value = "hull"
-                    amount = ship.hullStats
+//                    amount = ship.hullStats
+                    amount = ship.getShipStat(by: squadPilot.id, and: value)
                 } else if case .shields = type {
                     value = "shields"
-                    amount = ship.shieldStats
+//                    amount = ship.shieldStats
+                    amount = ship.getShipStat(by: squadPilot.id, and: value)
                 }
                 
                 for stat in stats {
