@@ -360,6 +360,10 @@ extension PilotStateService {
                 let agility = ship.agilityStats
                 var allUpgrades : [Upgrade] = []
                 
+                /*
+                 If no squadPilot.upgrades exist, check the standardLoadout upgrade list from the
+                 ship JSON by squadPilot.pilotId
+                 */
                 // Add the upgrades from SquadPilot.upgrades by iterating over the
                 // UpgradeCardEnum cases and calling getUpgrade
                 if let upgrades = squadPilot.upgrades {
