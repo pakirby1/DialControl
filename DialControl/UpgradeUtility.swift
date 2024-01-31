@@ -62,6 +62,49 @@ struct UpgradeUtility {
      cannons : ["ioncannon", "jammingbeam"}
      */
     var upgradesByCategory: [String: Array<String>] = [:]
+
+    /*
+     composure : talent
+     daredevil : talent
+     elusive : talent
+     ioncannon : cannons
+     jammingbeam : cannons
+     */
+    var upgradesByName: [String: String] = [:]
+    static func buildUpgradesByNameDictionary() -> [String: String] {
+        var dict: [String: String] = [:]
+
+        for category in UpgradeCategories.allCases {
+            /*
+             category = talent
+             upgrades = getUpgrades("talent").map{ $0.xws } -> talent : ["composure", "daredevil", "elusive"]
+             */
+            let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: category.rawValue).map{ $0.xws }
+            upgrades.forEach{ dict[$0] = category.rawValue }
+        }
+        
+        return dict
+    }
+    
+    func buildUpgradesByUpgradeNames(upgradeNames: [String]) -> [Upgrade] {
+        func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {
+            let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: upgradeCategory)
+            let matches: [Upgrade] = upgrades.filter({ $0.xws == upgradeName })
+            
+            let upgrade = matches[0]
+            
+            return upgrade
+        }
+        
+        let upgrades: [Upgrade] = []
+        UpgradeUtility.buildUpgradesByNameDictionary()
+        
+        upgradeNames.forEach{
+            let category = upgradesByName[$0]
+            
+        }
+        return upgrades
+    }
     
     static func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
         func buildFileName() -> String {

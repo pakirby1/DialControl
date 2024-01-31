@@ -392,6 +392,18 @@ extension Ship {
         return getStat(by: type, stats: pilotShipStats)
     }
     
+    /* "standardLoadout": ["hate", "ionmissiles", "afterburners"] */
+    func pilotStandardLoadoutUpgrades(pilotId: String) -> [String]? {
+        let foundPilots = pilots.filter{ $0.xws == pilotId }
+        
+        guard foundPilots.count > 0 else {
+            return nil
+        }
+        
+        let pilot = foundPilots[0]
+        return pilot.standardLoadout
+    }
+    
     func pilotShipStats(pilotId: String) -> [Stat]? {
         let foundPilots = pilots.filter{ $0.xws == pilotId }
         

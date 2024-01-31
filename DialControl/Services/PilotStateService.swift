@@ -368,6 +368,16 @@ extension PilotStateService {
                 // UpgradeCardEnum cases and calling getUpgrade
                 if let upgrades = squadPilot.upgrades {
                     allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
+                } else {
+                    /*
+                     Check if we have a list of upgrade names in standardLoadout field of pilot
+                     
+                     Get the pilot by pilotId
+                     Get the standardLoadout field for this pilot -> ["hate", "ionmissiles", "afterburners"]
+                     Build an [Upgrade] from this ["hate", "ionmissiles", "afterburners"]
+                     */
+                    let standardLoadoutUpgrades = ship.pilotStandardLoadoutUpgrades(pilotId: squadPilot.id)
+                    
                 }
                 
                 let pilotStateData = PilotStateData(
