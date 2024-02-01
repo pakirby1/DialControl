@@ -376,7 +376,9 @@ extension PilotStateService {
                      Get the standardLoadout field for this pilot -> ["hate", "ionmissiles", "afterburners"]
                      Build an [Upgrade] from this ["hate", "ionmissiles", "afterburners"]
                      */
-                    let standardLoadoutUpgrades = ship.pilotStandardLoadoutUpgrades(pilotId: squadPilot.id)
+                    if let standardLoadoutUpgrades = ship.pilotStandardLoadoutUpgrades(pilotId: squadPilot.id) {
+                        allUpgrades = UpgradeUtilityNew().getUpgradesForNames(upgradeNames: standardLoadoutUpgrades)
+                    }
                     
                 }
                 

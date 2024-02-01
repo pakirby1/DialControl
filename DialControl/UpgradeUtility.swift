@@ -71,6 +71,8 @@ struct UpgradeUtility {
      jammingbeam : cannons
      */
     var upgradesByName: [String: String] = [:]
+    
+    /*
     static func buildUpgradesByNameDictionary() -> [String: String] {
         var dict: [String: String] = [:]
 
@@ -85,7 +87,8 @@ struct UpgradeUtility {
         
         return dict
     }
-    
+    */
+    /*
     func buildUpgradesByUpgradeNames(upgradeNames: [String]) -> [Upgrade] {
         func getUpgrade(upgradeCategory: String, upgradeName: String) -> Upgrade {
             let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: upgradeCategory)
@@ -105,6 +108,7 @@ struct UpgradeUtility {
         }
         return upgrades
     }
+    */
     
     static func getJSONForUpgrade(forType: String, inDirectory: String) -> String {
         func buildFileName() -> String {
@@ -138,7 +142,7 @@ struct UpgradeUtility {
     
     static func getUpgrades(upgradeCategory: String) -> [Upgrade] {
         let jsonString = getJSONForUpgrade(forType: upgradeCategory, inDirectory: "upgrades")
-        
+    
         let upgrades: [Upgrade] = Upgrades.serializeJSON(jsonString: jsonString)
 
         return upgrades
@@ -152,6 +156,10 @@ struct UpgradeUtility {
     ///   - Read from disk & seriallize into an `[Upgrade]` once per category `device, configuration`.
     ///   - Store the upgrade array into a dictionary keyed by category name `["device": [Upgrade]]`
     ///
+    ///  Takes an input of SquadPilotUpgrade :
+    ///  "upgrades":{"talent":["deadeyeshot","marksmanship"],"modification":["shieldupgrade"]}}
+    ///  and returns an array of Upgrade types
+    ///  [Upgrade(talent), Upgrade(deadeyeshot), Upgrade(marksmanship), Upgrade(shieldupgrade)]
     static func buildAllUpgrades(_ upgrades: SquadPilotUpgrade,
                                  store: MyAppStore? = nil) -> [Upgrade] {
         print("UpgradeUtility.buildAllUpgrades \(upgrades)")
@@ -164,6 +172,7 @@ struct UpgradeUtility {
                 return upgrade
             }
         
+            /* REMOVE
             func getUpgrades(upgradeCategory: String) -> [Upgrade] {
                 func getUpgradesFromCache(upgradeCategory: String) -> [Upgrade]? {
                     guard let upgrades = store?.state.upgrades.upgrades[upgradeCategory] else {
@@ -203,13 +212,7 @@ struct UpgradeUtility {
                     return getUpgradesFromJSON(upgradeCategory: upgradeCategory)
                 }
             }
-        
-            func buildUpgradeDictionary() {
-                let allAstromechs : [Upgrade] = getUpgrades(upgradeCategory: "astromech")
-                var dict: [String: [Upgrade]] = [:]
-                
-                dict["astromech"] = allAstromechs
-            }
+             */
         
             var allUpgrades : [Upgrade] = []
         
@@ -324,6 +327,7 @@ struct UpgradeUtility {
             return allUpgrades
         }
 
+    /*
     static func buildAllUpgrades_throws(_ upgrades: SquadPilotUpgrade) throws -> [Upgrade] {
         func getJSONForUpgrade(forType: String, inDirectory: String) throws -> String {
             // Read json from file: forType.json
@@ -484,8 +488,5 @@ struct UpgradeUtility {
             throw error
         }
     }
-    
-    static func getCategory(for upgrade: String) -> String {
-        return ""
-    }
+    */
 }
