@@ -414,7 +414,23 @@ extension Ship {
         
         let pilot = foundPilots[0]
         
-        return pilot.shipStats
+        guard let pilotShipStats = pilot.shipStats else {
+            return nil
+        }
+        
+        guard pilotShipStats.count > 0 else {
+            return nil
+        }
+        
+        return pilotShipStats
+        
+        /*
+        if pilot.shipStats == nil {
+            return nil
+        } else {
+            return (pilot.shipStats!.count > 0) ? pilot.shipStats : nil
+        }
+        */
     }
     
     func pilotForce(pilotId: String) -> Int {

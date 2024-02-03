@@ -38,7 +38,7 @@ protocol SquadServiceProtocol : class {
 
     // throwing funcs
     func loadSquad_throws(jsonString: inout String) throws -> Squad
-    func saveSquad_throws(jsonString: String, name: String, isFavorite: Bool) throws -> SquadData
+    func saveSquad_throws() throws
 }
 
 enum SquadServiceProtocolError: LocalizedError {
@@ -74,23 +74,25 @@ extension SquadServiceProtocol {
                                    callBack: handleError)
     }
     
-    func saveSquad_throws(jsonString: String,
-                   name: String,
-                   isFavorite: Bool = false) throws -> SquadData
+    func buildSquadData(jsonString: String,
+                        name: String,
+                        isFavorite: Bool = false) -> SquadData
     {
         let squadData = SquadData(context: self.moc)
         squadData.id = UUID()
         squadData.name = name
         squadData.json = jsonString
         squadData.favorite = isFavorite
-        
+        return squadData
+    }
+    
+    func saveSquad_throws() throws
+    {
         do {
             try self.moc.save()
         } catch {
             throw SquadServiceProtocolError.saveSquadError(error.localizedDescription)
         }
-        
-        return squadData
     }
 }
 

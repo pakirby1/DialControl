@@ -376,7 +376,7 @@ class UpgradesData {
     ///
     func buildCategoryToUpgradesDictionary() {
         for upgradeCategory in UpgradeCategories.allCases {
-            let upgrades = UpgradeUtilityNew.getUpgrades(upgradeCategory: upgradeCategory.rawValue)
+            let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: upgradeCategory.rawValue)
             categoryToUpgradesDictionary[upgradeCategory.rawValue] = upgrades
         }
     }

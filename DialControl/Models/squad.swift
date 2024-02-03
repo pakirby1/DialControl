@@ -78,7 +78,128 @@ struct SquadPilotUpgrade: Codable {
     }
 }
 
+class DictionaryDecoder {
+    init() { }
+
+    func decode<T: Decodable>(_ type: T.Type, from data: [String: Any]) throws -> T {
+        let data = try Foundation.JSONSerialization.data(withJSONObject: data)
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+}
+
 extension SquadPilotUpgrade {
+    // Alternatively, use Ian Keen's DictionaryDecoder
+    // https://gist.github.com/IanKeen/0decfe8eae7c2411600b299d99236d88
+    // DictionaryDecoder.decode(SquadPilotUpgrade.self, from: dictionary)
+    static func initFrom(dictionary: [String : Array<String>]) -> SquadPilotUpgrade {
+        do {
+            let ret = try DictionaryDecoder().decode(SquadPilotUpgrade.self, from: dictionary)
+            return ret
+        } catch {
+            return SquadPilotUpgrade()
+        }
+    }
+    
+    static func loadFrom(dictionary: [String : Array<String>]) -> SquadPilotUpgrade? {
+        var ret = SquadPilotUpgrade()
+        
+        for (key, value) in dictionary {
+            switch(key) {
+                case "astromech":
+                    ret._astromech = value
+                    break
+                case "cannon":
+                    ret._cannon = value
+                    break
+                case "cargo":
+                    ret._cargo = value
+                    break
+                case "command":
+                    ret._command = value
+                    break
+                case "configuration":
+                    ret._configuration = value
+                    break
+                case "crew":
+                    ret._crew = value
+                    break
+                case "device":
+                    ret._device = value
+                    break
+                case "forcepower":
+                    ret._forcepower = value
+                    break
+                case "gunner":
+                    ret._gunner = value
+                    break
+                case "hardpoint":
+                    ret._hardpoint = value
+                    break
+                case "illicit":
+                    ret._illicit = value
+                    break
+                case "missile":
+                    ret._missile = value
+                    break
+                case "modification":
+                    ret._modification = value
+                    break
+                case "sensor":
+                    ret._sensor = value
+                    break
+                case "tacticalrelay":
+                    ret._tacticalrelay = value
+                    break
+                case "talent":
+                    ret._talent = value
+                    break
+                case "team":
+                    ret._team = value
+                    break
+                case "tech":
+                    ret._tech = value
+                    break
+                case "title":
+                    ret._title = value
+                    break
+                case "torpedo":
+                    ret._torpedo = value
+                    break
+                case "turret":
+                    ret._turret = value
+                default:
+                    return nil
+            }
+        }
+        
+        return ret
+    }
+    
+    static func loadFrom(jsonString: String) -> SquadPilotUpgrade? {
+        func serializeJSON(jsonString: String) -> Result<SquadPilotUpgrade, Error> {
+            let jsonData = jsonString.data(using: .utf8)!
+            let decoder = JSONDecoder()
+            
+            do {
+                let squad = try decoder.decode(SquadPilotUpgrade.self, from: jsonData)
+                return .success(squad)
+            } catch let DecodingError.dataCorrupted(context) {
+                return .failure(DecodingError.dataCorrupted(context))
+            } catch {
+                return .failure(error)
+            }
+        }
+        
+        let result = serializeJSON(jsonString: jsonString)
+        
+        switch(result) {
+            case .success(let spu):
+                return spu
+            default:
+                return nil
+        }
+    }
+    
     var allUpgrades: [String] {
         return astromechs +
             cannons +
@@ -294,7 +415,7 @@ struct SquadVendor: Codable {
 struct Squad: Codable, JSONSerialization {
     // Mandatory
     let faction: String
-    let pilots: [SquadPilot]
+    var pilots: [SquadPilot]
     var shipPilots: [ShipPilot] = []
     
     // Optional
@@ -427,6 +548,17 @@ struct Squad: Codable, JSONSerialization {
         }
         
         return Squad.emptySquad
+    }
+    
+    func getJSON() -> String? {
+        let encoder = JSONEncoder()
+        
+        do {
+            let data = try encoder.encode(self)
+            return String(data: data, encoding: .utf8)!
+        } catch {
+            return nil
+        }
     }
 }
 

@@ -17,7 +17,7 @@ protocol PilotStateServiceProtocol : class {
     func updateState(newData: PilotStateData, state: PilotState)
     
     func savePilotState_throws(squadData: SquadData, state: String, pilotIndex: Int) throws -> ()
-    func createPilotState_throws(squad: Squad, squadData: SquadData) throws
+    func createPilotState_throws(squad: inout Squad, squadData: SquadData) throws
 }
 
 enum PilotStateServiceProtocolError: LocalizedError {
@@ -253,178 +253,165 @@ extension PilotStateService {
         }
     }
     
-    func createPilotState_throws(squad: Squad, squadData: SquadData) throws {
-        func calculate_force_active(ship: Ship,
-                                    squadPilot: SquadPilot,
-                                    allUpgrades: [Upgrade]) -> Int
-        {
-            let forceUpgrades = allUpgrades.filter{ upgrade in
-                if let _ = upgrade.sides[0].force {
-                    return true
-                }
-                
-                return false
-            }
-            
-            let forceValues = forceUpgrades.reduce(0, {
-                return $0 + (($1.sides[0].force?.value) ?? 0)
-            })
-            
-            return ship.pilotForce(pilotId: squadPilot.id) + forceValues
-        }
-        
+    func createPilotState_throws(squad: inout Squad, squadData: SquadData) throws {
         enum AdjustmentType {
             case hull
             case shields
         }
         
-        func calculateActive(type: AdjustmentType,
-                             ship: Ship,
-                             squadPilot: SquadPilot,
-                             allUpgrades: [Upgrade]) -> Int
-        {
-            var adj = 0
-            
-            let sides: [Side] = allUpgrades.flatMap{ $0.sides }
-            let grants: [GrantElement] = sides.flatMap{ $0.grants }
-            let stats: [GrantElement] = grants.filter{ grant in
-                switch(grant) {
-                    case .stat(_):
-                        return true
-                    default:
-                        return false
-                }
-            }
-            
-            func adjustment(type: AdjustmentType) -> Int {
-                var value: String = ""
-                var amount: Int = 0
-                
-                if case .hull = type {
-                    value = "hull"
-//                    amount = ship.hullStats
-                    amount = ship.getShipStat(by: squadPilot.id, and: value)
-                } else if case .shields = type {
-                    value = "shields"
-//                    amount = ship.shieldStats
-                    amount = ship.getShipStat(by: squadPilot.id, and: value)
-                }
-                
-                for stat in stats {
-                    if case .stat(let statGrant) = stat {
-                        if statGrant.value == value {
-                            adj += statGrant.amount
+        func createAndSavePilotStateData(squad: Squad, squadData: SquadData) throws {
+            func buildPilotStateData(squad: Squad,
+                                             squadPilot: SquadPilot ,
+                                             pilotIndex: Int) throws -> String
+            {
+                func calculate_force_active(ship: Ship,
+                                            squadPilot: SquadPilot,
+                                            allUpgrades: [Upgrade]) -> Int
+                {
+                    let forceUpgrades = allUpgrades.filter{ upgrade in
+                        if let _ = upgrade.sides[0].force {
+                            return true
                         }
-                    }
-                }
-                
-                return amount + adj
-            }
-            
-            return adjustment(type: type)
-        }
-        
-        func buildUpgradeStates(allUpgrades : [Upgrade]) -> [UpgradeStateData] {
-            var ret:[UpgradeStateData] = []
-            
-            // for every upgrade with sides[].item[0].charges.value > 1
-            allUpgrades.forEach{ upgrade in
-                let charge_active : Int? = upgrade.sides[0].charges?.value
-                
-                // create an UpgradeStateData
-                ret.append(UpgradeStateData(force_active: nil,
-                                            force_inactive: nil,
-                                            charge_active: charge_active,
-                                            charge_inactive: 0,
-                                            selected_side: 0,
-                                            xws: upgrade.xws))
-            }
-            
-            return ret
-        }
-        
-        func buildPilotStateData(squad: Squad,
-                                 squadPilot: SquadPilot,
-                                 pilotIndex: Int) throws -> String
-        {
-            var shipJSON: String = ""
-            shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
-            
-            do {
-                
-                let ship: Ship = try Ship.deserializeJSON(jsonString: shipJSON)
-                
-                // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
-                
-                let arc = ship.arcStats
-                let agility = ship.agilityStats
-                var allUpgrades : [Upgrade] = []
-                
-                /*
-                 If no squadPilot.upgrades exist, check the standardLoadout upgrade list from the
-                 ship JSON by squadPilot.pilotId
-                 */
-                // Add the upgrades from SquadPilot.upgrades by iterating over the
-                // UpgradeCardEnum cases and calling getUpgrade
-                if let upgrades = squadPilot.upgrades {
-                    allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
-                } else {
-                    /*
-                     Check if we have a list of upgrade names in standardLoadout field of pilot
-                     
-                     Get the pilot by pilotId
-                     Get the standardLoadout field for this pilot -> ["hate", "ionmissiles", "afterburners"]
-                     Build an [Upgrade] from this ["hate", "ionmissiles", "afterburners"]
-                     */
-                    if let standardLoadoutUpgrades = ship.pilotStandardLoadoutUpgrades(pilotId: squadPilot.id) {
-                        allUpgrades = UpgradeUtilityNew().getUpgradesForNames(upgradeNames: standardLoadoutUpgrades)
+                        
+                        return false
                     }
                     
+                    let forceValues = forceUpgrades.reduce(0, {
+                        return $0 + (($1.sides[0].force?.value) ?? 0)
+                    })
+                    
+                    return ship.pilotForce(pilotId: squadPilot.id) + forceValues
                 }
                 
-                let pilotStateData = PilotStateData(
-                    pilot_index: pilotIndex,
-                    adjusted_attack: arc,
-                    adjusted_defense: agility,
-                    hull_active: calculateActive(type: .hull,ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
-                    hull_inactive: 0,
-                    shield_active: calculateActive(type: .shields, ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
-                    shield_inactive: 0,
-                    force_active: calculate_force_active(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
-                    force_inactive: 0,
-                    charge_active: ship.pilotCharge(pilotId: squadPilot.id),
-                    charge_inactive: 0,
-                    selected_maneuver: "",
-                    shipID: "",
-                    upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
-                    dial_status: DialStatus.hidden,
-                    hasSystemPhaseAction: false
-                )
+                func calculateActive(type: AdjustmentType,
+                                     ship: Ship,
+                                     squadPilot: SquadPilot,
+                                     allUpgrades: [Upgrade]) -> Int
+                {
+                    var adj = 0
+                    
+                    let sides: [Side] = allUpgrades.flatMap{ $0.sides }
+                    let grants: [GrantElement] = sides.flatMap{ $0.grants }
+                    let stats: [GrantElement] = grants.filter{ grant in
+                        switch(grant) {
+                            case .stat(_):
+                                return true
+                            default:
+                                return false
+                        }
+                    }
+                    
+                    func adjustment(type: AdjustmentType) -> Int {
+                        var value: String = ""
+                        var amount: Int = 0
+                        
+                        if case .hull = type {
+                            value = "hull"
+        //                    amount = ship.hullStats
+                            amount = ship.getShipStat(by: squadPilot.id, and: value)
+                        } else if case .shields = type {
+                            value = "shields"
+        //                    amount = ship.shieldStats
+                            amount = ship.getShipStat(by: squadPilot.id, and: value)
+                        }
+                        
+                        for stat in stats {
+                            if case .stat(let statGrant) = stat {
+                                if statGrant.value == value {
+                                    adj += statGrant.amount
+                                }
+                            }
+                        }
+                        
+                        return amount + adj
+                    }
+                    
+                    return adjustment(type: type)
+                }
                 
-                let json = try PilotStateData.serialize_throws(type: pilotStateData)
-                return json
+                func buildUpgradeStates(allUpgrades : [Upgrade]) -> [UpgradeStateData] {
+                    var ret:[UpgradeStateData] = []
+                    
+                    // for every upgrade with sides[].item[0].charges.value > 1
+                    allUpgrades.forEach{ upgrade in
+                        let charge_active : Int? = upgrade.sides[0].charges?.value
+                        
+                        // create an UpgradeStateData
+                        ret.append(UpgradeStateData(force_active: nil,
+                                                    force_inactive: nil,
+                                                    charge_active: charge_active,
+                                                    charge_inactive: 0,
+                                                    selected_side: 0,
+                                                    xws: upgrade.xws))
+                    }
+                    
+                    return ret
+                }
+                
+                var shipJSON: String = ""
+                shipJSON = getJSONFor(ship: squadPilot.ship, faction: squad.faction)
+                
+                do {
+                    
+                    let ship: Ship = try Ship.deserializeJSON(jsonString: shipJSON)
+                    
+                    // Calculate new adjusted values based on upgrades (Hull Upgrade, Delta-7B, etc.)
+                    
+                    let arc = ship.arcStats
+                    let agility = ship.agilityStats
+                    var allUpgrades : [Upgrade] = []
+                    
+                    // squadPilot.upgrades = "upgrades":{"talent":["marksmanship"],"modification":["afterburners"],"forcepower":["hate"]}
+                    if let upgrades = squadPilot.upgrades {
+                        allUpgrades = try UpgradeUtility.buildAllUpgrades(upgrades)
+                    }
+                    
+                    let pilotStateData = PilotStateData(
+                        pilot_index: pilotIndex,
+                        adjusted_attack: arc,
+                        adjusted_defense: agility,
+                        hull_active: calculateActive(type: .hull,ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                        hull_inactive: 0,
+                        shield_active: calculateActive(type: .shields, ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                        shield_inactive: 0,
+                        force_active: calculate_force_active(ship: ship, squadPilot: squadPilot, allUpgrades: allUpgrades),
+                        force_inactive: 0,
+                        charge_active: ship.pilotCharge(pilotId: squadPilot.id),
+                        charge_inactive: 0,
+                        selected_maneuver: "",
+                        shipID: "",
+                        upgradeStates: buildUpgradeStates(allUpgrades: allUpgrades),
+                        dial_status: DialStatus.hidden,
+                        hasSystemPhaseAction: false
+                    )
+                    
+                    let json = try PilotStateData.serialize_throws(type: pilotStateData)
+                    return json
+                }
+                catch {
+                    throw error
+                }
             }
-            catch {
-                throw error
+            
+            var pilotIndex: Int = 0
+            
+            for var pilot in squad.pilots {
+                do {
+                    let json = try buildPilotStateData(squad: squad,
+                                                       squadPilot: pilot,
+                                                   pilotIndex: pilotIndex)
+                    
+                    try savePilotState_throws(squadData: squadData,
+                                   state: json,
+                                   pilotIndex: pilotIndex)
+                    
+                    pilotIndex += 1
+                } catch {
+                    throw error
+                }
             }
         }
         
-        var pilotIndex: Int = 0
-        
-        for pilot in squad.pilots {
-            do {
-                let json = try buildPilotStateData(squad: squad,
-                                               squadPilot: pilot,
-                                               pilotIndex: pilotIndex)
-                
-                try savePilotState_throws(squadData: squadData,
-                               state: json,
-                               pilotIndex: pilotIndex)
-                
-                pilotIndex += 1
-            } catch {
-                throw error
-            }
-        }
+        try createAndSavePilotStateData(squad: squad, squadData: squadData)
     }
 }

@@ -403,10 +403,10 @@ struct ShipView: View {
     var content: some View {
         VStack(alignment: .leading) {
             headerView
-            CustomDivider()
+            CustomDivider().border(Color.green)
 //            bodyContent
             bodyContent
-            CustomDivider()
+            CustomDivider().border(Color.green)
             footer
         }
         .padding()
@@ -426,7 +426,7 @@ struct ShipView: View {
                      displayUpgrades: true,
                      displayHeaders: false,
                      displayDial: false)
-                
+                .border(Color.green)
                 .padding(2)
             //                .border(Color.green, width: 2)
             

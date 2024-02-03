@@ -20,29 +20,33 @@ struct UpgradeUtility {
     }
     
     enum UpgradeCategories: String, CaseIterable {
-        case astromechs
-        case cannons
-        case cargos
-        case commands
-        case configurations
-        case crews
-        case devices
-        case forcepowers
-        case gunners
-        case hardpoints
-        case illicits
-        case missiles
-        case modifications
-        case sensors
-        case tacticalrelays
-        case talents
-        case teams
-        case techs
-        case titles
-        case torpedos
-        case turrets
+        case astromech
+        case cannon
+        case cargo
+        case command
+        case configuration
+        case crew
+        case device
+        case forcepower = "forcepower"
+        case gunner
+        case hardpoint
+        case illicit
+        case missile
+        case modification
+        case sensor
+        case tacticalrelay = "tactical-relay"
+        case talent
+        case team
+        case tech
+        case title
+        case torpedo
+        case turret
     }
     
+    /*
+     talent : ["composure", "daredevil", "elusive"]
+     cannons : ["ioncannon", "jammingbeam"}
+     */
     static func buildUpgradesDictionary() -> [String: Array<String>] {
         var dict: [String: Array<String>] = [:]
         
@@ -489,4 +493,97 @@ struct UpgradeUtility {
         }
     }
     */
+    
+    /// Get all upgrades for each category, convert them to Array<Upgrade> and store in dictionary where key is category
+    /// and value in Array<Upgrade>
+    ///
+    /// returns
+    ///   "talent" : [Upgrade(marksmanship), Upgrade(Predator)]
+    ///   "forcepower" : [Upgrade(Foresight), Upgrade(Malice), Upgrade(Hate)]
+    static func buildCategoryToUpgradesDictionary() -> Dictionary<String, Array<Upgrade>> {
+        var ret : Dictionary<String, Array<Upgrade>> = [:]
+        
+        for upgradeCategory in UpgradeCategories.allCases {
+            let upgrades = UpgradeUtility.getUpgrades(upgradeCategory: upgradeCategory.rawValue)
+            ret[upgradeCategory.rawValue] = upgrades
+        }
+        
+        return ret
+    }
+    
+    static func getUpgradesForNames(upgradeXWSArray: [String]) -> [Upgrade] {
+        func getUpgrade(upgradeXWS: String, categoryToUpgradesDictionary: Dictionary<String, [Upgrade]>) -> Upgrade? {
+            /*
+             categoryToUpgradesDictionary
+             
+             key            value
+             "talent"       [Upgrade(Predator), Upgrade(Marksmanship)]
+             "forcepower"   [Upgrade(Foresight), Upgrade(Hate), Upgrade(Malice)]
+             
+             categoryToUpgradesDictionary.values
+             [
+                [Upgrade(Predator), Upgrade(Marksmanship)]
+                [Upgrade(Foresight), Upgrade(Hate), Upgrade(Malice)]
+             ]
+             
+             allUpgrades = [Upgrade(Predator), Upgrade(Marksmanship),Upgrade(Foresight), Upgrade(Hate), Upgrade(Malice)]
+             */
+            let allUpgrades: [Upgrade] = categoryToUpgradesDictionary.values.reduce([], +)
+            
+            if allUpgrades.count > 0 {
+                return allUpgrades
+                    .filter{ $0.xws.lowercased() == upgradeXWS.lowercased() }
+                    .first
+            }
+            
+            return nil
+        }
+        
+        var categoryToUpgradesDictionary : Dictionary<String, Array<Upgrade>> = [:]
+        var ret: [Upgrade] = []
+        categoryToUpgradesDictionary = buildCategoryToUpgradesDictionary()
+        
+        for upgradeXWS in upgradeXWSArray {
+            if let upgrade = getUpgrade(upgradeXWS: upgradeXWS, categoryToUpgradesDictionary: categoryToUpgradesDictionary) {
+                ret.append(upgrade)
+            }
+        }
+        
+        return ret
+    }
+    
+    /*
+     input
+        upgradeXWSArray = ["marksmanship", "predator", "hate", "afterburners"]
+        categoryToUpgradesDictionary =
+            "talent" : [Upgrade(marksmanship), Upgrade(Predator)]
+            "forcepower" : [Upgrade(Foresight), Upgrade(Malice), Upgrade(Hate)]
+     
+     returns
+        filteredDict = "talent":["marksmanship"],"modification":["afterburners"],"forcepower":["hate"]
+     */
+    static func getUpgradesDictionary(upgradeXWSArray: [String]) -> Dictionary<String, Array<String>> {
+        var ret: [String: Array<String>] = [:]
+        var categoryToUpgradesDictionary : Dictionary<String, Array<String>> = [:]
+        categoryToUpgradesDictionary = buildUpgradesDictionary()
+        
+        for upgradeXWS in upgradeXWSArray {
+            // iterate over categoryToUpgradesDictionary
+            for (key, value) in categoryToUpgradesDictionary {
+                // key: "talent" value: [Upgrade(marksmanship), Upgrade(Predator)]
+                if value.contains(where: { $0 == upgradeXWS }) {
+                    if var newValue = ret[key] {
+                        // append upgradeXWS to existing array and set array in dict
+                        newValue.append(upgradeXWS)
+                        ret[key] = newValue
+                    } else {
+                        // ret is empty
+                        ret[key] = [upgradeXWS]
+                    }
+                }
+            }
+            
+        }
+        return ret
+    }
 }

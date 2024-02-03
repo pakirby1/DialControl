@@ -336,7 +336,6 @@ struct Redux_ShipView: View, ShipIDRepresentable {
                              displayUpgrades: true,
                              displayHeaders: false,
                              displayDial: false)
-                        .padding(2)
                 }
             }
             
@@ -363,9 +362,7 @@ struct Redux_ShipView: View, ShipIDRepresentable {
             
             return VStack(alignment: .leading) {
                 headerView
-                CustomDivider()
                 bodyContent
-                CustomDivider()
                 footer
             }
             .padding()
@@ -722,7 +719,6 @@ struct StatusView: View {
             
             
         }.padding(.top, 20)
-        //                    .border(Color.green, width: 2)
     }
     
     var body: some View {

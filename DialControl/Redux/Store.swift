@@ -401,16 +401,71 @@ func xwsImportReducer(state: inout MyXWSImportViewState,
                       action: MyXWSImportAction,
                       environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never> {
     func importXWS(xws: inout String) -> AnyPublisher<MyAppAction, Never> {
-        do {
-            let squad = try environment.squadService.loadSquad_throws(jsonString: &xws)
+        func updateSquadPilotsWithStandardLoadoutUpgrades(squad: inout Squad) {
+            // Since we can't update squad.pilots while iterating over squad.pilots
+            var updatedPilotsWithStandardLoadoutUpgrades : [SquadPilot] = []
         
-            if squad.name != Squad.emptySquad.name {
-                // Save the squad JSON to CoreData
-                let squadData = try environment.squadService.saveSquad_throws(jsonString: xws,
-                                                         name: squad.name ?? "")
+            for var pilot in squad.pilots {
+                var shipJSON: String = ""
+                shipJSON = getJSONFor(ship: pilot.ship, faction: squad.faction)
                 
-                try environment.pilotStateService.createPilotState_throws(squad: squad, squadData: squadData)
+                do {
+                    let ship: Ship = try Ship.deserializeJSON(jsonString: shipJSON)
+                    /*
+                     Check if we have a list of upgrade names in standardLoadout field of pilot
+                     
+                     Get the pilot by pilotId
+                     Get the standardLoadout field for this pilot -> ["marksmanship", "hate", "afterburners"]
+                     Build an [Upgrade] from this ["marksmanship", "hate", "afterburners"]
+                     */
+                    if let standardLoadoutUpgrades = ship.pilotStandardLoadoutUpgrades(pilotId: pilot.id)
+                    {
+                        /*
+                         if the ship has standardLoadout upgrades, then build a SquadPilotUpgrade from
+                         the standardLoadout upgrades.  and set squadPilot.upgrades to the SquadPilotUpgrade
+                         
+                         if standardLoadout is
+                         "standardLoadout": ["marksmanship", "hate", "afterburners"]
+                         
+                         create
+                         "talent":["marksmanship"],"modification":["afterburners"],"forcepower":["hate"]
+                         
+                         {"talent":["deadeyeshot","marksmanship"],"modification":["shieldupgrade"]}
+                         
+                         */
+                        let squadPilotUpgrades : Dictionary<String, [String]> = UpgradeUtility.getUpgradesDictionary(upgradeXWSArray: standardLoadoutUpgrades)
+                        
+                        // serialize the dictionary into a SquadPilotUpgrade object and update
+                        // the pilot with the new SquadPilotUpgrade
+                        pilot.upgrades = SquadPilotUpgrade.loadFrom(dictionary: squadPilotUpgrades)
+                        updatedPilotsWithStandardLoadoutUpgrades.append(pilot)
+                    } else {
+                        // Normal pilot with upgrades
+                        updatedPilotsWithStandardLoadoutUpgrades.append(pilot)
+                    }
+                } catch {
+                    return
+                }
+            }
+
+            // Update squad.pilots with the array of updated pilots
+            squad.pilots = updatedPilotsWithStandardLoadoutUpgrades
+        }
+        
+        do {
+            var squad = try environment.squadService.loadSquad_throws(jsonString: &xws)
+            
+            updateSquadPilotsWithStandardLoadoutUpgrades(squad: &squad)
+            var updatedXWS = squad.getJSON() ?? ""
+            var updatedSquad = try environment.squadService.loadSquad_throws(jsonString: &updatedXWS)
+            
+            if updatedSquad.name != Squad.emptySquad.name {
+                // Build squad data
+                var squadData = environment.squadService.buildSquadData(jsonString: updatedXWS, name: updatedSquad.name ?? "")
                 
+                // create the pilot state & update the squad
+                try environment.pilotStateService.createPilotState_throws(squad: &updatedSquad, squadData: squadData)
+            
                 return Just<MyAppAction>(.xwsImport(action: .importSuccess))
                     .eraseToAnyPublisher()
             } else {
