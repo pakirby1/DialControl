@@ -229,5 +229,24 @@
     "standard": true,
     "extended": true,
     "epic": true
+  },
+  {
+    "name": "Feedback Emitter",
+    "limited": 0,
+    "xws": "feedbackemitter",
+    "sides": [
+      {
+        "ability": "After an object acquires a lock on you, you may spend 1 [Charge] to jam that object, ignoring range restrictions.  This upgrades [Charge] cannot be recovered.",
+        "charges": { "value": 1, "recovers": 0 },
+        "title": "Deuterium Power Cells",
+        "type": "Tech",
+        "slots": ["Tech"],
+        "artwork": "https://infinitearenas.com/xw2/images/artwork/upgrades/deuteriumpowercells.png",
+        "image": "https://infinitearenas.com/xw2/images/upgrades/deuteriumpowercells.png"
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true
   }
 ]

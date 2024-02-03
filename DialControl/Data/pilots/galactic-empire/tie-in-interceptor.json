@@ -98,6 +98,34 @@
       "epic": true
     },
     {
+      "name": "Soontir Fel",
+      "caption": "Battle Over Endor",
+      "initiative": 6,
+      "limited": 1,
+      "cost": 5,
+      "loadout": 10,
+      "xws": "soontirfel-battleoverendor",
+      "shipAbility": {
+        "name": "Sensitive Controls",
+        "text": "During the System Phase, you may perform a red [Barrel Roll] or red [Boost] action."
+      },
+      "charges": { "value": 2, "recovers": 0 },
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 3 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 3 }
+      ],
+      "standardLoadout": ["apexpredator", "noescape", "blanksignature", "feedbackemitter"],
+      "ability": "After you perform an attack, you may spend 1 [Charge] and gain 1 deplete token to boost or barrel roll.",
+      "image": "https://infinitearenas.com/xw2/images/pilots/soontirfel.png",
+      "slots": ["Talent", "Talent", "Modification", "Configuration"],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/soontirfel.png",
+      "standard": true,
+      "extended": true,
+      "keywords": ["TIE"],
+      "epic": true
+    },
+    {
       "name": "Turr Phennir",
       "caption": "Ambitious Ace",
       "initiative": 4,

@@ -986,5 +986,39 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Apex Predator",
+    "limited": 0,
+    "xws": "apexpredator",
+    "sides": [
+      {
+        "title": "Apex Predator",
+        "type": "Talent",
+        "ability": "While you perform a primary attack, if the defender's initiative is lower than yours, you may reroll 1 attack die.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "No Escape",
+    "limited": 0,
+    "xws": "noescape",
+    "sides": [
+      {
+        "title": "No Escape",
+        "type": "Talent",
+        "ability": "While you perform a primary attack, if there are more friendly ships than other enemy ships at range 0-1 of the defender, you may reroll 1 of your blank results.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]
