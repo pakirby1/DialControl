@@ -25,9 +25,10 @@ The upgrade view for a standard loadout should look like:
 - `createSubstringArray(input:) -> [SubstringType]` converts the string array into a `[SubstringType]` array
 
 |Index|Value|
+|-|-|
 |0|SubstringType.Text("While defending, if you are ")|
 |1|SubstringType.Symbol("[Charge]")|
-...
+more...
 
 - Merge any contiguous substrings, if needed.
 > For the cases where the string is " perform a [1 [Straight]] " in the sides.ability node of the upgrade.
