@@ -196,12 +196,34 @@ struct UpgradeCardFlipView<Model: ShipViewModelProtocol> : View {
 }
 
 struct UpgradeTextView: View {
+    let upgrade: Upgrade?
     let utility = UpgradeTextUtility()
     @State var text = "UpgradeTextView"
     
     var body: some View {
         let substrings = utility.testMergeTypes()
-        utility.buildViews(substrings)
+        let upgradeAbility = upgrade?.sides[0].ability ?? ""
+        
+        return VStack {
+            Text(upgrade?.name ?? "No Upgrade Text")
+                .font(.largeTitle)
+                .foregroundColor(.black)
+                .background(
+                    RoundedRectangle(cornerRadius: 5.0)
+                    .fill(Color.white)
+                    .frame(width: 400)
+                )
+            
+            utility.buildTextView(from: upgradeAbility)
+                .foregroundColor(.black)
+                .padding(20)
+                .frame(width: 400)
+                .background(
+                    RoundedRectangle(cornerRadius: 5.0)
+                    .fill(Color.white)
+                    .frame(width: 400)
+                )
+        }
     }
 }
 
@@ -485,10 +507,10 @@ class UpgradeTextUtility {
         func buildView(_ type: SubstringType) -> Text {
             switch(type) {
                 case .text(let val):
-                    return Text(val)
+                    return Text(val).font(.system(size: 24))
                 case .symbol(let val):
                     return Text(getSymbol(val))
-                        .font(.custom("xwing-miniatures", size: 18))
+                        .font(.custom("xwing-miniatures", size: 24))
             }
         }
         
@@ -536,5 +558,18 @@ class UpgradeTextUtility {
         return mergeSameSubstringTypes(substringTypes)
     }
     
+    func buildSubstringTypes(input: String) -> [SubstringType] {
+//        let input =  "After you fully execute a [3 [Straight]] or [4 [Straight]] maneuver, you may perform a boost using the [1 [Straight]] template. (This is not an action)."
+        
+//        let input = "While you perform a primary attack, if you are damaged, you may change 1 [Focus] result to a [Hit] result."
+        
+        let substrings = findDelimitedSubstrings(input)
+        let substringTypes = createSubstringArray(substrings)
+        return mergeSameSubstringTypes(substringTypes)
+    }
     
+    func buildTextView(from input: String) -> some View {
+        let substringTypes = buildSubstringTypes(input: input)
+        return buildViews(substringTypes)
+    }
 }

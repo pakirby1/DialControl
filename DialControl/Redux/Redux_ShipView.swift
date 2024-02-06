@@ -408,31 +408,46 @@ struct Redux_ShipView: View, ShipIDRepresentable {
         
         var upgradeCardImage: AnyView {
             let emptyView = AnyView(EmptyView())
+            var ret = emptyView
             
-            var ret = AnyView(ImageView(url: self.imageOverlayUrl,
-                                        moc: self.viewModel.moc,
-                  label: "upgrade")
-            .frame(width: 500.0, height:350)
-            )
-            
-            if (self.imageOverlayUrlBack != "") {
-                guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
-                
-                guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
-                
-                ret =
-                    UpgradeCardFlipView(
-                        side: (upgradeState.selected_side == 0) ? false : true,
-                        frontUrl: self.imageOverlayUrl,
-                        backUrl: self.imageOverlayUrlBack,
-                        viewModel: self.viewModel) { side in
-                            self.viewModel.update(
-                                type: PilotStatePropertyType.selectedSide(upgradeState,
-                                                                          side), active: -1, inactive: -1
-                            )
-                    }.eraseToAnyView()
+            if (self.selectedUpgrade?.upgrade.standardLoadoutOnly == true) {
+                // No card image, use upgrade text
+                ret = UpgradeTextView(upgrade: self.selectedUpgrade?.upgrade).eraseToAnyView()
+            } else {
+                if (self.imageOverlayUrl != "") {
+                    ret = AnyView(ImageView(url: self.imageOverlayUrl,
+                                            moc: self.viewModel.moc,
+                                            label: "upgrade")
+                        .frame(width: 500.0, height:350)
+                    )
+                    
+                    if (self.imageOverlayUrlBack != "") {
+                        guard let selectedUpgrade = self.selectedUpgrade else { return emptyView }
+                        
+                        guard let upgradeState = getUpgradeStateData(upgrade: selectedUpgrade.upgrade) else { return emptyView }
+                        
+                            // if not standard loadout upgrade
+                        ret =
+                        UpgradeCardFlipView(
+                            side: (upgradeState.selected_side == 0) ? false : true,
+                            frontUrl: self.imageOverlayUrl,
+                            backUrl: self.imageOverlayUrlBack,
+                            viewModel: self.viewModel) { side in
+                                self.viewModel.update(
+                                    type: PilotStatePropertyType.selectedSide(upgradeState,
+                                                                              side), active: -1, inactive: -1
+                                )
+                            }.eraseToAnyView()
+                    }
+                }
             }
             
+            /*
+             Either:
+                AnyView(ImageView(imageOverlayUrl...))
+                UpgradeCardFlipView(imageOverlayUrl, imageOverlayUrlBack)
+                UpgradeTextView(selectedUpgrade.sides[0].ability
+             */
             return ret
         }
         
@@ -440,7 +455,7 @@ struct Redux_ShipView: View, ShipIDRepresentable {
             ZStack {
                 Color
                     .gray
-                    .opacity(0.5)
+                    .opacity(0.9)
                     .onTapGesture{
                         self.showImageOverlay = false
                     }

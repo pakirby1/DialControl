@@ -243,6 +243,7 @@ struct Side: Codable {
     var grants: [GrantElement] { return _grants ?? [] }
     var force: Force? { return _force ?? nil }
     var charges: Charges? { return _charges ?? nil }
+    var ability: String { return _ability ?? "" }
     
     private var _ffg: Int?
     private var _title: String?
@@ -254,6 +255,7 @@ struct Side: Codable {
     private var _grants: [GrantElement]?
     private var _force: Force?
     private var _charges: Charges?
+    private var _ability: String?
 
     enum CodingKeys: String, CodingKey {
         case _text = "text"
@@ -266,6 +268,7 @@ struct Side: Codable {
         case _type = "type"
         case _force = "force"
         case _charges = "charges"
+        case _ability = "ability"
     }
 }
 
@@ -281,11 +284,28 @@ struct Cost: Codable {
 
 struct Upgrade: Codable, Identifiable {
     let id = UUID()
-    let name: String
-    let limited: Int
-    let sides: [Side]
-    let cost: Cost?
-    let xws: String
+    var name: String { return _name ?? "" }
+    var limited: Int { return _limited ?? 0 }
+    var sides: [Side] { return _sides ?? [] }
+    var cost: Cost? { return _cost ?? nil }
+    var xws: String { return _xws ?? "" }
+    var standardLoadoutOnly: Bool { return _standardLoadoutOnly ?? false }
+
+    private var _standardLoadoutOnly: Bool?
+    private var _name: String?
+    private var _limited: Int?
+    private var _sides: [Side]?
+    private var _cost: Cost?
+    private var _xws: String?
+
+    enum CodingKeys: String, CodingKey {
+        case _standardLoadoutOnly = "standardLoadoutOnly"
+        case _name = "name"
+        case _limited = "limited"
+        case _sides = "sides"
+        case _cost = "cost"
+        case _xws = "xws"
+    }
 }
 
 struct Upgrades: Codable, JSONSerialization {

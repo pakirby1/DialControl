@@ -15,6 +15,8 @@
 		AE028C6724A2CD1D00DF689B /* BindableFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */; };
 		AE0E38BC24E2BBA000A3A824 /* PilotStateData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */; };
 		AE0ED9A828AA75560003EFD2 /* ViewModelRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0ED9A728AA75560003EFD2 /* ViewModelRepresentable.swift */; };
+		AE125A132B6B60C3006C8AB6 /* UpgradeUtilityNew.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE125A122B6B60C3006C8AB6 /* UpgradeUtilityNew.swift */; };
+		AE125A172B6BAF0E006C8AB6 /* UpgradeUtilityNewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE125A162B6BAF0D006C8AB6 /* UpgradeUtilityNewTests.swift */; };
 		AE15E78B241D00120002F696 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE15E78A241D00120002F696 /* Ship.swift */; };
 		AE15E78E241D02120002F696 /* tie-in-interceptor.json in Resources */ = {isa = PBXBuildFile; fileRef = AE15E78D241D02120002F696 /* tie-in-interceptor.json */; };
 		AE1DF8ED24B5D7BB00B84D38 /* UpgradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */; };
@@ -138,6 +140,8 @@
 		AE028C6624A2CD1D00DF689B /* BindableFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindableFetchedResultsController.swift; sourceTree = "<group>"; };
 		AE0E38BB24E2BBA000A3A824 /* PilotStateData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PilotStateData.swift; sourceTree = "<group>"; };
 		AE0ED9A728AA75560003EFD2 /* ViewModelRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelRepresentable.swift; sourceTree = "<group>"; };
+		AE125A122B6B60C3006C8AB6 /* UpgradeUtilityNew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeUtilityNew.swift; sourceTree = "<group>"; };
+		AE125A162B6BAF0D006C8AB6 /* UpgradeUtilityNewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeUtilityNewTests.swift; sourceTree = "<group>"; };
 		AE15E78A241D00120002F696 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		AE15E78D241D02120002F696 /* tie-in-interceptor.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "tie-in-interceptor.json"; sourceTree = "<group>"; };
 		AE1DF8EC24B5D7BB00B84D38 /* UpgradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradesView.swift; sourceTree = "<group>"; };
@@ -409,6 +413,7 @@
 				AE028C5A249F82AF00DF689B /* Logging.swift */,
 				AEDAFCF724B095DD0073C60E /* Notes.txt */,
 				AEC125E32513468600021096 /* UpgradeUtility.swift */,
+				AE125A122B6B60C3006C8AB6 /* UpgradeUtilityNew.swift */,
 			);
 			path = DialControl;
 			sourceTree = "<group>";
@@ -430,6 +435,7 @@
 				AE28F90D26961E3700AE871D /* ImageServiceTests.swift */,
 				AE28F90F269627BB00AE871D /* StoreTests.swift */,
 				AE32D24E29474BA000602D34 /* XWSImportTests.swift */,
+				AE125A162B6BAF0D006C8AB6 /* UpgradeUtilityNewTests.swift */,
 			);
 			path = DialControlTests;
 			sourceTree = "<group>";
@@ -731,6 +737,7 @@
 				AE1FBE6024166798005C54F5 /* Rotated.swift in Sources */,
 				AE1FBE66241668CF005C54F5 /* AngleRange.swift in Sources */,
 				AE2ADE8126809A9100142419 /* ImageService.swift in Sources */,
+				AE125A132B6B60C3006C8AB6 /* UpgradeUtilityNew.swift in Sources */,
 				AED0381B24A9D4540064A547 /* SquadData+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -741,6 +748,7 @@
 			files = (
 				AE300073263173D100C326B3 /* ReduxTests.swift in Sources */,
 				AE32D24F29474BA000602D34 /* XWSImportTests.swift in Sources */,
+				AE125A172B6BAF0E006C8AB6 /* UpgradeUtilityNewTests.swift in Sources */,
 				AE4D58DD23F8087E00C66136 /* DialControlTests.swift in Sources */,
 				AE28F90E26961E3700AE871D /* ImageServiceTests.swift in Sources */,
 				AE28F910269627BB00AE871D /* StoreTests.swift in Sources */,
@@ -946,7 +954,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VEF5SEHVZ7;
 				INFOPLIST_FILE = DialControlTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -968,7 +976,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VEF5SEHVZ7;
 				INFOPLIST_FILE = DialControlTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
