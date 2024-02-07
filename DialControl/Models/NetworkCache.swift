@@ -30,13 +30,13 @@ class NetworkCacheViewModel: ObservableObject, IPrintLog {
     var classFuncString: String = ""
     let id = UUID()
     
-    init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: RemoteStore())) {
+    init(service: INetworkCacheService = NetworkCacheService(localStore: LocalStore(), remoteStore: AppBundleStore())) {
         self.service = service
         print("allocated \(self) \(id)")
     }
     
     convenience init(moc: NSManagedObjectContext) {
-        self.init(service: NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: RemoteStore()))
+        self.init(service: NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: AppBundleStore()))
         print("convenience \(self).init")
     }
     
@@ -103,6 +103,9 @@ extension NetworkCacheViewModel {
                 .store(in: &cancellables)
         }
         
+        func loadImageFromAppBundle(url: String) {
+            
+        }
         loadImage()
     }
 }

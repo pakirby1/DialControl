@@ -35,7 +35,7 @@ class ImageService : ImageServiceProtocol {
     let service: INetworkCacheService
     
     init(moc: NSManagedObjectContext) {
-        service = NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: RemoteStore())
+        service = NetworkCacheService(localStore: CoreDataLocalStore(moc: moc), remoteStore: AppBundleStore())
     }
     
     func downloadImage_old(at: URL) -> AnyPublisher<UIImage, URLError> {

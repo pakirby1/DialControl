@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import Combine
+import UIKit
 
 // MARK: - Local Store
 protocol ILocalStore {
@@ -88,7 +89,7 @@ protocol IRemoteStore {
     func loadData(url: String) -> Future<RemoteObject, Error>
 }
 
-struct RemoteStore : IRemoteStore {
+struct RemoteWebStore : IRemoteStore {
     let printer: DeallocPrinter
     let id = UUID()
     
@@ -96,6 +97,7 @@ struct RemoteStore : IRemoteStore {
         printer = DeallocPrinter("RemoteStore \(id)")
     }
     
+    // url https://pakirby1.github.io/images/XWing/pilots/herasyndulla-rz1awing.png
     func loadData(url: String) -> Future<Data, Error> {
         let future = Future<Data, Error> { promise in
             if let u = URL(string: url) {
@@ -126,6 +128,109 @@ struct RemoteStore : IRemoteStore {
     }
 }
 
+struct AppBundleStore : IRemoteStore {
+    let printer: DeallocPrinter
+    let id = UUID()
+    
+    init() {
+        printer = DeallocPrinter("AppBundleStore \(id)")
+    }
+    
+    func getImage(name: String, type: String = "png") -> UIImage? {
+        guard let pathToBundle = Bundle.main.path(forResource:"Images", ofType:"bundle"),
+                let bundle = Bundle(path: pathToBundle),
+              let path = bundle.path(forResource: name, ofType: type)
+        else
+        {
+            return nil
+        }
+        
+        return UIImage(contentsOfFile: path)
+    }
+
+    
+    /*
+    func gameImage(name: String, type: String = "png") -> UIImage? {
+        guard let plugins = Bundle.main.builtInPlugInsPath,
+              let bundle = Bundle(url: URL(fileURLWithPath:
+                           plugins).appendingPathComponent("Game.bundle")),
+              let path = bundle.path(forResource: name, ofType: type)
+              else { return nil }
+        return UIImage(contentsOfFile: path)
+    }
+     */
+    
+    /*
+     Normally load using url: https://pakirby1.github.io/images/XWing/pilots/herasyndulla-rz1awing.png
+     
+     I think we want:
+        pilots/herasyndulla-rz1awing.png
+     
+     convert "https://pakirby1.github.io/images/XWing/pilots/herasyndulla-rz1awing.png" into
+     "pilots/herasyndulla-rz1awing", "png"
+     
+     */
+    func loadData(url: String) -> Future<Data, Error> {
+        /*
+         convert "https://pakirby1.github.io/images/XWing/pilots/herasyndulla-rz1awing.png" into
+         "pilots/herasyndulla-rz1awing", "png"
+         */
+        func convert(url: URL) -> (folderWithFile: String, fileExtension: String)? {
+            func getFileComponents(file: String) -> (String, String) {
+                return (file.fileName(), file.fileExtension()) // ("herasyndulla-rz1awing", "png")
+            }
+            
+            let components = url.pathComponents  // ["/", "images", "XWing", "pilots", "herasyndulla-rz1awing.png"]
+            
+            if (components.count > 0) {
+                let lastIndex = components.count - 1
+                let filename = components[lastIndex]
+                
+                if filename.count > 0 {
+                    let fileComponents = getFileComponents(file: filename)   // ("herasyndulla-rz1awing", "png")
+                    let folder = components[lastIndex - 1] // "pilots"
+                    return (folder + "/" + fileComponents.0, fileComponents.1)
+                }
+            }
+            
+            return nil
+        }
+        // Image(uiImage: UIImage(named: "yourImage")!)
+        // Image(uiImage: UIImage(named: "BundleNameCreatedAbove.bundle"))
+        
+        /*
+         if let fileURL = Bundle.main.url(forResource: "some-file", withExtension: "txt") {
+             // we found the file in our bundle!
+         
+             if let fileContents = try? String(contentsOf: fileURL) {
+                 // we loaded the file into a string!
+         }
+         }
+         */
+        let future = Future<Data, Error> { promise in
+            if let u = URL(string: url) {
+                do {
+                    if let components = convert(url: u) {
+                        let image = getImage(name: components.folderWithFile, type: components.fileExtension)
+                        
+                        guard let data = image?.pngData() else {
+                            throw StoreError.remoteMiss("No data was received")
+                        }
+                        
+                        promise(.success(data))
+                    } else {
+                        throw StoreError.remoteMiss("Invalid url: \(url)")
+                    }
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+        }
+        
+        return future
+    }
+}
+
 // MARK:- Error
 enum StoreError : Error {
     case localMiss(String)
@@ -136,3 +241,4 @@ struct PAKStoreError : Error {
     let wrappedValue: StoreError
     let currentValue: StoreError
 }
+

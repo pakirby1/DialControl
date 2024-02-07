@@ -227,6 +227,52 @@ struct UpgradeTextView: View {
     }
 }
 
+struct UpgradeTextViewHeaderView {
+    struct ChargeView: View {
+        let symbol: String = "g"
+        let value: Int
+        let isRecurring: Bool
+        var body: some View {
+            EmptyView()
+            HStack {
+                chargeSymbol
+                Text("\(value)")
+                recurringSymbol
+            }
+        }
+        
+        var chargeSymbol : some View {
+            Text(symbol)
+                .font(.custom("xwing-miniatures", size: 24))
+        }
+        
+        var recurringSymbol : some View {
+            if (isRecurring) {
+                return Text("^").eraseToAnyView()
+            } else {
+                return EmptyView().eraseToAnyView()
+            }
+        }
+    }
+    
+    let category: UpgradeUtility.UpgradeCategories
+    let title: String
+    let chargeSymbol: String = "g"
+    let chargeValue: Int
+    let isRecurring: Bool
+    var body: some View {
+        HStack {
+            buildSymbol()
+            Text("\(title)")
+            ChargeView(value: chargeValue, isRecurring: isRecurring)
+        }
+    }
+    
+    func buildSymbol() -> some View {
+        return EmptyView()
+    }
+}
+
 class UpgradeTextUtility {
     enum SubstringType : Equatable, CustomStringConvertible {
         var description: String {

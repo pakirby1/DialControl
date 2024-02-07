@@ -218,3 +218,93 @@ flowchart TD
     G --> H["CacheService.getShipV1.getPilot.getUpgradesFromCache.getUpgrade(key:)"]
     H --> I["UpgradeUtility.getUpgrades(upgradeCategory)"]
 ```
+
+# Upgrade text header view
+The header of the upgrade text view consists of
+- upgrade category symbol
+- upgrade title
+- chages, if any
+
+![Blank Signature Upgrade](https://pakirby1.github.io/images/BlankSignatureUpgrade.png)
+
+We can represent the header as a view:
+
+```mermaid
+classDiagram
+    class UpgradeTextHeaderView {
+        var chargeView: View
+        let category: UpgradeUtility.UpgradeCategories
+        let title: String
+        let chargeSymbol: String = "g"
+        let chargeValue: Int
+        let isRecurring: Bool
+        var body: some View
+        func buildSymbol() -> some View
+    }
+
+    class ChargeView {
+        let symbol: String = "g"
+        let value: Int
+        let isRecurring: Bool
+        var body: some View
+        var chargeSymbol : some View
+        var recurringSymbol : some View
+
+        func buildSymbol() -> some View
+    }
+
+    UpgradeTextHeaderView --> ChargeView : chargeSymbol, chargeValue, isRecurring
+```
+
+# Loading Images from an app Bundle
+https://stackoverflow.com/questions/66996051/issue-with-image-not-found-in-bundle-for-app
+
+Instead of loading the images from a remote web server, we'd like to load the images from the app bundle. 
+
+```mermaid
+classDiagram
+    class IRemoteStore {
+        func loadData(url: String) -> Future<RemoteObject, Error>
+    }
+
+    class RemoteStore {
+        func loadData(url: String) -> Future<Data, Error>
+    }
+
+    IRemoteStore <|-- RemoteStore
+```
+
+The `RemoteStore` fetches images from a web server, but we also need to support fetching images from an app bundle, so we define a class called `RemoteWebStore` and `RemoteAppBundleStore`.
+> Here `Remote` just differentiates the download process from the cache (`Local`)
+
+```mermaid
+classDiagram
+    class IRemoteStore {
+        func loadData(url: String) -> Future<RemoteObject, Error>
+    }
+
+    class RemoteWebStore {
+        func loadData(url: String) -> Future<Data, Error>
+    }
+
+    class AppBundleStore {
+        func loadData(url: String) -> Future<Data, Error>
+    }
+
+    IRemoteStore <|-- RemoteWebStore
+    IRemoteStore <|-- AppBundleStore
+```
+
+The call hierarchy:
+
+```mermaid
+flowchart TD
+    UpgradeCardFlipView -->|url| ImageView
+    ShipView.upgradeCardImage -->|url| ImageView
+    ShipView.bodyContent -->|url| ImageView
+    Redux_ShipView.imageOverlayView.upgradeCardImage -->|url| ImageView
+    ImageView -->|url| NetworkCacheViewModel.loadImage
+    NetworkCacheViewModel.loadImage -->|url| NetworkCacheService.loadData
+
+```
+

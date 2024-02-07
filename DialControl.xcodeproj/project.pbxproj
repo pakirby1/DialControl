@@ -36,6 +36,7 @@
 		AE28F910269627BB00AE871D /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28F90F269627BB00AE871D /* StoreTests.swift */; };
 		AE2ADE8126809A9100142419 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2ADE8026809A9100142419 /* ImageService.swift */; };
 		AE2ADE832683142400142419 /* ProgressControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE2ADE822683142400142419 /* ProgressControl.swift */; };
+		AE2BA8712B7376F800923862 /* Images.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AE2BA8702B7376F800923862 /* Images.bundle */; };
 		AE2C0EC9243CA52A00042318 /* pilots in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0EC8243CA52A00042318 /* pilots */; };
 		AE2C0F0A24408AE400042318 /* upgrades in Resources */ = {isa = PBXBuildFile; fileRef = AE2C0F0924408AE400042318 /* upgrades */; };
 		AE2D80EC24277F0100248CA4 /* squad.json in Resources */ = {isa = PBXBuildFile; fileRef = AE2D80EB24277F0100248CA4 /* squad.json */; };
@@ -160,6 +161,7 @@
 		AE28F90F269627BB00AE871D /* StoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreTests.swift; sourceTree = "<group>"; };
 		AE2ADE8026809A9100142419 /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		AE2ADE822683142400142419 /* ProgressControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressControl.swift; sourceTree = "<group>"; };
+		AE2BA8702B7376F800923862 /* Images.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Images.bundle; sourceTree = "<group>"; };
 		AE2C0EC8243CA52A00042318 /* pilots */ = {isa = PBXFileReference; lastKnownFileType = folder; path = pilots; sourceTree = "<group>"; };
 		AE2C0F0924408AE400042318 /* upgrades */ = {isa = PBXFileReference; lastKnownFileType = folder; path = upgrades; sourceTree = "<group>"; };
 		AE2D80EB24277F0100248CA4 /* squad.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = squad.json; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 		AE4D58C123F8087C00C66136 /* DialControl */ = {
 			isa = PBXGroup;
 			children = (
+				AE2BA8702B7376F800923862 /* Images.bundle */,
 				AEA35D4E25F251BB007A2D36 /* Redux */,
 				AE1DF8F224B5E32800B84D38 /* Shapes */,
 				AEC1242E24A32CC500C0599A /* Services */,
@@ -628,6 +631,7 @@
 				AE5E326B24DB4D1A0023E063 /* xwing-miniatures-ships.ttf in Resources */,
 				AE5FEDAF2815762F00978FD3 /* CacheService-Redux_FactionSquadList.pdf in Resources */,
 				AE4D58CF23F8087D00C66136 /* Preview Assets.xcassets in Resources */,
+				AE2BA8712B7376F800923862 /* Images.bundle in Resources */,
 				AEDAFCF824B095DD0073C60E /* Notes.txt in Resources */,
 				AEAD19F62404F48B0020FABC /* kimberley bl.ttf in Resources */,
 				AE4D58CC23F8087D00C66136 /* Assets.xcassets in Resources */,
