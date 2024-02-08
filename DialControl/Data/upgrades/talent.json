@@ -1020,5 +1020,22 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Parting Gift",
+    "limited": 0,
+    "xws": "partinggift",
+    "sides": [
+      {
+        "title": "Parting Gift",
+        "type": "Talent",
+        "ability": "When you are destroyed, before you are removed, you may spend 1 [Charge] on an equipped [Device] upgrade to drop or launch a bomb using a 1 [Straight], [Bank Left], [Bank Right] template.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

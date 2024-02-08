@@ -211,17 +211,17 @@ struct UpgradeTextView: View {
                 .background(
                     RoundedRectangle(cornerRadius: 5.0)
                     .fill(Color.white)
-                    .frame(width: 400)
+                    .frame(width: 500)
                 )
             
             utility.buildTextView(from: upgradeAbility)
                 .foregroundColor(.black)
                 .padding(20)
-                .frame(width: 400)
+                .frame(width: 500)
                 .background(
                     RoundedRectangle(cornerRadius: 5.0)
                     .fill(Color.white)
-                    .frame(width: 400)
+                    .frame(width: 500)
                 )
         }
     }
@@ -476,6 +476,8 @@ class UpgradeTextUtility {
         //strip off the brackets
         
         switch(input) {
+            case "[Device]":
+                return "B"
             case "[Straight]":
                 return "8"
             case "[Focus]":
@@ -544,6 +546,8 @@ class UpgradeTextUtility {
                 return "r"
             case "[Slam]":
                 return "s"
+            case "[Shield]":
+                return "*"
             default:
                 return ""
         }

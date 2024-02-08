@@ -603,5 +603,23 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Computer-Assisted Handling",
+    "limited": 0,
+    "xws": "computer-assistedhandling",
+    "sides": [
+      {
+        "ability": "After you fully execute a maneuver, you may spend 1 [Charge] to perform a [Boost] or [Barrel Roll] action.",
+        "title": "Computer-Assisted Handling",
+        "type": "Modification",
+        "slots": ["Modification"],
+        "charges": { "value": 1, "recovers": 0 }
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

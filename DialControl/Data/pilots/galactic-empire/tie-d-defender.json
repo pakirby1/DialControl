@@ -227,6 +227,36 @@
       "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/captaindobbs.png",
       "image": "https://infinitearenas.com/xw2/images/pilots/captaindobbs.png",
       "epic": true
+    },
+    {
+      "name": "Captain Yorr",
+      "xws": "captainyorr-battleoverendor",
+      "initiative": 4,
+      "limited": 1,
+      "ability": {
+        "name": "Full Throttle",
+        "text": "After you perform a primary attack that hits, you may spend 1 [Charge] to perform a bonus [Cannon] attack."
+      },
+      "standardLoadout": [
+        "predator",
+        "noescape",
+        "ioncannon",
+        "computer-assistedhandling"
+      ],
+      "caption": "Battle Over Endor",
+      "standard": true,
+      "extended": true,
+      "cost": 6,
+      "loadout": 15,
+      "shipAbility": {
+        "name": "Chiss Engineering",
+        "text": "After you fully execute a speed 3-5 maneuver, you may perform a [Lock] action.  While attacking, if you are not stressed, you may spend 1 [Shield] to apply the range 1 bonus."
+      },
+      "charges": { "value": 2, "recovers" : 1},
+      "keywords": ["TIE"],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/captainyorr-battleoverendor.png",
+      "image": "https://infinitearenas.com/xw2/images/pilots/captainyorr-battleoverendor.png",
+      "epic": true
     }
   ]
 }
