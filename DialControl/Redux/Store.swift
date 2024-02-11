@@ -518,14 +518,52 @@ func shipReducer(state: inout MyShipViewState,
         update(psdHandler: { $0.updateManeuver(maneuver: maneuver) })
     }
     
+    func handleDestroyed(_ pilotStateData: inout PilotStateData) {
+        let current = pilotStateData.dial_status
+        
+        /*
+         case hidden
+         case revealed
+         case set
+         case destroyed
+         case ionized
+         
+         current        $0.isDestroyed  new Status
+         .hidden        false           .hidden
+         .hidden        true            .destroyed
+         .revealed      false           .revealed
+         .revealed      true            .destroyed
+         .set           false           .set
+         .set           true            .destroyed
+         .destroyed     false           .set
+         .destroyed     true            .destroyed
+         .ionized       false           .ionized
+         .ionized       true            .destroyed
+         */
+        
+        if pilotStateData.isDestroyed {
+            pilotStateData.dial_status = .destroyed
+        } else if (current == .destroyed) {
+            // we were destroyed but no longer destroyed so we are now .set
+            pilotStateData.dial_status = .set
+        }
+    }
+    
     func updateHull(_ active: Int, _ inactive: Int) {
         print(active, inactive)
-        update(psdHandler: { $0.updateHull(active: active, inactive: inactive) })
+        update(psdHandler: {
+            $0.updateHull(active: active, inactive: inactive)
+            handleDestroyed(&$0)
+        })
     }
     
     func updateShield(_ active: Int , _ inactive: Int ) {
         print(active, inactive)
-        update(psdHandler: { $0.updateShield(active: active, inactive: inactive) })
+        update(psdHandler: {
+            $0.updateShield(active: active, inactive: inactive)
+            handleDestroyed(&$0)
+        })
+        
     }
     
     func updateForce(_ active: Int, _ inactive: Int) {

@@ -127,6 +127,9 @@ class Redux_ShipViewModel: ObservableObject {
                 }
                 
                 self?.shipImageURL = $0.ship.shipImageURL
+                
+                // Update the destroyed status based on the emitted pilot state data
+                //self?.handleDestroyed()
             })
             .store(in: &cancellableSet)
     }
@@ -642,9 +645,11 @@ struct StatusView: View {
                                       active: active,
                                       inactive: inactive)
                 
-                if (handleDestroyed) {
-                    self.viewModel.handleDestroyed()
-                }
+                // Since self.viewModel.update queues the update on DispatchQueue.main.async function,
+                // self.viewModel.handleDestroyed() might run before the update is finished
+//                if (handleDestroyed) {
+//                    self.viewModel.handleDestroyed()
+//                }
             })
         }
         
