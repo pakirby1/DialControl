@@ -641,23 +641,6 @@
     "standardLoadoutOnly": true
   },
   {
-    "name": "Primed Thrusters",
-    "limited": 0,
-    "xws": "primedthrusters",
-    "sides": [
-      {
-        "ability": "While you have 2 or fewer stress tokens, you can perform [Barrel Roll] and [Boost] actions, even while stressed.",
-        "title": "Primed Thrusters",
-        "type": "Modification",
-        "slots": ["Modification"]
-      }
-    ],
-    "standard": true,
-    "extended": true,
-    "epic": true,
-    "standardLoadoutOnly": true
-  },
-  {
     "name": "Targeting Matrix",
     "limited": 0,
     "xws": "targetingmatrix",
