@@ -621,5 +621,74 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Fuel Injection Override",
+    "limited": 0,
+    "xws": "fuelinjectionoverride",
+    "sides": [
+      {
+        "ability": "While you perform a [Boost] or [Barrel Roll] action, you may spend 1 [Charge] to use a template with a speed 1 higher instead.",
+        "title": "Fuel Injection Override",
+        "type": "Modification",
+        "slots": ["Modification"],
+        "charges": { "value": 2, "recovers": 0 }
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "Primed Thrusters",
+    "limited": 0,
+    "xws": "primedthrusters",
+    "sides": [
+      {
+        "ability": "While you have 2 or fewer stress tokens, you can perform [Barrel Roll] and [Boost] actions, even while stressed.",
+        "title": "Primed Thrusters",
+        "type": "Modification",
+        "slots": ["Modification"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "Targeting Matrix",
+    "limited": 0,
+    "xws": "targetingmatrix",
+    "sides": [
+      {
+        "ability": "While attacking, you may spend 1 [Focus] result at the end of the Neutralize Results step.  If you do, after the attack is resolved, the defender gains a strain token.",
+        "title": "Targeting Matrix",
+        "type": "Modification",
+        "slots": ["Modification"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "Ion Maneuvering Jet",
+    "limited": 0,
+    "xws": "ionmaneuveringjet",
+    "sides": [
+      {
+        "ability": "After you fully execute a Koiogran Turn [Koigran Turn] maneuver, you may spend 1 [Charge] to perform an action, even while stressed.",
+        "title": "Ion Maneuvering Jet",
+        "type": "Modification",
+        "slots": ["Modification"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

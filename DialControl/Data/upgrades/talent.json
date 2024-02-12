@@ -1037,5 +1037,39 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Collected",
+    "limited": 0,
+    "xws": "collected",
+    "sides": [
+      {
+        "title": "Collected",
+        "type": "Talent",
+        "ability": "After you perform a primary attack, you may spend 1 focus token to gain 2 evade tokens.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "Reckless",
+    "limited": 0,
+    "xws": "reckless",
+    "sides": [
+      {
+        "title": "Reckless",
+        "type": "Talent",
+        "ability": "While you perform a red [Boost] or a red [Barrel Roll] action, you may use the 1 [Left Turn] of 1 [Right Turn] template instead.  If you do, roll an attack die.  On a [Hit]/[Critical Hit] result, gain a stress token.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

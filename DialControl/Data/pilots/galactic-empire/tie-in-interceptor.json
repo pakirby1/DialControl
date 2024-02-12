@@ -437,6 +437,52 @@
       "image": "https://infinitearenas.com/xw2/images/pilots/secondsister.png",
       "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/secondsister.png",
       "epic": true
+    },
+    {
+      "name": "Maus Monare",
+      "caption": "Battle of Yavin",
+      "xws": "mausmonare-battleoverendor",
+      "initiative": 3,
+      "limited": 1,
+      "shipAbility": {
+        "name": "Sensitive Controls",
+        "text": "During the System Phase, you may perform a red [Barrel Roll] or red [Boost] action."
+      },
+      "standard": true,
+      "extended": true,
+      "cost": 4,
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 3 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 3 },
+        { "type": "shield", "value": 1 }
+      ],
+      "standardLoadout": ["noescape", "outmaneuver", "fuelinjectionoverride"],
+      "ability": "After you perform an [Evade] action, gain a calculate token.",
+      "keywords": ["TIE"],
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/mausmonare-battleoverendor.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/mausmonare-battleoverendor.png",
+      "epic": true
+    },
+    {
+      "name": "Sapphire 2",
+      "caption": "Battle Over Endor",
+      "xws": "sapphire2-battleoverendor",
+      "initiative": 3,
+      "limited": 1,
+      "shipAbility": {
+        "name": "Sensitive Controls",
+        "text": "During the System Phase, you may perform a red [Barrel Roll] or red [Boost] action."
+      },
+      "standard": true,
+      "extended": true,
+      "cost": 4,
+      "standardLoadout": ["noescape", "reckless", "primedthrusters", "targetingmatrix"],
+      "ability": "While you defend, if you are focused, roll 1 additional defense die.",
+      "keywords": ["TIE"],
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/sapphire2-battleoverendor.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/sapphire2-battleoverendor.png",
+      "epic": true
     }
   ]
 }
