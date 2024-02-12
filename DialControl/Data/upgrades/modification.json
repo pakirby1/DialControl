@@ -683,7 +683,8 @@
         "ability": "After you fully execute a Koiogran Turn [Koigran Turn] maneuver, you may spend 1 [Charge] to perform an action, even while stressed.",
         "title": "Ion Maneuvering Jet",
         "type": "Modification",
-        "slots": ["Modification"]
+        "slots": ["Modification"],
+        "charges": { "value": 2, "recovers": 0 }
       }
     ],
     "standard": true,
