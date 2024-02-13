@@ -674,5 +674,40 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Chaff Particles",
+    "limited": 0,
+    "xws": "chaffparticles",
+    "sides": [
+      {
+        "ability": "While defending, you may spend one [Focus] result at the end of the Neutralize Results step to remove 1 red or orange token.",
+        "title": "Chaff Particles",
+        "type": "Modification",
+        "slots": ["Modification"],
+        "charges": { "value": 2, "recovers": 0 }
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "Target-Assist Algorithm",
+    "limited": 0,
+    "xws": "targetassistalgorithm",
+    "sides": [
+      {
+        "ability": "Before you engage, if you have no green tokens and there are 1 or more enemy objects in your [Front Arc], gain a calculate token.",
+        "title": "Target-Assist Algorithm",
+        "type": "Modification",
+        "slots": ["Modification"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

@@ -1370,5 +1370,29 @@
     "standard": true,
     "extended": true,
     "epic": true
+  },
+  {
+    "name": "Millennium Falcon",
+    "limited": 1,
+    "xws": "millenniumfalcon-battleoverendor",
+    "sides": [
+      {
+        "title": "Millennium Falcon",
+        "type": "Title",
+        "ability": "While attacking or defending, if you have a non-lock red or orange token, you may reroll 1 die.",
+        "image": "https://infinitearenas.com/xw2/images/upgrades/millenniumfalcon.png",
+        "slots": ["Title"],
+        "artwork": "https://infinitearenas.com/xw2/images/artwork/upgrades/millenniumfalcon.png"
+      }
+    ],
+    "cost": { "value": 0 },
+    "restrictions": [
+      { "factions": ["rebelalliance"] },
+      { "ships": ["modifiedyt1300lightfreighter"] }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

@@ -181,6 +181,28 @@
       "extended": true,
       "keywords": ["Freighter", "YT-1300"],
       "epic": true
+    },
+    {
+      "name": "Lando Calrissian",
+      "caption": "Battle Over Endor",
+      "initiative": 5,
+      "limited": 1,
+      "cost": 7,
+      "xws": "landocalrissian-battleoverendor",
+      "ability": "At the start of the Activation Phase, you may spend 1 [Charge].  If you do, choose an initiative value from 1 to 6.  You activate at that initiative this phase.",
+      "shipAbility": {
+        "name": "High Stakes",
+        "text": "After you perform a red action, you may roll an attack die.  On a [Hit]/[Critical Hit] result, remove 1 stress."
+      },
+      "charges": { "value": 2, "recovers": 0 },
+      "standardLoadout": ["aceinthehole", "itsatrap", "millenniumfalcon-battleoverendor", "niennunb", "airencracken-battleoverendor"],
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/landocalrissian-battleoverendor.png",
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/landocalrissian-battleoverendor.png",
+      "standard": true,
+      "extended": true,
+      "keywords": ["Freighter", "YT-1300"],
+      "epic": true
     }
+    
   ]
 }

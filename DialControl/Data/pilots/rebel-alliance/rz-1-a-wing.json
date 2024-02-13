@@ -378,6 +378,78 @@
       "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/sharabey-rz1awing.png",
       "image": "https://infinitearenas.com/xw2/images/quickbuilds/sharabey-swz106.png",
       "epic": true
+    },
+    {
+      "name": "Gemmer Sojan",
+      "xws": "gemmersojan-battleoverendor",
+      "initiative": 2,
+      "limited": 1,
+      "shipAbility": {
+        "name": "Vectored Cannons",
+        "text": "During the System Phase, you may perform a red [Boost] or [Rotate] action.  You can rotate your [Turret] indicator only to your [Front Arc] or [Rear Arc]"
+      },
+      "caption": "Battle Over Endor",
+      "standard": true,
+      "extended": true,
+      "cost": 3,
+      "standardLoadout": ["itsatrap", "precisiontunedcannons", "chaffparticles", "targetassistalgorithm"],
+      "ability": "While defending, you may gain 1 strain token to change up to 2 of your blank results to [Focus] results.",
+      "keywords": ["A-wing"],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/gemmersojan-battleoverendor.png",
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/gemmersojan-battleoverendor.png",
+      "epic": true
+    },
+    {
+      "name": "Arvel Crynyd",
+      "xws": "arvelcrynyd-battleoverendor",
+      "initiative": 3,
+      "limited": 1,
+      "shipAbility": {
+        "name": "Vectored Cannons",
+        "text": "During the System Phase, you may perform a red [Boost] or [Rotate] action.  You can rotate your [Turret] indicator only to your [Front Arc] or [Rear Arc]"
+      },
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 2 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 2 },
+        { "type": "shields", "value": 3 }
+      ],
+      "caption": "Battle Over Endor",
+      "standard": true,
+      "extended": true,
+      "cost": 4,
+      "standardLoadout": ["itsatrap", "heroicsacrifice", "protonrockets"],
+      "ability": "While defending, you may gain a strain token to change 1 [Focus] result to an [Evade] result.",
+      "keywords": ["A-wing"],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/arvelcrynyd-battleoverendor.png",
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/arvelcrynyd-battleoverendor.png",
+      "epic": true
+    },
+    {
+      "name": "Tycho Celchu",
+      "xws": "tychocelchu-battleoverendor",
+      "initiative": 5,
+      "limited": 1,
+      "shipAbility": {
+        "name": "Vectored Cannons",
+        "text": "During the System Phase, you may perform a red [Boost] or [Rotate] action.  You can rotate your [Turret] indicator only to your [Front Arc] or [Rear Arc]"
+      },
+      "shipStats": [
+        { "arc": "Front Arc", "type": "attack", "value": 2 },
+        { "type": "agility", "value": 3 },
+        { "type": "hull", "value": 2 },
+        { "type": "shields", "value": 3 }
+      ],
+      "caption": "Battle Over Endor",
+      "standard": true,
+      "extended": true,
+      "cost": 4,
+      "standardLoadout": ["itsatrap", "juke", "protonrockets", "chaffparticles"],
+      "ability": "While you are disarmed, you can still perform [Missile] attacks.  When you perform a [Missile] attack while disarmed, roll a maximum of 4 dice.",
+      "keywords": ["A-wing"],
+      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/tychocelchu-battleoverendor.png",
+      "image": "https://infinitearenas.com/xw2/images/quickbuilds/tychocelchu-battleoverendor.png",
+      "epic": true
     }
   ]
 }

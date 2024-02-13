@@ -678,5 +678,26 @@
     "standard": true,
     "extended": true,
     "epic": true
+  },
+  {
+    "name": "Airen Cracken",
+    "limited": 1,
+    "xws": "airencracken-battleoverendor",
+    "sides": [
+      {
+        "title": "Airen Cracken",
+        "type": "Gunner",
+        "ability": "After defending, if the attack hit, you may gain 1 deplete token to perform a bonus attack against the attacker.",
+        "slots": ["Gunner"],
+        "image": "https://infinitearenas.com/xw2/images/upgrades/migsmayfeld.png",
+        "artwork": "https://infinitearenas.com/xw2/images/artwork/upgrades/migsmayfeld.png"
+      }
+    ],
+    "cost": { "value": 4 },
+    "restrictions": [{ "factions": ["galacticempire", "scumandvillainy"] }],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

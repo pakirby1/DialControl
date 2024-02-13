@@ -1071,5 +1071,57 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Ace In The Hole",
+    "limited": 0,
+    "xws": "aceinthehole",
+    "sides": [
+      {
+        "title": "Ace In The Hole",
+        "type": "Talent",
+        "ability": "At the start of the Engagement Phase, you may spend 1 [Charge] and gain one jam token to perform a [Barrel Roll] action.",
+        "slots": ["Talent"]
+      }
+    ],
+    "charges": { "value": 2, "recovers": 0 },
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "It’s a Trap",
+    "limited": 0,
+    "xws": "itsatrap",
+    "sides": [
+      {
+        "title": "It’s a Trap",
+        "type": "Talent",
+        "ability": "While Defending, if there are more other friendly ships than enemy ships at range 0-1, you may reroll 1 of your blank results.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
+  },
+  {
+    "name": "Heroic Sacrifice",
+    "limited": 0,
+    "xws": "heroicsacrifice",
+    "sides": [
+      {
+        "title": "Heroic Sacrifice",
+        "type": "Talent",
+        "ability": "After you perform a [Slam] action, roll 5 attack dice.  Each large ship, huge ship, and scenario feature at range 0 suffers 1 [Hit] damage for each [Hit]/[Critical Hit] result, bypassing shields.  Then this ship is destroyed.  You can perform [Slam] actions, even while stressed.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

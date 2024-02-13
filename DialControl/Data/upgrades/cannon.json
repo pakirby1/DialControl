@@ -231,5 +231,22 @@
     "standard": true,
     "extended": true,
     "epic": true
+  },
+  {
+    "name": "Precision-Tuned Cannons",
+    "limited": 0,
+    "xws": "precisiontunedcannons",
+    "sides": [
+      {
+        "ability": "If the defender is in you [Bullseye Arc], add 1 [Focus] Result.",
+        "title": "Precision-Tuned Cannons",
+        "type": "Cannon",
+        "slots": ["Cannon"]
+      }
+    ],
+    "standardLoadoutOnly": true,
+    "standard": true,
+    "extended": true,
+    "epic": true
   }
 ]
