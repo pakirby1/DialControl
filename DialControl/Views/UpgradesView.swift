@@ -204,15 +204,25 @@ struct UpgradeTextView: View {
         let substrings = utility.testMergeTypes()
         let upgradeAbility = upgrade?.sides[0].ability ?? ""
         
+        /*
+         "charges": { "value": 1, "recovers": 0 }
+         "slots": ["Command"]
+         "slots": ["Command", "Crew"]
+         */
+        let categories = upgrade?.sides[0].slots ?? []
+        let chargeValue = upgrade?.sides[0].charges?.value ?? -1
+        var isRecurring : Bool {
+            let recovers = upgrade?.sides[0].charges?.recovers ?? -1
+            
+            return (recovers > 0) ? true : false
+        }
+        let title = upgrade?.name ?? "No Upgrade Text"
+        
         return VStack {
-            Text(upgrade?.name ?? "No Upgrade Text")
-                .font(.largeTitle)
-                .foregroundColor(.black)
-                .background(
-                    RoundedRectangle(cornerRadius: 5.0)
-                    .fill(Color.white)
-                    .frame(width: 500)
-                )
+            UpgradeTextViewHeaderView(category: UpgradeUtility.UpgradeCategories.talent,
+                                      title: title,
+                                      chargeValue: chargeValue,
+                                      isRecurring: isRecurring)
             
             utility.buildTextView(from: upgradeAbility)
                 .foregroundColor(.black)
@@ -227,7 +237,7 @@ struct UpgradeTextView: View {
     }
 }
 
-struct UpgradeTextViewHeaderView {
+struct UpgradeTextViewHeaderView : View {
     struct ChargeView: View {
         let symbol: String = "g"
         let value: Int
@@ -235,20 +245,43 @@ struct UpgradeTextViewHeaderView {
         var body: some View {
             EmptyView()
             HStack {
-                chargeSymbol
-                Text("\(value)")
-                recurringSymbol
+                chargeView
+                chargeValue
+                recurringView
             }
         }
         
-        var chargeSymbol : some View {
-            Text(symbol)
-                .font(.custom("xwing-miniatures", size: 24))
+        var chargeValue: some View {
+            guard (value != -1) else {
+                return EmptyView()
+                    .eraseToAnyView()
+            }
+            
+            return Text("\(value)")
+                .font(.title)
+                .bold()
+                .foregroundColor(Color.orange)
+                .eraseToAnyView()
         }
         
-        var recurringSymbol : some View {
+        var chargeView : some View {
+            guard (value != -1) else {
+                return EmptyView()
+                    .eraseToAnyView()
+            }
+            
+            return Text(UpgradeTextUtility.getSymbol("[Charge]"))
+                .font(.custom("xwing-miniatures", size: 36))
+                .foregroundColor(.orange)
+                .eraseToAnyView()
+        }
+        
+        var recurringView : some View {
             if (isRecurring) {
-                return Text("^").eraseToAnyView()
+                return Text(UpgradeTextUtility.getSymbol("[Recurring]"))
+                    .font(.custom("xwing-miniatures", size: 36))
+                    .foregroundColor(.orange)
+                    .eraseToAnyView()
             } else {
                 return EmptyView().eraseToAnyView()
             }
@@ -257,18 +290,28 @@ struct UpgradeTextViewHeaderView {
     
     let category: UpgradeUtility.UpgradeCategories
     let title: String
-    let chargeSymbol: String = "g"
     let chargeValue: Int
     let isRecurring: Bool
-    var body: some View {
-        HStack {
-            buildSymbol()
-            Text("\(title)")
-            ChargeView(value: chargeValue, isRecurring: isRecurring)
-        }
+    
+    var titleView : some View {
+        Text(title)
+            .font(.largeTitle)
+            .foregroundColor(.black)
     }
     
-    func buildSymbol() -> some View {
+    var body: some View {
+        HStack {
+            buildUpgradeCategoryView()
+            titleView
+            ChargeView(value: chargeValue, isRecurring: isRecurring)
+        }.background(
+            RoundedRectangle(cornerRadius: 5.0)
+            .fill(Color.white)
+            .frame(width: 500)
+        )
+    }
+    
+    func buildUpgradeCategoryView() -> some View {
         return EmptyView()
     }
 }
@@ -472,7 +515,7 @@ class UpgradeTextUtility {
             return results
     }
     
-    private func getSymbol(_ input: String) -> String {
+    public static func getSymbol(_ input: String) -> String {
         //strip off the brackets
         
         switch(input) {
@@ -548,6 +591,48 @@ class UpgradeTextUtility {
                 return "s"
             case "[Shield]":
                 return "*"
+            case "[Recurring]":
+                return "`"
+            case "[Astromech]":
+                return "A"
+            case "[Cannon]":
+                return "C"
+            case "[Cargo]":
+                return "G"
+            case "[Command]":
+                return ""
+            case "[Configuration]":
+                return "n"
+            case "[Crew]":
+                return "W"
+            case "[Forcepower]":
+                return "F"
+            case "[Gunner]":
+                return "Y"
+            case "[Hardpoint]":
+                return "H"
+            case "[Illicit]":
+                return "I"
+            case "[Missile]":
+                return "M"
+            case "[Modification]":
+                return "m"
+            case "[Sensor]":
+                return "S"
+            case "[TacticalRelay]":
+                return "Z"
+            case "[Talent]":
+                return "E"
+            case "[Team]":
+                return "T"
+            case "[Tech]":
+                return "X"
+            case "[Title]":
+                return "t"
+            case "[Torpedo]":
+                return "P"
+            case "[Turret]":
+                return "U"
             default:
                 return ""
         }
@@ -559,7 +644,7 @@ class UpgradeTextUtility {
                 case .text(let val):
                     return Text(val).font(.system(size: 24))
                 case .symbol(let val):
-                    return Text(getSymbol(val))
+                    return Text(UpgradeTextUtility.getSymbol(val))
                         .font(.custom("xwing-miniatures", size: 24))
             }
         }
