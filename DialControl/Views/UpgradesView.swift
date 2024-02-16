@@ -219,7 +219,7 @@ struct UpgradeTextView: View {
         let title = upgrade?.name ?? "No Upgrade Text"
         
         return VStack {
-            UpgradeTextViewHeaderView(category: UpgradeUtility.UpgradeCategories.talent,
+            UpgradeTextViewHeaderView(category: categories[0],
                                       title: title,
                                       chargeValue: chargeValue,
                                       isRecurring: isRecurring)
@@ -288,7 +288,7 @@ struct UpgradeTextViewHeaderView : View {
         }
     }
     
-    let category: UpgradeUtility.UpgradeCategories
+    let category: String    // "[Talent]"
     let title: String
     let chargeValue: Int
     let isRecurring: Bool
@@ -301,18 +301,32 @@ struct UpgradeTextViewHeaderView : View {
     
     var body: some View {
         HStack {
-            buildUpgradeCategoryView()
+            buildUpgradeCategoryView(category)
+            Spacer()
             titleView
+            Spacer()
             ChargeView(value: chargeValue, isRecurring: isRecurring)
-        }.background(
+        }
+        .frame(width: 500)
+        .background(
             RoundedRectangle(cornerRadius: 5.0)
             .fill(Color.white)
-            .frame(width: 500)
         )
     }
     
-    func buildUpgradeCategoryView() -> some View {
-        return EmptyView()
+    func buildUpgradeCategoryView(_ category: String) -> some View {
+        if (category.isEmpty) {
+            return EmptyView()
+                .eraseToAnyView()
+        }
+        else {
+            let bracketedCategory = "[" + category + "]"
+            
+            return Text(UpgradeTextUtility.getSymbol(bracketedCategory))
+                .font(.custom("xwing-miniatures", size: 36))
+                .foregroundColor(.black)
+                .eraseToAnyView()
+        }
     }
 }
 
