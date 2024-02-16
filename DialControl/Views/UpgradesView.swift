@@ -302,10 +302,15 @@ struct UpgradeTextViewHeaderView : View {
     var body: some View {
         HStack {
             buildUpgradeCategoryView(category)
+                .layoutPriority(-1)
+                .frame(minWidth: 50)
             Spacer()
             titleView
+                .layoutPriority(1)
             Spacer()
             ChargeView(value: chargeValue, isRecurring: isRecurring)
+                .layoutPriority(-1)
+                .frame(minWidth: 50)
         }
         .frame(width: 500)
         .background(
