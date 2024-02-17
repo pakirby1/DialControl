@@ -1123,5 +1123,22 @@
     "extended": true,
     "epic": true,
     "standardLoadoutOnly": true
+  },
+  {
+    "name": "Push The Limit",
+    "limited": 0,
+    "xws": "pushthelimit",
+    "sides": [
+      {
+        "title": "Push The Limit",
+        "type": "Talent",
+        "ability": "After you fully execute a red maneuver or perform a red action, if you are not strained, you may gain 1 strain token to remove 1 stress token.",
+        "slots": ["Talent"]
+      }
+    ],
+    "standard": true,
+    "extended": true,
+    "epic": true,
+    "standardLoadoutOnly": true
   }
 ]

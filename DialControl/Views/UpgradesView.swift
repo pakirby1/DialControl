@@ -295,7 +295,7 @@ struct UpgradeTextViewHeaderView : View {
     
     var titleView : some View {
         Text(title)
-            .font(.largeTitle)
+            .font(.title)
             .foregroundColor(.black)
     }
     
