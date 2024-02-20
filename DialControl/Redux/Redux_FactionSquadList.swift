@@ -16,6 +16,7 @@ struct PillButton : View {
     let add: () -> Void
     let subtract: () -> Void
     let reset: () -> Void
+    let displayReset: Bool
     
     var body: some View {
         ZStack {
@@ -38,9 +39,11 @@ struct PillButton : View {
                         .modifier(PillButtonImageModifier(color: .blue))
                 }
                 
-                Button(action: reset) {
-                    Image(systemName: "multiply.circle.fill")
-                        .modifier(PillButtonImageModifier(color: .red))
+                if (displayReset) {
+                    Button(action: reset) {
+                        Image(systemName: "multiply.circle.fill")
+                            .modifier(PillButtonImageModifier(color: .red))
+                    }
                 }
             }
         }
@@ -167,7 +170,8 @@ struct Redux_FactionSquadList: View {
                 return PillButton(label: "\(store.state.faction.currentRound)",
                            add: increment,
                            subtract: decrement,
-                           reset: pre_reset)
+                           reset: pre_reset,
+                           displayReset: true)
                     .alert(isPresented: $displayResetRoundCounter) {
                         Alert(
                             title: Text("Reset"),

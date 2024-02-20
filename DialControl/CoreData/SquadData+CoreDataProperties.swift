@@ -21,7 +21,8 @@ extension SquadData {
     @NSManaged public var firstPlayer: Bool
     @NSManaged public var victoryPoints: Int32
     @NSManaged public var pilotState: NSSet?
-
+    @NSManaged public var wonCount: Int32
+    @NSManaged public var lostCount: Int32
 }
 
 // MARK: Generated accessors for pilotState

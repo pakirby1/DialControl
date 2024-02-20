@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20E241" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G725" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ImageData" representedClassName=".ImageData" syncable="YES">
         <attribute name="data" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
         <attribute name="url" optional="YES" attributeType="String"/>
@@ -21,14 +21,11 @@
         <attribute name="firstPlayer" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="json" attributeType="String"/>
+        <attribute name="lostCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="revealed" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="victoryPoints" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="wonCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="pilotState" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PilotState" inverseName="squadData" inverseEntity="PilotState"/>
     </entity>
-    <elements>
-        <element name="ImageData" positionX="-73.85546875" positionY="-216.55078125" width="128" height="73"/>
-        <element name="PilotState" positionX="-537.515625" positionY="-220.50390625" width="128" height="103"/>
-        <element name="SquadData" positionX="-332.50390625" positionY="-190.171875" width="128" height="164"/>
-    </elements>
 </model>

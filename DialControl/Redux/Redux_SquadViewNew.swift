@@ -18,6 +18,8 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
     @State private var displayResetAllConfirmation: Bool = false
     @State var isFirstPlayer: Bool = false
     @State var victoryPoints: Int32 = 0
+    @State var wonCount: Int32 = 0
+    @State var lostCount: Int32 = 0
     @State var shipPilotsNew : [ShipPilot] = []
     @State private var displayWonLostCount: Bool = false
     
@@ -46,9 +48,6 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
         Button(action: {
             self.displayWonLostCount = true
         }) {
-            let wonCount: String = self.viewModel.viewProperties.wonCount.description
-            let lostCount: String = self.viewModel.viewProperties.lostCount.description
-            
             Text("Won: \(wonCount) Lost: \(lostCount)")
                 .font(.title)
                 .foregroundColor(Color.red)
@@ -69,18 +68,41 @@ extension Redux_SquadViewNew {
                 
                 HStack {
                     Spacer()
-                    PillButton(label: "Won: \(self.viewModel.viewProperties.wonCount)",
+                    PillButton(label: "Won: \(self.wonCount)",
                                add: {
-//                                self.squadData.wonCount += self.squadData.wonCount
-//                                self.viewModel.updateSquad(squadData: T##SquadData)
-                               },
-                               subtract: {},
-                               reset: {})
+                        self.wonCount += 1
+                    },
+                               subtract: {
+                        self.wonCount -= 1
+                    },
+                               reset: {
+                        self.wonCount = 0
+                    },
+                               displayReset: false
+                    )
                     
-                    PillButton(label: "Lost: \(self.viewModel.viewProperties.lostCount)",
-                               add: {},
-                               subtract: {},
-                               reset: {})
+                    PillButton(label: "Lost: \(self.lostCount)",
+                               add: {
+                        self.lostCount += 1
+                    },
+                               subtract: {
+                        self.lostCount -= 1
+                    },
+                               reset: {
+                        self.lostCount = 0
+                    },
+                               displayReset: false
+                    )
+                    
+                    Button(action: {
+                        self.wonCount = 0
+                        self.lostCount = 0
+                    }) {
+                        Image(systemName: "multiply.circle.fill")
+                            .modifier(PillButtonImageModifier(color: .red))
+                            .background(.white)
+                            .clipShape(Circle())
+                    }
                     Spacer()
                 }
             }
@@ -133,6 +155,14 @@ extension Redux_SquadViewNew {
                 // for each pilot update system phase state
                 disableSystemPhaseForAllPilots()
             }
+        })
+        .onChange(of: wonCount, perform: {
+            self.squadData.wonCount = $0
+            self.updateSquad(squadData: self.squadData)
+        })
+        .onChange(of: lostCount, perform: {
+            self.squadData.lostCount = $0
+            self.updateSquad(squadData: self.squadData)
         })
     }
     
@@ -296,6 +326,8 @@ extension Redux_SquadViewNew {
             self.isFirstPlayer = self.squadData.firstPlayer
             self.victoryPoints = self.squadData.victoryPoints
             self.viewProperties = viewModel.buildViewProperties()
+            self.wonCount = self.squadData.wonCount
+            self.lostCount = self.squadData.lostCount
         }
         
         return VStack {
