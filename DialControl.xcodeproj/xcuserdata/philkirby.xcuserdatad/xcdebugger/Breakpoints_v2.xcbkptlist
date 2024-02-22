@@ -14,10 +14,10 @@
             filePath = "DialControl/Redux/Store.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1005"
-            endingLineNumber = "1005"
-            landmarkName = "send_old(_:)"
-            landmarkType = "9">
+            startingLineNumber = "1045"
+            endingLineNumber = "1045"
+            landmarkName = "init(state:reducer:environment:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -110,9 +110,9 @@
             filePath = "DialControl/Redux/Store.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "556"
-            endingLineNumber = "556"
-            landmarkName = "updateUpgradeSelectedSide(upgrade:selectedSide:)"
+            startingLineNumber = "557"
+            endingLineNumber = "557"
+            landmarkName = "updateHull(_:_:)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -144,7 +144,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "607"
             endingLineNumber = "607"
-            landmarkName = "shipReducer(state:action:environment:)"
+            landmarkName = "updateState(newData:)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -174,9 +174,9 @@
             filePath = "DialControl/Redux/Store.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "555"
-            endingLineNumber = "555"
-            landmarkName = "updateUpgradeSelectedSide(upgrade:selectedSide:)"
+            startingLineNumber = "556"
+            endingLineNumber = "556"
+            landmarkName = "updateHull(_:_:)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -231,70 +231,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D42366B3-F361-49A5-935B-ACE2C9EEDC4D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
-            landmarkName = "header"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9F0C1E06-6806-47C1-B86E-C545ED4C8F79"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
-            landmarkName = "header"
-            landmarkType = "24">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "723B0908-0BC9-43DC-B8FE-5869D61C6C43"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "329"
-            endingLineNumber = "329"
-            landmarkName = "onAppearBlock()"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "59888EF7-AA0E-41C1-90A7-420DC2E9BE1A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "330"
-            endingLineNumber = "330"
-            landmarkName = "onAppearBlock()"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "96D99805-9120-4AAC-BF01-AA96EEA2ECE9"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -334,8 +270,8 @@
             filePath = "DialControl/Redux/Redux_SquadViewNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "479"
-            endingLineNumber = "479"
+            startingLineNumber = "476"
+            endingLineNumber = "476"
             landmarkName = "resetAllShips()"
             landmarkType = "7">
          </BreakpointContent>

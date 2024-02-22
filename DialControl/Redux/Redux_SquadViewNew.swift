@@ -43,7 +43,10 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
 
         return self.shipPilotsNew
     }
-    
+}
+
+//MARK:- Views
+extension Redux_SquadViewNew {
     var wonLostCountButton: some View {
         Button(action: {
             self.displayWonLostCount = true
@@ -53,69 +56,63 @@ struct Redux_SquadViewNew: View, DamagedSquadRepresenting {
                 .foregroundColor(Color.red)
         }
     }
-}
-
-extension Redux_SquadViewNew {
-    var imageOverlayView: AnyView {
-        var wonLossCountOverlay: some View {
-            ZStack {
-                Color
-                    .gray
-                    .opacity(0.5)
-                    .onTapGesture{
-                        self.displayWonLostCount = false
-                    }
-                
-                HStack {
-                    Spacer()
-                    PillButton(label: "Won: \(self.wonCount)",
-                               add: {
-                        self.wonCount += 1
-                    },
-                               subtract: {
-                        self.wonCount -= 1
-                    },
-                               reset: {
-                        self.wonCount = 0
-                    },
-                               displayReset: false
-                    )
-                    
-                    PillButton(label: "Lost: \(self.lostCount)",
-                               add: {
-                        self.lostCount += 1
-                    },
-                               subtract: {
-                        self.lostCount -= 1
-                    },
-                               reset: {
-                        self.lostCount = 0
-                    },
-                               displayReset: false
-                    )
-                    
-                    Button(action: {
-                        self.wonCount = 0
-                        self.lostCount = 0
-                    }) {
-                        Image(systemName: "multiply.circle.fill")
-                            .modifier(PillButtonImageModifier(color: .red))
-                            .background(.white)
-                            .clipShape(Circle())
-                    }
-                    Spacer()
+    
+    var wonLossCountOverlay: some View {
+        ZStack {
+            Color
+                .gray
+                .opacity(0.5)
+                .onTapGesture{
+                    self.displayWonLostCount = false
                 }
+            
+            HStack {
+                Spacer()
+                PillButton(label: "Won: \(self.wonCount)",
+                           add: {
+                    self.wonCount += 1
+                },
+                           subtract: {
+                    self.wonCount -= 1
+                },
+                           reset: {
+                    self.wonCount = 0
+                },
+                           displayReset: false
+                )
+                
+                PillButton(label: "Lost: \(self.lostCount)",
+                           add: {
+                    self.lostCount += 1
+                },
+                           subtract: {
+                    self.lostCount -= 1
+                },
+                           reset: {
+                    self.lostCount = 0
+                },
+                           displayReset: false
+                )
+                
+                Button(action: {
+                    self.wonCount = 0
+                    self.lostCount = 0
+                }) {
+                    Image(systemName: "multiply.circle.fill")
+                        .modifier(PillButtonImageModifier(color: .red))
+                        .background(.white)
+                        .clipShape(Circle())
+                }
+                Spacer()
             }
         }
-        
-        let defaultView = AnyView(Color.clear)
-        
-        print("Redux_SquadViewNew var displayWonLostCount self.displayWonLostCount=\(self.displayWonLostCount)")
-
+    }
+    
+    @ViewBuilder var imageOverlayView: some View {
         if (self.displayWonLostCount == true) {
-            return AnyView(wonLossCountOverlay)
+            wonLossCountOverlay
         } else {
-            return defaultView
+            Color.clear
         }
     }
     
@@ -125,48 +122,7 @@ extension Redux_SquadViewNew {
         }
     }
 
-    var header: some View {
-        HStack {
-            BackButtonView()
-                .environmentObject(viewFactory)
-           
-            Spacer()
-            ObjectiveScoreView(currentPoints: self.$victoryPoints,
-                               action: {
-                                    print("victory points = \($0)")
-                                setVictoryPoints(points: $0)
-                               })
-                .environmentObject(viewFactory)
-            
-            Spacer()
-            wonLostCountButton
-            Spacer()
-            CustomToggleView(label: "First Player", binding: $isFirstPlayer)
-        }
-        .padding(10)
-        .onChange(of: isFirstPlayer, perform: {
-            // Hack because swift thinks I don't want to perform
-            // an assignment (=) vs. a boolean check (==)
-            let x = $0
-            self.squadData.firstPlayer = x
-            self.updateSquad(squadData: self.squadData)
-            
-            if (FeaturesManager.shared.isFeatureEnabled(.firstPlayerUpdate)) {
-                // for each pilot update system phase state
-                disableSystemPhaseForAllPilots()
-            }
-        })
-        .onChange(of: wonCount, perform: {
-            self.squadData.wonCount = $0
-            self.updateSquad(squadData: self.squadData)
-        })
-        .onChange(of: lostCount, perform: {
-            self.squadData.lostCount = $0
-            self.updateSquad(squadData: self.squadData)
-        })
-    }
-    
-    var content: some View {
+    var bodyView: some View {
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
             .foregroundColor(theme.TEXT_FOREGROUND)
@@ -174,154 +130,192 @@ extension Redux_SquadViewNew {
             .background(Color.blue)
             .clipShape(Circle())
         
-        let engage = Button(action: {
-            self.processEngage()
-        }) {
-            Text(self.activationOrder ? "Engage" : "Activate").foregroundColor(Color.white)
-        }
-        
-        let title = Text(squad.name ?? "Unnamed")
-            .font(.title)
-            .lineLimit(1)
-            .foregroundColor(theme.TEXT_FOREGROUND)
-        
-        
-        
-        let reset = Button(action: {
-            self.displayResetAllConfirmation = true
-        }) {
-            Text("Reset All")
-                .font(.title)
-                .foregroundColor(Color.red)
-        }.alert(isPresented: $displayResetAllConfirmation) {
-            Alert(
-                title: Text("Reset All"),
-                message: Text("Reset All Pilots"),
-                primaryButton: Alert.Button.default(Text("Reset"), action: { self.resetAllShips() }),
-                secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
-            )
-        }
-        
-        let totalHealth = IndicatorView(label: "30", bgColor: .white, fgColor: .black)
-        
-        var firstPlayer: some View {
-            if isFirstPlayer == true {
-                return AnyView(firstPlayerSymbol)
-            }
-            
-            return AnyView(EmptyView())
-        }
-        
-        var dialState: some View {
-            func row(label: String, text: String) -> some View {
-                return Text("\(label): \(text)")
-            }
-            
-            return VStack {
-                row(label: "dialsState", text: self.viewModel.viewProperties.dialsState.description)
-                row(label: "revealedDialCount", text: self.viewModel.viewProperties.revealedDialCount.description)
-                row(label: "hiddenDialCount", text: self.viewModel.viewProperties.hiddenDialCount.description)
-                row(label: "shipPilots Count", text: self.viewModel.viewProperties.shipPilots.count.description)
-            }
-        }
-        
-        var hideOrRevealAll: some View {
-            func buildButton(_ newDialStatus: DialStatus) -> some View {
-                global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton newDialStatus: \(newDialStatus)")
-                let title: String = (newDialStatus == .hidden) ? "Hide" : "Reveal"
-                global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton title: \(title)")
-                
-                return Button(action: {
-                    func logDetails() {
-                        global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton dialsState: \(self.viewModel.viewProperties.dialsState)")
-                        global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton revealedDialCount: \(self.viewModel.viewProperties.revealedDialCount)")
-                        global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
-                    }
-                    
-                    logDetails()
-                    self.updateAllDials(newDialStatus: newDialStatus)
-                }) {
-                    Text(title).foregroundColor(Color.white)
-                }
-            }
-            
-            return (self.viewModel.viewProperties.dialsState == .hidden) ? buildButton(.revealed) : buildButton(.hidden)
-        }
-    
         var header: some View {
             HStack {
+                BackButtonView()
+                    .environmentObject(viewFactory)
+               
+                Spacer()
                 points
-
                 Spacer()
-
-                engage
-
-                Spacer()
-
-                title
-
-                firstPlayer
-
-                Spacer()
-
-                hideOrRevealAll
-
-                Spacer()
-
-                totalHealth
-            }.padding(20)
-        }
-        
-        var footer: some View {
-            HStack {
-                Spacer()
-                reset
-                Spacer()
-            }
-        }
-        
-        return ZStack {
-            VStack(alignment: .leading) {
-                // Header
-                header
+                ObjectiveScoreView(currentPoints: self.$victoryPoints,
+                                   action: {
+                                        print("victory points = \($0)")
+                                    setVictoryPoints(points: $0)
+                                   })
+                    .environmentObject(viewFactory)
                 
-                // Body
-                if shipPilots.isEmpty {
-                    emptySection
-                } else {
-                    ShipGridView(shipPilots: self.shipPilotsNew,
-                                 activationOrder: self.activationOrder,
-                                 onPilotTapped: self.pilotTapped,
-                                 getShips: self.getShips)
-                        .environmentObject(viewModel.store)
-                        .environment(\.updatePilotStateHandler, updatePilotState)
+                Spacer()
+                wonLostCountButton
+                Spacer()
+                CustomToggleView(label: "First Player", binding: $isFirstPlayer)
+            }
+            .onChange(of: isFirstPlayer, perform: {
+                // Hack because swift thinks I don't want to perform
+                // an assignment (=) vs. a boolean check (==)
+                let x = $0
+                self.squadData.firstPlayer = x
+                self.updateSquad(squadData: self.squadData)
+                
+                if (FeaturesManager.shared.isFeatureEnabled(.firstPlayerUpdate)) {
+                    // for each pilot update system phase state
+                    disableSystemPhaseForAllPilots()
+                }
+            })
+            .onChange(of: wonCount, perform: {
+                self.squadData.wonCount = $0
+                self.updateSquad(squadData: self.squadData)
+            })
+            .onChange(of: lostCount, perform: {
+                self.squadData.lostCount = $0
+                self.updateSquad(squadData: self.squadData)
+            })
+        }
+        
+        var content: some View {
+            
+            
+            let engage = Button(action: {
+                self.processEngage()
+            }) {
+                Text(self.activationOrder ? "Engage" : "Activate").foregroundColor(Color.white)
+            }
+            
+            let title = Text(squad.name ?? "Unnamed")
+                .font(.title)
+                .lineLimit(1)
+                .foregroundColor(theme.TEXT_FOREGROUND)
+            
+            
+            
+            let reset = Button(action: {
+                self.displayResetAllConfirmation = true
+            }) {
+                Text("Reset All")
+                    .font(.title)
+                    .foregroundColor(Color.red)
+            }.alert(isPresented: $displayResetAllConfirmation) {
+                Alert(
+                    title: Text("Reset All"),
+                    message: Text("Reset All Pilots"),
+                    primaryButton: Alert.Button.default(Text("Reset"), action: { self.resetAllShips() }),
+                    secondaryButton: Alert.Button.cancel(Text("Cancel"), action: {})
+                )
+            }
+            
+            let totalHealth = IndicatorView(label: "30", bgColor: .white, fgColor: .black)
+            
+            var firstPlayer: some View {
+                if isFirstPlayer == true {
+                    return AnyView(firstPlayerSymbol)
                 }
                 
-                CustomDivider()
-                footer
+                return AnyView(EmptyView())
             }
-            .multilineTextAlignment(.center)
-        }
-        .onAppear{
-            print("PAK_DialStatus SquadCardView.onAppear()")
-            executionTime("Perf Redux_SquadView.content.onAppear()") {
-                self.viewModel.loadShips(squad: squad, squadData: squadData)
-                self.activationOrder = self.squadData.engaged
-                print("PAKshipPilots \(Date()) .onAppear")
+            
+            var dialState: some View {
+                func row(label: String, text: String) -> some View {
+                    return Text("\(label): \(text)")
+                }
+                
+                return VStack {
+                    row(label: "dialsState", text: self.viewModel.viewProperties.dialsState.description)
+                    row(label: "revealedDialCount", text: self.viewModel.viewProperties.revealedDialCount.description)
+                    row(label: "hiddenDialCount", text: self.viewModel.viewProperties.hiddenDialCount.description)
+                    row(label: "shipPilots Count", text: self.viewModel.viewProperties.shipPilots.count.description)
+                }
+            }
+            
+            var hideOrRevealAll: some View {
+                func buildButton(_ newDialStatus: DialStatus) -> some View {
+                    global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton newDialStatus: \(newDialStatus)")
+                    let title: String = (newDialStatus == .hidden) ? "Hide" : "Reveal"
+                    global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton title: \(title)")
+                    
+                    return Button(action: {
+                        func logDetails() {
+                            global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton dialsState: \(self.viewModel.viewProperties.dialsState)")
+                            global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton revealedDialCount: \(self.viewModel.viewProperties.revealedDialCount)")
+                            global_os_log("Redux_SquadViewNew.hideOrRevealAll.buildButton shipPilots Count: \(self.viewModel.viewProperties.shipPilots.count)")
+                        }
+                        
+                        logDetails()
+                        self.updateAllDials(newDialStatus: newDialStatus)
+                    }) {
+                        Text(title).foregroundColor(Color.white)
+                    }
+                }
+                
+                return (self.viewModel.viewProperties.dialsState == .hidden) ? buildButton(.revealed) : buildButton(.hidden)
+            }
+        
+            var header: some View {
+                HStack {
+                    
+
+                    Spacer()
+
+                    engage
+
+                    Spacer()
+
+                    title
+
+                    firstPlayer
+
+                    Spacer()
+
+                    hideOrRevealAll
+                    
+                    Spacer()
+                }
+            }
+            
+            var footer: some View {
+                HStack {
+                    Spacer()
+                    reset
+                    Spacer()
+                }
+            }
+            
+            return ZStack {
+                VStack(alignment: .leading, spacing: 10) {
+                    // Header
+                    header
+                    
+                    // Body
+                    if shipPilots.isEmpty {
+                        emptySection
+                    } else {
+                        ShipGridView(shipPilots: self.shipPilotsNew,
+                                     activationOrder: self.activationOrder,
+                                     onPilotTapped: self.pilotTapped,
+                                     getShips: self.getShips)
+                            .environmentObject(viewModel.store)
+                            .environment(\.updatePilotStateHandler, updatePilotState)
+                    }
+                    
+                    CustomDivider()
+                    footer
+                }
+                .multilineTextAlignment(.center)
+            }
+            .onAppear{
+                print("PAK_DialStatus SquadCardView.onAppear()")
+                executionTime("Perf Redux_SquadView.content.onAppear()") {
+                    self.viewModel.loadShips(squad: squad, squadData: squadData)
+                    self.activationOrder = self.squadData.engaged
+                    print("PAKshipPilots \(Date()) .onAppear")
+                }
+            }
+            .onReceive(self.viewModel.$viewProperties) {
+                let shipPilots = $0.shipPilots
+                self.shipPilotsNew = $0.shipPilots
+                global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onReceive \(shipPilots)")
             }
         }
-        .onReceive(self.viewModel.$viewProperties) {
-            let shipPilots = $0.shipPilots
-            self.shipPilotsNew = $0.shipPilots
-            global_os_log("FeatureId.firstPlayerUpdate","Redux_SquadViewNew.content.onReceive \(shipPilots)")
-        }
-    }
-    
-    func body(viewModel: Redux_SquadViewNewViewModel) -> some View {
-        return bodyView
-    }
-    
-    var bodyView: some View {
+        
         func onAppearBlock() {
             self.isFirstPlayer = self.squadData.firstPlayer
             self.victoryPoints = self.squadData.victoryPoints
@@ -330,7 +324,7 @@ extension Redux_SquadViewNew {
             self.lostCount = self.squadData.lostCount
         }
         
-        return VStack {
+        return VStack(spacing: 0) {
             header
             content
         }
@@ -340,6 +334,10 @@ extension Redux_SquadViewNew {
                 onAppearBlock()
             }
         }
+    }
+    
+    func body(viewModel: Redux_SquadViewNewViewModel) -> some View {
+        return bodyView
     }
     
     struct ObjectiveScoreView : View {
@@ -382,7 +380,6 @@ extension Redux_SquadViewNew {
 }
 
 //MARK:- Behavior
-
 extension Redux_SquadViewNew {
     private func hideAllDials() {
         updateAllPilots() { $0.dial_status = .hidden }
@@ -782,7 +779,7 @@ struct ShipGridView : View {
     
     struct ShipButton: View {
         @EnvironmentObject var store: MyAppStore
-        @Environment(\.updatePilotStateHandler) var updatePilotState
+//        @Environment(\.updatePilotStateHandler) var updatePilotState
         let shipPilot: ShipPilot
         let getShips: () -> ()
         
@@ -793,7 +790,7 @@ struct ShipGridView : View {
                                                    dialStatus: data.dial_status,
                                                    hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
                                 .environmentObject(SquadViewHandler(store: store, getShips: getShips))
-                                .environment(\.updatePilotStateHandler, updatePilotState)
+//                                .environment(\.updatePilotStateHandler, updatePilotState)
                 )
             }
             
@@ -802,26 +799,11 @@ struct ShipGridView : View {
     }
     
     private func buildShipButton(shipPilot: ShipPilot, getShipsHandler: @escaping () -> ()) -> some View {
-//        func buildPilotCardView(shipPilot: ShipPilot) -> AnyView {
-//            // Get the dial status from the pilot state
-//            if let data = shipPilot.pilotStateData {
-//                print("PAK_Hide shipPilot.pilotStateData.dial_status = \(data.dial_status)")
-//                return AnyView(Redux_PilotCardView(shipPilot: shipPilot,
-//                                                   dialStatus: data.dial_status,
-//                                                   hasSystemPhaseAction: shipPilot.pilotStateData?.hasSystemPhaseAction ?? false)
-//                                .environmentObject(SquadViewHandler(store: store))
-//                                .environment(\.updatePilotStateHandler, updatePilotState)
-//                )
-//                                
-//            }
-//            
-//            return AnyView(EmptyView())
-//        }
-        
         return Button(action: {
-            onPilotTapped(shipPilot) })
+            onPilotTapped(shipPilot)
+        })
         {
-            ShipButton(shipPilot: shipPilot, getShips: getShipsHandler)
+            ShipButton(shipPilot: shipPilot, getShips: getShipsHandler).padding(2)
         }
     }
 }

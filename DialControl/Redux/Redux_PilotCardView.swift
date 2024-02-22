@@ -452,4 +452,44 @@ extension SquadViewHandler {
             getShips()
         }
     }
+
+    // Async
+    func flipDial_async(shipPilot: ShipPilot) {
+        Task {
+            do {
+                let data = try await fetchPilotState(shipPilot: shipPilot)          
+                getShips()
+            } catch {
+                print(error)
+            }
+        }
+        
+    }
+    
+    @available(*, renamed: "fetchPilotState(shipPilot:)")
+    func getPilotState(shipPilot: ShipPilot, completion: @escaping (Result<PilotStateData, PilotStateDataError>) -> Void) {
+        Task {
+            do {
+                let result = try await fetchPilotState(shipPilot: shipPilot)
+                completion(.success(result))
+            } catch {
+                completion(.failure(error as! PilotStateDataError))
+            }
+        }
+    }
+    
+    func fetchPilotState(shipPilot: ShipPilot) async throws -> PilotStateData {
+        do {
+            if let psd = shipPilot.pilotStateData {
+                store.send(.squad(action: .flipDial(psd, shipPilot.pilotState)))
+                return psd
+            } else {
+                throw PilotStateDataError()
+            }
+        }
+    }
+}
+
+struct PilotStateDataError: Error {
+    
 }

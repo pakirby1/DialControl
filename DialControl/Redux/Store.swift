@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import CoreData
 import TimelaneCombine
+import UIKit
 
 // MARK:- MyAppState
 struct MyAppState {
@@ -563,7 +564,6 @@ func shipReducer(state: inout MyShipViewState,
             $0.updateShield(active: active, inactive: inactive)
             handleDestroyed(&$0)
         })
-        
     }
     
     func updateForce(_ active: Int, _ inactive: Int) {
@@ -615,6 +615,46 @@ func shipReducer(state: inout MyShipViewState,
         })
     }
 
+    /*
+    // Async version
+//    func update() async -> PilotStateData {
+//        await withCheckedContinuation{ continuation in
+//            update { psd in
+//                continuation.resume(with: &psd)
+//            }
+//
+//        }
+//    }
+     
+     
+     */
+    
+    
+    
+    /*
+    func updatePSD(completion: @escaping (Result<PilotStateData, Error>) -> Void) {
+        Task {
+            do {
+                let psd = try await updatePSD()
+                completion(.success(psd))
+            } catch {
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    @Sendable func updatePSD() async throws -> PilotStateData {
+        do {
+            if let psd = state.pilotStateData {
+                return psd
+            }
+        }
+        catch {
+            throw Error(error)
+        }
+    }
+     */
+    
     func update(upgrade: UpgradeStateData, upgradeHandler: (inout UpgradeStateData) -> ()) {
         upgrade.change(update: { newUpgrade in
             print("PAK_\(#function) pilotStateData.id: \(newUpgrade)")
