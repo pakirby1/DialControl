@@ -145,7 +145,6 @@ enum MySquadAction {
     case getShips(Squad, SquadData)
     case setShips([ShipPilot])
     case flipDial(PilotStateData, PilotState)
-    case flipDialFix(Squad, SquadData, PilotStateData, PilotState)
 }
 
 extension MySquadAction : CustomStringConvertible {
@@ -159,8 +158,6 @@ extension MySquadAction : CustomStringConvertible {
             case let .updateSquad(squadData) :
                 return "MySquadAction.updateSquad( \(String(describing: squadData.name)) )"
             case let .flipDial(psd, _):
-                return "MySquadAction.flipDial( \(psd.pilot_index) )"
-            case let .flipDialFix(_, _, psd, _):
                 return "MySquadAction.flipDial( \(psd.pilot_index) )"
             case let .setShips(shipPilots):
                 return "MySquadAction.setShips( shipCount: \(String(describing: shipPilots.count)) )"
@@ -608,7 +605,7 @@ func shipReducer(state: inout MyShipViewState,
     }
     
     func update(psdHandler: (inout PilotStateData) -> ()) {
-        state.pilotStateData?.change(update: {
+        state.pilotStateData?.mutate(update: {
             print("PAK_\(#function) pilotStateData.id: \($0)")
             psdHandler(&$0)
             updateState(newData: $0)
@@ -730,30 +727,8 @@ func squadReducer(state: inout MySquadViewState,
                     environment: MyEnvironment) -> AnyPublisher<MyAppAction, Never>
 {
     switch(action) {
-        case let .flipDialFix(squad, squadData, pilotStateData, pilotState):
-            pilotStateData.change(update: {
-                var newPSD = $0
-                
-                newPSD.dial_status.handleEvent(event: .dialTapped)
-                
-                environment
-                    .pilotStateService
-                    .updateState(newData: newPSD, state: pilotState)
-                
-                print("\(Date()) PAK_\(#function) after pilotStateData id: \(String(describing: pilotState.id)) dial_status: \(newPSD.dial_status)")
-            })
-            
-            return environment
-                .squadService
-                .getShips(squad: squad, squadData: squadData)
-                .logShips(squadName: String(describing: squad.name))
-                .map {
-                    MyAppAction.squad(action: .setShips($0))
-                }
-                .eraseToAnyPublisher()
-            
         case let .flipDial(pilotStateData, pilotState):
-            pilotStateData.change(update: {
+            pilotStateData.mutate(update: {
                 var newPSD = $0
                 
                 newPSD.dial_status.handleEvent(event: .dialTapped)

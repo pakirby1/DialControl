@@ -385,7 +385,7 @@ extension Redux_SquadViewNew {
         func setSystemPhaseState_Old(shipPilot: ShipPilot, state: Bool) {
             if let data = shipPilot.pilotStateData {
                 let name = shipPilot.pilotName
-                data.change(update: { psd in
+                data.mutate(update: { psd in
                     
                     print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
                     
@@ -466,7 +466,7 @@ extension Redux_SquadViewNew {
     private func resetAllShips() {
         viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
-                data.change(update: {
+                data.mutate(update: {
                     $0.reset()
                     
                     self.updatePilotState(pilotStateData: $0,
@@ -484,7 +484,7 @@ extension Redux_SquadViewNew {
         viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
-                    data.change(update: {
+                    data.mutate(update: {
                         print("PAK_DialStatus pilotStateData.id: \($0)")
                         let revealAllDialsStatus: DialStatus = (self.viewModel.viewProperties.dialsState == .revealed) ? .revealed : .hidden
                         $0.dial_status = revealAllDialsStatus
@@ -503,7 +503,7 @@ extension Redux_SquadViewNew {
         viewModel.viewProperties.sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
-                    data.change(update: {
+                    data.mutate(update: {
                         print("PAK_DialStatus pilotStateData.id: \($0)")
     
                         $0.dial_status = newDialStatus

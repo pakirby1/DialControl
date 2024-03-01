@@ -227,7 +227,7 @@ class Redux_ShipViewModel: ObservableObject {
     func reset() {
         print("\(Date()) PAK_(#function): \(self.pilotStateData.description)")
     
-        self.pilotStateData.change(update: {
+        self.pilotStateData.mutate(update: {
             $0.reset()
             self.updateState(newData: $0)
             print("\(Date()) PAK_(#function): \(self.pilotStateData.description)")

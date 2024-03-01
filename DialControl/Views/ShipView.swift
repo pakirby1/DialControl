@@ -248,7 +248,7 @@ class ShipViewModel: ObservableObject {
     func reset() {
         print("\(Date()) PAK_(#function): \(self.pilotStateData.description)")
     
-        self.pilotStateData.change(update: {
+        self.pilotStateData.mutate(update: {
             $0.reset()
             self.updateState(newData: $0)
             print("\(Date()) PAK_(#function): \(self.pilotStateData.description)")
@@ -257,7 +257,7 @@ class ShipViewModel: ObservableObject {
     
     func updateHull(active: Int, inactive: Int) {
         print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
+            self.pilotStateData.mutate(update: {
                 print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateHull(active: active, inactive: inactive)
                 self.updateState(newData: $0)
@@ -266,7 +266,7 @@ class ShipViewModel: ObservableObject {
     
     func updateShield(active: Int, inactive: Int) {
         print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
+            self.pilotStateData.mutate(update: {
                 print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateShield(active: active, inactive: inactive)
                 self.updateState(newData: $0)
@@ -275,7 +275,7 @@ class ShipViewModel: ObservableObject {
     
     func updateForce(active: Int, inactive: Int) {
         print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
+            self.pilotStateData.mutate(update: {
                 print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateForce(active: active, inactive: inactive)
                 self.updateState(newData: $0)
@@ -284,7 +284,7 @@ class ShipViewModel: ObservableObject {
     
     func updateCharge(active: Int, inactive: Int) {
         print("\(Date()) PAK_\(#function) : active: \(active) inactive: \(inactive)")
-            self.pilotStateData.change(update: {
+            self.pilotStateData.mutate(update: {
                 print("PAK_\(#function) pilotStateData.id: \($0)")
                 $0.updateCharge(active: active, inactive: inactive)
                 self.updateState(newData: $0)
@@ -293,7 +293,7 @@ class ShipViewModel: ObservableObject {
     
     func updateShipIDMarker(marker: String) {
         print("\(Date()) \(#function) : \(marker)")
-        self.pilotStateData.change(update: {
+        self.pilotStateData.mutate(update: {
             $0.updateShipID(shipID: marker)
             self.updateState(newData: $0)
         })
@@ -301,7 +301,7 @@ class ShipViewModel: ObservableObject {
     
     func updateSelectedManeuver(maneuver: String) {
         print("\(Date()) \(#function) : \(maneuver)")
-        self.pilotStateData.change(update: {
+        self.pilotStateData.mutate(update: {
             $0.updateManeuver(maneuver: maneuver)
             self.updateState(newData: $0)
         })
@@ -309,7 +309,7 @@ class ShipViewModel: ObservableObject {
     
     func updateDialStatus(status: DialStatus) {
         print("\(Date()) \(#function) : \(status)")
-        self.pilotStateData.change(update: {
+        self.pilotStateData.mutate(update: {
             $0.updateDialStatus(status: status)
             self.updateState(newData: $0)
         })

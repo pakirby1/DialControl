@@ -211,31 +211,31 @@ extension PilotStateData {
     func update(type: PilotStatePropertyType_New) -> PilotStateData {
         switch(type) {
         case .hull(let active, let inactive):
-            return change{ $0.updateHull(active: active, inactive: inactive) }
+            return updateAndCopy{ $0.updateHull(active: active, inactive: inactive) }
         case .shield(let active, let inactive):
-            return change{ $0.updateShield(active: active, inactive: inactive) }
+            return updateAndCopy{ $0.updateShield(active: active, inactive: inactive) }
         case .force(let active, let inactive):
-            return change{ $0.updateForce(active: active, inactive: inactive) }
+            return updateAndCopy{ $0.updateForce(active: active, inactive: inactive) }
         case .charge(let active, let inactive):
-            return change{ $0.updateCharge(active: active, inactive: inactive) }
+            return updateAndCopy{ $0.updateCharge(active: active, inactive: inactive) }
         case .shipIDMarker(let id):
-            return change{ $0.updateShipID(shipID: id) }
+            return updateAndCopy{ $0.updateShipID(shipID: id) }
         case .selectedManeuver(let maneuver):
-            return change{ $0.updateManeuver(maneuver: maneuver) }
+            return updateAndCopy{ $0.updateManeuver(maneuver: maneuver) }
         case .revealAllDials(let revealed):
-            return change{ $0.updateDialRevealed(revealed: revealed)}
+            return updateAndCopy{ $0.updateDialRevealed(revealed: revealed)}
         case .hasSystemPhaseAction(let state):
-            return change{ $0.updateSystemPhaseAction(value: state)}
+            return updateAndCopy{ $0.updateSystemPhaseAction(value: state)}
         }
     }
     
-    private func change(update: UpdateHandler) -> PilotStateData {
+    func updateAndCopy(update: UpdateHandler) -> PilotStateData {
         var newState = self
         update(&newState)
         return newState
     }
     
-    func change(update: (inout PilotStateData) -> ()) {
+    func mutate(update: (inout PilotStateData) -> ()) {
         var newState = self
         update(&newState)
     }
@@ -358,7 +358,7 @@ extension PilotStateData {
                      inactiveKeyPath: WritableKeyPath<PilotStateData, Int>) -> (Int, Int) -> Self
     {
         let ret: (Int, Int) -> Self = { (active: Int, inactive: Int) -> Self in
-            return self.change() { psd in
+            return self.updateAndCopy() { psd in
                 psd[keyPath: activeKeyPath] = active
                 psd[keyPath: inactiveKeyPath] = inactive
             }

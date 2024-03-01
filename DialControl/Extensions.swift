@@ -16,7 +16,7 @@ extension PilotStateData {
                      handler: (inout PilotStateData) -> ()
     ) {
         measure(name: "\(label)(state:\(state)") {
-            self.change(update: { psd in
+            self.mutate(update: { psd in
                 global_os_log(label, state.description)
                 handler(&psd)
             })
@@ -27,6 +27,19 @@ extension PilotStateData {
         updateState(label: "FeatureId.firstPlayerUpdate", state: value) {
             $0.updateSystemPhaseAction(value: value)
         }
+    }
+    
+    private func updateState_New(label: String,
+                     state: Bool,
+                     handler: (inout PilotStateData) -> ()
+    ) -> PilotStateData
+    {
+        let ret: PilotStateData = self.updateAndCopy(update: { psd in
+            global_os_log(label, state.description)
+            handler(&psd)
+        })
+        
+        return ret
     }
 }
 

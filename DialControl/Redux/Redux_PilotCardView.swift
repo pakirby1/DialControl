@@ -402,7 +402,7 @@ class SquadViewHandler: ObservableObject {
         measure(name: "\(label)(state:\(state)") {
             if let data = shipPilot.pilotStateData {
                 let name = shipPilot.pilotName
-                data.change(update: { psd in
+                data.mutate(update: { psd in
                     print("\(label) name: \(name) state: \(state)")
                     
                     handler(&psd)
@@ -436,7 +436,7 @@ extension SquadViewHandler {
             measure(name: "setSystemPhaseState(state:\(state)") {
                 if let data = shipPilot.pilotStateData {
                     let name = shipPilot.pilotName
-                    data.change(update: { psd in
+                    data.mutate(update: { psd in
                         
                         print("Redux_PilotCardView.setSystemPhaseState name: \(name) state: \(state)")
 

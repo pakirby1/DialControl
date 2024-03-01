@@ -264,7 +264,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
         sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
-                    data.change(update: {
+                    data.mutate(update: {
                         print("PAK_DialStatus pilotStateData.id: \($0)")
                         let revealAllDialsStatus: DialStatus = self.revealAllDials ? .revealed : .hidden
                         $0.dial_status = revealAllDialsStatus
@@ -285,7 +285,7 @@ struct SquadCardView: View, DamagedSquadRepresenting {
     func resetAllShips() {
         sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
-                data.change(update: {
+                data.mutate(update: {
                     $0.reset()
                     
                     self.pilotStateService.updateState(
@@ -629,7 +629,7 @@ class PilotDetailsViewModel: ObservableObject {
                 return
             }
             
-            data.change(update: {
+            data.mutate(update: {
                 var newPSD = $0
                 
                 print("\(Date()) PAK_\(#function) before pilotStateData id: \(self.shipPilot.id) dial_status: \(newPSD.dial_status)")

@@ -422,7 +422,7 @@ extension Redux_SquadView {
     private func resetAllShips() {
         sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
-                data.change(update: {
+                data.mutate(update: {
                     $0.reset()
                     
                     self.updatePilotState(pilotStateData: $0,
@@ -439,7 +439,7 @@ extension Redux_SquadView {
         sortedShipPilots.forEach{ shipPilot in
             if var data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
-                    data.change(update: {
+                    data.mutate(update: {
                         print("PAK_DialStatus pilotStateData.id: \($0)")
                         let revealAllDialsStatus: DialStatus = (self.dialsState == .revealed) ? .revealed : .hidden
                         $0.dial_status = revealAllDialsStatus
@@ -458,7 +458,7 @@ extension Redux_SquadView {
         sortedShipPilots.forEach{ shipPilot in
             if let data = shipPilot.pilotStateData {
                 if data.dial_status != .destroyed {
-                    data.change(update: {
+                    data.mutate(update: {
                         global_os_log("Redux_SquadViewNew pilotStateData.id: \($0)")
     
                         $0.dial_status = newDialStatus
