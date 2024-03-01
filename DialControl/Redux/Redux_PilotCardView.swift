@@ -239,9 +239,7 @@ struct Redux_PilotDetailsView: View {
                 
                 buildPointsView(half: true)
 
-                IndicatorView(label: "\(self.shipPilot.threshold)",
-                    bgColor: Color.yellow,
-                    fgColor: Color.black)
+                buildThresholdView()
                 
                 Spacer()
                 
@@ -264,12 +262,21 @@ struct Redux_PilotDetailsView: View {
 extension Redux_PilotDetailsView {
     func buildPointsView(half: Bool = false) -> AnyView {
         let points = half ? self.shipPilot.halfPoints : self.shipPilot.points
-        let color = half ? Color.red : Color.blue
+        let color = half ? Color.yellow : Color.blue
         let label = "\(points)"
         
         return AnyView(IndicatorView(label:label,
                                      bgColor: color,
-                                     fgColor: theme.TEXT_FOREGROUND))
+                                     fgColor: half ? Color.black : theme.TEXT_FOREGROUND))
+    }
+    
+    func buildThresholdView() -> AnyView {
+        return AnyView(
+            IndicatorView(label: "\(self.shipPilot.threshold)",
+            bgColor: Color.yellow,
+            fgColor: Color.black,
+             damaged: true)
+        )
     }
     
     func buildManeuverView(isFlipped: Bool) -> AnyView {

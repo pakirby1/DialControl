@@ -122,7 +122,15 @@ extension Redux_SquadViewNew {
         }
     }
 
+    var totalHealth: Int {
+        return shipPilots.reduce(0) { result, shipPilot in
+            return result + shipPilot.totalHealth
+        }
+    }
+    
     var bodyView: some View {
+        let totalHealth = IndicatorView(label: "\(self.totalHealth)", bgColor: .white, fgColor: .black)
+        
         let points = Text("\(squad.points ?? 0)")
             .font(.title)
             .foregroundColor(theme.TEXT_FOREGROUND)
@@ -137,6 +145,7 @@ extension Redux_SquadViewNew {
                
                 Spacer()
                 points
+                totalHealth
                 Spacer()
                 ObjectiveScoreView(currentPoints: self.$victoryPoints,
                                    action: {
@@ -156,11 +165,6 @@ extension Redux_SquadViewNew {
                 let x = $0
                 self.squadData.firstPlayer = x
                 self.updateSquad(squadData: self.squadData)
-                
-                if (FeaturesManager.shared.isFeatureEnabled(.firstPlayerUpdate)) {
-                    // for each pilot update system phase state
-                    disableSystemPhaseForAllPilots()
-                }
             })
             .onChange(of: wonCount, perform: {
                 self.squadData.wonCount = $0
@@ -173,8 +177,6 @@ extension Redux_SquadViewNew {
         }
         
         var content: some View {
-            
-            
             let engage = Button(action: {
                 self.processEngage()
             }) {
@@ -185,8 +187,6 @@ extension Redux_SquadViewNew {
                 .font(.title)
                 .lineLimit(1)
                 .foregroundColor(theme.TEXT_FOREGROUND)
-            
-            
             
             let reset = Button(action: {
                 self.displayResetAllConfirmation = true
@@ -203,9 +203,7 @@ extension Redux_SquadViewNew {
                 )
             }
             
-            let totalHealth = IndicatorView(label: "30", bgColor: .white, fgColor: .black)
-            
-            var firstPlayer: some View {
+            var firstPlayerIndicator: some View {
                 if isFirstPlayer == true {
                     return AnyView(firstPlayerSymbol)
                 }
@@ -251,8 +249,6 @@ extension Redux_SquadViewNew {
         
             var header: some View {
                 HStack {
-                    
-
                     Spacer()
 
                     engage
@@ -261,7 +257,7 @@ extension Redux_SquadViewNew {
 
                     title
 
-                    firstPlayer
+                    firstPlayerIndicator
 
                     Spacer()
 

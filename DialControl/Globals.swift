@@ -444,6 +444,7 @@ func getJSONFor(ship: String, faction: String) -> String {
             let pilotFileUrl = matchingFaction[0]
             print("pilotFileUrl: \(pilotFileUrl)")
             
+            //
             if let path = Bundle.main.path(forResource: pilotFileUrl.fileName,
                                            ofType: "",
                                            inDirectory: pilotFileUrl.directoryPath)

@@ -547,6 +547,10 @@ extension ShipPilot {
         
         return .full
     }
+    
+    var totalHealth: Int {
+        return totalActiveHealth + totalInactiveHealth
+    }
 }
 
 struct TieInInterceptor : ShipProtocol {

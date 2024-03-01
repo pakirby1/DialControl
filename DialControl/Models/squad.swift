@@ -567,3 +567,5 @@ extension Squad: Equatable {
         return true
     }
 }
+
+

@@ -568,14 +568,27 @@ struct IndicatorView: View {
     let label: String
     let bgColor: Color
     let fgColor: Color
+    var damaged: Bool = false
     
     var body: some View {
-        Text("\(label)")
-            .font(.title)
-            .foregroundColor(fgColor)
-            .padding()
-            .background(bgColor)
-            .clipShape(Circle())
+        if (!damaged) {
+            Text("\(label)")
+                .font(.title)
+                .foregroundColor(fgColor)
+                .padding()
+                .background(bgColor)
+                .clipShape(Circle())
+        } else {
+            Text("\(label)")
+                .font(.title)
+                .foregroundColor(fgColor)
+                .padding()
+                .background(Image(systemName: "burst.fill")
+                                                    .imageScale(.large)
+                                                    .font(Font.largeTitle.weight(.bold))
+                                                    .foregroundColor(bgColor))
+//                .clipShape(Circle())
+        }
     }
 }
 
